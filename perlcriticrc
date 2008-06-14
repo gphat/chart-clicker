@@ -1,0 +1,2 @@
+[Documentation::RequirePodSections]
+lib_sections = NAME | SYNOPSIS | DESCRIPTION | METHODS | AUTHOR | LICENSE

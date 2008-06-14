@@ -1,0 +1,14 @@
+# http://module-build.sourceforge.net/META-spec.html
+#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
+name:         Chart-Clicker
+version:      1.1.8
+version_from: lib/Chart/Clicker.pm
+installdirs:  site
+requires:
+    Cairo:                         1
+    Class::Accessor:               0.25
+    DateTime:                      0.36
+    DateTime::Set:                 0.25
+
+distribution_type: module
+generated_by: ExtUtils::MakeMaker version 6.17
