@@ -1,3 +1,4 @@
+
 package Chart::Clicker::Axis;
 use Moose;
 
@@ -5,6 +6,7 @@ extends 'Chart::Clicker::Drawing::Component';
 
 use constant PI => 4 * atan2 1, 1;
 
+use Chart::Clicker::Context;
 use Chart::Clicker::Data::Range;
 use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Drawing::Color;
@@ -202,7 +204,7 @@ sub draw {
     }
 
     my $surf = $self->SUPER::draw($clicker);
-    my $cr = Cairo::Context->create($surf);
+    my $cr = Chart::Clicker::Context->create($surf);
 
     my $stroke = $self->stroke();
     $cr->set_line_width($stroke->width());

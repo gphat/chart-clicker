@@ -12,6 +12,7 @@ use Chart::Clicker::Decoration::Plot;
 use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Drawing::Insets;
 
+has 'chart' => ( is => 'rw', isa => 'Chart::Clicker' );
 has 'data' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] });
 has 'domain_label' => ( is => 'rw', isa => 'Str' );
 has 'height' => ( is => 'rw', isa => 'Int', default => 300 );
@@ -113,7 +114,7 @@ sub BUILD {
 
     $chart->prepare();
 
-    return $chart;
+    $self->chart($chart);
 }
 
 1;

@@ -36,7 +36,7 @@ sub add {
         disturb     => $disturb
     });
 
-    # Make not of all the axis so we can find them when we need
+    # Make note of all the axes so we can find them when we need
     # to resize them.
     if(($pos == $CC_AXIS_LEFT) || ($pos == $CC_AXIS_RIGHT)
         || ($pos == $CC_AXIS_TOP) || ($pos == $CC_AXIS_BOTTOM)) {

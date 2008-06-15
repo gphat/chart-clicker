@@ -193,8 +193,8 @@ sub draw {
         # This item's label might not be as tall as the tallest (or wide as the
         # widest) one we will draw, so we must center this item in the
         # available space.
-        my $vcenter = int(($self->tallest() - $extents->{'height'}) / 2);
-        my $center = int(($self->widest() - $extents->{'width'}) / 2);
+        my $vcenter = ($self->tallest() - $extents->{'height'}) / 2;
+        my $center = ($self->widest() - $extents->{'width'}) / 2;
 
         $cr->move_to($x + $center, $y + $extents->{'height'} + $vcenter);
         $cr->text_path($item->label());
