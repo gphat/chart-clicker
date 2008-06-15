@@ -3,13 +3,12 @@ use Moose;
 
 extends 'Chart::Clicker::Drawing::Component';
 
+use Chart::Clicker::Context;
 use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Drawing::Border;
 use Chart::Clicker::Drawing::Dimension;
 use Chart::Clicker::Drawing::Insets;
 use Chart::Clicker::Drawing::Point;
-
-use Cairo;
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -57,7 +56,7 @@ sub draw {
     my $clicker = shift();
 
     my $surface = $self->SUPER::draw($clicker, $self->inside_dimensions());
-    my $context = Cairo::Context->create($surface);
+    my $context = Chart::Clicker::Context->create($surface);
 
     my $x = ($self->width() - $self->inside_width()) / 2;
     my $y = ($self->height() - $self->inside_height()) / 2;

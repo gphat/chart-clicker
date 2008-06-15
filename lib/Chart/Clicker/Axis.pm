@@ -174,8 +174,7 @@ sub mark {
     if(!defined($self->{'LOWER'})) {
         $self->{'LOWER'} = $self->range->lower();
     }
-    # This is rounded and .5'ed to get the lines nice and sharp for Cairo.
-    return int($self->per() * ($value - $self->{'LOWER'} || 0)) + .5;
+    return $self->per() * ($value - $self->{'LOWER'} || 0);
 }
 
 sub draw {
@@ -194,13 +193,13 @@ sub draw {
     my $height = $self->height();
 
     if($pos == $CC_LEFT) {
-        $x += $width - .5;
+        $x += $width;
     } elsif($pos == $CC_RIGHT) {
-        $x += .5;
+        # nuffin
     } elsif($pos == $CC_TOP) {
-        $y += $height - .5;
+        $y += $height;
     } else {
-        $y += .5;
+        # nuffin
     }
 
     my $surf = $self->SUPER::draw($clicker);
@@ -235,7 +234,7 @@ sub draw {
             my $val = $values[$_];
             # Grab the extent from the cache.
             my $ext = $self->{'ticks_extents_cache'}->[$_];
-            my $ix = int($x + ($val - $lower) * $per) + .5;
+            my $ix = $x + ($val - $lower) * $per;
             $cr->move_to($ix, $y);
             if($pos == $CC_TOP) {
                 $cr->line_to($ix, $y - $tick_length);
@@ -264,7 +263,7 @@ sub draw {
         my @values = @{ $self->tick_values() };
         for(0..scalar(@values) - 1) {
             my $val = $values[$_];
-            my $iy = int($y + $height - (($val - $lower) * $per)) + .5;
+            my $iy = $y + $height - (($val - $lower) * $per);
             my $ext = $self->{'ticks_extents_cache'}->[$_];
             $cr->move_to($x, $iy);
             if($self->position() == $CC_LEFT) {

@@ -3,6 +3,7 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
+use Chart::Clicker::Context;
 use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Drawing::Color;
 use Chart::Clicker::Drawing::Font;
@@ -98,9 +99,8 @@ sub draw {
     my $width = $self->width();
     my $height = $self->height();
 
-    # my $surface = Cairo::ImageSurface->create('argb32', $width, $height);
     my $surface = $clicker->create_new_surface($width, $height);
-    my $cr = Cairo::Context->create($surface);
+    my $cr = Chart::Clicker::Context->create($surface);
 
     $cr->set_source_rgba($self->color->rgba());
     $cr->select_font_face(

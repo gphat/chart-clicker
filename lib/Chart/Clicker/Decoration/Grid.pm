@@ -3,6 +3,9 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
+use Chart::Clicker::Drawing::Color;
+use Chart::Clicker::Drawing::Stroke;
+
 has '+background_color' => (
     default => sub {
         new Chart::Clicker::Drawing::Color(
@@ -23,11 +26,6 @@ has 'stroke' => (
     default => sub { new Chart::Clicker::Drawing::Stroke() }
 );
 
-use Chart::Clicker::Drawing::Color;
-use Chart::Clicker::Drawing::Stroke;
-
-use Cairo;
-
 sub prepare {
     my $self = shift();
     my $clicker = shift();
@@ -44,7 +42,7 @@ sub draw {
     my $clicker = shift();
 
     my $surface = $self->SUPER::draw($clicker);
-    my $cr = Cairo::Context->create($surface);
+    my $cr = Chart::Clicker::Context->create($surface);
 
     $cr->set_source_rgba($self->background_color->rgba());
     $cr->paint();

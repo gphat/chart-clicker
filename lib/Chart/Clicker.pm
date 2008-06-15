@@ -24,7 +24,7 @@ has 'color_allocator' => (
 
 has 'context' => (
     is => 'rw',
-    isa => 'Cairo::Context',
+    isa => 'Chart::Clicker::Context',
 );
 
 has 'datasets' => (
@@ -204,7 +204,7 @@ sub prepare {
     $self->surface($self->create_new_surface(
         $self->width(), $self->height())
     );
-    $self->context(Cairo::Context->create($self->surface()));
+    $self->context(Chart::Clicker::Context->create($self->surface()));
 
     $self->SUPER::prepare($self, $self->dimensions());
     return 1;
@@ -354,7 +354,7 @@ sub _write_svg {
 
     my $surface = Cairo::SvgSurface->create($file, $self->width, $self->height);
 
-    my $cr = Cairo::Context->create($surface);
+    my $cr = Chart::Clicker::Context->create($surface);
     $cr->set_source_surface($self->surface, 0, 0);
     $cr->paint();
     $cr->show_page();
@@ -378,7 +378,7 @@ sub data {
             $buff .= $data;
         }, undef, $self->width, $self->height);
 
-        my $cr = Cairo::Context->create($surface);
+        my $cr = Chart::Clicker::Context->create($surface);
         $cr->set_source_surface($self->surface, 0, 0);
         $cr->paint();
         $cr->show_page();

@@ -3,12 +3,11 @@ package Chart::Clicker::Drawing::Component;
 use Moose;
 use Moose::Util::TypeConstraints;
 
+use Chart::Clicker::Context;
 use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Drawing::Color;
 use Chart::Clicker::Drawing::Dimension;
 use Chart::Clicker::Drawing::Insets;
-
-use Cairo;
 
 enum 'Orientations' => ($CC_HORIZONTAL, $CC_VERTICAL);
 enum 'Positions' => ($CC_TOP, $CC_BOTTOM, $CC_LEFT, $CC_RIGHT );
@@ -48,7 +47,7 @@ sub draw {
     my $surface = $clicker->create_new_surface(
         $width, $height
     );
-    my $context = Cairo::Context->create($surface);
+    my $context = Chart::Clicker::Context->create($surface);
 
     if(defined($self->background_color())) {
         $context->set_source_rgba($self->background_color->rgba());

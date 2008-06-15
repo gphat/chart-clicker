@@ -3,8 +3,8 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
+use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::LegendItem;
-
 use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Drawing::Border;
 use Chart::Clicker::Drawing::Font;
@@ -170,7 +170,7 @@ sub draw {
     my $height = $self->height();
 
     my $surface = $self->SUPER::draw($clicker);
-    my $cr = Cairo::Context->create($surface);
+    my $cr = Chart::Clicker::Context->create($surface);
 
     $cr->select_font_face($self->font->face(), $self->font->slant(), $self->font->weight());
     $cr->set_font_size($self->font->size());

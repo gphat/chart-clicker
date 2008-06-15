@@ -78,7 +78,7 @@ sub draw {
     my $basey;
     if(defined($range->baseline())) {
         $base = $range->baseline();
-        $basey = int($height - $range->mark($base)) + .5;
+        $basey = $height - $range->mark($base);
     } else {
         $basey = $height;
         $base = $range->range->lower();

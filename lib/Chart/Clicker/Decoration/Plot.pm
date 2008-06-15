@@ -6,6 +6,7 @@ extends 'Chart::Clicker::Drawing::Component';
 has 'renderers' => ( is => 'rw', isa => 'ArrayRef', default => sub { [ ] } );
 has 'markers' => ( is => 'rw', isa => 'Bool', default => 1 );
 
+use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::MarkerOverlay;
 use Chart::Clicker::Drawing::Border;
 
@@ -72,12 +73,12 @@ sub draw {
     my $clicker = shift();
 
     my $surface = $self->SUPER::draw($clicker);
-    my $cr = Cairo::Context->create($surface);
+    my $cr = Chart::Clicker::Context->create($surface);
 
     my $rendsurface = $clicker->create_new_surface(
         $self->inside_width(), $self->inside_height()
     );
-    my $rcr = Cairo::Context->create($rendsurface);
+    my $rcr = Chart::Clicker::Context->create($rendsurface);
 
     my $renderers = $self->renderers();
 
