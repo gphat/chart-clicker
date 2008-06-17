@@ -5,15 +5,24 @@ use Moose::Util::TypeConstraints;
 extends 'Chart::Clicker::Drawing::Container';
 
 use Chart::Clicker::Decoration::Plot;
+use Chart::Clicker::Format::Png;
+use Chart::Clicker::Util;
 
-enum 'Formats' => (
-    'png', 'svg'
-);
+subtype 'Format'
+    => as 'Object'
+    => where { $_->does('Chart::Clicker::Format') };
+
+coerce 'Format'
+    => from 'Str'
+    => via {
+        return Chart::Clicker::Util::load('Chart::Clicker::Format::'.$_)
+    };
 
 has 'format' => (
     is      => 'rw',
-    isa     => 'Formats',
-    default => 'png'
+    isa     => 'Format',
+    coerce  => 1,
+    default => sub { return Chart::Clicker::Format::Png->new() }
 );
 
 has 'color_allocator' => (
@@ -59,10 +68,6 @@ has 'range_axes' => (
     default => sub { [] }
 );
 
-has 'surface' => (
-    is => 'rw',
-#    isa => 'Cairo::ImageSurface'
-);
 
 has '+width' => (
     default => 500
@@ -161,8 +166,8 @@ sub inside_height {
 sub draw {
     my $self = shift();
 
-    $self->surface($self->SUPER::draw($self));
-    return $self->surface();
+    $self->format->surface($self->SUPER::draw($self));
+    return $self->format->surface();
 }
 
 sub prepare {
@@ -178,9 +183,9 @@ sub prepare {
         }
 
         my $rend = $plot->renderers->[$plot->get_renderer_for_dataset($count)];
-		if(!defined($rend)) {
-			die("Can't find a renderer, that's fatal!");
-		}
+        if(!defined($rend)) {
+            die("Can't find a renderer, that's fatal!");
+        }
         $ds->prepare();
 
         my $daxis = $self->get_dataset_domain_axis($count);
@@ -201,10 +206,10 @@ sub prepare {
         $count++;
     }
 
-    $self->surface($self->create_new_surface(
+    $self->format->surface($self->create_new_surface(
         $self->width(), $self->height())
     );
-    $self->context(Chart::Clicker::Context->create($self->surface()));
+    $self->context(Chart::Clicker::Context->create($self->format->surface()));
 
     $self->SUPER::prepare($self, $self->dimensions());
     return 1;
@@ -315,14 +320,10 @@ sub create_new_surface {
     my $width = shift();
     my $height = shift();
 
-    if(defined($self->surface())) {
-        $self->surface->create_similar('color-alpha', $width, $height);
+    if(defined($self->format->surface())) {
+        $self->format->surface->create_similar('color-alpha', $width, $height);
     } else {
-        if($self->format() eq 'svg') {
-            return Cairo::SvgSurface->create_for_stream(sub { }, undef, $width, $height);
-        } else {
-            return Cairo::ImageSurface->create('argb32', $width, $height);
-        }
+        return $self->format->create_surface($width, $height);
     }
 }
 
@@ -330,93 +331,14 @@ sub write {
     my $self = shift();
     my $file = shift();
 
-    if($self->format() eq 'svg') {
-        $self->_write_svg($file);
-    } else {
-        $self->_write_png($file);
-    }
-
-    return 1;
-}
-
-sub _write_png {
-    my $self = shift();
-    my $file = shift();
-
-    $self->surface->write_to_png($file);
-}
-
-sub _write_svg {
-    my $self = shift();
-    my $file = shift();
-
-    return undef unless Cairo::HAS_SVG_SURFACE;
-
-    my $surface = Cairo::SvgSurface->create($file, $self->width, $self->height);
-
-    my $cr = Chart::Clicker::Context->create($surface);
-    $cr->set_source_surface($self->surface, 0, 0);
-    $cr->paint();
-    $cr->show_page();
-
-    # Unset the context and the surface to force them to do the actual drawing.
-    $cr = undef;
-    $surface = undef;
+    return $self->format->write($self, $file);
 }
 
 sub data {
     my $self = shift();
 
-    my $buff;
-
-    if($self->format() eq 'svg') {
-
-        return undef unless Cairo::HAS_SVG_SURFACE;
-
-        my $surface = Cairo::SvgSurface->create_for_stream(sub {
-            my ($closure, $data) = @_;
-            $buff .= $data;
-        }, undef, $self->width, $self->height);
-
-        my $cr = Chart::Clicker::Context->create($surface);
-        $cr->set_source_surface($self->surface, 0, 0);
-        $cr->paint();
-        $cr->show_page();
-
-        $cr = undef;
-        $surface = undef;
-    } else {
-        $self->surface->write_to_png_stream(sub {
-            my ($closure, $data) = @_;
-            $buff .= $data;
-        });
-    }
-
-    return $buff;
+    return $self->format->data();
 }
-
-# sub svg {
-#     my $self = shift();
-# 
-#     return undef unless Cairo::HAS_SVG_SURFACE;
-# 
-#     my $buffer;
-#     my $surface = Cairo::SvgSurface->create_for_stream(sub {
-#         my ($closure, $data) = @_;
-#         $buffer .= $data;
-#     }, undef, $self->width, $self->height);
-# 
-#     my $cr = Cairo::Context->create($surface);
-#     $cr->set_source_surface($self->surface, 0, 0);
-#     $cr->paint();
-#     $cr->show_page();
-# 
-#     # Unset the context and the surface to force them to do the actual drawing.
-#     $cr = undef;
-#     $surface = undef;
-# 
-#     return $buffer;
-# }
 
 1;
 

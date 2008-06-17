@@ -14,7 +14,7 @@ subtype 'Color'
 
 coerce 'Color'
     => from 'Str'
-        => via { new Chart::Clicker::Drawing::Color(name => $_) };
+        => via { Chart::Clicker::Drawing::Color->new(name => $_) };
 
 my %colors = (
     'aqua'      => [   0,   1,   1,  1 ],

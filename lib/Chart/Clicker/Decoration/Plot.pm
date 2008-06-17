@@ -60,7 +60,7 @@ sub prepare {
     my $renderers = $self->renderers();
     $count = 0;
     foreach my $rend (@{ $self->renderers() }) {
-        $rend->dataset_count($dscount{$count});
+        $rend->dataset_count($dscount{$count} || 0);
         $rend->prepare($clicker, $idim, $rend_ds{$count});
         $count++;
     }

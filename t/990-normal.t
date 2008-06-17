@@ -95,7 +95,6 @@ my $grid = new Chart::Clicker::Decoration::Grid();
 $chart->add($grid, $CC_CENTER, 0);
 
 my $plot = $chart->plot();
-#$chart->plot($plot);
 $chart->add($plot, $CC_CENTER);
 ok(defined($plot), 'new Plot');
 

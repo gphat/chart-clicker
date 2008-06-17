@@ -1,4 +1,4 @@
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 BEGIN {
     use_ok('Chart::Clicker::Simple');
@@ -20,11 +20,11 @@ my $simple = Chart::Clicker::Simple->new({
     width           => 800,
     domain_label    => 'Danes',
     range_label     => 'Footballs',
-    renderer        => new Chart::Clicker::Renderer::Line(),
-    format          => 'png'
+    renderer        => Chart::Clicker::Renderer::Line->new(),
+    format          => 'Png'
 });
 ok(defined($simple));
 ok(defined($simple->chart()));
 my $chart = $simple->chart();
 $chart->draw();
-$chart->write('/Users/gphat/test.png');
+#$chart->write('/Users/gphat/test.png');

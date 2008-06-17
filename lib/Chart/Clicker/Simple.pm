@@ -26,7 +26,9 @@ has 'width' => ( is => 'rw', isa => 'Int', default => 400 );
 has 'hide_axes' => ( is => 'rw', isa => 'Bool', default => 0 );
 has 'hide_grid' => ( is => 'rw', isa => 'Bool', default => 0 );
 has 'range_baseline' => ( is => 'rw', isa => 'Num' );
-has 'format' => ( is => 'ro', isa => 'Str', default => 'png' );
+has 'format' => ( is => 'ro', isa => 'Format', coerce => 1, default => sub {
+    Chart::Clicker::Format::Png->new()
+} );
 has 'domain_tick_format' => ( is => 'ro', isa => 'Str', default => '%s' );
 has 'domain_tick_values' => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );
 has 'domain_tick_labels' => ( is => 'ro', isa => 'ArrayRef', default => sub { [] } );

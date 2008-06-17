@@ -150,4 +150,4 @@ $plot->set_renderer_for_dataset(3, 3);
 
 $chart->prepare();
 my $surf = $chart->draw();
-$chart->write('/Users/gphat/test.png');
+#$chart->write('/Users/gphat/test.pdf');
