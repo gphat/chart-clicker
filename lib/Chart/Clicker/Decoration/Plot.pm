@@ -5,23 +5,18 @@ extends 'Chart::Clicker::Drawing::Component';
 
 has 'renderers' => ( is => 'rw', isa => 'ArrayRef', default => sub { [ ] } );
 has 'markers' => ( is => 'rw', isa => 'Bool', default => 1 );
+has 'dataset_renderers' => ( is => 'rw', isa => 'HashRef', default => sub { {} } );
 
 use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::MarkerOverlay;
 use Chart::Clicker::Drawing::Border;
-
-sub BUILD {
-    my ($self, $args) = @_;
-    
-    $self->{'DSRENDERERS'} = {};
-}
 
 sub set_renderer_for_dataset {
     my $self = shift();
     my $didx = shift();
     my $ridx = shift();
 
-    $self->{'DSRENDERERS'}->{$didx} = $ridx;
+    $self->dataset_renderers->{$didx} = $ridx;
     return 1;
 }
 
@@ -29,7 +24,7 @@ sub get_renderer_for_dataset {
     my $self = shift();
     my $didx = shift();
 
-    my $idx = $self->{'DSRENDERERS'}->{$didx};
+    my $idx = $self->dataset_renderers->{$didx};
     unless(defined($idx)) {
         $idx = 0;
     }

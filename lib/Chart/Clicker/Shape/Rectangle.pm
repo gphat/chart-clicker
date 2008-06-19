@@ -7,8 +7,7 @@ has 'width' => ( is => 'rw', isa => 'Num' );
 has 'height' => ( is => 'rw', isa => 'Num' );
 
 sub create_path {
-    my $self = shift();
-    my ($cairo, $x, $y) = @_;
+    my ($self, $cairo, $x, $y) = @_;
 
     $cairo->rectangle(
         $x - ($self->width() / 2),

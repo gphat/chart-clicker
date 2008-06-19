@@ -10,8 +10,7 @@ has 'radius' => ( is => 'rw', isa => 'Num' );
 my $TO_RAD = (4 * atan2(1, 1)) / 180;
 
 sub create_path {
-    my $self = shift();
-    my ($cairo, $x, $y) = @_;
+    my ($self, $cairo, $x, $y) = @_;
 
     my $halfrad = 0;
 

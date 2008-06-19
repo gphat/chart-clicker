@@ -68,6 +68,29 @@ has 'range_axes' => (
     default => sub { [] }
 );
 
+has 'dataset_domain_axes' => (
+    is => 'rw',
+    isa => 'HashRef',
+    default => sub { return {} }
+);
+
+has 'dataset_range_axes' => (
+    is => 'rw',
+    isa => 'HashRef',
+    default => sub { return {} }
+);
+
+has 'renderer_domain_axes' => (
+    is => 'rw',
+    isa => 'HashRef',
+    default => sub { return {} }
+);
+
+has 'renderer_range_axes' => (
+    is => 'rw',
+    isa => 'HashRef',
+    default => sub { return {} }
+);
 
 has '+width' => (
     default => 500
@@ -108,17 +131,7 @@ use Chart::Clicker::Drawing::Point;
 
 use Cairo;
 
-our $VERSION = '1.4.1';
-
-sub BUILD {
-    my ($self, $args) = @_;
-    
-    $self->{'DSDOMAINAXIS'} = {};
-    $self->{'DSRANGEAXIS'} = {};
-
-    $self->{'RDOMAINAXIS'} = {};
-    $self->{'RRANGEAXIS'} = {};
-}
+our $VERSION = '1.5.0';
 
 sub add_to_markers {
     my $self = shift();
@@ -220,7 +233,7 @@ sub set_dataset_domain_axis {
     my $dsidx = shift();
     my $axis = shift();
 
-    $self->{'DSDOMAINAXIS'}->{$dsidx} = $axis;
+    $self->dataset_domain_axes->{$dsidx} = $axis;
     return 1;
 }
 
@@ -232,7 +245,7 @@ sub get_dataset_domain_axis {
         return;
     }
 
-    my $aidx = $self->{'DSDOMAINAXIS'}->{$idx};
+    my $aidx = $self->dataset_domain_axes->{$idx};
     if(defined($aidx)) {
         return $self->domain_axes->[$aidx];
     } else {
@@ -245,7 +258,7 @@ sub set_dataset_range_axis {
     my $dsidx = shift();
     my $axisidx = shift();
 
-    $self->{'DSRANGEAXIS'}->{$dsidx} = $axisidx;
+    $self->dataset_range_axes->{$dsidx} = $axisidx;
     return 1;
 }
 
@@ -257,7 +270,7 @@ sub get_dataset_range_axis {
         return;
     }
 
-    my $aidx = $self->{'DSRANGEAXIS'}->{$idx};
+    my $aidx = $self->dataset_range_axes->{$idx};
     if(defined($aidx)) {
         return $self->range_axes->[$aidx];
     } else {
@@ -270,7 +283,7 @@ sub set_marker_domain_axis {
     my $midx = shift();
     my $axis = shift();
 
-    $self->{'RDOMAINAXIS'}->{$midx} = $axis;
+    $self->renderer_domain_axis->{$midx} = $axis;
     return 1;
 }
 
@@ -282,7 +295,7 @@ sub get_marker_domain_axis {
         return;
     }
 
-    my $aidx = $self->{'RDOMAINAXIS'}->{$idx};
+    my $aidx = $self->renderer_domain_axes->{$idx};
     if(defined($aidx)) {
         return $self->domain_axes->[$aidx];
     } else {
@@ -295,7 +308,7 @@ sub set_marker_range_axis {
     my $midx = shift();
     my $axisidx = shift();
 
-    $self->{'RRANGEAXIS'}->{$midx} = $axisidx;
+    $self->renderer_range_axes->{$midx} = $axisidx;
     return 1;
 }
 
@@ -307,7 +320,7 @@ sub get_marker_range_axis {
         return;
     }
 
-    my $aidx = $self->{'RRANGEAXIS'}->{$idx};
+    my $aidx = $self->renderer_range_axes->{$idx};
     if(defined($aidx)) {
         return $self->range_axes->[$aidx];
     } else {
