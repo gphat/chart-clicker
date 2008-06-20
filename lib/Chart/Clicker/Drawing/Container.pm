@@ -1,7 +1,46 @@
 package Chart::Clicker::Drawing::Container;
 use Moose;
+use MooseX::AttributeHelpers;
 
 extends 'Chart::Clicker::Drawing::Component';
+
+has 'components' => (
+    metaclass => 'Collection::Array',
+    is  => 'rw',
+    isa => 'ArrayRef[HashRef]',
+    default => sub { [] },
+    provides => {
+        push    => 'add_to_components',
+        clear   => 'clear_components',
+        count   => 'component_count',
+        empty   => 'has_components',
+        get     => 'get_component'
+    }
+);
+
+has 'axis_left' => (
+    is => 'rw',
+    isa => 'Num',
+    default => sub { 0 },
+);
+
+has 'axis_right' => (
+    is => 'rw',
+    isa => 'Num',
+    default => sub { 0 },
+);
+
+has 'axis_top' => (
+    is => 'rw',
+    isa => 'Num',
+    default => 0,
+);
+
+has 'axis_bottom' => (
+    is => 'rw',
+    isa => 'Num',
+    default => 0,
+);
 
 use Chart::Clicker::Context;
 use Chart::Clicker::Drawing qw(:positions);
@@ -9,15 +48,6 @@ use Chart::Clicker::Drawing::Border;
 use Chart::Clicker::Drawing::Dimension;
 use Chart::Clicker::Drawing::Insets;
 use Chart::Clicker::Drawing::Point;
-
-sub BUILD {
-    my ($self, $args) = @_;
-
-    $self->{'AXISLEFT'} = 0;
-    $self->{'AXISRIGHT'} = 0;
-    $self->{'AXISBOTTOM'} = 0;
-    $self->{'AXISTOP'} = 0;
-}
 
 sub add {
     my $self = shift();
@@ -29,26 +59,20 @@ sub add {
         $disturb = 1;
     }
 
-    push(@{ $self->{'COMPONENTS'} }, {
+    $self->add_to_components({
         component   => $comp,
         position    => $pos,
-        disturb     => $disturb
+        disturb     => $disturb        
     });
 
     # Make note of all the axes so we can find them when we need
     # to resize them.
     if(($pos == $CC_AXIS_LEFT) || ($pos == $CC_AXIS_RIGHT)
         || ($pos == $CC_AXIS_TOP) || ($pos == $CC_AXIS_BOTTOM)) {
-        $self->{'AXES'}->{$#{ $self->{'COMPONENTS'} }} = $pos;
+        $self->{'AXES'}->{$self->component_count() - 1} = $pos;
     }
 
     return 1;
-}
-
-sub components {
-    my $self = shift();
-
-    return $self->{'COMPONENTS'};
 }
 
 sub draw {
@@ -56,29 +80,38 @@ sub draw {
     my $clicker = shift();
 
     my $surface = $self->SUPER::draw($clicker, $self->inside_dimensions());
-    my $context = Chart::Clicker::Context->create($surface);
+    my $context = $self->context();
+    # my $context = Chart::Clicker::Context->create($surface);
 
-    my $x = ($self->width() - $self->inside_width()) / 2;
-    my $y = ($self->height() - $self->inside_height()) / 2;
+    # my $x = ($self->width() - $self->inside_width()) / 2;
+    # my $y = ($self->height() - $self->inside_height()) / 2;
 
-    foreach my $child (@{ $self->{'COMPONENTS'} }) {
+    foreach my $child (@{ $self->components() }) {
         my $comp = $child->{'component'};
         my $pos = $child->{'position'};
-        my $surf = $comp->draw($clicker);
-        unless(defined($surf)) {
-            next;
-        }
-        # XXX this is wrong.
-        unless(defined($comp->location())) {
-            $comp->location(new Chart::Clicker::Drawing::Point({
-                x => 0,
-                y => 0
-            }))
-        }
-        $context->set_source_surface(
-            $surf, $comp->location->x(), $comp->location->y()
-        );
-        $context->paint();
+
+        $context->save;
+        $context->translate($comp->location->x, $comp->location->y);
+        $context->rectangle(0, 0, $comp->width, $comp->height);
+        $context->clip;
+        
+        $comp->draw($clicker);
+
+        # my $surf = $comp->draw($clicker);
+        # unless(defined($surf)) {
+        #     next;
+        # }
+        # # XXX this is wrong.
+        # unless(defined($comp->location())) {
+        #     $comp->location(new Chart::Clicker::Drawing::Point({
+        #         x => 0,
+        #         y => 0
+        #     }))
+        # }
+        # $context->set_source_surface(
+        #     $surf, $comp->location->x(), $comp->location->y()
+        # );
+        # $context->paint();
     }
 
     return $surface;
@@ -97,7 +130,7 @@ sub prepare {
     my ($top, $left, $right, $bottom) = (0, 0, 0, 0);
 
     my $count = 0;
-    foreach my $child (@{ $self->{'COMPONENTS'} }) {
+    foreach my $child (@{ $self->components() }) {
         my $comp = $child->{'component'};
         my $dim = new Chart::Clicker::Drawing::Dimension({
             width => int($self->inside_width() - $left - $right),
@@ -118,7 +151,7 @@ sub prepare {
                 $top += $comp->height();
             }
             if($pos == $CC_AXIS_TOP) {
-                $self->{'AXISTOP'} += $comp->height();
+                $self->axis_top($self->axis_top + $comp->height);
                 $self->pack_axes($count, $comp->height(), $pos);
             }
         } elsif(($pos == $CC_LEFT) || ($pos == $CC_AXIS_LEFT)) {
@@ -129,7 +162,7 @@ sub prepare {
                 $left += $comp->width();
             }
             if($pos == $CC_AXIS_LEFT) {
-                $self->{'AXISLEFT'} += $comp->width();
+                $self->axis_left($self->axis_left + $comp->width);
                 $self->pack_axes($count, $comp->width(), $pos);
             }
         } elsif(($pos == $CC_RIGHT) || ($pos == $CC_AXIS_RIGHT)) {
@@ -140,7 +173,7 @@ sub prepare {
                 $right += $comp->width();
             }
             if($pos == $CC_AXIS_RIGHT) {
-                $self->{'AXISRIGHT'} += $comp->width();
+                $self->axis_right($self->axis_right + $comp->width);
                 $self->pack_axes($count, $comp->width(), $pos);
             }
         } elsif(($pos == $CC_BOTTOM) || ($pos == $CC_AXIS_BOTTOM)) {
@@ -151,7 +184,7 @@ sub prepare {
                 $bottom += $comp->height();
             }
             if($pos == $CC_AXIS_BOTTOM) {
-                $self->{'AXISBOTTOM'} += $comp->height();
+                $self->axis_bottom($self->axis_bottom + $comp->height);
                 $self->pack_axes($count, $comp->height(), $pos);
             }
         } else {
@@ -184,7 +217,7 @@ sub pack_axes {
     my $item = shift(@indices);
     while($item < $count) {
 
-        my $child = $self->{'COMPONENTS'}->[$item];
+        my $child = $self->get_component($item);
         my $comp = $child->{'component'};
         my $pos = $child->{'position'};
         if(($pos == $CC_AXIS_BOTTOM) || ($pos == $CC_AXIS_TOP)) {
