@@ -179,8 +179,7 @@ sub inside_height {
 sub draw {
     my $self = shift();
 
-    $self->format->surface($self->SUPER::draw($self));
-    return $self->format->surface();
+    $self->SUPER::draw($self);
 }
 
 sub prepare {
@@ -219,8 +218,8 @@ sub prepare {
         $count++;
     }
 
-    $self->format->surface($self->create_new_surface(
-        $self->width(), $self->height())
+    $self->format->surface(
+        $self->format->create_surface($self->width, $self->height)
     );
     $self->context(Chart::Clicker::Context->create($self->format->surface()));
 
@@ -325,18 +324,6 @@ sub get_marker_range_axis {
         return $self->range_axes->[$aidx];
     } else {
         return $self->range_axes->[0];
-    }
-}
-
-sub create_new_surface {
-    my $self = shift();
-    my $width = shift();
-    my $height = shift();
-
-    if(defined($self->format->surface())) {
-        $self->format->surface->create_similar('color-alpha', $width, $height);
-    } else {
-        return $self->format->create_surface($width, $height);
     }
 }
 
@@ -549,6 +536,7 @@ Cory 'G' Watson <gphat@cpan.org>
 =head1 CONTRIBUTORS
 
 Torsten Schoenfeld
+Ash Berlin
 
 =head1 SEE ALSO
 

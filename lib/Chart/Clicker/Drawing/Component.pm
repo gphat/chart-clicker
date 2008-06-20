@@ -44,10 +44,6 @@ sub draw {
     my $width = $self->width();
     my $height = $self->height();
 
-    # my $surface = $clicker->create_new_surface(
-    #     $width, $height
-    # );
-    # my $context = Chart::Clicker::Context->create($surface);
     my $context = $clicker->context();
 
     if(defined($self->background_color())) {
@@ -85,9 +81,6 @@ sub draw {
         );
         $context->stroke();
     }
-
-    # return $surface;
-    return $context->get_target();
 }
 
 sub inside_width {

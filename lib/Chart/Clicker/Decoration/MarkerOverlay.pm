@@ -21,8 +21,9 @@ sub draw {
     my $self = shift();
     my $clicker = shift();
 
-    my $surface = $self->SUPER::draw($clicker);
-    my $cr = Chart::Clicker::Context->create($surface);
+    # my $surface = $self->SUPER::draw($clicker);
+    # my $cr = Chart::Clicker::Context->create($surface);
+    my $cr = $clicker->context();
 
     my $width = $self->width();
     my $height = $self->height();
@@ -91,8 +92,6 @@ sub draw {
 
         $count++;
     }
-
-    return $surface;
 }
 
 1;

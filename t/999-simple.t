@@ -27,4 +27,4 @@ ok(defined($simple));
 ok(defined($simple->chart()));
 my $chart = $simple->chart();
 $chart->draw();
-#$chart->write('/Users/gphat/test.png');
+$chart->write('/Users/gphat/test.png');

@@ -3,7 +3,8 @@ Revision history for Perl extension Chart::Clicker.
 1.5.0
     - Work with latest Cairo
     - Pretty up some un-Moosey behaviour
-	- Add PostScript and PDF support
+	  - Add PostScript and PDF support
+	  - Use clipping rather than a bunch of surface painting
 1.4.2
     - Packaging fixes.
 1.4.1

@@ -41,8 +41,7 @@ sub draw {
     my $self = shift();
     my $clicker = shift();
 
-    my $surface = $self->SUPER::draw($clicker);
-    my $cr = Chart::Clicker::Context->create($surface);
+    my $cr = $clicker->context();
 
     $cr->set_source_rgba($self->background_color->rgba());
     $cr->paint();
@@ -72,8 +71,6 @@ sub draw {
     $cr->set_line_cap($stroke->line_cap());
     $cr->set_line_join($stroke->line_join());
     $cr->stroke();
-
-    return $surface;
 }
 
 1;

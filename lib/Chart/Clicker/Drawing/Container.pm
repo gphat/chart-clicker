@@ -62,7 +62,7 @@ sub add {
     $self->add_to_components({
         component   => $comp,
         position    => $pos,
-        disturb     => $disturb        
+        disturb     => $disturb
     });
 
     # Make note of all the axes so we can find them when we need
@@ -79,12 +79,10 @@ sub draw {
     my $self = shift();
     my $clicker = shift();
 
-    my $surface = $self->SUPER::draw($clicker, $self->inside_dimensions());
-    my $context = $self->context();
-    # my $context = Chart::Clicker::Context->create($surface);
+    use Data::Dumper;
+    print STDERR Dumper(caller());
 
-    # my $x = ($self->width() - $self->inside_width()) / 2;
-    # my $y = ($self->height() - $self->inside_height()) / 2;
+    my $context = $clicker->context();
 
     foreach my $child (@{ $self->components() }) {
         my $comp = $child->{'component'};
@@ -94,27 +92,11 @@ sub draw {
         $context->translate($comp->location->x, $comp->location->y);
         $context->rectangle(0, 0, $comp->width, $comp->height);
         $context->clip;
-        
+
         $comp->draw($clicker);
 
-        # my $surf = $comp->draw($clicker);
-        # unless(defined($surf)) {
-        #     next;
-        # }
-        # # XXX this is wrong.
-        # unless(defined($comp->location())) {
-        #     $comp->location(new Chart::Clicker::Drawing::Point({
-        #         x => 0,
-        #         y => 0
-        #     }))
-        # }
-        # $context->set_source_surface(
-        #     $surf, $comp->location->x(), $comp->location->y()
-        # );
-        # $context->paint();
+        $context->restore();
     }
-
-    return $surface;
 }
 
 sub prepare {

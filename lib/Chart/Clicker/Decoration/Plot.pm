@@ -67,13 +67,7 @@ sub draw {
     my $self = shift();
     my $clicker = shift();
 
-    my $surface = $self->SUPER::draw($clicker);
-    my $cr = Chart::Clicker::Context->create($surface);
-
-    my $rendsurface = $clicker->create_new_surface(
-        $self->inside_width(), $self->inside_height()
-    );
-    my $rcr = Chart::Clicker::Context->create($rendsurface);
+    my $cr = $clicker->context();
 
     my $renderers = $self->renderers();
 
@@ -85,9 +79,9 @@ sub draw {
         my $rend = $renderers->[$ridx];
 
         foreach my $series (@{ $dataset->series() }) {
-            $rcr->save();
-            $rend->draw($clicker, $rcr, $series, $domain, $range);
-            $rcr->restore();
+            $cr->save();
+            $rend->draw($clicker, $cr, $series, $domain, $range);
+            $cr->restore();
         }
         $count++;
     }
@@ -97,17 +91,13 @@ sub draw {
         if(scalar(@{ $clicker->markers() })) {
             my $mo = new Chart::Clicker::Decoration::MarkerOverlay();
             $mo->prepare($clicker, $id);
-            my $marksurf = $mo->draw($clicker);
-            $rcr->set_source_surface($marksurf, 0, 0);
-            $rcr->paint();
+            $cr->save;
+            $mo->draw($clicker);
+            $cr->restore();
         }
     }
 
-    my $ul = $self->upper_left_inside_point();
-    $cr->set_source_surface($rendsurface, $ul->x(), $ul->y());
-    $cr->paint();
-
-    return $surface;
+    $cr->restore();
 }
 
 1;

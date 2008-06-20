@@ -202,8 +202,7 @@ sub draw {
         # nuffin
     }
 
-    my $surf = $self->SUPER::draw($clicker);
-    my $cr = Chart::Clicker::Context->create($surf);
+    my $cr = $clicker->context();
 
     my $stroke = $self->stroke();
     $cr->set_line_width($stroke->width());
@@ -291,8 +290,6 @@ sub draw {
     }
 
     $cr->stroke();
-
-    return $surf;
 }
 
 sub format_value {

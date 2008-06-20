@@ -99,8 +99,7 @@ sub draw {
     my $width = $self->width();
     my $height = $self->height();
 
-    my $surface = $clicker->create_new_surface($width, $height);
-    my $cr = Chart::Clicker::Context->create($surface);
+    my $cr = $clicker->context();
 
     $cr->set_source_rgba($self->color->rgba());
     $cr->select_font_face(
@@ -129,8 +128,6 @@ sub draw {
     } else {
         $cr->show_text($self->text());
     }
-
-    return $surface;
 }
 
 1;

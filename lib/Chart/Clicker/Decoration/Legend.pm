@@ -169,8 +169,7 @@ sub draw {
     my $width = $self->width();
     my $height = $self->height();
 
-    my $surface = $self->SUPER::draw($clicker);
-    my $cr = Chart::Clicker::Context->create($surface);
+    my $cr = $clicker->context();
 
     $cr->select_font_face($self->font->face(), $self->font->slant(), $self->font->weight());
     $cr->set_font_size($self->font->size());
@@ -211,8 +210,6 @@ sub draw {
             $y += $self->tallest();
         }
     }
-
-    return $surface;
 }
 
 1;
