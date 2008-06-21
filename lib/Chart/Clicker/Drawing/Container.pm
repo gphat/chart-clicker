@@ -79,9 +79,7 @@ sub draw {
     my $self = shift();
     my $clicker = shift();
 
-    use Data::Dumper;
-    print STDERR Dumper(caller());
-
+    $self->SUPER::draw($clicker);
     my $context = $clicker->context();
 
     foreach my $child (@{ $self->components() }) {

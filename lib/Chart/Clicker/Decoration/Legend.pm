@@ -169,6 +169,7 @@ sub draw {
     my $width = $self->width();
     my $height = $self->height();
 
+    $self->SUPER::draw($clicker);
     my $cr = $clicker->context();
 
     $cr->select_font_face($self->font->face(), $self->font->slant(), $self->font->weight());

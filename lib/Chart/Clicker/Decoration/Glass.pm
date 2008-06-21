@@ -33,8 +33,7 @@ sub draw {
     my $self = shift();
     my $clicker = shift();
 
-    my $surface = $self->SUPER::draw($clicker);
-    my $cr = Chart::Clicker::Context->create($surface);
+    my $cr = $clicker->context();
 
     if($self->background_color()) {
         $cr->set_source_rgba($self->background_color->rgba());

@@ -14,10 +14,19 @@ sub create {
     return $cairo;
 }
 
-around qw(move_to rel_move_to line_to) => sub {
+around qw(move_to rel_move_to line_to rel_line_to translate) => sub {
     my ($cont, $class, $x, $y) = @_;
 
-    $cont->($class, int($x) + .5, int($y) + .5);
+    $x = int($x) + .5 if $x > 0;
+    $y = int($y) + .5 if $y > 0;
+
+    $cont->($class, $x, $y);
+};
+
+around qw(rectangle) => sub {
+    my ($cont, $class, $x, $y, $width, $height) = @_;
+
+    $cont->($class, int($x) + .5, int($y) + .5, int($width), int($height));
 };
 
 1;

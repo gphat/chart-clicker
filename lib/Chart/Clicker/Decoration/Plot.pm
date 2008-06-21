@@ -97,7 +97,7 @@ sub draw {
         }
     }
 
-    $cr->restore();
+    #$cr->restore();
 }
 
 1;
