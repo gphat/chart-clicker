@@ -14,7 +14,7 @@ sub BUILD {
 sub create_surface {
     my ($self, $width, $height) = @_;
 
-    return Cairo::ImageSurface->create(
+    return Cairo::PdfSurface->create(
         'argb32', $width, $height
     );
 }
