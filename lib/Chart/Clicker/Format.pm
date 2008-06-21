@@ -1,14 +1,42 @@
 package Chart::Clicker::Format;
 use Moose::Role;
+use MooseX::AttributeHelpers;
+
+use IO::File;
 
 requires 'create_surface';
-requires 'data';
-requires 'write';
 
 has 'surface' => (
     is => 'rw',
-#    isa => 'Cairo::ImageSurface'
+    clearer => 'clear_surface'
 );
+
+has 'surface_data' => (
+    metaclass => 'String',
+    is => 'rw',
+    isa => 'Str',
+    default => sub { '' },
+    provides => {
+        append => 'append_surface_data'
+    },
+);
+
+sub write {
+    my ($self, $click, $file) = @_;
+
+    my $cr = $click->context();
+    $cr->show_page();
+
+    $cr = undef;
+    $click->clear_context();
+    $self->clear_surface();
+
+    my $fh = new IO::File($file, 'w')
+        or die("Unable to open '$file' for writing: $!");
+    $fh->binmode(1);
+    $fh->print($self->surface_data);
+    $fh->close();
+}
 
 1;
 

@@ -34,6 +34,7 @@ has 'color_allocator' => (
 has 'context' => (
     is => 'rw',
     isa => 'Chart::Clicker::Context',
+    clearer => 'clear_context'
 );
 
 has 'datasets' => (
@@ -337,7 +338,7 @@ sub write {
 sub data {
     my $self = shift();
 
-    return $self->format->data();
+    return $self->format->surface_data();
 }
 
 1;

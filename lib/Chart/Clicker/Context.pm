@@ -14,7 +14,7 @@ sub create {
     return $cairo;
 }
 
-around qw(move_to rel_move_to line_to rel_line_to translate) => sub {
+around qw(move_to rel_move_to line_to rel_line_to) => sub {
     my ($cont, $class, $x, $y) = @_;
 
     $x = int($x) + .5 if $x > 0;
