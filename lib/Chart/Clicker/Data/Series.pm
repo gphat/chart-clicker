@@ -1,12 +1,11 @@
 package Chart::Clicker::Data::Series;
 use Moose;
+use MooseX::AttributeHelpers;
 
 use Chart::Clicker::Data::Range;
 
 has 'error_count' => ( is => 'rw', isa => 'Int' );
 has 'errors' => ( is => 'rw', isa => 'Num' );
-has 'key_count' => ( is => 'rw', isa => 'Int' );
-has 'value_count' => ( is => 'rw', isa => 'Int' );
 has 'name' => ( is => 'rw', isa => 'Str' );
 has 'range' => (
     is => 'rw',
@@ -14,16 +13,24 @@ has 'range' => (
     default => sub { new Chart::Clicker::Data::Range() }
 );
 has 'keys' => (
+    metaclass => 'Collection::Array',
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
-    trigger => sub { my ($self, $keys) = @_; $self->key_count(scalar(@{ $keys })) }
+    provides => {
+        'push' => 'add_to_keys',
+        'count' => 'key_count'
+    }
 );
 has 'values' => (
+    metaclass => 'Collection::Array',
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
-    trigger => sub { my ($self, $values) = @_; $self->value_count(scalar(@{ $values })) }
+    provides => {
+        'push' => 'add_to_values',
+        'count' => 'value_count'
+    }
 );
 
 sub prepare {
