@@ -232,7 +232,7 @@ sub prepare {
             die("Dataset $count is empty.");
         }
 
-        my $rend = $plot->renderers->[$plot->get_renderer_for_dataset($count)];
+        my $rend = $plot->get_renderer($plot->get_dataset_renderer($count));
         if(!defined($rend)) {
             die("Can't find a renderer, that's fatal!");
         }

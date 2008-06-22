@@ -135,7 +135,6 @@ my $rmark = new Chart::Clicker::Data::Marker({
 $chart->add_to_markers($rmark);
 $chart->set_marker_range_axis(0, 1);
 cmp_ok($chart->get_marker_range_axis(0), '==', 1, 'Marker range axis');
-# $chart->set_marker_domain_axis(1,);
 cmp_ok($chart->get_marker_domain_axis(0), '==', 0, 'Marker domain axis');
 cmp_ok($chart->marker_count(), '==', 2, 'Marker count');
 
@@ -146,14 +145,17 @@ my $area = new Chart::Clicker::Renderer::Area(
     })
 );
 ok(defined($area), 'new Renderer');
+$plot->add_to_renderers($area);
 my $point = new Chart::Clicker::Renderer::Point();
+$plot->add_to_renderers($point);
 my $line = new Chart::Clicker::Renderer::Line();
+$plot->add_to_renderers($line);
 my $bar = new Chart::Clicker::Renderer::Bar(opacity => .60);
+$plot->add_to_renderers($bar);
 
-$plot->renderers([$area, $point, $line, $bar]);
-$plot->set_renderer_for_dataset(1, 1);
-$plot->set_renderer_for_dataset(2, 2);
-$plot->set_renderer_for_dataset(3, 3);
+$plot->set_dataset_renderer(1, 1);
+$plot->set_dataset_renderer(2, 2);
+$plot->set_dataset_renderer(3, 3);
 
 $chart->prepare();
 my $surf = $chart->draw();

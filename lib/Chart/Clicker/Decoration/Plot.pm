@@ -1,36 +1,40 @@
 package Chart::Clicker::Decoration::Plot;
 use Moose;
+use MooseX::AttributeHelpers;
 
 extends 'Chart::Clicker::Drawing::Component';
 
-has 'renderers' => ( is => 'rw', isa => 'ArrayRef', default => sub { [ ] } );
-has 'markers' => ( is => 'rw', isa => 'Bool', default => 1 );
-has 'dataset_renderers' => ( is => 'rw', isa => 'HashRef', default => sub { {} } );
+has 'renderers' => (
+    metaclass => 'Collection::Array',
+    is => 'rw',
+    isa => 'ArrayRef',
+    default => sub { [ ] },
+    provides => {
+        'push' => 'add_to_renderers',
+        'get' => 'get_renderer'
+    }
+);
+
+has 'markers' => (
+    is => 'rw',
+    isa => 'Bool',
+    default => 1
+);
+
+has 'dataset_renderers' => (
+    metaclass => 'Collection::Hash',
+    is => 'rw',
+    isa => 'HashRef',
+    default => sub { {} },
+    provides => {
+        'set' => 'set_dataset_renderer',
+        'get' => 'get_dataset_renderer'
+    }
+);
 
 use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::MarkerOverlay;
 use Chart::Clicker::Drawing::Border;
-
-sub set_renderer_for_dataset {
-    my $self = shift();
-    my $didx = shift();
-    my $ridx = shift();
-
-    $self->dataset_renderers->{$didx} = $ridx;
-    return 1;
-}
-
-sub get_renderer_for_dataset {
-    my $self = shift();
-    my $didx = shift();
-
-    my $idx = $self->dataset_renderers->{$didx};
-    unless(defined($idx)) {
-        $idx = 0;
-    }
-
-    return $idx;
-}
 
 sub prepare {
     my $self = shift();
@@ -46,13 +50,12 @@ sub prepare {
     my %rend_ds;
     my $count = 0;
     foreach my $dataset (@{ $clicker->datasets() }) {
-        my $ridx = $self->get_renderer_for_dataset($count);
+        my $ridx = $self->get_dataset_renderer($count) || 0;
         $dscount{$ridx} += scalar(@{ $dataset->series() });
         push(@{ $rend_ds{$ridx} }, $dataset);
         $count++;
     }
 
-    my $renderers = $self->renderers();
     $count = 0;
     foreach my $rend (@{ $self->renderers() }) {
         $rend->dataset_count($dscount{$count} || 0);
@@ -69,8 +72,6 @@ sub draw {
 
     my $cr = $clicker->context();
 
-    my $renderers = $self->renderers();
-
     my $count = 0;
     foreach my $dataset (@{ $clicker->datasets() }) {
         my $domain = $clicker->get_domain_axis(
@@ -79,8 +80,8 @@ sub draw {
         my $range = $clicker->get_range_axis(
             $clicker->get_dataset_range_axis($count) || 0
         );
-        my $ridx = $self->get_renderer_for_dataset($count);
-        my $rend = $renderers->[$ridx];
+        my $ridx = $self->get_dataset_renderer($count);
+        my $rend = $self->get_renderer($ridx || 0);
 
         foreach my $series (@{ $dataset->series() }) {
             $cr->save();
@@ -100,8 +101,6 @@ sub draw {
             $cr->restore();
         }
     }
-
-    #$cr->restore();
 }
 
 1;
