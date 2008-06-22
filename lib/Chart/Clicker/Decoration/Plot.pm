@@ -73,8 +73,12 @@ sub draw {
 
     my $count = 0;
     foreach my $dataset (@{ $clicker->datasets() }) {
-        my $domain = $clicker->get_dataset_domain_axis($count);
-        my $range = $clicker->get_dataset_range_axis($count);
+        my $domain = $clicker->get_domain_axis(
+            $clicker->get_dataset_domain_axis($count) || 0
+        );
+        my $range = $clicker->get_range_axis(
+            $clicker->get_dataset_range_axis($count) || 0
+        );
         my $ridx = $self->get_renderer_for_dataset($count);
         my $rend = $renderers->[$ridx];
 

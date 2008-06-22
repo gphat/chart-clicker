@@ -1,6 +1,7 @@
 package Chart::Clicker;
 use Moose;
 use Moose::Util::TypeConstraints;
+use MooseX::AttributeHelpers;
 
 extends 'Chart::Clicker::Drawing::Container';
 
@@ -18,13 +19,6 @@ coerce 'Format'
         return Chart::Clicker::Util::load('Chart::Clicker::Format::'.$_)
     };
 
-has 'format' => (
-    is      => 'rw',
-    isa     => 'Format',
-    coerce  => 1,
-    default => sub { return Chart::Clicker::Format::Png->new() }
-);
-
 has 'color_allocator' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::ColorAllocator',
@@ -38,59 +32,116 @@ has 'context' => (
 );
 
 has 'datasets' => (
+    metaclass => 'Collection::Array',
     is => 'rw',
     isa => 'ArrayRef',
-    default => sub { [] }
+    default => sub { [] },
+    provides => {
+        'count'=> 'dataset_count',
+        'push' => 'add_to_datasets'
+    }
+);
+
+has 'dataset_domain_axes' => (
+    metaclass => 'Collection::Hash',
+    is => 'rw',
+    isa => 'HashRef',
+    default => sub { {} },
+    provides => {
+        'set' => 'set_dataset_domain_axis',
+        'get' => 'get_dataset_domain_axis',
+    }
+);
+
+has 'dataset_range_axes' => (
+    metaclass => 'Collection::Hash',
+    is => 'rw',
+    isa => 'HashRef',
+    default => sub { {} },
+    provides => {
+        'set' => 'set_dataset_range_axis',
+        'get' => 'get_dataset_range_axis',
+    }
 );
 
 has 'domain_axes' => (
+    metaclass => 'Collection::Array',
     is => 'rw',
-    isa => 'ArrayRef',
-    default => sub { [] }
+    isa => 'ArrayRef[Chart::Clicker::Axis]',
+    default => sub { [] },
+    provides => {
+        'get' => 'get_domain_axis'
+    }
+);
+
+has 'format' => (
+    is      => 'rw',
+    isa     => 'Format',
+    coerce  => 1,
+    default => sub { Chart::Clicker::Format::Png->new() }
 );
 
 has 'markers' => (
+    metaclass => 'Collection::Array',
     is => 'rw',
-    isa => 'ArrayRef',
-    default => sub { [] }
+    isa => 'ArrayRef[Chart::Clicker::Data::Marker]',
+    default => sub { [] },
+    provides => {
+        'count' => 'marker_count',
+        'push'  => 'add_to_markers'
+    }
+);
+
+has 'marker_domain_axes' => (
+    metaclass => 'Collection::Hash',
+    is => 'rw',
+    isa => 'HashRef',
+    default => sub { {} },
+    provides => {
+        'set' => 'set_marker_domain_axis',
+        'get' => 'get_marker_domain_axis'
+    }
+);
+
+has 'marker_range_axes' => (
+    metaclass => 'Collection::Hash',
+    is => 'rw',
+    isa => 'HashRef',
+    default => sub { {} },
+    provides => {
+        'set' => 'set_marker_range_axis',
+        'get' => 'get_marker_range_axis'
+    }
 );
 
 has 'plot' => (
     is => 'rw',
     isa => 'Chart::Clicker::Decoration::Plot',
     default => sub {
-        new Chart::Clicker::Decoration::Plot()
+        Chart::Clicker::Decoration::Plot->new()
     }
 );
 
 has 'range_axes' => (
+    metaclass => 'Collection::Array',
     is => 'rw',
-    isa => 'ArrayRef',
-    default => sub { [] }
-);
-
-has 'dataset_domain_axes' => (
-    is => 'rw',
-    isa => 'HashRef',
-    default => sub { return {} }
-);
-
-has 'dataset_range_axes' => (
-    is => 'rw',
-    isa => 'HashRef',
-    default => sub { return {} }
+    isa => 'ArrayRef[Chart::Clicker::Axis]',
+    default => sub { [] },
+    provides => {
+        'get' => 'get_range_axis'
+    }
 );
 
 has 'renderer_domain_axes' => (
     is => 'rw',
     isa => 'HashRef',
-    default => sub { return {} }
+    default => sub { {} }
 );
 
 has 'renderer_range_axes' => (
     is => 'rw',
     isa => 'HashRef',
-    default => sub { return {} }
+    default => sub { {} }
 );
 
 has '+width' => (
@@ -133,20 +184,6 @@ use Chart::Clicker::Drawing::Point;
 use Cairo;
 
 our $VERSION = '1.5.0';
-
-sub add_to_markers {
-    my $self = shift();
-    my $marker = shift();
-
-    push(@{ $self->markers() }, $marker);
-}
-
-sub add_to_datasets {
-    my $self = shift();
-    my $ds = shift();
-
-    push(@{ $self->datasets() }, $ds);
-}
 
 sub inside_width {
     my $self = shift();
@@ -201,12 +238,14 @@ sub prepare {
         }
         $ds->prepare();
 
-        my $daxis = $self->get_dataset_domain_axis($count);
+        my $daxisnum = $self->get_dataset_domain_axis($count);
+        my $daxis = $self->get_domain_axis($daxisnum || 0);
         if(defined($daxis)) {
             $daxis->range->combine($ds->domain());
         }
 
-        my $raxis = $self->get_dataset_range_axis($count);
+        my $raxisnum = $self->get_dataset_range_axis($count);
+        my $raxis = $self->get_range_axis($raxisnum || 0);
 
         if(defined($raxis)) {
             if($rend->additive()) {
@@ -226,106 +265,6 @@ sub prepare {
 
     $self->SUPER::prepare($self, $self->dimensions());
     return 1;
-}
-
-sub set_dataset_domain_axis {
-    my $self = shift();
-    my $dsidx = shift();
-    my $axis = shift();
-
-    $self->dataset_domain_axes->{$dsidx} = $axis;
-    return 1;
-}
-
-sub get_dataset_domain_axis {
-    my $self = shift();
-    my $idx = shift();
-
-    unless(defined($self->domain_axes())) {
-        return;
-    }
-
-    my $aidx = $self->dataset_domain_axes->{$idx};
-    if(defined($aidx)) {
-        return $self->domain_axes->[$aidx];
-    } else {
-        return $self->domain_axes->[0];
-    }
-}
-
-sub set_dataset_range_axis {
-    my $self = shift();
-    my $dsidx = shift();
-    my $axisidx = shift();
-
-    $self->dataset_range_axes->{$dsidx} = $axisidx;
-    return 1;
-}
-
-sub get_dataset_range_axis {
-    my $self = shift();
-    my $idx = shift();
-
-    unless(defined($self->range_axes())) {
-        return;
-    }
-
-    my $aidx = $self->dataset_range_axes->{$idx};
-    if(defined($aidx)) {
-        return $self->range_axes->[$aidx];
-    } else {
-        return $self->range_axes->[0];
-    }
-}
-
-sub set_marker_domain_axis {
-    my $self = shift();
-    my $midx = shift();
-    my $axis = shift();
-
-    $self->renderer_domain_axis->{$midx} = $axis;
-    return 1;
-}
-
-sub get_marker_domain_axis {
-    my $self = shift();
-    my $idx = shift();
-
-    unless(defined($self->markers())) {
-        return;
-    }
-
-    my $aidx = $self->renderer_domain_axes->{$idx};
-    if(defined($aidx)) {
-        return $self->domain_axes->[$aidx];
-    } else {
-        return $self->domain_axes->[0];
-    }
-}
-
-sub set_marker_range_axis {
-    my $self = shift();
-    my $midx = shift();
-    my $axisidx = shift();
-
-    $self->renderer_range_axes->{$midx} = $axisidx;
-    return 1;
-}
-
-sub get_marker_range_axis {
-    my $self = shift();
-    my $idx = shift();
-
-    unless(defined($self->markers())) {
-        return;
-    }
-
-    my $aidx = $self->renderer_range_axes->{$idx};
-    if(defined($aidx)) {
-        return $self->range_axes->[$aidx];
-    } else {
-        return $self->range_axes->[0];
-    }
 }
 
 sub write {
@@ -352,7 +291,8 @@ Chart::Clicker - Powerful, extensible charting.
 =head1 DESCRIPTION
 
 Chart::Clicker aims to be a powerful, extensible charting package that creates
-really pretty output.
+really pretty output.  Charts can be saved in png, svg, pdf and postscript
+format.
 
 Clicker leverages the power of Cairo to create snazzy 2D graphics easily and
 quickly.
@@ -464,6 +404,47 @@ specified then defaults of png, 500 and 300 are chosen, respectively.
 
 =over 4
 
+=item add_to_datasets
+
+Add the specified dataset (or arrayref of datasets) to the chart.
+
+=item add_to_markers
+
+Add the specified marker to the chart.
+
+=item color_allocator
+
+Set/Get the color_allocator for this chart.
+
+=item context
+
+Set/Get the context for this chart.
+
+=item data
+
+Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
+client.
+
+=item datasets
+
+Get/Set the datasets for this chart.
+
+=item draw
+
+Draw this chart
+
+=item get_dataset_domain_axis
+
+  my $axis = $chart->get_dataset_domain_axis($index)
+
+Returns the domain axis to which the specified dataset is affined.
+
+=item get_dataset_range_axis
+
+  my $axis = $chart->get_dataset_range_axis($index)
+
+Returns the range axis to which the specified dataset is affined.
+
 =item inside_width
 
 Get the width available in this container after taking away space for
@@ -473,18 +454,6 @@ insets and borders.
 
 Get the height available in this container after taking away space for
 insets and borders.
-
-=item draw
-
-Draw this chart
-
-=item add_to_markers
-
-Add the specified marker to the chart.
-
-=item add_to_datasets
-
-Add the specified dataset (or array or datasets) to the chart.
 
 =item prepare
 
@@ -497,12 +466,6 @@ Prepare this chart for rendering.
 Affines the dataset at the specified index to the domain axis at the second
 index.
 
-=item get_dataset_domain_axis
-
-  my $axis = $chart->get_dataset_domain_axis($index)
-
-Returns the domain axis to which the specified dataset is affined.
-
 =item set_dataset_range_axis
 
   $chart->set_dataset_range_axis($dataset_index, $axis_index)
@@ -510,23 +473,12 @@ Returns the domain axis to which the specified dataset is affined.
 Affines the dataset at the specified index to the range axis at the second
 index.
 
-=item get_dataset_range_axis
-
-  my $axis = $chart->get_dataset_range_axis($index)
-
-Returns the range axis to which the specified dataset is affined.
-
 =item write
 
 Write the chart output to the specified location. Output is written in the
 format provided to the constructor (which defaults to png).
 
   $c->write('/path/to/the.png');
-
-=item data
-
-Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
-client.
 
 =back
 

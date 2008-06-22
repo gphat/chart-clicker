@@ -1,10 +1,12 @@
-use Test::More tests => 14;
+use Test::More tests => 16;
 
 BEGIN { use_ok('Chart::Clicker::Data::Range'); }
 
 my $range = new Chart::Clicker::Data::Range({ lower => 1, upper => 10 });
 ok(defined($range), 'new Chart::Clicker::Data::Range');
 isa_ok($range, 'Chart::Clicker::Data::Range', 'isa Chart::Clicker::Data::Range');
+cmp_ok($range->lower(), '==', 1, 'Lower');
+cmp_ok($range->upper(), '==', 10, 'Upper');
 
 $range->combine(new Chart::Clicker::Data::Range({ lower => 3, upper => 15 }));
 ok($range->lower() == 1, 'Combine 1: Lower stays');
@@ -23,7 +25,7 @@ my $min = 3;
 $range2->min($min);
 ok($range2->lower() == $min, 'Lower == min');
 
-ok($range2->span() == ($max - $min), 'Span == (max - min)');
+ok($range2->span() == ($max - $min + 1), 'Span == (max - min)');
 
 $range2->combine(new Chart::Clicker::Data::Range({ lower => -1, upper => 50 }));
 ok($range2->upper() == $max, 'Upper == max after combine()');

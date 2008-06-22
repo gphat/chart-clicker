@@ -1,4 +1,4 @@
-use Test::More tests => 21;
+use Test::More tests => 25;
 
 BEGIN {
     use_ok('Chart::Clicker');
@@ -20,7 +20,7 @@ BEGIN {
 
 use Chart::Clicker::Drawing qw(:positions);
 
-my $chart = new Chart::Clicker({ width => 400, height => 250 });
+my $chart = new Chart::Clicker({ width => 800, height => 600 });
 ok(defined($chart), 'new Chart::Clicker');
 
 my $series = new Chart::Clicker::Data::Series();
@@ -47,19 +47,19 @@ my @vals4 = (12, 9, 90, 78, 24, 34, 89, 56, 65, 3);
 $series4->keys(\@keys4);
 $series4->values(\@vals4);
 
-my $dataset = new Chart::Clicker::Data::DataSet();
-$dataset->series([ $series ]);
+my $dataset = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
+$chart->add_to_datasets($dataset);
 
-my $dataset2 = new Chart::Clicker::Data::DataSet();
-$dataset2->series([ $series2 ]);
+my $dataset2 = Chart::Clicker::Data::DataSet->new(series => [ $series2 ]);
+$chart->add_to_datasets($dataset2);
 
-my $dataset3 = new Chart::Clicker::Data::DataSet();
-$dataset3->series([ $series3 ]);
+my $dataset3 = Chart::Clicker::Data::DataSet->new(series => [ $series3 ]);
+$chart->add_to_datasets($dataset3);
 
-my $dataset4 = new Chart::Clicker::Data::DataSet();
-$dataset4->series([ $series4 ]);
+my $dataset4 = Chart::Clicker::Data::DataSet->new(series => [ $series4 ]);
+$chart->add_to_datasets($dataset4);
 
-$chart->datasets([ $dataset, $dataset2, $dataset3, $dataset4 ]);
+# $chart->datasets([ $dataset, $dataset2, $dataset3, $dataset4 ]);
 
 my $legend = new Chart::Clicker::Decoration::Legend({
     margins => new Chart::Clicker::Drawing::Insets({
@@ -113,6 +113,9 @@ $chart->domain_axes([ $daxis, $daxis2 ]);
 $chart->set_dataset_range_axis(2, 1);
 $chart->set_dataset_domain_axis(2, 1);
 
+cmp_ok($chart->get_dataset_range_axis(1), '==', 0, 'First dataset is on 0 range');
+cmp_ok($chart->get_dataset_range_axis(2), '==', 1, 'Second dataset is on 1 range');
+
 my $grid = new Chart::Clicker::Decoration::Grid();
 $chart->add($grid, $CC_CENTER, 0);
 
@@ -130,7 +133,11 @@ my $rmark = new Chart::Clicker::Data::Marker({
     value2 => 320
 });
 $chart->add_to_markers($rmark);
-cmp_ok(scalar(@{ $chart->markers() }), '==', 2, 'Marker count');
+$chart->set_marker_range_axis(0, 1);
+cmp_ok($chart->get_marker_range_axis(0), '==', 1, 'Marker range axis');
+# $chart->set_marker_domain_axis(1,);
+cmp_ok($chart->get_marker_domain_axis(0), '==', 0, 'Marker domain axis');
+cmp_ok($chart->marker_count(), '==', 2, 'Marker count');
 
 my $area = new Chart::Clicker::Renderer::Area(
     fade => 1,

@@ -30,7 +30,9 @@ sub draw {
 
     my $count = 0;
     foreach my $marker (@{ $clicker->markers() }) {
-        my $range = $clicker->get_marker_range_axis($count);
+        my $range = $clicker->get_range_axis(
+            $clicker->get_marker_range_axis($count) || 0
+        );
 
         my $key = $marker->key();
         my $key2 = $marker->key2();
@@ -42,7 +44,9 @@ sub draw {
 
         if($key && $value) {
         } elsif(defined($key)) {
-            my $domain = $clicker->get_marker_domain_axis($count);
+            my $domain = $clicker->get_domain_axis(
+                $clicker->get_marker_domain_axis($count) || 0
+            );
 
             my $x = $domain->mark($key);
             my $x2;
@@ -66,7 +70,9 @@ sub draw {
 
             $cr->stroke();
         } elsif(defined($value)) {
-            my $range = $clicker->get_marker_range_axis($count);
+            my $range = $clicker->get_range_axis(
+                $clicker->get_marker_range_axis($count) || 0
+            );
 
             my $y = $range->mark($value);
             my $y2;

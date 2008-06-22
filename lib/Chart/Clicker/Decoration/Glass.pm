@@ -53,9 +53,7 @@ sub draw {
 
     $cr->set_source_rgba($self->glare_color->rgba());
     $cr->fill();
-    $cr->restore();
-
-    return $surface;
+    # $cr->restore();
 }
 
 1;
