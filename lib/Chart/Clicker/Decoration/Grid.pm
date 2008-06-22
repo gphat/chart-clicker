@@ -25,6 +25,16 @@ has 'stroke' => (
     isa => 'Chart::Clicker::Drawing::Stroke',
     default => sub { new Chart::Clicker::Drawing::Stroke() }
 );
+has 'show_domain' => (
+    is => 'rw',
+    isa => 'Bool',
+    default => 1
+);
+has 'show_range' => (
+    is => 'rw',
+    isa => 'Bool',
+    default => 1
+);
 
 sub prepare {
     my $self = shift();
@@ -41,6 +51,10 @@ sub draw {
     my $self = shift();
     my $clicker = shift();
 
+    return unless ($self->show_domain || $self->show_range);
+
+    $self->SUPER::draw($clicker);
+
     my $cr = $clicker->context();
 
     $cr->set_source_rgba($self->background_color->rgba());
@@ -51,18 +65,23 @@ sub draw {
 
     # Make the grid
 
-    my $per = $daxis->per();
     my $height = $self->height();
-    foreach my $val (@{ $daxis->tick_values() }) {
-        $cr->move_to($daxis->mark($val), 0);
-        $cr->rel_line_to(0, $height);
+
+    if($self->show_domain()) {
+        my $per = $daxis->per();
+        foreach my $val (@{ $daxis->tick_values() }) {
+            $cr->move_to($daxis->mark($val), 0);
+            $cr->rel_line_to(0, $height);
+        }
     }
 
-    $per = $raxis->per();
-    my $width = $self->width();
-    foreach my $val (@{ $raxis->tick_values() }) {
-        $cr->move_to(0, $height - $raxis->mark($val));
-        $cr->rel_line_to($width, 0);
+    if($self->show_range()) {
+        my $per = $raxis->per();
+        my $width = $self->width();
+        foreach my $val (@{ $raxis->tick_values() }) {
+            $cr->move_to(0, $height - $raxis->mark($val));
+            $cr->rel_line_to($width, 0);
+        }
     }
 
     $cr->set_source_rgba($self->color->rgba());
