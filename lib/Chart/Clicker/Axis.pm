@@ -20,7 +20,7 @@ has 'font' => (
     default => sub { Chart::Clicker::Drawing::Font->new(); }
 );
 has 'format' => ( is => 'rw', isa => 'Str' );
-has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => .10 );
+has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
 has 'label' => ( is => 'rw', isa => 'Str' );
 has 'per' => ( is => 'rw', isa => 'Num' );
 has 'position' => ( is => 'rw', isa => 'Positions' );

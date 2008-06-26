@@ -67,17 +67,16 @@ sub draw {
 
     # Calculate the bar width we can use to fit all the datasets.
     if(!$self->{'BWIDTH'}) {
-        $self->{'BWIDTH'} = int(($width / scalar(@vals)) / $self->dataset_count())# / 2);
+        $self->{'BWIDTH'} = int(($width / scalar(@vals)) / $self->dataset_count() / 2);
     }
 
     if(!$self->{'XOFFSET'}) {
         $self->{'XOFFSET'} = int((($self->{'BWIDTH'} + $padding) * $self->dataset_count()) / 2);
     }
 
-    my $base;
+    my $base = $range->baseline();
     my $basey;
-    if(defined($range->baseline())) {
-        $base = $range->baseline();
+    if(defined($base)) {
         $basey = $height - $range->mark($base);
     } else {
         $basey = $height;

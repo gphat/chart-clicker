@@ -9,6 +9,9 @@ Revision history for Perl extension Chart::Clicker.
 	    data.
 	  - Add show_range and show_domain flags to Grid
 	  - Make Range's span inclusive
+	  - Add lots of convenient methods via MooseX::AttributeHelpers
+	  - Get rid of all indirect method calls (ewww!)
+	  - Fix broken bar renderer alignment
 1.4.2
     - Packaging fixes.
 1.4.1
