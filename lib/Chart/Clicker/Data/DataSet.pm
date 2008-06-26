@@ -12,7 +12,8 @@ has 'series' => (
     default => sub { [] },
     provides => {
         'count' => 'count',
-        'push' => 'add_to_series'
+        'push' => 'add_to_series',
+        'get' => 'get_series'
     }
 );
 has 'domain' => (

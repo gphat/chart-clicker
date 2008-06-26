@@ -57,6 +57,7 @@ sub draw {
 
     if(defined($self->shape())) {
         for(0..$kcount) {
+
             my $x = $domain->mark($keys[$_]);
             my $y = $height - $range->mark($vals[$_]);
             $self->shape->create_path($cr, $x, $y);

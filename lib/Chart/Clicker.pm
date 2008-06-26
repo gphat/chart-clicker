@@ -38,7 +38,8 @@ has 'datasets' => (
     default => sub { [] },
     provides => {
         'count'=> 'dataset_count',
-        'push' => 'add_to_datasets'
+        'push' => 'add_to_datasets',
+        'get' => 'get_dataset'
     }
 );
 
@@ -370,10 +371,7 @@ Clicker supports PNG and SVG output.
   my $grid = Chart::Clicker::Decoration::Grid->new();
   $chart->add($grid, $CC_CENTER, 0);
 
-  my $renderer = Chart::Clicker::Renderer::Area->new();
-  $renderer->options({
-    fade => 1
-  });
+  my $renderer = Chart::Clicker::Renderer::Area->new(fade => 1);
 
   my $plot = Chart::Clicker::Decoration::Plot->new();
   $plot->renderers([$renderer]);

@@ -76,7 +76,6 @@ has '+color' => (
 has 'baseline' => (
     is  => 'rw',
     isa => 'Num',
-	default => 0
 );
 
 has 'orientation' => ( is => 'rw', isa => 'Orientations' );
@@ -158,7 +157,7 @@ sub prepare {
             : 0;
         $self->height($biggest + $label_height + 4);
         $self->width($dimension->width());
-        $self->per($self->width() / $self->range->span());
+        $self->per($self->width() / ($self->range->span() - 1));
     } else {
         # The label will be rotated, so use height here too.
         my $label_width = $self->label()
@@ -166,7 +165,7 @@ sub prepare {
             : 0;
         $self->width($biggest + $label_width + 4);
         $self->height($dimension->height());
-        $self->per($self->height() / $self->range->span());
+        $self->per($self->height() / ($self->range->span() - 1));
     }
 
     return 1;

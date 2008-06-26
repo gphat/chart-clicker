@@ -15,6 +15,7 @@ Revision history for Perl extension Chart::Clicker.
 	  - Fix broken bar renderer alignment
 	  - Rename Renderer::Base to just Renderer
 	  - Add resize method to Shape classes
+	  - Stop baselining axes by default, it breaks stuff.
 1.4.2
     - Packaging fixes.
 1.4.1

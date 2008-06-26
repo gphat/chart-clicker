@@ -86,7 +86,7 @@ sub divvy {
         return [];
     }
 
-    my $per = $self->span() / $n;
+    my $per = ($self->span() - 1) / $n;
 
     my @vals;
     for(1..($n - 1)) {

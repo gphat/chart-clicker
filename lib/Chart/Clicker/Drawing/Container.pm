@@ -207,7 +207,7 @@ sub pack_axes {
             if(($apos == $CC_AXIS_LEFT) || ($apos == $CC_AXIS_RIGHT)) {
                 $comp->width($comp->width() - $amt);
             }
-            $comp->per($comp->width() / $comp->range->span());
+            $comp->per($comp->width() / ($comp->range->span() - 1));
         } elsif(($pos == $CC_AXIS_LEFT) || ($pos == $CC_AXIS_RIGHT)) {
             if($apos == $CC_AXIS_TOP) {
                 $comp->location->y($comp->location->y() + $amt);
@@ -215,7 +215,7 @@ sub pack_axes {
             if(($apos == $CC_AXIS_TOP) || ($apos == $CC_AXIS_BOTTOM)) {
                 $comp->height($comp->height() - $amt);
             }
-            $comp->per($comp->height() / $comp->range->span());
+            $comp->per($comp->height() / ($comp->range->span() - 1));
         }
 
         $item = shift(@indices);
