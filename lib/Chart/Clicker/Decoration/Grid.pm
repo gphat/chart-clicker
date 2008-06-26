@@ -8,14 +8,14 @@ use Chart::Clicker::Drawing::Stroke;
 
 has '+background_color' => (
     default => sub {
-        new Chart::Clicker::Drawing::Color(
+        Chart::Clicker::Drawing::Color->new(
             red => 0.9, green => 0.9, blue => 0.9, alpha => 1
         )
     }
 );
 has '+color' => (
     default => sub {
-        new Chart::Clicker::Drawing::Color(
+        Chart::Clicker::Drawing::Color->new(
             red => 0, green => 0, blue => 0, alpha => .30
         )
     }
@@ -23,7 +23,7 @@ has '+color' => (
 has 'stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { new Chart::Clicker::Drawing::Stroke() }
+    default => sub { Chart::Clicker::Drawing::Stroke->new() }
 );
 has 'show_domain' => (
     is => 'rw',
@@ -111,37 +111,37 @@ Generates a collection of Markers for use as a background.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Chart::Clicker::Decoration::Grid object.
 
 =back
 
-=head2 Class Methods
+=head2 Methods
 
 =over 4
 
-=item prepare
+=item I<prepare>
 
 Prepare this Grid for drawing
 
-=item color
+=item I<color>
 
 Set/Get the color for this Grid.
 
-=item domain_ticks
+=item I<domain_ticks>
 
 Set/Get the domain ticks for this Grid.
 
-=item range_ticks
+=item I<range_ticks>
 
 Set/Get the range ticks for this Grid.
 
-=item stroke
+=item I<stroke>
 
 Set/Get the Stroke for this Grid.
 
-=item draw
+=item I<draw>
 
 Draw this Grid.
 

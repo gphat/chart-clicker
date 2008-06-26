@@ -5,5 +5,5 @@ BEGIN {
 }
 
 my @xy = (25, 25);
-my $point = new Chart::Clicker::Drawing::Point({ x => $xy[0], y => $xy[1] });
+my $point = Chart::Clicker::Drawing::Point->new({ x => $xy[0], y => $xy[1] });
 isa_ok($point, 'Chart::Clicker::Drawing::Point');

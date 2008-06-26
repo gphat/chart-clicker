@@ -5,7 +5,7 @@ BEGIN {
     use_ok('Chart::Clicker::Drawing::Color');
 }
 
-my $ca = new Chart::Clicker::Drawing::ColorAllocator();
+my $ca = Chart::Clicker::Drawing::ColorAllocator->new();
 isa_ok($ca, 'Chart::Clicker::Drawing::ColorAllocator');
 
 my $red = $ca->next();
@@ -17,7 +17,7 @@ ok(defined($green), 'Second Color');
 cmp_ok($green->name(), 'eq', 'green', 'Second is green');
 
 my @seedcolors = (
-    new Chart::Clicker::Drawing::Color({
+    Chart::Clicker::Drawing::Color->new({
         red     => 0,
         green   => 0,
         blue    => 0,
@@ -25,7 +25,7 @@ my @seedcolors = (
         name    => 'black'
     })
 );
-my $ca2 = new Chart::Clicker::Drawing::ColorAllocator({
+my $ca2 = Chart::Clicker::Drawing::ColorAllocator->new({
     colors => \@seedcolors
 });
 my $shouldbeblack = $ca2->next();

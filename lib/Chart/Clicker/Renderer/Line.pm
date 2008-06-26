@@ -16,7 +16,7 @@ has 'shape_stroke' => (
 has 'stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { new Chart::Clicker::Drawing::Stroke() }
+    default => sub { Chart::Clicker::Drawing::Stroke->new() }
 );
 
 sub draw {
@@ -88,8 +88,8 @@ Chart::Clicker::Renderer::Line renders a dataset as lines.
 
 =head1 SYNOPSIS
 
-  my $lr = new Chart::Clicker::Renderer::Line(
-    stroke => new Chart::Clicker::Drawing::Stroke({
+  my $lr = Chart::Clicker::Renderer::Line->new(
+    stroke => Chart::Clicker::Drawing::Stroke->new({
       ...
     })
   });
@@ -98,16 +98,16 @@ Chart::Clicker::Renderer::Line renders a dataset as lines.
 
 =over 4
 
-=item shape
+=item I<shape>
 
 Set a shape object to draw at each of the data points.
 
-=item shape_stroke
+=item I<shape_stroke>
 
 Define the stroke to be used on the shapes at each point.  If no shape_stroke
 is provided, then the shapes will be billed.
 
-=item stroke
+=item I<stroke>
 
 Set a Stroke object to be used for the lines.
 
@@ -115,13 +115,13 @@ Set a Stroke object to be used for the lines.
 
 =head1 METHODS
 
-=head2 Class Methods
+=head2 Misc Methods
 
 =over 4
 
-=item render
+=item I<draw>
 
-Render the series.
+Draw it!
 
 =back
 

@@ -112,7 +112,7 @@ sub prepare {
     my $count = 0;
     foreach my $child (@{ $self->components() }) {
         my $comp = $child->{'component'};
-        my $dim = new Chart::Clicker::Drawing::Dimension({
+        my $dim = Chart::Clicker::Drawing::Dimension->new({
             width => int($self->inside_width() - $left - $right),
             height => int($self->inside_height() - $top - $bottom)
         });
@@ -236,11 +236,11 @@ A Base 'container' for all components that want to hold other components.
 
 =head1 SYNOPSIS
 
-  my $c = new Chart::Clicker::Drawing::Container({
+  my $c = Chart::Clicker::Drawing::Container->new({
     width => 500, height => 350
-    background_color => new Chart::Clicker::Drawing::Color(),
-    border => new Chart::Clicker::Drawing::Border(),
-    insets => new Chart::Clicker::Drawing::Insets(),
+    background_color => 'white',
+    border => Chart::Clicker::Drawing::Border->new(),
+    insets => Chart::Clicker::Drawing::Insets->new(),
   });
 
 =cut
@@ -253,11 +253,11 @@ A Base 'container' for all components that want to hold other components.
 
 =item new
 
-  my $c = new Chart::Clicker::Drawing::Container({
+  my $c = Chart::Clicker::Drawing::Container->new({
     width => 500, height => 350
-    background_color => new Chart::Clicker::Drawing::Color(),
-    border => new Chart::Clicker::Drawing::Border(),
-    insets => new Chart::Clicker::Drawing::Insets(),
+    background_color => 'white',
+    border => Chart::Clicker::Drawing::Border->new(),
+    insets => Chart::Clicker::Drawing::Insets->new(),
   });
 
 Creates a new Container.  Width and height must be specified.  Border,

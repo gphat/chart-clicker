@@ -42,7 +42,7 @@ sub draw {
     $cr->stroke();
 
     # Draw the points
-    my $shape = new Chart::Clicker::Shape::Arc({
+    my $shape = Chart::Clicker::Shape::Arc->new({
         radius => 3,
         angle1 => 0,
         angle2 => 360,

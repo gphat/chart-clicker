@@ -20,7 +20,7 @@ has 'range_label' => ( is => 'rw', isa => 'Str' );
 has 'renderer' => (
     is => 'rw',
     isa => 'Chart::Clicker::Renderer::Base',
-    default => sub { new Chart::Clicker::Renderer::Line() }
+    default => sub { Chart::Clicker::Renderer::Line->new() }
 );
 has 'width' => ( is => 'rw', isa => 'Int', default => 400 );
 has 'hide_axes' => ( is => 'rw', isa => 'Bool', default => 0 );
@@ -39,34 +39,34 @@ sub BUILD {
 
     my @serieses;
     foreach my $d (@{ $self->data() }) {
-        my $series = new Chart::Clicker::Data::Series({
+        my $series = Chart::Clicker::Data::Series->new({
             keys    => $d->{'keys'},
             values  => $d->{'values'}
         });
         push(@serieses, $series);
     }
 
-    my $chart = new Chart::Clicker({
+    my $chart = Chart::Clicker->new({
         format              => $self->format(),
         width               => $self->width(),
         height              => $self->height(),
         datasets            => [
-            new Chart::Clicker::Data::DataSet({
+            Chart::Clicker::Data::DataSet->new({
                 series => \@serieses
             })
         ]
     });
 
     $chart->add(
-        new Chart::Clicker::Decoration::Legend({
-            margins => new Chart::Clicker::Drawing::Insets({
+        Chart::Clicker::Decoration::Legend->new({
+            margins => Chart::Clicker::Drawing::Insets->new({
                 top => 3
             })
         }), $CC_BOTTOM
     );
 
     # Domain Axis
-    my $daxis = new Chart::Clicker::Axis({
+    my $daxis = Chart::Clicker::Axis->new({
         orientation => $CC_HORIZONTAL,
         position    => $CC_BOTTOM,
         label       => $self->domain_label(),
@@ -81,7 +81,7 @@ sub BUILD {
     $chart->add($daxis, $CC_AXIS_BOTTOM);
 
     # Range Axis
-    my $raxis = new Chart::Clicker::Axis({
+    my $raxis = Chart::Clicker::Axis->new({
         orientation => $CC_VERTICAL,
         position    => $CC_LEFT,
         label       => $self->range_label(),
@@ -100,7 +100,7 @@ sub BUILD {
 
     # Grid
     unless($self->hide_grid()) {
-        $chart->add(new Chart::Clicker::Decoration::Grid(), $CC_CENTER, 0);
+        $chart->add(Chart::Clicker::Decoration::Grid->new(), $CC_CENTER, 0);
     }
 
     # Plot
@@ -137,7 +137,7 @@ it a bit more simple.
  use Chart::Clicker::Simple;
  use Chart::Clicker::Line;
 
- my $simple = new Chart::Clicker::Simple({
+ my $simple = Chart::Clicker::Simple->new({
     # Add two sets of data!
     data => [
         {

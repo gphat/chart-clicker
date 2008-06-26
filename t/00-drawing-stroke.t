@@ -4,7 +4,7 @@ BEGIN {
     use_ok('Chart::Clicker::Drawing::Stroke');
 }
 
-my $stroke = new Chart::Clicker::Drawing::Stroke();
+my $stroke = Chart::Clicker::Drawing::Stroke->new();
 isa_ok($stroke, 'Chart::Clicker::Drawing::Stroke');
 
 cmp_ok($stroke->width(), '==', 1, 'Default width');

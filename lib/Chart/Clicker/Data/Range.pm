@@ -111,7 +111,7 @@ Chart::Clicker::Data::Range implements a range of values.
 
   use Chart::Clicker::Data::Range;
 
-  my $range = new Chart::Clicker::Data::Range({
+  my $range = Chart::Clicker::Data::Range->new({
     lower => 1,
     upper => 10
   });

@@ -4,12 +4,12 @@ BEGIN {
     use_ok('Chart::Clicker::Axis::DateTime');
 }
 
-my $a = new Chart::Clicker::Axis::DateTime({ format => '%H:%M:%S' });
+my $a = Chart::Clicker::Axis::DateTime->new({ format => '%H:%M:%S' });
 isa_ok($a, 'Chart::Clicker::Axis::DateTime');
 my $foo = $a->format_value(time());
 ok($foo =~ /\d+:\d+:\d/, 'Formatted Properly');
 
-my $dt = new DateTime(
+my $dt = DateTime->new(
     'year'  => 2007,
     'month' => 8,
     'day'   => 30,

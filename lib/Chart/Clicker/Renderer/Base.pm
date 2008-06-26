@@ -36,7 +36,7 @@ Chart::Clicker::Renderer::Base represents the plot of the chart.
 
 =head1 SYNOPSIS
 
-  my $renderer = new Chart::Clicker::Renderer::Foo();
+  my $renderer = Chart::Clicker::Renderer::Foo->new();
 
 =head1 METHODS
 

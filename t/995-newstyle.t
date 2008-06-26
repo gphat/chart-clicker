@@ -20,28 +20,28 @@ BEGIN {
 
 use Chart::Clicker::Drawing qw(:positions);
 
-my $chart = new Chart::Clicker({ width => 800, height => 600 });
+my $chart = Chart::Clicker->new({ width => 800, height => 600 });
 ok(defined($chart), 'new Chart::Clicker');
 
-my $series = new Chart::Clicker::Data::Series();
+my $series = Chart::Clicker::Data::Series->new();
 my @keys = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 my @vals = (42, 25, 86, 23, 2, 19, 10, 12, 540, 9);
 $series->keys(\@keys);
 $series->values(\@vals);
 
-my $series2 = new Chart::Clicker::Data::Series();
+my $series2 = Chart::Clicker::Data::Series->new();
 my @keys2 = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 my @vals2 = (67, 15, 6, 90, 11, 45, 83, 11, 9, 101);
 $series2->keys(\@keys2);
 $series2->values(\@vals2);
 
-my $series3 = new Chart::Clicker::Data::Series();
+my $series3 = Chart::Clicker::Data::Series->new();
 my @keys3 = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 my @vals3 = (56, 52, 68, 32, 98, 1, 67, 21, 45, 33);
 $series3->keys(\@keys3);
 $series3->values(\@vals3);
 
-my $series4 = new Chart::Clicker::Data::Series();
+my $series4 = Chart::Clicker::Data::Series->new();
 my @keys4 = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 my @vals4 = (12, 9, 90, 78, 24, 34, 89, 56, 65, 3);
 $series4->keys(\@keys4);
@@ -61,7 +61,7 @@ $chart->add_to_datasets($dataset4);
 
 # $chart->datasets([ $dataset, $dataset2, $dataset3, $dataset4 ]);
 
-my $legend = new Chart::Clicker::Decoration::Legend({
+my $legend = Chart::Clicker::Decoration::Legend->new({
     margins => new Chart::Clicker::Drawing::Insets({
         top => 3
     })
@@ -72,31 +72,31 @@ $chart->add($legend, $CC_BOTTOM);
 
 my $format = '%0.2f';
 
-my $daxis = new Chart::Clicker::Axis({
+my $daxis = Chart::Clicker::Axis->new({
     orientation => $CC_HORIZONTAL,
     position    => $CC_TOP,
     format      => $format
 });
-my $tlabel = new Chart::Clicker::Decoration::Label({ text => 'Danes', orientation => $CC_HORIZONTAL});
+my $tlabel = Chart::Clicker::Decoration::Label->new({ text => 'Danes', orientation => $CC_HORIZONTAL});
 $chart->add($tlabel, $CC_TOP);
 
-my $label = new Chart::Clicker::Decoration::Label({text => 'Footballs', orientation => $CC_VERTICAL});
+my $label = Chart::Clicker::Decoration::Label->new({text => 'Footballs', orientation => $CC_VERTICAL});
 $chart->add($label, $CC_LEFT);
 
-my $daxis2 = new Chart::Clicker::Axis({
+my $daxis2 = Chart::Clicker::Axis->new({
     orientation => $CC_HORIZONTAL,
     position    => $CC_BOTTOM,
     format      => $format
 });
 
-my $raxis = new Chart::Clicker::Axis({
+my $raxis = Chart::Clicker::Axis->new({
     orientation => $CC_VERTICAL,
     position    => $CC_LEFT,
     format      => $format
 });
 ok(defined($raxis), 'new Axis');
 
-my $raxis2 = new Chart::Clicker::Axis({
+my $raxis2 = Chart::Clicker::Axis->new({
     orientation => $CC_VERTICAL,
     position    => $CC_RIGHT,
     format      => $format
@@ -116,19 +116,19 @@ $chart->set_dataset_domain_axis(2, 1);
 cmp_ok($chart->get_dataset_range_axis(1), '==', 0, 'First dataset is on 0 range');
 cmp_ok($chart->get_dataset_range_axis(2), '==', 1, 'Second dataset is on 1 range');
 
-my $grid = new Chart::Clicker::Decoration::Grid();
+my $grid = Chart::Clicker::Decoration::Grid->new();
 $chart->add($grid, $CC_CENTER, 0);
 
 my $plot = $chart->plot();
 $chart->add($plot, $CC_CENTER);
 ok(defined($plot), 'new Plot');
 
-my $dmark = new Chart::Clicker::Data::Marker({
+my $dmark = Chart::Clicker::Data::Marker->new({
     key => 6,
     key2 => 8,
 });
 $chart->markers([ $dmark ]);
-my $rmark = new Chart::Clicker::Data::Marker({
+my $rmark = Chart::Clicker::Data::Marker->new({
     value => 225,
     value2 => 320
 });
@@ -138,19 +138,19 @@ cmp_ok($chart->get_marker_range_axis(0), '==', 1, 'Marker range axis');
 cmp_ok($chart->get_marker_domain_axis(0), '==', 0, 'Marker domain axis');
 cmp_ok($chart->marker_count(), '==', 2, 'Marker count');
 
-my $area = new Chart::Clicker::Renderer::Area(
+my $area = Chart::Clicker::Renderer::Area->new(
     fade => 1,
-    stroke => new Chart::Clicker::Drawing::Stroke({
+    stroke => Chart::Clicker::Drawing::Stroke->new({
         width => 2
     })
 );
 ok(defined($area), 'new Renderer');
 $plot->add_to_renderers($area);
-my $point = new Chart::Clicker::Renderer::Point();
+my $point = Chart::Clicker::Renderer::Point->new();
 $plot->add_to_renderers($point);
-my $line = new Chart::Clicker::Renderer::Line();
+my $line = Chart::Clicker::Renderer::Line->new();
 $plot->add_to_renderers($line);
-my $bar = new Chart::Clicker::Renderer::Bar(opacity => .60);
+my $bar = Chart::Clicker::Renderer::Bar->new(opacity => .60);
 $plot->add_to_renderers($bar);
 
 $plot->set_dataset_renderer(1, 1);

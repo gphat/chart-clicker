@@ -1,8 +1,8 @@
-use Test::More tests => 21;
+use Test::More tests => 23;
 
 BEGIN { use_ok('Chart::Clicker::Data::Series'); }
 
-my $series = new Chart::Clicker::Data::Series();
+my $series = Chart::Clicker::Data::Series->new();
 ok(defined($series), 'new Chart::Clicker::Data::Series');
 isa_ok($series, 'Chart::Clicker::Data::Series', 'isa Chart::Clicker::Data::Series');
 
@@ -40,7 +40,7 @@ cmp_ok($series->range->lower(), '==', $values[0], 'Minimum Value');
 cmp_ok($series->range->upper(), '==', $values[2], 'Maximum Value');
 cmp_ok($series->range->span(), '==', 10, 'Span');
 
-my $fooseries = new Chart::Clicker::Data::Series({
+my $fooseries = Chart::Clicker::Data::Series->new({
     keys => [ 1, 2, 3, 4 ],
     values => [ 5, 6, 7, 14]
 });

@@ -14,12 +14,12 @@ has 'tallest' => ( is => 'rw', isa => 'Num' );
 has 'widest' => ( is => 'rw', isa => 'Num' );
 
 has '+border' => (
-    default => sub { new Chart::Clicker::Drawing::Border() }
+    default => sub { Chart::Clicker::Drawing::Border->new() }
 );
 
 has '+insets' => (
     default => sub {
-        new Chart::Clicker::Drawing::Insets(
+        Chart::Clicker::Drawing::Insets->new(
             top => 3, left => 3, bottom => 3, right => 3
         )
     }
@@ -29,7 +29,7 @@ has 'item_insets' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Insets',
     default => sub {
-        new Chart::Clicker::Drawing::Insets({
+        Chart::Clicker::Drawing::Insets->new({
             top => 3, left => 3, bottom => 0, right => 0
         })
     }
@@ -45,7 +45,7 @@ has 'font' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Font',
     default => sub {
-        new Chart::Clicker::Drawing::Font()
+        Chart::Clicker::Drawing::Font->new()
     }
 );
 
@@ -91,7 +91,7 @@ sub prepare {
             if($tall < $extents->{'height'}) {
                 $tall = $extents->{'height'};
             }
-            push(@items, new Chart::Clicker::Decoration::LegendItem({
+            push(@items, Chart::Clicker::Decoration::LegendItem->new({
                 color   => $ca->next(),
                 font    => $font,
                 insets  => $ii,
@@ -238,24 +238,24 @@ Creates a new Legend object.
 
 =back
 
-=head2 Class Methods
+=head2 Methods
 
 =over 4
 
-=item border
+=item I<border>
 
 Set/Get this Legend's border.
 
-=item insets
+=item I<insets>
 
 Set/Get this Legend's insets.
 
-=item prepare
+=item I<prepare>
 
 Prepare this Legend by creating the LegendItems based on the datasets
 provided and testing the lengths of the series names.
 
-=item draw
+=item I<draw>
 
 Draw this Legend
 

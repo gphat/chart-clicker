@@ -8,7 +8,7 @@ use Chart::Clicker::Drawing::Stroke;
 has 'color' => (
     is => 'rw',
     isa => 'Color',
-    default => sub { new Chart::Clicker::Drawing::Color(
+    default => sub { Chart::Clicker::Drawing::Color->new(
         red     => 0,
         green   => 0,
         blue    => 0,
@@ -20,7 +20,7 @@ has 'color' => (
 has 'stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { new Chart::Clicker::Drawing::Stroke(); }
+    default => sub { Chart::Clicker::Drawing::Stroke->new(); }
 );
 
 1;
@@ -39,9 +39,9 @@ component.
 
   use Chart::Clicker::Drawing::Border;
 
-  my $border = new Chart::Clicker::Drawing::Border({
-    color => new Chart::Clicker::Drawing::Color({ name => black }),
-    stroke => new Chart::Clicker::Drawing::Stroke()
+  my $border = Chart::Clicker::Drawing::Border->new({
+    color => 'black',
+    stroke => Chart::Clicker::Drawing::Stroke->new()
   });
 
 =head1 METHODS

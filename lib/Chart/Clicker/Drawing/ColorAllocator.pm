@@ -1,11 +1,23 @@
 package Chart::Clicker::Drawing::ColorAllocator;
 use Moose;
 
+use MooseX::AttributeHelpers;
+
 use Chart::Clicker::Drawing::Color;
 
 my @defaults = (qw(red green blue lime yellow maroon teal fuchsia));;
 
-has 'colors' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
+has 'colors' => (
+    metaclass => 'Collection::Array',
+    is => 'rw',
+    isa => 'ArrayRef',
+    default => sub { [] },
+    provides => {
+        'push' => 'add_to_colors',
+        'clear' => 'clear_colors',
+        'count' => 'color_count'
+    }
+);
 has 'position' => ( is => 'rw', isa => 'Int', default => -1 );
 
 sub next {
@@ -26,15 +38,17 @@ before 'next' => sub {
 
         if($self->position() <= scalar(@defaults)) {
             $self->colors->[$pos + 1] =
-                new Chart::Clicker::Drawing::Color({
+                Chart::Clicker::Drawing::Color->new({
                     name => $defaults[$pos + 1]
                 });
         } else {
-            $self->colors->[$pos + 1] = new Chart::Clicker::Drawing::Color(
-                red     => rand(1),
-                green   => rand(1),
-                blue    => rand(1),
-                alpha   => 1
+            $self->add_to_colors(
+                Chart::Clicker::Drawing::Color->new(
+                    red     => rand(1),
+                    green   => rand(1),
+                    blue    => rand(1),
+                    alpha   => 1
+                )
             );
         }
     }
@@ -70,9 +84,9 @@ corresponds to the series that will be colored.
 
     use Chart::Clicker::Drawing::ColorAllocator;
 
-    my $ca = new Chart::Clicker::Drawing::ColorAllocator({
+    my $ca = Chart::Clicker::Drawing::ColorAllocator->new({
         colors => (
-            new Chart::Clicker::Drawing::Color(1.0, 0, 0, 1.0),
+            Chart::Clicker::Drawing::Color(1.0, 0, 0, 1.0)->new,
             ...
         )
     });
@@ -92,9 +106,21 @@ to 'seed' the allocator.
 
 =back
 
-=head2 Class Methods
+=head2 Methods
 
 =over 4
+
+=item I<add_to_colors>
+
+Add a color to this allocator.
+
+=item I<clear_colors>
+
+Clear this allocator's colors
+
+=item I<color_count>
+
+Get the number of colors in this allocator.
 
 =item position
 

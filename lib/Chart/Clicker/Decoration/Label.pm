@@ -13,7 +13,7 @@ has 'color' => (
     is => 'rw',
     isa => 'Color',
     default => sub {
-        new Chart::Clicker::Drawing::Color(
+        Chart::Clicker::Drawing::Color->new(
             red => 0, green => 0, blue => 0, alpha => .30
         )
     },
@@ -24,7 +24,7 @@ has 'font' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Font',
     default => sub {
-        new Chart::Clicker::Drawing::Font()
+        Chart::Clicker::Drawing::Font->new()
     }
 );
 
@@ -32,7 +32,7 @@ has 'insets' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Insets',
     default => sub {
-        new Chart::Clicker::Drawing::Insets(
+        Chart::Clicker::Drawing::Insets->new(
             top => 0, left => 0, bottom => 3, right => 3
         )
     }
@@ -149,29 +149,29 @@ Chart::Clicker::Decoration::Label draws text on the chart.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Label object.
 
 =back
 
-=head2 Class Methods
+=head2 Methods
 
 =over 4
 
-=item border
+=item I<border>
 
 Set/Get this Label's border.
 
-=item insets
+=item I<insets>
 
 Set/Get this Label's insets.
 
-=item draw
+=item I<draw>
 
 Draw this Label
 
-=item prepare
+=item I<prepare>
 
 Prepare this Label by determining how much space it needs.
 

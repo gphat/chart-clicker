@@ -17,7 +17,7 @@ Chart::Clicker::Drawing::Dimension represents the width and height of an area.
 
 =head1 SYNOPSIS
 
-  my $dim = new Chart::Clicker::Drawing::Dimension({
+  my $dim = Chart::Clicker::Drawing::Dimension->new({
     width => 300, height => 300
   });
 
@@ -29,7 +29,7 @@ Chart::Clicker::Drawing::Dimension represents the width and height of an area.
 
 =item new
 
-  my $dim = new Chart::Clicker::Drawing::Dimension({
+  my $dim = Chart::Clicker::Drawing::Dimension->new({
     width => 300,
     height => 200
   });

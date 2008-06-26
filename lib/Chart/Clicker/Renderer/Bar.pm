@@ -18,7 +18,7 @@ has 'padding' => (
 has 'stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { new Chart::Clicker::Drawing::Stroke() }
+    default => sub { Chart::Clicker::Drawing::Stroke->new() }
 );
 
 sub prepare {
@@ -141,7 +141,7 @@ Chart::Clicker::Renderer::Bar renders a dataset as bars.
 
 =head1 SYNOPSIS
 
-  my $br = new Chart::Clicker::Renderer::Bar({});
+  my $br = Chart::Clicker::Renderer::Bar->new();
 
 =head1 ATTRIBUTES
 
@@ -164,15 +164,15 @@ A stroke to use on each bar.
 
 =head1 METHODS
 
-=head2 Class Methods
+=head2 Misc. Methods
 
 =over 4
 
-=item prepare
+=item I<prepare>
 
 Prepare the renderer
 
-=item draw
+=item I<draw>
 
 Draw the data!
 

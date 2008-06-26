@@ -80,7 +80,7 @@ $CC_FONT_WEIGHT_BOLD
 
   use Chart::Clicker::Drawing::Font;
 
-  my $font = new Chart::Clicker::Drawing::Font({
+  my $font = Chart::Clicker::Drawing::Font->new({
     face => 'Sans',
     size => 12,
     slant => $Chart::Clicker::Drawing::FONT_SLANT_NORMAL

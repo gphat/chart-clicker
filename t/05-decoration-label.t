@@ -5,5 +5,5 @@ BEGIN {
 }
 
 # Test Moose coercion
-my $label = new Chart::Clicker::Decoration::Label(color => 'black');
+my $label = Chart::Clicker::Decoration::Label->new(color => 'black');
 cmp_ok($label->color->red(), '==', 0, 'Red');

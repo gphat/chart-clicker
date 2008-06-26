@@ -31,7 +31,7 @@ sub write {
     $click->clear_context();
     $self->clear_surface();
 
-    my $fh = new IO::File($file, 'w')
+    my $fh = IO::File->new($file, 'w')
         or die("Unable to open '$file' for writing: $!");
     $fh->binmode(1);
     $fh->print($self->surface_data);

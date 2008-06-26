@@ -51,7 +51,7 @@ Chart::Clicker::Shape::Arc represents an arc.
 
  use Chart::Clicker::Shape::Arc;
 
- my $arc = new Chart::Clicker::Shape::Arc({
+ my $arc = Chart::Clicker::Shape::Arc->new({
     angle1 => 0,
     angle2 => 360,
     ragius => 5

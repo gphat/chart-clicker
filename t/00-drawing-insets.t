@@ -5,7 +5,7 @@ BEGIN {
 }
 
 my @insets = (25, 25, 25, 25);
-my $insets = new Chart::Clicker::Drawing::Insets({
+my $insets = Chart::Clicker::Drawing::Insets->new({
     top     => $insets[0],
     bottom  => $insets[1],
     left    => $insets[2],

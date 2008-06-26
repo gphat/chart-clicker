@@ -5,5 +5,5 @@ BEGIN {
 }
 
 
-my $c = new Chart::Clicker::Drawing::Component();
+my $c = Chart::Clicker::Drawing::Component->new();
 isa_ok($c, 'Chart::Clicker::Drawing::Component');

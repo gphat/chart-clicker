@@ -67,7 +67,7 @@ sub as_string {
 sub clone {
     my $self = shift();
 
-    return new Chart::Clicker::Drawing::Color({
+    return Chart::Clicker::Drawing::Color->new({
         red => $self->red(), green => $self->green(),
         blue => $self->blue(), alpha => $self->alpha()
     });
@@ -112,14 +112,14 @@ white and yellow.  Any case is fine, navy, NAVY or Navy.
 
     use Chart::Clicker::Drawing::Color;
 
-    my $color = new Chart::Clicker::Drawing::Color({
+    my $color = Chart::Clicker::Drawing::Color->new({
         red     => 1,
         blue    => .31,
         green   => .25,
         alpha   => 1
     });
 
-    my $aqua = new Chart::Clicker::Drawing::Color({ name => 'aqua' });
+    my $aqua = Chart::Clicker::Drawing::Color->new({ name => 'aqua' });
 
 =head1 METHODS
 

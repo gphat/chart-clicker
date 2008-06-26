@@ -17,7 +17,7 @@ has 'padding' => (
 has 'stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { new Chart::Clicker::Drawing::Stroke() }
+    default => sub { Chart::Clicker::Drawing::Stroke->new() }
 );
 
 
@@ -126,22 +126,22 @@ Chart::Clicker::Renderer::StackedBar renders a dataset as stacked bars.
 
 =head1 SYNOPSIS
 
-  my $br = new Chart::Clicker::Renderer::Bar({});
+  my $br = Chart::Clicker::Renderer::Bar->new({});
 
 =head1 ATTRIBUTES
 
 =over 4
 
-=item opacity
+=item I<opacity>
 
 If true this value will be used when setting the opacity of the bar's fill.
 
-=item padding
+=item I<padding>
 
 How much padding to put around a bar.  A padding of 4 will result in 2 pixels
 on each side.
 
-=item stroke
+=item I<stroke>
 
 A stroke to use on each bar.
 
@@ -153,11 +153,11 @@ A stroke to use on each bar.
 
 =over 4
 
-=item prepare
+=item I<prepare>
 
 Prepare the renderer
 
-=item draw
+=item I<draw>
 
 Draw the data!
 

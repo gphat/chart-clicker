@@ -19,7 +19,7 @@ has 'opacity' => (
 has 'stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { new Chart::Clicker::Drawing::Stroke() }
+    default => sub { Chart::Clicker::Drawing::Stroke->new() }
 );
 
 sub draw {
@@ -108,9 +108,9 @@ Chart::Clicker::Renderer::Area renders a dataset as lines.
 
 =head1 SYNOPSIS
 
-  my $ar = new Chart::Clicker::Renderer::Area({
+  my $ar = Chart::Clicker::Renderer::Area->new({
       fade => 1,
-      stroke => new Chart::Clicker::Drawing::Stroke({
+      stroke => Chart::Clicker::Drawing::Stroke->new({
           width => 2
       })
   });
@@ -119,17 +119,17 @@ Chart::Clicker::Renderer::Area renders a dataset as lines.
 
 =over 4
 
-=item fade
+=item I<fade>
 
 If true, the color of the fill will be faded from opaque at the top to
 transparent at the bottom.
 
-=item opacity
+=item I<opacity>
 
 If true this value will be used when setting the opacity of the fill.  This
 setting may not be used with the 'fade' option.
 
-=item stroke
+=item I<stroke>
 
 Allows a Stroke object to be passed that will define the Stroke used on the
 series' line.
@@ -138,11 +138,11 @@ series' line.
 
 =head1 METHODS
 
-=head2 Class Methods
+=head2 Misc. Methods
 
 =over 4
 
-=item draw
+=item I<draw>
 
 Draw the data.
 

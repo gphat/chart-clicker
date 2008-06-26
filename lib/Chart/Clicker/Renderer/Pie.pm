@@ -10,12 +10,13 @@ use Chart::Clicker::Shape::Arc;
 has 'border_color' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Color',
-    default => sub { new Chart::Clicker::Drawing::Color({ name => 'black' }) }
+    default => sub { Chart::Clicker::Drawing::Color->new({ name => 'black' }) },
+    coerce => 1
 );
 has 'stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { new Chart::Clicker::Drawing::Stroke() }
+    default => sub { Chart::Clicker::Drawing::Stroke->new() }
 );
 
 my $TO_RAD = (4 * atan2(1, 1)) / 180;
@@ -104,10 +105,10 @@ of like-named Series are totaled and keys are ignored.
 
 =head1 SYNOPSIS
 
-  my $lr = new Chart::Clicker::Renderer::Pie();
+  my $lr = Chart::Clicker::Renderer::Pie->new();
   # Optionally set the stroke
   $lr->options({
-    stroke => new Chart::Clicker::Drawing::Stroke({
+    stroke => Chart::Clicker::Drawing::Stroke->new({
       ...
     })
   });

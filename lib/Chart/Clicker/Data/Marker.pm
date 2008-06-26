@@ -12,7 +12,7 @@ has 'inside_color' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Color',
     default => sub {
-        new Chart::Clicker::Drawing::Color(
+        Chart::Clicker::Drawing::Color->new(
             red => 0, green => 0, blue => 0, alpha => 1
         );
     }
@@ -21,7 +21,7 @@ has 'color' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Color',
     default => sub {
-        new Chart::Clicker::Drawing::Color(
+        Chart::Clicker::Drawing::Color->new(
             red => 0, green => 0, blue => 0, alpha => 1
         );
     }
@@ -30,7 +30,7 @@ has 'stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
     default => sub {
-        new Chart::Clicker::Drawing::Stroke();
+        Chart::Clicker::Drawing::Stroke->new();
     }
 );
 
@@ -51,9 +51,9 @@ Used to highlight a particular key, value or range of either.
  use Chart::Clicker::Drawing::Color;
  use Chart::Clicker::Drawing::Stroke;
 
- my $mark = new Chart::Clicker::Decoration::Marker({
-    color=  > new Chart::Clicker::Drawing::Color({ name => 'red' }),
-    stroke  => new CHart::Clicker::Drawing::Stroke(),
+ my $mark = Chart::Clicker::Decoration::Marker->new({
+    color=  > Chart::Clicker::Drawing::Color->new({ name => 'red' }),
+    stroke  => CHart::Clicker::Drawing::Stroke->new(),
     key     => 12,
     value   => 123,
     # Optionally

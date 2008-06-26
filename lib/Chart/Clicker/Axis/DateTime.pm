@@ -62,10 +62,10 @@ override 'prepare' => sub {
         start => $dstart, end => $dend
     );
 
-    my $linecolor = new Chart::Clicker::Drawing::Color({
+    my $linecolor = Chart::Clicker::Drawing::Color->new({
         red => 0, green => 0, blue => 0, alpha => .35
     });
-    my $fillcolor = new Chart::Clicker::Drawing::Color({
+    my $fillcolor = Chart::Clicker::Drawing::Color->new({
         red => 0, green => 0, blue => 0, alpha => .10
     });
 
@@ -77,7 +77,7 @@ override 'prepare' => sub {
         if($set->contains($day)) {
             if(defined($dayval)) {
                 push(@dmarkers,
-                    new Chart::Clicker::Data::Marker({
+                    Chart::Clicker::Data::Marker->new({
                         key         => $dayval,
                         key2        => $day->epoch(),
                         color       => $linecolor,
@@ -93,7 +93,7 @@ override 'prepare' => sub {
     }
     if($dayval) {
         push(@dmarkers,
-            new Chart::Clicker::Data::Marker({
+            Chart::Clicker::Data::Marker->new({
                 key         => $dayval,
                 key2        => $day->epoch(),
                 color       => $linecolor,
@@ -138,7 +138,7 @@ unix format.
 
 =head1 SYNOPSIS
 
-  my $axis = new Chart::Clicker::Axis::DateTime();
+  my $axis = Chart::Clicker::Axis::DateTime->new();
 
 =head1 METHODS
 

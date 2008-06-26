@@ -94,7 +94,7 @@ sub draw {
     my $id = $self->inside_dimensions();
     if($self->markers()) {
         if(scalar(@{ $clicker->markers() })) {
-            my $mo = new Chart::Clicker::Decoration::MarkerOverlay();
+            my $mo = Chart::Clicker::Decoration::MarkerOverlay->new();
             $mo->prepare($clicker, $id);
             $cr->save;
             $mo->draw($clicker);

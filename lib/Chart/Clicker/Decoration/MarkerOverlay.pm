@@ -125,8 +125,6 @@ Creates a new MarkerOverlay object.
 
 =back
 
-=head2 Class Methods
-
 =head1 AUTHOR
 
 Cory 'G' Watson <gphat@cpan.org>

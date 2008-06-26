@@ -1,8 +1,9 @@
-
 package Chart::Clicker::Axis;
 use Moose;
 
 extends 'Chart::Clicker::Drawing::Component';
+
+use MooseX::AttributeHelpers;
 
 use constant PI => 4 * atan2 1, 1;
 
@@ -16,7 +17,7 @@ use Chart::Clicker::Drawing::Stroke;
 has 'font' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Font',
-    default => sub { new Chart::Clicker::Drawing::Font(); }
+    default => sub { Chart::Clicker::Drawing::Font->new(); }
 );
 has 'format' => ( is => 'rw', isa => 'Str' );
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => .10 );
@@ -31,19 +32,25 @@ has 'visible' => ( is => 'rw', isa => 'Bool', default => 1 );
 has 'stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { new Chart::Clicker::Drawing::Stroke(); }
+    default => sub { Chart::Clicker::Drawing::Stroke->new(); }
 );
 
 has 'tick_stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { new Chart::Clicker::Drawing::Stroke(); }
+    default => sub { Chart::Clicker::Drawing::Stroke->new(); }
 );
 
 has 'tick_values' => (
+    metaclass => 'Collection::Array',
     is => 'rw',
     isa => 'ArrayRef',
-    default => sub { [] }
+    default => sub { [] },
+    provides => {
+        'push' => 'add_to_tick_values',
+        'clear' => 'clear_tick_values',
+        'count' => 'tick_value_count'
+    }
 );
 has 'tick_labels' => (
     is => 'rw',
@@ -54,12 +61,12 @@ has 'tick_labels' => (
 has 'range' => (
     is => 'rw',
     isa => 'Chart::Clicker::Data::Range',
-    default => sub { new Chart::Clicker::Data::Range() }
+    default => sub { Chart::Clicker::Data::Range->new() }
 );
 
 has '+color' => (
     default => sub {
-        new Chart::Clicker::Drawing::Color({
+        Chart::Clicker::Drawing::Color->new({
             red => 0, green => 0, blue => 0, alpha => 1
         })
     },
@@ -321,15 +328,15 @@ Chart::Clicker::Axis represents the plot of the chart.
   use Chart::Clicker::Drawing::Font;
   use Chart::Clicker::Drawing::Stroke;
 
-  my $axis = new Chart::Clicker::Axis({
-    color => new Chart::Clicker::Drawing::Color({ name => 'black' }),
-    font  => new Chart::Clicker::Drawing::Font(),
+  my $axis = Chart::Clicker::Axis->new({
+    color => 'black',
+    font  => Chart::Clicker::Drawing::Font->new(),
     orientation => $CC_VERTICAL,
     position => $CC_LEFT,
     show_ticks => 1,
-    stroke = new Chart::Clicker::Drawing::Stroke(),
+    stroke = Chart::Clicker::Drawing::Stroke->new(),
     tick_length => 2,
-    tick_stroke => new Chart::Clicker::Drawing::Stroke(),
+    tick_stroke => Chart::Clicker::Drawing::Stroke->new(),
     visible => 1,
   });
 
@@ -370,6 +377,16 @@ Set/Get the format to use for the axis values.  The format is applied to each
 value 'tick' via sprintf().  See sprintf()s perldoc for details!  This is
 useful for situations where the values end up with repeating decimals.
 
+=item fudge_amount
+
+Set/Get the amount to 'fudge' the span of this axis.  You should supply a
+percentage (in decimal form) and the axis will grow at both ends by the
+supplied amount.  This is useful when you want a bit of padding above and
+below the dataset.
+
+As an example, a fugdge_amount of .10 on an axis with a span of 10 to 50
+would add 5 to the top and bottom of the axis.
+
 =item height
 
 Set/Get the height of the axis.
@@ -398,7 +415,8 @@ Set/Get the Range for this axis.
 
 =item show_ticks
 
-Set/Get the show ticks flag.
+Set/Get the show ticks flag.  If this is value then the small tick marks at
+each mark on the axis will not be drawn.
 
 =item stroke
 
@@ -406,7 +424,7 @@ Set/Get the stroke for this axis.
 
 =item tick_length
 
-Set/Get the tick length
+Set/Get the tick length.
 
 =item tick_stroke
 
@@ -415,6 +433,18 @@ Set/Get the stroke for the tick markers.
 =item tick_values
 
 Set/Get the arrayref of values show as ticks on this Axis.
+
+=item I<add_to_tick_values>
+
+Add a value to the list of tick values.
+
+=item I<clear_tick_values>
+
+Clear all tick values.
+
+=item I<tick_value_count>
+
+Get a count of tick values.
 
 =item tick_labels
 

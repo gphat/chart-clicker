@@ -21,18 +21,18 @@ has 'location' => ( is => 'rw', isa => 'Chart::Clicker::Drawing::Point' );
 has 'insets' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Insets',
-    default => sub { new Chart::Clicker::Drawing::Insets() }
+    default => sub { Chart::Clicker::Drawing::Insets->new() }
 );
 has 'margins' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Insets',
-    default => sub { new Chart::Clicker::Drawing::Insets() }
+    default => sub { Chart::Clicker::Drawing::Insets->new() }
 );
 
 sub dimensions {
     my $self = shift();
 
-    return new Chart::Clicker::Drawing::Dimension({
+    return Chart::Clicker::Drawing::Dimension->new({
         width => $self->width(), height => $self->height()
     });
 }
@@ -107,7 +107,7 @@ sub inside_width {
 sub inside_dimensions {
     my $self = shift();
 
-    return new Chart::Clicker::Drawing::Dimension({
+    return Chart::Clicker::Drawing::Dimension->new({
         width   => $self->inside_width(),
         height  => $self->inside_height()
     });
@@ -137,7 +137,7 @@ sub inside_height {
 sub upper_left_inside_point {
     my $self = shift();
 
-    my $point = new Chart::Clicker::Drawing::Point({ x => 0, y => 0 });
+    my $point = Chart::Clicker::Drawing::Point->new({ x => 0, y => 0 });
 
     if(defined($self->insets())) {
         $point->x($self->insets->left());
@@ -182,8 +182,8 @@ A Component is an entity with a graphical representation.
 
 =head1 SYNOPSIS
 
-  my $c = new Chart::Clicker::Drawing::Component({
-    location => new Chart::Clicker::Drawing::Point({
+  my $c = Chart::Clicker::Drawing::Component->new({
+    location => Chart::Clicker::Drawing::Point->new({
         x => $x, y => $y
     }),
     width => 500, height => 350
@@ -197,8 +197,8 @@ A Component is an entity with a graphical representation.
 
 =item new
 
-  my $c = new Chart::Clicker::Drawing::Component({
-    location => new Chart::Clicker::Drawing::Point({
+  my $c = Chart::Clicker::Drawing::Component->new({
+    location => Chart::Clicker::Drawing::Point->new({
         x => $x, y => $y
     }),
     width => 500, height => 350

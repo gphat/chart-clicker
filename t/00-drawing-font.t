@@ -6,7 +6,7 @@ BEGIN {
 
 use Chart::Clicker::Drawing::Font qw(:weights :slants);
 
-my $font = new Chart::Clicker::Drawing::Font();
+my $font = Chart::Clicker::Drawing::Font->new();
 isa_ok($font, 'Chart::Clicker::Drawing::Font');
 
 cmp_ok($font->size(), '==', 12, 'Default Size');

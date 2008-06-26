@@ -9,7 +9,7 @@ has 'shape' => (
     is => 'rw',
     isa => 'Chart::Clicker::Shape',
     default => sub {
-        new Chart::Clicker::Shape::Arc({
+        Chart::Clicker::Shape::Arc->new({
            radius => 3,
            angle1 => 0,
            angle2 => 360
@@ -60,8 +60,8 @@ Chart::Clicker::Renderer::Point renders a dataset as points.
 
 =head1 SYNOPSIS
 
-  my $pr = new Chart::Clicker::Renderer::Point({
-    shape => new Chart::Clicker::Shape::Arc({
+  my $pr = Chart::Clicker::Renderer::Point->new({
+    shape => Chart::Clicker::Shape::Arc->new({
         angle1 => 0,
         angle2 => 180,
         radius  => 5

@@ -4,5 +4,5 @@ BEGIN {
     use_ok('Chart::Clicker::Drawing::Dimension');
 }
 
-my $dim = new Chart::Clicker::Drawing::Dimension();
+my $dim = Chart::Clicker::Drawing::Dimension->new();
 isa_ok($dim, 'Chart::Clicker::Drawing::Dimension');

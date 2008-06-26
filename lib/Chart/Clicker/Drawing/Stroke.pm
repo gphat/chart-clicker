@@ -48,7 +48,7 @@ see it!
 
   use Chart::Clicker::Drawing::Stroke qw(:line_caps :line_joins);
 
-  my $stroke = new Chart::Clicker::Drawing::Stroke({
+  my $stroke = Chart::Clicker::Drawing::Stroke->new({
     line_cap => $CC_LINE_CAP_ROUND,
     line_join => $CC_LINE_JOIN_MITER,
     width => 2

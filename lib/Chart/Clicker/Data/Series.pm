@@ -10,7 +10,7 @@ has 'name' => ( is => 'rw', isa => 'Str' );
 has 'range' => (
     is => 'rw',
     isa => 'Chart::Clicker::Data::Range',
-    default => sub { new Chart::Clicker::Data::Range() }
+    default => sub { Chart::Clicker::Data::Range->new() }
 );
 has 'keys' => (
     metaclass => 'Collection::Array',
@@ -76,7 +76,7 @@ sub prepare {
         $count++;
     }
     $self->range(
-        new Chart::Clicker::Data::Range({ lower => $min, upper => $max })
+        Chart::Clicker::Data::Range->new({ lower => $min, upper => $max })
     );
 
     return 1;
@@ -100,7 +100,7 @@ Chart::Clicker::Data::Series is the core class
   my @keys = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
 
-  my $series = new Chart::Clicker::Data::Series({
+  my $series = Chart::Clicker::Data::Series->new({
     keys    => \@keys,
     value   => \@values
   });
@@ -111,46 +111,52 @@ Chart::Clicker::Data::Series is the core class
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new, empty Series
 
-=item count
-
-Return a count of the number of values in this series.  Only available
-after the series has been prepared.
-
-=item errors
+=item I<errors>
 
 Set/Get the errors for this series.
 
-=item key_count
+=item I<add_to_keys>
 
-Return a count of the number of keys in this series.  Only available
-after the series has been prepared.
+Adds a key to this series.
 
-=item keys
+=item I<keys>
 
 Set/Get the keys for this series.
 
-=item name
+=item I<key_count>
+
+Get the count of keys in this series.
+
+=item I<name>
 
 Set/Get the name for this Series
 
-=item numeric_keys
+=item I<numeric_keys>
 
 Set/Get the flag that denotes if this series' keys are all numeric.
 
-=item prepare
+=item I<prepare>
 
 Prepare this series.  Performs various checks and calculates
 various things.
 
-=item range
+=item I<range>
 
 Returns the range for this series.
 
-=item values
+=item I<add_to_values>
+
+Add a value to this series.
+
+=item I<value_count>
+
+Get the count of values in this series.
+
+=item I<values>
 
 Set/Get the values for this series.
 

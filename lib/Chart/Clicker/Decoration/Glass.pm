@@ -11,7 +11,7 @@ has 'glare_color' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Color',
     default => sub {
-        new Chart::Clicker::Drawing::Color(
+        Chart::Clicker::Drawing::Color->new(
             red => 1, green => 1, blue => 1, alpha => 1
         )
     },
@@ -53,7 +53,6 @@ sub draw {
 
     $cr->set_source_rgba($self->glare_color->rgba());
     $cr->fill();
-    # $cr->restore();
 }
 
 1;

@@ -22,7 +22,7 @@ coerce 'Format'
 has 'color_allocator' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::ColorAllocator',
-    default => sub { new Chart::Clicker::Drawing::ColorAllocator()  }
+    default => sub { Chart::Clicker::Drawing::ColorAllocator->new()  }
 );
 
 has 'context' => (
@@ -75,7 +75,7 @@ has 'domain_axes' => (
 );
 
 has 'format' => (
-    is      => 'rw',
+    is      => 'ro',
     isa     => 'Format',
     coerce  => 1,
     default => sub { Chart::Clicker::Format::Png->new() }
@@ -154,7 +154,7 @@ has '+height' => (
 
 has '+insets' => (
     default => sub {
-        new Chart::Clicker::Drawing::Insets(
+        Chart::Clicker::Drawing::Insets->new(
             { top => 5, bottom => 5, left => 5, right => 5 }
         )
     }
@@ -162,13 +162,13 @@ has '+insets' => (
 
 has '+border' => (
     default => sub {
-        new Chart::Clicker::Drawing::Border()
+        Chart::Clicker::Drawing::Border->new()
     }
 );
 
 has '+background_color' => (
     default => sub {
-        new Chart::Clicker::Drawing::Color(
+        Chart::Clicker::Drawing::Color->new(
             { red => 1, green => 1, blue => 1, alpha => 1 }
         )
     }
@@ -331,33 +331,33 @@ Clicker supports PNG and SVG output.
   use Chart::Clicker::Drawing::Insets;
   use Chart::Clicker::Renderer::Area;
 
-  my $chart = new Chart::Clicker({ format => 'png', width => 500, height => 350 });
+  my $chart = Chart::Clicker->new({ format => 'Png', width => 500, height => 350 });
 
-  my $series = new Chart::Clicker::Data::Series({
+  my $series = Chart::Clicker::Data::Series->new({
     keys    => [1, 2, 3, 4, 5, 6],
     values  => [12, 9, 8, 3, 5, 1]
   });
 
-  my $dataset = new Chart::Clicker::Data::DataSet({
+  my $dataset = Chart::Clicker::Data::DataSet->new({
     series => [ $series ]
   });
   $chart->datasets([ $dataset ]);
 
-  my $legend = new Chart::Clicker::Decoration::Legend({
-    margins => new Chart::Clicker::Drawing::Insets({
+  my $legend = Chart::Clicker::Decoration::Legend->new({
+    margins => Chart::Clicker::Drawing::Insets->new({
         top => 3
     })
   });
   $chart->add($legend, $CC_BOTTOM);
 
-  my $daxis = new Chart::Clicker::Axis({
+  my $daxis = Chart::Clicker::Axis->new({
     orientation => $CC_HORIZONTAL,
     position    => $CC_BOTTOM,
     format      => '%0.2f'
   });
   $chart->add($daxis, $CC_AXIS_BOTTOM);
 
-  my $raxis = new Chart::Clicker::Axis({
+  my $raxis = Chart::Clicker::Axis->new({
     orientation => $CC_VERTICAL,
     position    => $CC_LEFT,
     format      => '%0.2f'
@@ -367,15 +367,15 @@ Clicker supports PNG and SVG output.
   $chart->range_axes([ $raxis ]);
   $chart->domain_axes([ $daxis ]);
 
-  my $grid = new Chart::Clicker::Decoration::Grid();
+  my $grid = Chart::Clicker::Decoration::Grid->new();
   $chart->add($grid, $CC_CENTER, 0);
 
-  my $renderer = new Chart::Clicker::Renderer::Area();
+  my $renderer = Chart::Clicker::Renderer::Area->new();
   $renderer->options({
     fade => 1
   });
 
-  my $plot = new Chart::Clicker::Decoration::Plot();
+  my $plot = Chart::Clicker::Decoration::Plot->new();
   $plot->renderers([$renderer]);
   $chart->plot($plot);
 
@@ -396,7 +396,7 @@ Clicker supports PNG and SVG output.
 =item new
 
 Creates a new Chart::Clicker object. If no format, width and height are
-specified then defaults of png, 500 and 300 are chosen, respectively.
+specified then defaults of Png, 500 and 300 are chosen, respectively.
 
 =back
 
@@ -432,6 +432,11 @@ Get/Set the datasets for this chart.
 =item draw
 
 Draw this chart
+
+=item I<format>
+
+Get the format for this Chart.  Required in the constructor.  Must be on of
+Png, Pdf, Ps or Svg.
 
 =item get_dataset_domain_axis
 
@@ -476,7 +481,7 @@ index.
 =item write
 
 Write the chart output to the specified location. Output is written in the
-format provided to the constructor (which defaults to png).
+format provided to the constructor (which defaults to Png).
 
   $c->write('/path/to/the.png');
 
