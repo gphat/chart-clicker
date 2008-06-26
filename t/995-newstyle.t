@@ -113,7 +113,7 @@ $chart->domain_axes([ $daxis, $daxis2 ]);
 $chart->set_dataset_range_axis(2, 1);
 $chart->set_dataset_domain_axis(2, 1);
 
-cmp_ok($chart->get_dataset_range_axis(1), '==', 0, 'First dataset is on 0 range');
+ok(!defined($chart->get_dataset_range_axis(1)), 'First dataset is on 0 range');
 cmp_ok($chart->get_dataset_range_axis(2), '==', 1, 'Second dataset is on 1 range');
 
 my $grid = Chart::Clicker::Decoration::Grid->new();
@@ -135,7 +135,7 @@ my $rmark = Chart::Clicker::Data::Marker->new({
 $chart->add_to_markers($rmark);
 $chart->set_marker_range_axis(0, 1);
 cmp_ok($chart->get_marker_range_axis(0), '==', 1, 'Marker range axis');
-cmp_ok($chart->get_marker_domain_axis(0), '==', 0, 'Marker domain axis');
+ok(!defined($chart->get_marker_domain_axis(0)), 'Marker domain axis');
 cmp_ok($chart->marker_count(), '==', 2, 'Marker count');
 
 my $area = Chart::Clicker::Renderer::Area->new(

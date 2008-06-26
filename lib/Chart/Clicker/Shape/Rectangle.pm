@@ -7,7 +7,7 @@ has 'width' => ( is => 'rw', isa => 'Num' );
 has 'height' => ( is => 'rw', isa => 'Num' );
 
 sub resize {
-    my ($self, $factor = @_);
+    my ($self, $factor) = @_;
 
     $self->width($factor);
     $self->height($factor);

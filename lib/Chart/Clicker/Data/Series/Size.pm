@@ -50,7 +50,11 @@ for the Bubble renderer.
 
 Creates a new, empty Series::Size
 
+=back
+
 =head2 Methods
+
+=over 4
 
 =item I<add_to_sizes>
 
