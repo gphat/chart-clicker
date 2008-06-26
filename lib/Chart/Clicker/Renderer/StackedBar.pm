@@ -1,7 +1,7 @@
 package Chart::Clicker::Renderer::StackedBar;
 use Moose;
 
-extends 'Chart::Clicker::Renderer::Base';
+extends 'Chart::Clicker::Renderer';
 
 has '+additive' => ( default => 1 );
 has 'opacity' => (

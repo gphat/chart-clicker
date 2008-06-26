@@ -1,7 +1,7 @@
 package Chart::Clicker::Renderer::Pie;
 use Moose;
 
-extends 'Chart::Clicker::Renderer::Base';
+extends 'Chart::Clicker::Renderer';
 
 use Chart::Clicker::Drawing::Color;
 use Chart::Clicker::Drawing::Stroke;

@@ -36,6 +36,12 @@ sub height {
     return $self->radius();
 }
 
+sub resize {
+    my ($self, $factor) = @_;
+
+    $self->radius($factor);
+}
+
 1;
 __END__
 

@@ -6,6 +6,13 @@ extends 'Chart::Clicker::Shape';
 has 'width' => ( is => 'rw', isa => 'Num' );
 has 'height' => ( is => 'rw', isa => 'Num' );
 
+sub resize {
+    my ($self, $factor = @_);
+
+    $self->width($factor);
+    $self->height($factor);
+}
+
 sub create_path {
     my ($self, $cairo, $x, $y) = @_;
 

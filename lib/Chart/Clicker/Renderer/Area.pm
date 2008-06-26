@@ -2,7 +2,7 @@ package Chart::Clicker::Renderer::Area;
 use Moose;
 use Cairo;
 
-extends 'Chart::Clicker::Renderer::Base';
+extends 'Chart::Clicker::Renderer';
 
 use Chart::Clicker::Drawing::Stroke;
 

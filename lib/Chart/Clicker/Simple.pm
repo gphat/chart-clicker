@@ -5,6 +5,7 @@ use Chart::Clicker;
 use Chart::Clicker::Axis;
 use Chart::Clicker::Data::DataSet;
 use Chart::Clicker::Data::Series;
+use Chart::Clicker::Data::Series::Size;
 use Chart::Clicker::Decoration::Grid;
 use Chart::Clicker::Decoration::Label;
 use Chart::Clicker::Decoration::Legend;
@@ -19,7 +20,7 @@ has 'height' => ( is => 'rw', isa => 'Int', default => 300 );
 has 'range_label' => ( is => 'rw', isa => 'Str' );
 has 'renderer' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Renderer::Base',
+    isa => 'Chart::Clicker::Renderer',
     default => sub { Chart::Clicker::Renderer::Line->new() }
 );
 has 'width' => ( is => 'rw', isa => 'Int', default => 400 );
@@ -39,10 +40,19 @@ sub BUILD {
 
     my @serieses;
     foreach my $d (@{ $self->data() }) {
-        my $series = Chart::Clicker::Data::Series->new({
-            keys    => $d->{'keys'},
-            values  => $d->{'values'}
-        });
+        my $series;
+        if(exists($d->{'sizes'})) {
+            $series = Chart::Clicker::Data::Series::Size->new({
+                keys    => $d->{'keys'},
+                values  => $d->{'values'},
+                sizes   => $d->{'sizes'}
+            });
+        } else {
+            $series = Chart::Clicker::Data::Series->new({
+                keys    => $d->{'keys'},
+                values  => $d->{'values'}
+            });
+        }
         push(@serieses, $series);
     }
 

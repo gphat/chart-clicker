@@ -1,10 +1,11 @@
 Revision history for Perl extension Chart::Clicker.
 
-1.5.0
+2.0.0
     - Work with latest Cairo
     - Pretty up some un-Moosey behaviour
+		- Add Bubble renderer and Series::Size
 	  - Add PostScript and PDF support
-	  - Use clipping rather than a bunch of surface painting
+	  - Use clipping rather than a bunch of surface painting (thanks to ash)
 	  - Create all surfaces as streams and use IO::File to write out the surface
 	    data.
 	  - Add show_range and show_domain flags to Grid
@@ -12,6 +13,8 @@ Revision history for Perl extension Chart::Clicker.
 	  - Add lots of convenient methods via MooseX::AttributeHelpers
 	  - Get rid of all indirect method calls (ewww!)
 	  - Fix broken bar renderer alignment
+	  - Rename Renderer::Base to just Renderer
+	  - Add resize method to Shape classes
 1.4.2
     - Packaging fixes.
 1.4.1

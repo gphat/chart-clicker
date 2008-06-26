@@ -4,7 +4,7 @@ BEGIN { use_ok('Chart::Clicker::Data::Series'); }
 
 my $series = Chart::Clicker::Data::Series->new();
 ok(defined($series), 'new Chart::Clicker::Data::Series');
-isa_ok($series, 'Chart::Clicker::Data::Series', 'isa Chart::Clicker::Data::Series');
+isa_ok($series, 'Chart::Clicker::Data::Series');
 
 my $name = 'Foo';
 $series->name($name);

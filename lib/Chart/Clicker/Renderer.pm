@@ -1,4 +1,4 @@
-package Chart::Clicker::Renderer::Base;
+package Chart::Clicker::Renderer;
 use Moose;
 
 extends 'Chart::Clicker::Drawing::Component';
@@ -17,22 +17,20 @@ sub prepare {
     return 1;
 }
 
-## no critic
 sub render {
     die('Override me.');
 }
-## use critic
 
 1;
 __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::Base
+Chart::Clicker::Renderer
 
 =head1 DESCRIPTION
 
-Chart::Clicker::Renderer::Base represents the plot of the chart.
+Chart::Clicker::Renderer represents the plot of the chart.
 
 =head1 SYNOPSIS
 
@@ -46,7 +44,7 @@ Chart::Clicker::Renderer::Base represents the plot of the chart.
 
 =item new
 
-Creates a new Chart::Clicker::Renderer::Base.
+Creates a new Chart::Clicker::Renderer.
 
 =back
 

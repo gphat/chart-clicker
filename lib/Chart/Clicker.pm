@@ -183,7 +183,7 @@ use Chart::Clicker::Drawing::Point;
 
 use Cairo;
 
-our $VERSION = '1.5.0';
+our $VERSION = '2.0.0';
 
 sub inside_width {
     my $self = shift();

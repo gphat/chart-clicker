@@ -1,7 +1,7 @@
 package Chart::Clicker::Renderer::Point;
 use Moose;
 
-extends 'Chart::Clicker::Renderer::Base';
+extends 'Chart::Clicker::Renderer';
 
 use Chart::Clicker::Shape::Arc;
 
@@ -38,13 +38,19 @@ sub draw {
         my $y = $height - $range->mark($vals[$_]);
 
         $cr->move_to($x, $y);
-        $self->shape->create_path($cr, $x , $y);
+        $self->draw_point($cr, $x, $y, $series, $_);
     }
     my $color = $clicker->color_allocator->next();
     $cr->set_source_rgba($color->rgba());
     $cr->fill();
 
     return 1;
+}
+
+sub draw_point {
+    my ($self, $cr, $x, $y, $series, $count) = @_;
+
+    $self->shape->create_path($cr, $x , $y);
 }
 
 1;
@@ -95,9 +101,14 @@ Create a new Point renderer
 
 =over 4
 
-=item render
+=item I<render>
 
 Render the series.
+
+=item I<draw_point>
+
+Called for each point.  Implemented as a separate method so that subclasses
+such as Bubble may override the drawing.
 
 =back
 

@@ -91,7 +91,7 @@ Chart::Clicker::Data::Series
 
 =head1 DESCRIPTION
 
-Chart::Clicker::Data::Series is the core class 
+Chart::Clicker::Data::Series represents a series of values to be charted.
 
 =head1 SYNOPSIS
 
