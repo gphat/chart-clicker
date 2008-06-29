@@ -1,4 +1,4 @@
-use Test::More tests => 23;
+use Test::More tests => 2;
 
 use Chart::Clicker;
 use Chart::Clicker::Axis;
@@ -60,7 +60,7 @@ $chart->add($plot, $CC_CENTER);
 
 $chart->prepare();
 $chart->draw();
-$chart->write('/Users/gphat/chart.png');
+#$chart->write('/Users/gphat/chart.png');
 
 my $range = $chart->get_dataset(0)->get_series(0)->range;
 cmp_ok($range->lower(), '==', 1, 'Lower is 1');
