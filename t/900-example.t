@@ -50,7 +50,7 @@ my $renderer = Chart::Clicker::Renderer::Area->new(fade => 1);
 my $plot = Chart::Clicker::Decoration::Plot->new();
 $plot->renderers([$renderer]);
 # TODO Shouldn't have to do this here.
-# $plot->add_component($renderer);
+$plot->add_component($renderer);
 
 $chart->plot($plot);
 

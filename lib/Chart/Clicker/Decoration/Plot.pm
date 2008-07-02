@@ -5,7 +5,7 @@ use MooseX::AttributeHelpers;
 use Layout::Manager::Single;
 
 # TODO MOve this class?  It's not decoration anymore.
-extends 'Chart::Clicker::Drawing::Component';
+extends 'Chart::Clicker::Drawing::Container';
 
 # TODO Temporary
 has '+background_color' => ( default => sub { Graphics::Color::RGB->new( red => 1 ) });
@@ -15,9 +15,9 @@ has 'clicker' => (
     isa => 'Chart::Clicker',
 );
 
-# has '+layout' => (
-#     default => sub { Layout::Manager::Single->new }
-# );
+has '+layout' => (
+    default => sub { Layout::Manager::Single->new }
+);
 
 has 'renderers' => (
     metaclass => 'Collection::Array',
@@ -50,8 +50,8 @@ has 'dataset_renderers' => (
 use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::MarkerOverlay;
 
-# sub prepare {
-#     my $self = shift();
+sub prepare {
+    my $self = shift();
 #     my $clicker = shift();
 #     my $dimension = shift();
 # 
@@ -60,22 +60,22 @@ use Chart::Clicker::Decoration::MarkerOverlay;
 # 
 #     # my $idim = $self->inside_dimensions();
 # 
-#     my %dscount;
-#     my %rend_ds;
-#     my $count = 0;
-#     foreach my $dataset (@{ $self->clicker->datasets() }) {
-#         my $ridx = $self->get_dataset_renderer($count) || 0;
-#         $dscount{$ridx} += scalar(@{ $dataset->series() });
-#         push(@{ $rend_ds{$ridx} }, $dataset);
-#         $count++;
-#     }
+    # my %dscount;
+    # my %rend_ds;
+    # my $count = 0;
+    # foreach my $dataset (@{ $self->clicker->datasets() }) {
+        # my $ridx = $self->get_dataset_renderer($count) || 0;
+    #     $dscount{$ridx} += scalar(@{ $dataset->series() });
+        # push(@{ $rend_ds{$ridx} }, $dataset);
+        # $count++;
+    }
 # 
     # TODO This is also happening in Clicker.pm
-    # foreach my $c (@{ $self->components }) {
-    #     $c->{component}->clicker($self->clicker);
-    # }
+    foreach my $c (@{ $self->components }) {
+        $c->{component}->clicker($self->clicker);
+    }
 # 
-    # super;
+    super;
 # 
 #     # $count = 0;
 #     # foreach my $rend (@{ $self->renderers() }) {
@@ -85,7 +85,7 @@ use Chart::Clicker::Decoration::MarkerOverlay;
 #     # }
 # 
 #     return 1;
-# }
+}
 
 # sub draw {
 #     my $self = shift();
