@@ -3,11 +3,24 @@ use Moose;
 use Moose::Util::TypeConstraints;
 use MooseX::AttributeHelpers;
 
-extends 'Chart::Clicker::Drawing::Container';
+extends 'Graphics::Primitive::Container';
+
+use Layout::Manager::Compass;
+
+use Graphics::Color::RGB;
+
+use Graphics::Primitive::Insets;
+use Graphics::Primitive::Border;
 
 use Chart::Clicker::Decoration::Plot;
 use Chart::Clicker::Format::Png;
 use Chart::Clicker::Util;
+
+use Chart::Clicker::Drawing::ColorAllocator;
+
+use Cairo;
+
+our $VERSION = '2.0.0';
 
 subtype 'Format'
     => as 'Object'
@@ -153,67 +166,19 @@ has '+height' => (
     default => 300
 );
 
-has '+insets' => (
-    default => sub {
-        Chart::Clicker::Drawing::Insets->new(
-            { top => 5, bottom => 5, left => 5, right => 5 }
-        )
-    }
-);
-
 has '+border' => (
     default => sub {
-        Chart::Clicker::Drawing::Border->new()
+        Graphics::Primitive::Border->new()
     }
 );
 
 has '+background_color' => (
     default => sub {
-        Chart::Clicker::Drawing::Color->new(
+        Graphics::Color::RGB->new(
             { red => 1, green => 1, blue => 1, alpha => 1 }
         )
     }
 );
-
-use Chart::Clicker::Drawing qw(:positions);
-use Chart::Clicker::Drawing::Border;
-use Chart::Clicker::Drawing::Color;
-use Chart::Clicker::Drawing::ColorAllocator;
-use Chart::Clicker::Drawing::Insets;
-use Chart::Clicker::Drawing::Point;
-
-use Cairo;
-
-our $VERSION = '2.0.0';
-
-sub inside_width {
-    my $self = shift();
-
-    my $w = $self->width();
-
-    if(defined($self->insets())) {
-        $w -= $self->insets->left() + $self->insets->right()
-    }
-    if(defined($self->border())) {
-        $w -= $self->border->stroke->width() * 2;
-    }
-
-    return $w;
-}
-
-sub inside_height {
-    my $self = shift();
-
-    my $h = $self->height();
-    if(defined($self->insets())) {
-        $h -= $self->insets->bottom() + $self->insets->top();
-    }
-    if(defined($self->border())) {
-        $h -= $self->border->stroke->width() * 2;
-    }
-
-    return $h;
-}
 
 sub draw {
     my $self = shift();
