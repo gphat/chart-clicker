@@ -1,24 +1,18 @@
 package Chart::Clicker::Renderer;
 use Moose;
 
-extends 'Graphics::Primitive::Component';
+extends 'Chart::Clicker::Drawing::Component';
 
 has 'dataset_count' => ( is => 'rw', isa => 'Int' );
 has 'additive' => ( is => 'ro', isa => 'Bool', default => 0 );
 
 sub prepare {
     my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
 
-    $self->width($dimension->width());
-    $self->height($dimension->height());
+    # $self->width($dimension->width());
+    # $self->height($dimension->height());
 
     return 1;
-}
-
-sub render {
-    die('Override me.');
 }
 
 1;

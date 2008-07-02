@@ -1,7 +1,7 @@
 package Chart::Clicker::Axis;
 use Moose;
 
-extends 'Graphics::Primitive::Component';
+extends 'Chart::Clicker::Drawing::Component';
 
 use MooseX::AttributeHelpers;
 
@@ -18,14 +18,15 @@ use Graphics::Primitive::Stroke;
 
 has 'font' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Font',
+    isa => 'Graphics::Primitive::Font',
     default => sub { Graphics::Primitive::Font->new(); }
 );
 has 'format' => ( is => 'rw', isa => 'Str' );
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
 has 'label' => ( is => 'rw', isa => 'Str' );
 has 'per' => ( is => 'rw', isa => 'Num' );
-has 'position' => ( is => 'rw', isa => 'Positions' );
+# TODO FIxme
+has 'position' => ( is => 'rw', isa => 'Num' );
 has 'show_ticks' => ( is => 'rw', isa => 'Bool', default => 1 );
 has 'tick_length' => ( is => 'rw', isa => 'Num', default => 3 );
 has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
@@ -33,13 +34,13 @@ has 'visible' => ( is => 'rw', isa => 'Bool', default => 1 );
 
 has 'stroke' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
+    isa => 'Graphics::Primitive::Stroke',
     default => sub { Graphics::Primitive::Stroke->new(); }
 );
 
 has 'tick_stroke' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
+    isa => 'Graphics::Primitive::Stroke',
     default => sub { Graphics::Primitive::Stroke->new(); }
 );
 
@@ -80,14 +81,8 @@ has 'baseline' => (
     isa => 'Num',
 );
 
-has 'orientation' => ( is => 'rw', isa => 'Orientations' );
-
-has 'positions' => ( is => 'rw', isa => 'Positions' );
-
 sub prepare {
     my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
 
     if($self->range->span() == 0) {
         die('This axis has a span of 0, that\'s fatal!');
@@ -113,7 +108,7 @@ sub prepare {
         $self->tick_values($self->range->divvy($self->ticks()));
     }
 
-    my $cairo = $clicker->context();
+    my $cairo = $self->clicker->context();
 
     my $font = $self->font();
 
@@ -157,16 +152,20 @@ sub prepare {
         my $label_height = $self->label()
             ? $self->{'label_extents_cache'}->{'total_height'}
             : 0;
-        $self->height($biggest + $label_height + 4);
-        $self->width($dimension->width());
-        $self->per($self->width() / ($self->range->span() - 1));
+        $self->minimum_height($biggest + $label_height + 4);
+        # TODO Wrong, need widest label + tick length + outside
+        $self->minimum_width($biggest + $self->outside_width);
+        # TODO This is wrong
+        $self->per($self->width / ($self->range->span - 1));
     } else {
         # The label will be rotated, so use height here too.
         my $label_width = $self->label()
             ? $self->{'label_extents_cache'}->{'total_height'}
             : 0;
-        $self->width($biggest + $label_width + 4);
-        $self->height($dimension->height());
+        $self->minimum_width($biggest + $label_width + 4);
+        # TODO Wrong, need tallest label + tick length + outside
+        $self->minimum_height($self->outside_height + $biggest);
+        # TODO This is wrong
         $self->per($self->height() / ($self->range->span() - 1));
     }
 
@@ -187,7 +186,8 @@ sub mark {
 
 sub draw {
     my $self = shift();
-    my $clicker = shift();
+
+    print STDERR "WEEE ".$self->width." ".$self->height."\n";
 
     unless($self->visible()) {
         return;
@@ -200,6 +200,7 @@ sub draw {
     my $width = $self->width();
     my $height = $self->height();
 
+
     if($pos == $CC_LEFT) {
         $x += $width;
     } elsif($pos == $CC_RIGHT) {
@@ -210,7 +211,7 @@ sub draw {
         # nuffin
     }
 
-    my $cr = $clicker->context();
+    my $cr = $self->clicker->context();
 
     my $stroke = $self->stroke();
     $cr->set_line_width($stroke->width());
@@ -228,7 +229,7 @@ sub draw {
 
     my $lower = $self->range->lower();
 
-    $cr->set_source_rgba($self->color->rgba());
+    $cr->set_source_rgba($self->color->as_array_with_alpha());
 
     $cr->move_to($x, $y);
     if($orient == $CC_HORIZONTAL) {

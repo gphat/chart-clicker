@@ -8,7 +8,6 @@ use Chart::Clicker::Decoration::Grid;
 use Chart::Clicker::Decoration::Legend;
 use Chart::Clicker::Decoration::Plot;
 use Chart::Clicker::Drawing qw(:positions);
-use Chart::Clicker::Drawing::Insets;
 use Chart::Clicker::Renderer::Area;
 
 my $chart = Chart::Clicker->new({ format => 'Png', width => 500, height => 350 });
@@ -23,45 +22,45 @@ my $dataset = Chart::Clicker::Data::DataSet->new({
 });
 $chart->datasets([ $dataset ]);
 
-my $legend = Chart::Clicker::Decoration::Legend->new({
-  margins => Chart::Clicker::Drawing::Insets->new({
-      top => 3
-  })
-});
-$chart->add($legend, $CC_BOTTOM);
+my $legend = Chart::Clicker::Decoration::Legend->new();
+$chart->add_component($legend, 's');
 
 my $daxis = Chart::Clicker::Axis->new({
   orientation => $CC_HORIZONTAL,
   position    => $CC_BOTTOM,
   format      => '%0.2f'
 });
-$chart->add($daxis, $CC_AXIS_BOTTOM);
+$chart->add_component($daxis, 's');
 
 my $raxis = Chart::Clicker::Axis->new({
   orientation => $CC_VERTICAL,
   position    => $CC_LEFT,
   format      => '%0.2f'
 });
-$chart->add($raxis, $CC_AXIS_LEFT);
+$chart->add_component($raxis, 'w');
 
 $chart->range_axes([ $raxis ]);
 $chart->domain_axes([ $daxis ]);
 
 my $grid = Chart::Clicker::Decoration::Grid->new();
-$chart->add($grid, $CC_CENTER, 0);
+# $chart->add_component($grid, 'c');
 
 my $renderer = Chart::Clicker::Renderer::Area->new(fade => 1);
 
 my $plot = Chart::Clicker::Decoration::Plot->new();
 $plot->renderers([$renderer]);
+# TODO Shouldn't have to do this here.
+$plot->add_component($renderer);
+
 $chart->plot($plot);
 
-$chart->add($plot, $CC_CENTER);
+$chart->add_component($plot, 'center');
 
 $chart->prepare();
 $chart->draw();
-#$chart->write('/Users/gphat/chart.png');
+$chart->write('/Users/gphat/chart.png');
 
 my $range = $chart->get_dataset(0)->get_series(0)->range;
 cmp_ok($range->lower(), '==', 1, 'Lower is 1');
 cmp_ok($raxis->range->lower(), 'eq', $range->lower(), 'series lower = axis lower');
+

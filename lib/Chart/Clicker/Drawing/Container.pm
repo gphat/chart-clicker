@@ -2,224 +2,82 @@ package Chart::Clicker::Drawing::Container;
 use Moose;
 use MooseX::AttributeHelpers;
 
-extends 'Chart::Clicker::Drawing::Component';
+extends 'Graphics::Primitive::Container';
 
-has 'components' => (
-    metaclass => 'Collection::Array',
-    is  => 'rw',
-    isa => 'ArrayRef[HashRef]',
-    default => sub { [] },
-    provides => {
-        push    => 'add_to_components',
-        clear   => 'clear_components',
-        count   => 'component_count',
-        empty   => 'has_components',
-        get     => 'get_component'
-    }
-);
-
-has 'axis_left' => (
-    is => 'rw',
-    isa => 'Num',
-    default => sub { 0 },
-);
-
-has 'axis_right' => (
-    is => 'rw',
-    isa => 'Num',
-    default => sub { 0 },
-);
-
-has 'axis_top' => (
-    is => 'rw',
-    isa => 'Num',
-    default => 0,
-);
-
-has 'axis_bottom' => (
-    is => 'rw',
-    isa => 'Num',
-    default => 0,
-);
-
-use Chart::Clicker::Context;
-use Chart::Clicker::Drawing qw(:positions);
-use Chart::Clicker::Drawing::Dimension;
-
-sub add {
-    my $self = shift();
-    my $comp = shift();
-    my $pos = shift() || $CC_TOP;
-    my $disturb = shift();
-
-    unless(defined($disturb)) {
-        $disturb = 1;
-    }
-
-    $self->add_to_components({
-        component   => $comp,
-        position    => $pos,
-        disturb     => $disturb
-    });
-
-    # Make note of all the axes so we can find them when we need
-    # to resize them.
-    if(($pos == $CC_AXIS_LEFT) || ($pos == $CC_AXIS_RIGHT)
-        || ($pos == $CC_AXIS_TOP) || ($pos == $CC_AXIS_BOTTOM)) {
-        $self->{'AXES'}->{$self->component_count() - 1} = $pos;
-    }
-
-    return 1;
-}
-
-sub draw {
-    my $self = shift();
-    my $clicker = shift();
-
-    $self->SUPER::draw($clicker);
-    my $context = $clicker->context();
-
-    foreach my $child (@{ $self->components() }) {
-        my $comp = $child->{'component'};
-        my $pos = $child->{'position'};
-
-        $context->save;
-        $context->translate($comp->location->x, $comp->location->y);
-        $context->rectangle(0, 0, $comp->width, $comp->height);
-        $context->clip;
-
-        $comp->draw($clicker);
-
-        $context->restore();
-    }
-}
-
-sub prepare {
-    my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
-
-    $self->width($dimension->width());
-    $self->height($dimension->height());
-
-    # These variables accrue values throughout the loop and are used
-    # to size components.
-    my ($top, $left, $right, $bottom) = (0, 0, 0, 0);
-
-    my $count = 0;
-    foreach my $child (@{ $self->components() }) {
-        my $comp = $child->{'component'};
-        my $dim = Chart::Clicker::Drawing::Dimension->new({
-            width => int($self->inside_width() - $left - $right),
-            height => int($self->inside_height() - $top - $bottom)
-        });
-
-        my $pos = $child->{'position'};
-        $comp->prepare($clicker, $dim);
-
-        my $disturb = $child->{'disturb'};
-
-        my $loc;
-        if(($pos == $CC_TOP) || ($pos == $CC_AXIS_TOP)) {
-            $loc = $self->upper_left_inside_point();
-            $loc->x($loc->x() + $left);
-            $loc->y($loc->y() + $top);
-            if($disturb) {
-                $top += $comp->height();
-            }
-            if($pos == $CC_AXIS_TOP) {
-                $self->axis_top($self->axis_top + $comp->height);
-                $self->pack_axes($count, $comp->height(), $pos);
-            }
-        } elsif(($pos == $CC_LEFT) || ($pos == $CC_AXIS_LEFT)) {
-            $loc = $self->upper_left_inside_point();
-            $loc->x($loc->x() + $left);
-            $loc->y($loc->y() + $top);
-            if($disturb) {
-                $left += $comp->width();
-            }
-            if($pos == $CC_AXIS_LEFT) {
-                $self->axis_left($self->axis_left + $comp->width);
-                $self->pack_axes($count, $comp->width(), $pos);
-            }
-        } elsif(($pos == $CC_RIGHT) || ($pos == $CC_AXIS_RIGHT)) {
-            $loc = $self->upper_right_inside_point();
-            $loc->x($loc->x() - $comp->width() - $right);
-            $loc->y($loc->y() + $top);
-            if($disturb) {
-                $right += $comp->width();
-            }
-            if($pos == $CC_AXIS_RIGHT) {
-                $self->axis_right($self->axis_right + $comp->width);
-                $self->pack_axes($count, $comp->width(), $pos);
-            }
-        } elsif(($pos == $CC_BOTTOM) || ($pos == $CC_AXIS_BOTTOM)) {
-            $loc = $self->lower_left_inside_point();
-            $loc->x($loc->x() + $left);
-            $loc->y($loc->y() - $bottom - $comp->height());
-            if($disturb) {
-                $bottom += $comp->height();
-            }
-            if($pos == $CC_AXIS_BOTTOM) {
-                $self->axis_bottom($self->axis_bottom + $comp->height);
-                $self->pack_axes($count, $comp->height(), $pos);
-            }
-        } else {
-            $loc = $self->upper_left_inside_point();
-            $loc->x($loc->x() + $left);
-            $loc->y($loc->y() + $top);
-            if($disturb) {
-                $left += $comp->width();
-                $top += $comp->height();
-            }
-        }
-
-        $comp->location($loc);
-        $count++;
-    }
-
-    return 1;
-}
-
-# Man, this thing is crazy.  See, each time an Axis is placed we need to
-# resize all the other axes to accommodate it.  This code is pretty straight
-# forward in this iteration but I'm certain there's some better way I can do it.
-sub pack_axes {
-    my $self = shift();
-    my $count = shift();
-    my $amt = shift();
-    my $apos = shift();
-
-    my @indices = sort(keys(%{ $self->{'AXES'} }));
-    my $item = shift(@indices);
-    while($item < $count) {
-
-        my $child = $self->get_component($item);
-        my $comp = $child->{'component'};
-        my $pos = $child->{'position'};
-        if(($pos == $CC_AXIS_BOTTOM) || ($pos == $CC_AXIS_TOP)) {
-            if($apos == $CC_AXIS_LEFT) {
-                $comp->location->x($comp->location->x() + $amt);
-            }
-            if(($apos == $CC_AXIS_LEFT) || ($apos == $CC_AXIS_RIGHT)) {
-                $comp->width($comp->width() - $amt);
-            }
-            $comp->per($comp->width() / ($comp->range->span() - 1));
-        } elsif(($pos == $CC_AXIS_LEFT) || ($pos == $CC_AXIS_RIGHT)) {
-            if($apos == $CC_AXIS_TOP) {
-                $comp->location->y($comp->location->y() + $amt);
-            }
-            if(($apos == $CC_AXIS_TOP) || ($apos == $CC_AXIS_BOTTOM)) {
-                $comp->height($comp->height() - $amt);
-            }
-            $comp->per($comp->height() / ($comp->range->span() - 1));
-        }
-
-        $item = shift(@indices);
-    }
-
-    return 1;
-}
+# override('draw', sub {
+#     my ($self) = @_;
+# 
+#     super;
+# 
+#     # TODO This should be elsewhere...
+#     my $width = $self->width();
+#     my $height = $self->height();
+#     
+#     my $context = $self->context();
+#     
+#     if(defined($self->background_color())) {
+#         $context->set_source_rgba($self->background_color->as_array_with_alpha());
+#         $context->rectangle(0, 0, $width, $height);
+#         $context->paint();
+#     }
+#     
+#     my $x = 0;
+#     my $y = 0;
+#     my $bwidth = $width;
+#     my $bheight = $height;
+#     
+#     my $margins = $self->margins();
+#     my ($mx, $my, $mw, $mh) = (0, 0, 0, 0);
+#     if($margins) {
+#         $mx = $margins->left();
+#         $my = $margins->top();
+#         $mw = $margins->right();
+#         $mh = $margins->bottom();
+#     }
+#     
+#     if(defined($self->border())) {
+#         my $stroke = $self->border();
+#         my $bswidth = $stroke->width();
+#         $context->set_source_rgba($self->border->color->as_array_with_alpha());
+#         $context->set_line_width($bswidth);
+#         $context->set_line_cap($stroke->line_cap());
+#         $context->set_line_join($stroke->line_join());
+#         $context->new_path();
+#         my $swhalf = $bswidth / 2;
+#         $context->rectangle(
+#             $mx + $swhalf, $my + $swhalf,
+#             $width - $bswidth - $mw - $mx, $height - $bswidth - $mh - $my
+#         );
+#         $context->stroke();
+#     }
+#     # TODO END This should be elsewhere...
+# 
+#     foreach my $c (@{ $self->components }) {
+#         next unless defined($c);
+# 
+#         my $comp = $c->{component};
+#         my $context = $self->context();
+# 
+#         $context->save;
+#         $context->translate($comp->origin->x, $comp->origin->y);
+#         $context->rectangle(0, 0, $comp->width, $comp->height);
+#         $context->clip;
+# 
+#         $comp->draw();
+# 
+#         $context->restore();
+#     }
+# });
+# 
+# override('prepare', sub {
+#     my ($self) = @_;
+# 
+#     foreach my $c (@{ $self->components }) {
+#          $c->{component}->clicker($self->clicker);
+#     }
+# 
+#     super;
+# });
 
 1;
 __END__

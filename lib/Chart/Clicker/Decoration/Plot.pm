@@ -2,8 +2,22 @@ package Chart::Clicker::Decoration::Plot;
 use Moose;
 use MooseX::AttributeHelpers;
 
-# TODO MOve this class?  It's not deocration anymore.
-extends 'Graphics::Primitive::Container';
+use Layout::Manager::Single;
+
+# TODO MOve this class?  It's not decoration anymore.
+extends 'Chart::Clicker::Drawing::Container';
+
+# TODO Temporary
+has '+background_color' => ( default => sub { Graphics::Color::RGB->new( red => 1 ) });
+
+has 'clicker' => (
+    is => 'rw',
+    isa => 'Chart::Clicker',
+);
+
+has '+layout' => (
+    default => sub { Layout::Manager::Single->new }
+);
 
 has 'renderers' => (
     metaclass => 'Collection::Array',
@@ -36,72 +50,78 @@ has 'dataset_renderers' => (
 use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::MarkerOverlay;
 
-sub prepare {
-    my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
+# sub prepare {
+#     my $self = shift();
+#     my $clicker = shift();
+#     my $dimension = shift();
+# 
+#     # $self->width($dimension->width());
+#     # $self->height($dimension->height());
+# 
+#     # my $idim = $self->inside_dimensions();
+# 
+#     my %dscount;
+#     my %rend_ds;
+#     my $count = 0;
+#     foreach my $dataset (@{ $self->clicker->datasets() }) {
+#         my $ridx = $self->get_dataset_renderer($count) || 0;
+#         $dscount{$ridx} += scalar(@{ $dataset->series() });
+#         push(@{ $rend_ds{$ridx} }, $dataset);
+#         $count++;
+#     }
+# 
+    # TODO This is also happening in Clicker.pm
+    # foreach my $c (@{ $self->components }) {
+    #     $c->{component}->clicker($self->clicker);
+    # }
+# 
+    super;
+# 
+#     # $count = 0;
+#     # foreach my $rend (@{ $self->renderers() }) {
+#     #     $rend->dataset_count($dscount{$count} || 0);
+#     #     $rend->prepare($clicker, $idim, $rend_ds{$count});
+#     #     $count++;
+#     # }
+# 
+#     return 1;
+# }
 
-    $self->width($dimension->width());
-    $self->height($dimension->height());
-
-    my $idim = $self->inside_dimensions();
-
-    my %dscount;
-    my %rend_ds;
-    my $count = 0;
-    foreach my $dataset (@{ $clicker->datasets() }) {
-        my $ridx = $self->get_dataset_renderer($count) || 0;
-        $dscount{$ridx} += scalar(@{ $dataset->series() });
-        push(@{ $rend_ds{$ridx} }, $dataset);
-        $count++;
-    }
-
-    $count = 0;
-    foreach my $rend (@{ $self->renderers() }) {
-        $rend->dataset_count($dscount{$count} || 0);
-        $rend->prepare($clicker, $idim, $rend_ds{$count});
-        $count++;
-    }
-
-    return 1;
-}
-
-sub draw {
-    my $self = shift();
-    my $clicker = shift();
-
-    my $cr = $clicker->context();
-
-    my $count = 0;
-    foreach my $dataset (@{ $clicker->datasets() }) {
-        my $domain = $clicker->get_domain_axis(
-            $clicker->get_dataset_domain_axis($count) || 0
-        );
-        my $range = $clicker->get_range_axis(
-            $clicker->get_dataset_range_axis($count) || 0
-        );
-        my $ridx = $self->get_dataset_renderer($count);
-        my $rend = $self->get_renderer($ridx || 0);
-
-        foreach my $series (@{ $dataset->series() }) {
-            $cr->save();
-            $rend->draw($clicker, $cr, $series, $domain, $range);
-            $cr->restore();
-        }
-        $count++;
-    }
-
-    my $id = $self->inside_dimensions();
-    if($self->markers()) {
-        if(scalar(@{ $clicker->markers() })) {
-            my $mo = Chart::Clicker::Decoration::MarkerOverlay->new();
-            $mo->prepare($clicker, $id);
-            $cr->save;
-            $mo->draw($clicker);
-            $cr->restore();
-        }
-    }
-}
+# sub draw {
+#     my $self = shift();
+# 
+#     my $cr = $self->clicker->context();
+# 
+#     my $count = 0;
+#     foreach my $dataset (@{ $self->clicker->datasets() }) {
+#         my $domain = $self->clicker->get_domain_axis(
+#             $self->clicker->get_dataset_domain_axis($count) || 0
+#         );
+#         my $range = $self->clicker->get_range_axis(
+#             $self->clicker->get_dataset_range_axis($count) || 0
+#         );
+#         my $ridx = $self->get_dataset_renderer($count);
+#         my $rend = $self->get_renderer($ridx || 0);
+# 
+#         foreach my $series (@{ $dataset->series() }) {
+#             $cr->save();
+#             $rend->draw($clicker, $cr, $series, $domain, $range);
+#             $cr->restore();
+#         }
+#         $count++;
+#     }
+# 
+#     my $id = $self->inside_dimensions();
+#     if($self->markers()) {
+#         if(scalar(@{ $self->clicker->markers() })) {
+#             my $mo = Chart::Clicker::Decoration::MarkerOverlay->new();
+#             $mo->prepare($clicker, $id);
+#             $cr->save;
+#             $mo->draw($clicker);
+#             $cr->restore();
+#         }
+#     }
+# }
 
 1;
 __END__

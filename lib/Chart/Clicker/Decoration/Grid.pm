@@ -22,7 +22,7 @@ has '+color' => (
 );
 has 'stroke' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
+    isa => 'Graphics::Primitive::Stroke',
     default => sub { Graphics::Primitive::Stroke->new() }
 );
 has 'show_domain' => (

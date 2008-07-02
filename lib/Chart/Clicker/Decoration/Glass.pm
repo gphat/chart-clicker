@@ -36,7 +36,7 @@ sub draw {
     my $cr = $clicker->context();
 
     if($self->background_color()) {
-        $cr->set_source_rgba($self->background_color->rgba());
+        $cr->set_source_rgba($self->background_color->as_array_with_alpha());
         $cr->fill();
     }
 
@@ -51,7 +51,7 @@ sub draw {
     $cr->line_to(0, 0);
     $cr->line_to(0, $twentypofheight);
 
-    $cr->set_source_rgba($self->glare_color->rgba());
+    $cr->set_source_rgba($self->glare_color->as_array_with_alpha());
     $cr->fill();
 }
 

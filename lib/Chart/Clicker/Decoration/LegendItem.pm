@@ -5,14 +5,9 @@ extends 'Chart::Clicker::Decoration';
 
 use Chart::Clicker::Drawing::Font;
 
-has 'color' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Color'
-);
-
 has 'font' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Font'
+    isa => 'Graphics::Primitive::Font'
 );
 
 has 'label' => (
