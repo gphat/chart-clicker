@@ -3,9 +3,9 @@ use Moose;
 
 use MooseX::AttributeHelpers;
 
-use Chart::Clicker::Drawing::Color;
+use Graphics::Color;
 
-my @defaults = (qw(red green blue lime yellow maroon teal fuchsia));;
+my @defaults = (qw());;
 
 has 'colors' => (
     metaclass => 'Collection::Array',
@@ -37,13 +37,13 @@ before 'next' => sub {
     if(!defined($self->colors->[$pos + 1])) {
 
         if($self->position() <= scalar(@defaults)) {
-            $self->colors->[$pos + 1] =
-                Chart::Clicker::Drawing::Color->new({
-                    name => $defaults[$pos + 1]
-                });
+            # $self->colors->[$pos + 1] =
+                # Chart::Clicker::Drawing::Color->new({
+                #     name => $defaults[$pos + 1]
+                # });
         } else {
             $self->add_to_colors(
-                Chart::Clicker::Drawing::Color->new(
+                Graphics::Color::RGB->new(
                     red     => rand(1),
                     green   => rand(1),
                     blue    => rand(1),

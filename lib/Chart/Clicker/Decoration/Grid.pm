@@ -3,19 +3,19 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
-use Chart::Clicker::Drawing::Color;
-use Chart::Clicker::Drawing::Stroke;
+use Graphics::Primitive::Stroke;
+use Graphics::Color::RGB;
 
 has '+background_color' => (
     default => sub {
-        Chart::Clicker::Drawing::Color->new(
+        Graphics::Color::RGB->new(
             red => 0.9, green => 0.9, blue => 0.9, alpha => 1
         )
     }
 );
 has '+color' => (
     default => sub {
-        Chart::Clicker::Drawing::Color->new(
+        Graphics::Color::RGB->new(
             red => 0, green => 0, blue => 0, alpha => .30
         )
     }
@@ -23,7 +23,7 @@ has '+color' => (
 has 'stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { Chart::Clicker::Drawing::Stroke->new() }
+    default => sub { Graphics::Primitive::Stroke->new() }
 );
 has 'show_domain' => (
     is => 'rw',

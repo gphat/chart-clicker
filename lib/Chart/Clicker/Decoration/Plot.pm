@@ -2,7 +2,8 @@ package Chart::Clicker::Decoration::Plot;
 use Moose;
 use MooseX::AttributeHelpers;
 
-extends 'Chart::Clicker::Drawing::Component';
+# TODO MOve this class?  It's not deocration anymore.
+extends 'Graphics::Primitive::Container';
 
 has 'renderers' => (
     metaclass => 'Collection::Array',
@@ -34,7 +35,6 @@ has 'dataset_renderers' => (
 
 use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::MarkerOverlay;
-use Chart::Clicker::Drawing::Border;
 
 sub prepare {
     my $self = shift();

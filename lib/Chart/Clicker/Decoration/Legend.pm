@@ -6,30 +6,18 @@ extends 'Chart::Clicker::Decoration';
 use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::LegendItem;
 use Chart::Clicker::Drawing qw(:positions);
-use Chart::Clicker::Drawing::Border;
-use Chart::Clicker::Drawing::Font;
-use Chart::Clicker::Drawing::Insets;
+
+use Graphics::Primitive::Font;
+use Graphics::Primitive::Insets;
 
 has 'tallest' => ( is => 'rw', isa => 'Num' );
 has 'widest' => ( is => 'rw', isa => 'Num' );
-
-has '+border' => (
-    default => sub { Chart::Clicker::Drawing::Border->new() }
-);
-
-has '+insets' => (
-    default => sub {
-        Chart::Clicker::Drawing::Insets->new(
-            top => 3, left => 3, bottom => 3, right => 3
-        )
-    }
-);
 
 has 'item_insets' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Insets',
     default => sub {
-        Chart::Clicker::Drawing::Insets->new({
+        Graphics::Primitive::Insets->new({
             top => 3, left => 3, bottom => 0, right => 0
         })
     }
@@ -43,9 +31,9 @@ has 'legend_items' => (
 
 has 'font' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Font',
+    isa => 'Graphics::Primitive::Font',
     default => sub {
-        Chart::Clicker::Drawing::Font->new()
+        Graphics::Primitive::Font->new()
     }
 );
 

@@ -1,7 +1,7 @@
 package Chart::Clicker::Renderer;
 use Moose;
 
-extends 'Chart::Clicker::Drawing::Component';
+extends 'Graphics::Primitive::Component';
 
 has 'dataset_count' => ( is => 'rw', isa => 'Int' );
 has 'additive' => ( is => 'ro', isa => 'Bool', default => 0 );

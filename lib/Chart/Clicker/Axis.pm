@@ -1,7 +1,7 @@
 package Chart::Clicker::Axis;
 use Moose;
 
-extends 'Chart::Clicker::Drawing::Component';
+extends 'Graphics::Primitive::Component';
 
 use MooseX::AttributeHelpers;
 
@@ -10,14 +10,16 @@ use constant PI => 4 * atan2 1, 1;
 use Chart::Clicker::Context;
 use Chart::Clicker::Data::Range;
 use Chart::Clicker::Drawing qw(:positions);
-use Chart::Clicker::Drawing::Color;
-use Chart::Clicker::Drawing::Font;
-use Chart::Clicker::Drawing::Stroke;
+
+use Graphics::Color::RGB;
+
+use Graphics::Primitive::Font;
+use Graphics::Primitive::Stroke;
 
 has 'font' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Font',
-    default => sub { Chart::Clicker::Drawing::Font->new(); }
+    default => sub { Graphics::Primitive::Font->new(); }
 );
 has 'format' => ( is => 'rw', isa => 'Str' );
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
@@ -32,13 +34,13 @@ has 'visible' => ( is => 'rw', isa => 'Bool', default => 1 );
 has 'stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { Chart::Clicker::Drawing::Stroke->new(); }
+    default => sub { Graphics::Primitive::Stroke->new(); }
 );
 
 has 'tick_stroke' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { Chart::Clicker::Drawing::Stroke->new(); }
+    default => sub { Graphics::Primitive::Stroke->new(); }
 );
 
 has 'tick_values' => (
@@ -66,7 +68,7 @@ has 'range' => (
 
 has '+color' => (
     default => sub {
-        Chart::Clicker::Drawing::Color->new({
+        Graphics::Color::RGB->new({
             red => 0, green => 0, blue => 0, alpha => 1
         })
     },

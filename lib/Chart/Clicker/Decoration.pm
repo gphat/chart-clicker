@@ -2,7 +2,7 @@ package Chart::Clicker::Decoration;
 
 use Moose;
 
-extends 'Chart::Clicker::Drawing::Component';
+extends 'Graphics::Primitive::Component';
 
 1;
 __END__

@@ -5,15 +5,17 @@ extends 'Chart::Clicker::Decoration';
 
 use Chart::Clicker::Context;
 use Chart::Clicker::Drawing qw(:positions);
-use Chart::Clicker::Drawing::Color;
-use Chart::Clicker::Drawing::Font;
-use Chart::Clicker::Drawing::Insets;
+
+use Graphics::Color::RGB;
+
+use Graphics::Primitive::Font;
+use Graphics::Primitive::Insets;
 
 has 'color' => (
     is => 'rw',
-    isa => 'Color',
+    isa => 'Graphics::Color',
     default => sub {
-        Chart::Clicker::Drawing::Color->new(
+        Graphics::Color::RGB->new(
             red => 0, green => 0, blue => 0, alpha => .30
         )
     },
@@ -22,26 +24,10 @@ has 'color' => (
 
 has 'font' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Font',
+    isa => 'Graphics::Primitive::Font',
     default => sub {
-        Chart::Clicker::Drawing::Font->new()
+        Graphics::Primitive::Font->new()
     }
-);
-
-has 'insets' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Insets',
-    default => sub {
-        Chart::Clicker::Drawing::Insets->new(
-            top => 0, left => 0, bottom => 3, right => 3
-        )
-    }
-);
-
-has 'orientation' => (
-    is => 'rw',
-    isa => 'Orientations',
-    default => $CC_HORIZONTAL
 );
 
 has 'text' => (

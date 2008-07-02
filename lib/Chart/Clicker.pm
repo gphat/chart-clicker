@@ -95,6 +95,10 @@ has 'format' => (
     default => sub { Chart::Clicker::Format::Png->new() }
 );
 
+has '+layout' => (
+    default => sub { Layout::Manager::Compass->new() }
+);
+
 has 'markers' => (
     metaclass => 'Collection::Array',
     is => 'rw',
@@ -229,7 +233,6 @@ sub prepare {
     );
     $self->context(Chart::Clicker::Context->create($self->format->surface()));
 
-    $self->SUPER::prepare($self, $self->dimensions());
     return 1;
 }
 
