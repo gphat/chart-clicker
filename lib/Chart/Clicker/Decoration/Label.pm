@@ -42,7 +42,7 @@ sub prepare {
 
     my $font = $self->font();
 
-    my $cr = $self->context();
+    my $cr = $self->clicker->context();
 
     $cr->select_font_face($font->face(), $font->slant(), $font->weight());
     $cr->set_font_size($font->size());
@@ -82,7 +82,7 @@ override('draw', sub {
     my $width = $self->width();
     my $height = $self->height();
 
-    my $cr = $self->context();
+    my $cr = $self->clicker->context();
 
     $cr->set_source_rgba($self->color->as_array_with_alpha());
     $cr->select_font_face(

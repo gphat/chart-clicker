@@ -89,7 +89,7 @@ has 'domain_axes' => (
 );
 
 has 'format' => (
-    is      => 'ro',
+    is      => 'rw',
     isa     => 'Format',
     coerce  => 1,
     default => sub { Chart::Clicker::Format::Png->new() }
@@ -187,7 +187,7 @@ has '+background_color' => (
 override('draw', sub {
     my ($self) = @_;
 
-    super;
+    #super;
 
     # TODO This should be elsewhere...
     my $width = $self->width();
@@ -298,7 +298,7 @@ override('prepare', sub {
     $self->context(Chart::Clicker::Context->create($self->format->surface()));
 
     foreach my $c (@{ $self->components }) {
-        $c->{component}->context($self->context());
+        $c->{component}->clicker($self);
     }
 
     super;

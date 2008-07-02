@@ -3,9 +3,9 @@ use Moose;
 
 extends 'Graphics::Primitive::Component';
 
-has 'context' => (
+has 'clicker' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Context'
+    isa => 'Chart::Clicker'
 );
 
 override('draw', sub {
@@ -14,7 +14,7 @@ override('draw', sub {
     my $width = $self->width();
     my $height = $self->height();
 
-    my $context = $self->context();
+    my $context = $self->clicker->context();
 
     if(defined($self->background_color())) {
         $context->set_source_rgba($self->background_color->as_array_with_alpha());

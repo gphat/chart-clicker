@@ -49,6 +49,9 @@ cmp_ok($chart->component_count(), '==', 4, 'component_count');
 my $plot = $chart->plot();
 $plot->add_to_renderers(Chart::Clicker::Renderer::Area->new());
 
+use Chart::Clicker::Format::Pdf;
+$chart->format(Chart::Clicker::Format::Pdf->new());
+
 $chart->prepare();
 $chart->do_layout($chart);
 
@@ -58,7 +61,7 @@ cmp_ok($tlabel->width, '==', 300 - $tlabel2->width - $tlabel3->width, 'label wid
 
 cmp_ok($tlabel2->origin->x, '==', 0, 'label origin x');
 cmp_ok($tlabel2->origin->y, '==', 0 + $tlabel->height, 'label origin y');
-# cmp_ok($tlabel->height, '==', 250, 'label height');
 
 $chart->draw();
-# $chart->write('/Users/gphat/foo.png');
+#$chart->write('/Users/gphat/foo.pdf');
+

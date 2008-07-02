@@ -7,8 +7,8 @@ use Cairo;
 
 sub BUILD {
 
-    die('Your Cairo does not have PostScript support!')
-        unless Cairo::HAS_PS_SURFACE;
+    die('Your Cairo does not have SVG support!')
+        unless Cairo::HAS_SVG_SURFACE;
 }
 
 sub create_surface {
