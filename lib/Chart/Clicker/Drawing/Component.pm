@@ -8,6 +8,51 @@ has 'context' => (
     isa => 'Chart::Clicker::Context'
 );
 
+override('draw', sub {
+    my $self = shift();
+
+    my $width = $self->width();
+    my $height = $self->height();
+
+    my $context = $self->context();
+
+    if(defined($self->background_color())) {
+        $context->set_source_rgba($self->background_color->as_array_with_alpha());
+        $context->rectangle(0, 0, $width, $height);
+        $context->paint();
+    }
+
+    my $x = 0;
+    my $y = 0;
+    my $bwidth = $width;
+    my $bheight = $height;
+
+    my $margins = $self->margins();
+    my ($mx, $my, $mw, $mh) = (0, 0, 0, 0);
+    if($margins) {
+        $mx = $margins->left();
+        $my = $margins->top();
+        $mw = $margins->right();
+        $mh = $margins->bottom();
+    }
+
+    if(defined($self->border())) {
+        my $stroke = $self->border();
+        my $bswidth = $stroke->width();
+        $context->set_source_rgba($self->border->color->as_array_with_alpha());
+        $context->set_line_width($bswidth);
+        $context->set_line_cap($stroke->line_cap());
+        $context->set_line_join($stroke->line_join());
+        $context->new_path();
+        my $swhalf = $bswidth / 2;
+        $context->rectangle(
+            $mx + $swhalf, $my + $swhalf,
+            $width - $bswidth - $mw - $mx, $height - $bswidth - $mh - $my
+        );
+        $context->stroke();
+    }
+});
+
 1;
 __END__
 

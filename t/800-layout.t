@@ -1,4 +1,4 @@
-use Test::More tests => 14;
+use Test::More tests => 17;
 
 BEGIN {
     use_ok('Cairo');
@@ -36,9 +36,15 @@ $dataset->series([ $series, $series2 ]);
 $chart->datasets([ $dataset ]);
 
 my $tlabel = Chart::Clicker::Decoration::Label->new({ text => 'Danes', orientation => $CC_HORIZONTAL});
+my $tlabel2 = Chart::Clicker::Decoration::Label->new({ text => 'Footballs', orientation => $CC_VERTICAL});
+my $tlabel3 = Chart::Clicker::Decoration::Label->new({ text => 'Boots', orientation => $CC_VERTICAL});
+my $tlabel4 = Chart::Clicker::Decoration::Label->new({ text => 'Goals', orientation => $CC_HORIZONTAL});
 $chart->add_component($tlabel, 'north');
+$chart->add_component($tlabel2, 'west');
+$chart->add_component($tlabel3, 'east');
+$chart->add_component($tlabel4, 'south');
 
-cmp_ok($chart->component_count(), '==', 1, 'component_count');
+cmp_ok($chart->component_count(), '==', 4, 'component_count');
 
 my $plot = $chart->plot();
 $plot->add_to_renderers(Chart::Clicker::Renderer::Area->new());
@@ -46,10 +52,13 @@ $plot->add_to_renderers(Chart::Clicker::Renderer::Area->new());
 $chart->prepare();
 $chart->do_layout($chart);
 
-cmp_ok($tlabel->origin->x, '==', 0, 'label origin x');
+cmp_ok($tlabel->origin->x, '==', (0 + $tlabel2->width), 'label origin x');
 cmp_ok($tlabel->origin->y, '==', 0, 'label origin y');
-cmp_ok($tlabel->width, '==', 300, 'label width');
-cmp_ok($tlabel->height, '==', 250, 'label height');
+cmp_ok($tlabel->width, '==', 300 - $tlabel2->width - $tlabel3->width, 'label width');
 
-# cmp_ok($tlabel->location->x(), '==', ($chart->insets->left() + 1), 'Label X position');
-# cmp_ok($tlabel->location->y(), '==', ($chart->insets->top() + 1), 'Label Y position');
+cmp_ok($tlabel2->origin->x, '==', 0, 'label origin x');
+cmp_ok($tlabel2->origin->y, '==', 0 + $tlabel->height, 'label origin y');
+# cmp_ok($tlabel->height, '==', 250, 'label height');
+
+$chart->draw();
+# $chart->write('/Users/gphat/foo.png');

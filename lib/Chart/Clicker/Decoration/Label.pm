@@ -74,23 +74,23 @@ sub prepare {
     return 1;
 }
 
-sub draw {
+override('draw', sub {
     my $self = shift();
-    my $clicker = shift();
+
+    super;
 
     my $width = $self->width();
     my $height = $self->height();
 
     my $cr = $self->context();
 
-    $cr->set_source_rgba($self->color->rgba());
+    $cr->set_source_rgba($self->color->as_array_with_alpha());
     $cr->select_font_face(
         $self->font->face(), $self->font->slant(), $self->font->weight()
     );
     $cr->set_font_size($self->font->size());
 
     my $extents = $self->{'EXTENTS'};
-    my $insets = $self->insets();
     my ($x, $y);
     if($self->orientation() == $CC_HORIZONTAL) {
         $x = ($width / 2) - ($extents->{'width'} / 2);
@@ -110,7 +110,7 @@ sub draw {
     } else {
         $cr->show_text($self->text());
     }
-}
+});
 
 1;
 __END__
