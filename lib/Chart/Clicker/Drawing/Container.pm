@@ -44,10 +44,7 @@ has 'axis_bottom' => (
 
 use Chart::Clicker::Context;
 use Chart::Clicker::Drawing qw(:positions);
-use Chart::Clicker::Drawing::Border;
 use Chart::Clicker::Drawing::Dimension;
-use Chart::Clicker::Drawing::Insets;
-use Chart::Clicker::Drawing::Point;
 
 sub add {
     my $self = shift();
