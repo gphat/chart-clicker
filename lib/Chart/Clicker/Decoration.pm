@@ -1,8 +1,7 @@
 package Chart::Clicker::Decoration;
-
 use Moose;
 
-extends 'Graphics::Primitive::Component';
+extends 'Chart::Clicker::Drawing::Component';
 
 1;
 __END__

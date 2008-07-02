@@ -190,7 +190,7 @@ sub draw {
     $self->SUPER::draw($self);
 }
 
-sub prepare {
+override('prepare', sub {
     my $self = shift();
 
     my $plot = $self->plot();
@@ -233,8 +233,14 @@ sub prepare {
     );
     $self->context(Chart::Clicker::Context->create($self->format->surface()));
 
+    foreach my $c (@{ $self->components }) {
+        $c->{component}->context($self->context());
+    }
+
+    super;
+
     return 1;
-}
+});
 
 sub write {
     my $self = shift();

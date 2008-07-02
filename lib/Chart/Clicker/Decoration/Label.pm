@@ -39,17 +39,13 @@ my $VERTICAL = 4.71238898;
 
 sub prepare {
     my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
 
     my $font = $self->font();
 
-    my $cr = $clicker->context();
+    my $cr = $self->context();
 
     $cr->select_font_face($font->face(), $font->slant(), $font->weight());
     $cr->set_font_size($font->size());
-
-    my $insets = $self->insets();
 
     my $orientation = $self->orientation();
 
@@ -60,16 +56,16 @@ sub prepare {
         $extents = $cr->text_extents($self->text());
         $extents->{total_height} = $extents->{height} - $extents->{y_bearing};
         $cr->restore();
-        $self->width(
-            $extents->{'total_height'} + $insets->left() + $insets->right()
+        $self->minimum_width(
+            $extents->{total_height} + $self->outside_width
         );
-        $self->height($dimension->height());
+        $self->minimum_height($extents->{width});
     } else {
         $extents = $cr->text_extents($self->text());
         $extents->{total_height} = $extents->{height} - $extents->{y_bearing};
-        $self->width($dimension->width());
-        $self->height(
-            $extents->{'total_height'} + $insets->top() + $insets->bottom()
+        $self->minimum_width($extents->{width});
+        $self->minimum_height(
+            $extents->{'total_height'} + $self->outside_height
         );
     }
 
@@ -85,7 +81,7 @@ sub draw {
     my $width = $self->width();
     my $height = $self->height();
 
-    my $cr = $clicker->context();
+    my $cr = $self->context();
 
     $cr->set_source_rgba($self->color->rgba());
     $cr->select_font_face(

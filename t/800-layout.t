@@ -38,11 +38,18 @@ $chart->datasets([ $dataset ]);
 my $tlabel = Chart::Clicker::Decoration::Label->new({ text => 'Danes', orientation => $CC_HORIZONTAL});
 $chart->add_component($tlabel, 'north');
 
+cmp_ok($chart->component_count(), '==', 1, 'component_count');
+
 my $plot = $chart->plot();
 $plot->add_to_renderers(Chart::Clicker::Renderer::Area->new());
 
 $chart->prepare();
 $chart->do_layout($chart);
-# 
+
+cmp_ok($tlabel->origin->x, '==', 0, 'label origin x');
+cmp_ok($tlabel->origin->y, '==', 0, 'label origin y');
+cmp_ok($tlabel->width, '==', 300, 'label width');
+cmp_ok($tlabel->height, '==', 250, 'label height');
+
 # cmp_ok($tlabel->location->x(), '==', ($chart->insets->left() + 1), 'Label X position');
 # cmp_ok($tlabel->location->y(), '==', ($chart->insets->top() + 1), 'Label Y position');
