@@ -5,7 +5,7 @@ use MooseX::AttributeHelpers;
 use Layout::Manager::Single;
 
 # TODO MOve this class?  It's not decoration anymore.
-extends 'Chart::Clicker::Drawing::Container';
+extends 'Chart::Clicker::Drawing::Component';
 
 # TODO Temporary
 has '+background_color' => ( default => sub { Graphics::Color::RGB->new( red => 1 ) });
@@ -15,9 +15,9 @@ has 'clicker' => (
     isa => 'Chart::Clicker',
 );
 
-has '+layout' => (
-    default => sub { Layout::Manager::Single->new }
-);
+# has '+layout' => (
+#     default => sub { Layout::Manager::Single->new }
+# );
 
 has 'renderers' => (
     metaclass => 'Collection::Array',

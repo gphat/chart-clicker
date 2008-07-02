@@ -184,127 +184,127 @@ has '+background_color' => (
     }
 );
 
-# override('draw', sub {
-#     my ($self) = @_;
-# 
-#     #super;
-# 
-#     # TODO This should be elsewhere...
-#     my $width = $self->width();
-#     my $height = $self->height();
-# 
-#     my $context = $self->context();
-# 
-#     if(defined($self->background_color())) {
-#         $context->set_source_rgba($self->background_color->as_array_with_alpha());
-#         $context->rectangle(0, 0, $width, $height);
-#         $context->paint();
-#     }
-# 
-#     my $x = 0;
-#     my $y = 0;
-#     my $bwidth = $width;
-#     my $bheight = $height;
-# 
-#     my $margins = $self->margins();
-#     my ($mx, $my, $mw, $mh) = (0, 0, 0, 0);
-#     if($margins) {
-#         $mx = $margins->left();
-#         $my = $margins->top();
-#         $mw = $margins->right();
-#         $mh = $margins->bottom();
-#     }
-# 
-#     if(defined($self->border())) {
-#         my $stroke = $self->border();
-#         my $bswidth = $stroke->width();
-#         $context->set_source_rgba($self->border->color->as_array_with_alpha());
-#         $context->set_line_width($bswidth);
-#         $context->set_line_cap($stroke->line_cap());
-#         $context->set_line_join($stroke->line_join());
-#         $context->new_path();
-#         my $swhalf = $bswidth / 2;
-#         $context->rectangle(
-#             $mx + $swhalf, $my + $swhalf,
-#             $width - $bswidth - $mw - $mx, $height - $bswidth - $mh - $my
-#         );
-#         $context->stroke();
-#     }
-#     # TODO END This should be elsewhere...
-# 
-#     foreach my $c (@{ $self->components }) {
-#         next unless defined($c);
-# 
-#         my $comp = $c->{component};
-#         my $context = $self->context();
-# 
-#         $context->save;
-#         $context->translate($comp->origin->x, $comp->origin->y);
-#         $context->rectangle(0, 0, $comp->width, $comp->height);
-#         $context->clip;
-# 
-#         $comp->draw();
-# 
-#         $context->restore();
-#     }
-# });
+override('draw', sub {
+    my ($self) = @_;
+
+    # super;
+
+    # TODO This should be elsewhere...
+    my $width = $self->width();
+    my $height = $self->height();
+
+    my $context = $self->context();
+
+    if(defined($self->background_color())) {
+        $context->set_source_rgba($self->background_color->as_array_with_alpha());
+        $context->rectangle(0, 0, $width, $height);
+        $context->paint();
+    }
+
+    my $x = 0;
+    my $y = 0;
+    my $bwidth = $width;
+    my $bheight = $height;
+
+    my $margins = $self->margins();
+    my ($mx, $my, $mw, $mh) = (0, 0, 0, 0);
+    if($margins) {
+        $mx = $margins->left();
+        $my = $margins->top();
+        $mw = $margins->right();
+        $mh = $margins->bottom();
+    }
+
+    if(defined($self->border())) {
+        my $stroke = $self->border();
+        my $bswidth = $stroke->width();
+        $context->set_source_rgba($self->border->color->as_array_with_alpha());
+        $context->set_line_width($bswidth);
+        $context->set_line_cap($stroke->line_cap());
+        $context->set_line_join($stroke->line_join());
+        $context->new_path();
+        my $swhalf = $bswidth / 2;
+        $context->rectangle(
+            $mx + $swhalf, $my + $swhalf,
+            $width - $bswidth - $mw - $mx, $height - $bswidth - $mh - $my
+        );
+        $context->stroke();
+    }
+    # TODO END This should be elsewhere...
+
+    foreach my $c (@{ $self->components }) {
+        next unless defined($c);
+
+        my $comp = $c->{component};
+        my $context = $self->context();
+
+        $context->save;
+        $context->translate($comp->origin->x, $comp->origin->y);
+        $context->rectangle(0, 0, $comp->width, $comp->height);
+        $context->clip;
+
+        $comp->draw();
+
+        $context->restore();
+    }
+});
 
 # sub draw {
 #      my $self = shift();
 # 
 # }
 
-# override('prepare', sub {
-#     my $self = shift();
-# 
-#     my $plot = $self->plot();
-# 
-#     # Prepare the datasets and establish ranges for the axes.
-#     my $count = 0;
-#     foreach my $ds (@{ $self->datasets() }) {
-#         unless($ds->count() > 0) {
-#             die("Dataset $count is empty.");
-#         }
-# 
-#         my $rend = $plot->get_renderer($plot->get_dataset_renderer($count) || 0);
-#         if(!defined($rend)) {
-#             die("Can't find a renderer, that's fatal!");
-#         }
-#         $ds->prepare();
-# 
-#         my $daxisnum = $self->get_dataset_domain_axis($count);
-#         my $daxis = $self->get_domain_axis($daxisnum || 0);
-#         if(defined($daxis)) {
-#             $daxis->range->combine($ds->domain());
-#         }
-# 
-#         my $raxisnum = $self->get_dataset_range_axis($count);
-#         my $raxis = $self->get_range_axis($raxisnum || 0);
-# 
-#         if(defined($raxis)) {
-#             if($rend->additive()) {
-#                 $raxis->range->combine($ds->combined_range());
-#             } else {
-#                 $raxis->range->combine($ds->range());
-#             }
-#         }
-# 
-#         $count++;
-#     }
-# 
-#     $self->format->surface(
-#         $self->format->create_surface($self->width, $self->height)
-#     );
-#     $self->context(Chart::Clicker::Context->create($self->format->surface()));
-# 
-#     foreach my $c (@{ $self->components }) {
-#         $c->{component}->clicker($self);
-#     }
-# 
-#     super;
-# 
-#     return 1;
-# });
+override('prepare', sub {
+    my $self = shift();
+
+    my $plot = $self->plot();
+
+    # Prepare the datasets and establish ranges for the axes.
+    my $count = 0;
+    foreach my $ds (@{ $self->datasets() }) {
+        unless($ds->count() > 0) {
+            die("Dataset $count is empty.");
+        }
+
+        my $rend = $plot->get_renderer($plot->get_dataset_renderer($count) || 0);
+        if(!defined($rend)) {
+            die("Can't find a renderer, that's fatal!");
+        }
+        $ds->prepare();
+
+        my $daxisnum = $self->get_dataset_domain_axis($count);
+        my $daxis = $self->get_domain_axis($daxisnum || 0);
+        if(defined($daxis)) {
+            $daxis->range->combine($ds->domain());
+        }
+
+        my $raxisnum = $self->get_dataset_range_axis($count);
+        my $raxis = $self->get_range_axis($raxisnum || 0);
+
+        if(defined($raxis)) {
+            if($rend->additive()) {
+                $raxis->range->combine($ds->combined_range());
+            } else {
+                $raxis->range->combine($ds->range());
+            }
+        }
+
+        $count++;
+    }
+
+    $self->format->surface(
+        $self->format->create_surface($self->width, $self->height)
+    );
+    $self->context(Chart::Clicker::Context->create($self->format->surface()));
+
+    foreach my $c (@{ $self->components }) {
+        $c->{component}->clicker($self);
+    }
+
+    super;
+
+    return 1;
+});
 
 sub write {
     my $self = shift();

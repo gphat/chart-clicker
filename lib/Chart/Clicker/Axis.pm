@@ -156,7 +156,7 @@ sub prepare {
         # TODO Wrong, need widest label + tick length + outside
         $self->minimum_width($biggest + $self->outside_width);
         # TODO This is wrong
-        $self->per($self->width / ($self->range->span - 1));
+        # $self->per($self->width / ($self->range->span - 1));
     } else {
         # The label will be rotated, so use height here too.
         my $label_width = $self->label()
@@ -166,7 +166,7 @@ sub prepare {
         # TODO Wrong, need tallest label + tick length + outside
         $self->minimum_height($self->outside_height + $biggest);
         # TODO This is wrong
-        $self->per($self->height() / ($self->range->span() - 1));
+        # $self->per($self->height() / ($self->range->span() - 1));
     }
 
     return 1;
@@ -188,10 +188,18 @@ sub draw {
     my $self = shift();
 
     print STDERR "WEEE ".$self->width." ".$self->height."\n";
+    print STDERR "WEEE ".$self->minimum_width." ".$self->minimum_height."\n";
+
+    if($self->orientation() == $CC_HORIZONTAL) {
+        $self->per($self->width / ($self->range->span - 1));
+    } else {
+        $self->per($self->height() / ($self->range->span() - 1));
+    }
 
     unless($self->visible()) {
         return;
     }
+
     my $x = 0;
     my $y = 0;
 
