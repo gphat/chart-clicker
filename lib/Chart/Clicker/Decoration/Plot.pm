@@ -75,7 +75,7 @@ use Chart::Clicker::Decoration::MarkerOverlay;
     #     $c->{component}->clicker($self->clicker);
     # }
 # 
-    super;
+    # super;
 # 
 #     # $count = 0;
 #     # foreach my $rend (@{ $self->renderers() }) {

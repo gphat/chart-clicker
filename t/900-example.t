@@ -22,7 +22,7 @@ my $dataset = Chart::Clicker::Data::DataSet->new({
 });
 $chart->datasets([ $dataset ]);
 
-my $legend = Chart::Clicker::Decoration::Legend->new();
+my $legend = Chart::Clicker::Decoration::Legend->new(orientation => $CC_HORIZONTAL);
 $chart->add_component($legend, 's');
 
 my $daxis = Chart::Clicker::Axis->new({
@@ -54,10 +54,13 @@ $plot->renderers([$renderer]);
 
 $chart->plot($plot);
 
-# $chart->add_component($plot, 'center');
+$chart->add_component($plot, 'center');
 
 $chart->prepare();
 $chart->do_layout($chart);
+diag($plot->width());
+diag($plot->height());
+
 $chart->draw();
 $chart->write('/Users/gphat/chart.png');
 

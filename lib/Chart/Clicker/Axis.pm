@@ -187,9 +187,6 @@ sub mark {
 sub draw {
     my $self = shift();
 
-    print STDERR "WEEE ".$self->width." ".$self->height."\n";
-    print STDERR "WEEE ".$self->minimum_width." ".$self->minimum_height."\n";
-
     if($self->orientation() == $CC_HORIZONTAL) {
         $self->per($self->width / ($self->range->span - 1));
     } else {
