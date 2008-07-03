@@ -36,35 +36,21 @@ has 'show_range' => (
     default => 1
 );
 
-sub prepare {
-    my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
-
-    $self->width($dimension->width());
-    $self->height($dimension->height());
-
-    return 1;
-}
-
 sub draw {
     my $self = shift();
-    my $clicker = shift();
 
     return unless ($self->show_domain || $self->show_range);
 
-    $self->SUPER::draw($clicker);
+    my $clicker = $self->clicker;
+    my $cr = $clicker->cairo;
 
-    my $cr = $clicker->cairo();
-
-    $cr->set_source_rgba($self->background_color->rgba());
+    $cr->set_source_rgba($self->background_color->as_array_with_alpha());
     $cr->paint();
 
-    my $daxis = $clicker->domain_axes->[0];
-    my $raxis = $clicker->range_axes->[0];
+    my $daxis = $clicker->get_context('default')->domain_axis;
+    my $raxis = $clicker->get_context('default')->range_axis;
 
     # Make the grid
-
     my $height = $self->height();
 
     if($self->show_domain()) {
@@ -84,7 +70,7 @@ sub draw {
         }
     }
 
-    $cr->set_source_rgba($self->color->rgba());
+    $cr->set_source_rgba($self->color->as_array_with_alpha());
     my $stroke = $self->stroke();
     $cr->set_line_width($stroke->width());
     $cr->set_line_cap($stroke->line_cap());

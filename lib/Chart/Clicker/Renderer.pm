@@ -3,6 +3,7 @@ use Moose;
 
 extends 'Chart::Clicker::Drawing::Component';
 
+has 'context' => ( is => 'rw', isa => 'Str' );
 has 'dataset_count' => ( is => 'rw', isa => 'Int' );
 has 'additive' => ( is => 'ro', isa => 'Bool', default => 0 );
 

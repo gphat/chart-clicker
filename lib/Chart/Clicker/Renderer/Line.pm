@@ -19,64 +19,71 @@ has 'stroke' => (
     default => sub { Chart::Clicker::Drawing::Stroke->new() }
 );
 
-# sub draw {
-#     my $self = shift();
+sub draw {
+    my $self = shift();
+
 #     # my $clicker = shift();
 #     # my $cr = shift();
 #     # my $series = shift();
 #     # my $domain = shift();
 #     # my $range = shift();
 # 
-#     my $cr = $self->clicker->cairo;
-# 
-#     my $height = $self->height();
-#     my $linewidth = 1;
-# 
-#     $cr->set_line_cap($self->stroke->line_cap());
-#     $cr->set_line_join($self->stroke->line_join());
-#     $cr->set_line_width($self->stroke->width());
-# 
-#     $cr->new_path();
-# 
-#     my $color = $clicker->color_allocator->next();
-#     $cr->set_source_rgba($color->rgba());
-# 
-#     my @vals = @{ $series->values() };
-#     my @keys = @{ $series->keys() };
-# 
-#     my $kcount = $series->key_count() - 1;
-# 
-#     for(0..$kcount) {
-#         my $x = $domain->mark($keys[$_]);
-#         my $y = $height - $range->mark($vals[$_]);
-#         if($_ == 0) {
-#             $cr->move_to($x, $y);
-#         } else {
-#             $cr->line_to($x, $y);
-#         }
-#     }
-#     $cr->stroke();
-# 
-#     if(defined($self->shape())) {
-#         for(0..$kcount) {
-# 
-#             my $x = $domain->mark($keys[$_]);
-#             my $y = $height - $range->mark($vals[$_]);
-#             $self->shape->create_path($cr, $x, $y);
-# 
-#             if($self->shape_stroke()) {
-#                 $cr->set_line_cap($self->shape_stroke->line_cap());
-#                 $cr->set_line_join($self->shape_stroke->line_join());
-#                 $cr->set_line_width($self->shape_stroke->width());
-#                 $cr->stroke();
-#             } else {
-#                 $cr->fill();
-#             }
-#         }
-#     }
-# 
-#     return 1;
-# }
+    my $clicker = $self->clicker;
+    my $cr = $clicker->cairo;
+    my $ctx = $clicker->get_context($self->context);
+    # TODO if undef...
+    my $domain = $ctx->domain_axis;
+    my $range = $ctx->range_axis;
+
+    my $series = $clicker->get_dataset(0)->get_series(0);
+
+    my $height = $self->height();
+
+    $cr->set_line_cap($self->stroke->line_cap());
+    $cr->set_line_join($self->stroke->line_join());
+    $cr->set_line_width($self->stroke->width());
+
+    $cr->new_path();
+
+    my $color = $clicker->color_allocator->next();
+    $cr->set_source_rgba($color->as_array_with_alpha());
+
+    my @vals = @{ $series->values() };
+    my @keys = @{ $series->keys() };
+
+    my $kcount = $series->key_count() - 1;
+
+    for(0..$kcount) {
+        my $x = $domain->mark($keys[$_]);
+        my $y = $height - $range->mark($vals[$_]);
+        if($_ == 0) {
+            $cr->move_to($x, $y);
+        } else {
+            $cr->line_to($x, $y);
+        }
+    }
+    $cr->stroke();
+
+    if(defined($self->shape())) {
+        for(0..$kcount) {
+
+            my $x = $domain->mark($keys[$_]);
+            my $y = $height - $range->mark($vals[$_]);
+            $self->shape->create_path($cr, $x, $y);
+
+            if($self->shape_stroke()) {
+                $cr->set_line_cap($self->shape_stroke->line_cap());
+                $cr->set_line_join($self->shape_stroke->line_join());
+                $cr->set_line_width($self->shape_stroke->width());
+                $cr->stroke();
+            } else {
+                $cr->fill();
+            }
+        }
+    }
+
+    return 1;
+}
 
 1;
 __END__

@@ -13,7 +13,10 @@ use Graphics::Primitive::Insets;
 use Graphics::Primitive::Border;
 
 use Chart::Clicker::Context;
+use Chart::Clicker::Decoration::Grid;
+use Chart::Clicker::Decoration::Legend;
 use Chart::Clicker::Decoration::Plot;
+use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Format::Png;
 use Chart::Clicker::Util;
 use Chart::Clicker::Drawing::ColorAllocator;
@@ -211,7 +214,14 @@ override('draw', sub {
 override('prepare', sub {
     my $self = shift();
 
+    # TODO Move this
+    my $legend = Chart::Clicker::Decoration::Legend->new(orientation => $CC_HORIZONTAL);
+    $self->add_component($legend, 's');
+
+
     my $plot = $self->plot();
+    $plot->clicker($self);
+    $plot->add_component(Chart::Clicker::Decoration::Grid->new());
 
     # Prepare the datasets and establish ranges for the axes.
     my $count = 0;
@@ -241,8 +251,8 @@ override('prepare', sub {
         $self->add_component($daxis, 's'); # TODO Fix direction!
 
         my $rend = $ctx->renderer();
-        $self->plot->clicker($self);
-        $self->plot->add_component($rend);
+        $rend->context($ctx->name);
+        $plot->add_component($rend);
 
         my $raxis = $ctx->range_axis;
         if(defined($raxis)) {

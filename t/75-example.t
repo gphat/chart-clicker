@@ -20,8 +20,7 @@ my $series2 = Chart::Clicker::Data::Series->new(
     values  => [ 67, 15, 6, 90, 11, 45, 83, 11, 9, 101 ]
 );
 
-my $ds = Chart::Clicker::Data::DataSet->new( context => 'default');
-$ds->series([ $series, $series2 ]);
+my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series, $series2 ]);
 
 $cc->add_to_datasets($ds);
 
