@@ -3,7 +3,6 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
-use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::LegendItem;
 use Chart::Clicker::Drawing qw(:positions);
 

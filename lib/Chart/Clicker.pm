@@ -40,7 +40,7 @@ has 'color_allocator' => (
 
 has 'context' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Context',
+    isa => 'Chart::Clicker::Cairo',
     clearer => 'clear_context'
 );
 
@@ -295,7 +295,7 @@ override('prepare', sub {
     $self->format->surface(
         $self->format->create_surface($self->width, $self->height)
     );
-    $self->cairo(Chart::Clicker::Context->create($self->format->surface()));
+    $self->cairo(Chart::Clicker::Cairo->create($self->format->surface()));
 
     foreach my $c (@{ $self->components }) {
         $c->{component}->clicker($self);

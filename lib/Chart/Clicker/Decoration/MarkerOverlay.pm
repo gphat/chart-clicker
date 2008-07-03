@@ -4,8 +4,6 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
-use Chart::Clicker::Context;
-
 sub prepare {
     my $self = shift();
     my $clicker = shift();
@@ -21,8 +19,6 @@ sub draw {
     my $self = shift();
     my $clicker = shift();
 
-    # my $surface = $self->SUPER::draw($clicker);
-    # my $cr = Chart::Clicker::Context->create($surface);
     my $cr = $clicker->cairo();
 
     my $width = $self->width();

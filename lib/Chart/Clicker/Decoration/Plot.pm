@@ -3,6 +3,7 @@ use Moose;
 use MooseX::AttributeHelpers;
 
 use Layout::Manager::Single;
+#use Chart::Clicker::Decoration::MarkerOverlay;
 
 # TODO MOve this class?  It's not decoration anymore.
 extends 'Chart::Clicker::Drawing::Container';
@@ -47,11 +48,8 @@ has 'dataset_renderers' => (
     }
 );
 
-use Chart::Clicker::Context;
-use Chart::Clicker::Decoration::MarkerOverlay;
-
 sub prepare {
-    my $self = shift();
+    my ($self) = @_;
 #     my $clicker = shift();
 #     my $dimension = shift();
 # 
@@ -68,7 +66,7 @@ sub prepare {
     #     $dscount{$ridx} += scalar(@{ $dataset->series() });
         # push(@{ $rend_ds{$ridx} }, $dataset);
         # $count++;
-    }
+    # }
 # 
     # TODO This is also happening in Clicker.pm
     foreach my $c (@{ $self->components }) {

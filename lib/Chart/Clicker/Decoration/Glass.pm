@@ -3,7 +3,6 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
-use Chart::Clicker::Context;
 use Chart::Clicker::Drawing::Color;
 
 has 'background_color' => ( is => 'rw', isa => 'Chart::Clicker::Drawing::Color' );

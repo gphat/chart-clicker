@@ -7,7 +7,7 @@ use MooseX::AttributeHelpers;
 
 use constant PI => 4 * atan2 1, 1;
 
-use Chart::Clicker::Context;
+use Chart::Clicker::Cairo;
 use Chart::Clicker::Data::Range;
 use Chart::Clicker::Drawing qw(:positions);
 
