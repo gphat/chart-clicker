@@ -14,7 +14,7 @@ sub create_surface {
 sub write {
     my ($self, $click, $file) = @_;
 
-    $click->context->get_target->write_to_png($file);
+    $click->cairo->get_target->write_to_png($file);
 }
 
 1;

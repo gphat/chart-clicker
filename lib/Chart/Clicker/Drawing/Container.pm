@@ -13,7 +13,7 @@ extends 'Graphics::Primitive::Container';
 #     my $width = $self->width();
 #     my $height = $self->height();
 #     
-#     my $context = $self->context();
+#     my $context = $self->cairo();
 #     
 #     if(defined($self->background_color())) {
 #         $context->set_source_rgba($self->background_color->as_array_with_alpha());
@@ -56,7 +56,7 @@ extends 'Graphics::Primitive::Container';
 #         next unless defined($c);
 # 
 #         my $comp = $c->{component};
-#         my $context = $self->context();
+#         my $context = $self->cairo();
 # 
 #         $context->save;
 #         $context->translate($comp->origin->x, $comp->origin->y);

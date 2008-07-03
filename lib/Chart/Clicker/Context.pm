@@ -1,4 +1,4 @@
-package Chart::Clicker::Context;
+package Chart::Clicker::Cairo;
 use Moose;
 
 use Cairo;
@@ -35,15 +35,15 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Context
+Chart::Clicker::Cairo
 
 =head1 DESCRIPTION
 
-Chart::Clicker::Context wraps the Context from Cairo.
+Chart::Clicker::Cairo wraps the Context from Cairo.
 
 =head1 SYNOPSIS
 
- my $context = Chart::Clicker::Context->new();
+ my $cairo = Chart::Clicker::Cairo->new();
 
 =head1 METHODS
 

@@ -108,7 +108,7 @@ sub prepare {
         $self->tick_values($self->range->divvy($self->ticks()));
     }
 
-    my $cairo = $self->clicker->context();
+    my $cairo = $self->clicker->cairo();
 
     my $font = $self->font();
 
@@ -216,7 +216,7 @@ sub draw {
         # nuffin
     }
 
-    my $cr = $self->clicker->context();
+    my $cr = $self->clicker->cairo();
 
     my $stroke = $self->stroke();
     $cr->set_line_width($stroke->width());

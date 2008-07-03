@@ -24,7 +24,7 @@ has 'surface_data' => (
 sub write {
     my ($self, $click, $file) = @_;
 
-    my $cr = $click->context();
+    my $cr = $click->cairo();
     $cr->show_page();
 
     $cr = undef;

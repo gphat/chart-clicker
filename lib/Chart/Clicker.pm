@@ -193,7 +193,7 @@ override('draw', sub {
     my $width = $self->width();
     my $height = $self->height();
 
-    my $context = $self->context();
+    my $context = $self->cairo();
 
     if(defined($self->background_color())) {
         $context->set_source_rgba($self->background_color->as_array_with_alpha());
@@ -236,7 +236,7 @@ override('draw', sub {
         next unless defined($c);
 
         my $comp = $c->{component};
-        my $context = $self->context();
+        my $context = $self->cairo();
 
         $context->save;
         $context->translate($comp->origin->x, $comp->origin->y);
@@ -295,7 +295,7 @@ override('prepare', sub {
     $self->format->surface(
         $self->format->create_surface($self->width, $self->height)
     );
-    $self->context(Chart::Clicker::Context->create($self->format->surface()));
+    $self->cairo(Chart::Clicker::Context->create($self->format->surface()));
 
     foreach my $c (@{ $self->components }) {
         $c->{component}->clicker($self);

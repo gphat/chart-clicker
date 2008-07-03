@@ -90,7 +90,7 @@ sub prepare {
 # sub draw {
 #     my $self = shift();
 # 
-#     my $cr = $self->clicker->context();
+#     my $cr = $self->clicker->cairo();
 # 
 #     my $count = 0;
 #     foreach my $dataset (@{ $self->clicker->datasets() }) {

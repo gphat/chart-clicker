@@ -15,7 +15,7 @@ override('draw', sub {
     my $height = $self->height();
 
     print STDERR ref($self)."\n";
-    my $context = $self->clicker->context();
+    my $cairo = $self->clicker->cairo();
 
     if(defined($self->background_color())) {
         $context->set_source_rgba($self->background_color->as_array_with_alpha());

@@ -33,7 +33,7 @@ sub draw {
     my $height = $self->height();
     my $width = $self->width();
 
-    my $cr = $self->clicker->context;
+    my $cr = $self->clicker->cairo;
 
     $cr->set_line_width($self->stroke->width());
     $cr->set_line_cap($self->stroke->line_cap());

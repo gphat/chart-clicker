@@ -23,7 +23,7 @@ sub draw {
 
     # my $surface = $self->SUPER::draw($clicker);
     # my $cr = Chart::Clicker::Context->create($surface);
-    my $cr = $clicker->context();
+    my $cr = $clicker->cairo();
 
     my $width = $self->width();
     my $height = $self->height();

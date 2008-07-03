@@ -55,7 +55,7 @@ sub draw {
 
     $self->SUPER::draw($clicker);
 
-    my $cr = $clicker->context();
+    my $cr = $clicker->cairo();
 
     $cr->set_source_rgba($self->background_color->rgba());
     $cr->paint();

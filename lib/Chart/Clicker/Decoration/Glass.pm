@@ -33,7 +33,7 @@ sub draw {
     my $self = shift();
     my $clicker = shift();
 
-    my $cr = $clicker->context();
+    my $cr = $clicker->cairo();
 
     if($self->background_color()) {
         $cr->set_source_rgba($self->background_color->as_array_with_alpha());

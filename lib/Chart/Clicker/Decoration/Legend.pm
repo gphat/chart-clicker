@@ -46,7 +46,7 @@ sub prepare {
 
     my $font = $self->font();
 
-    my $cr = $self->clicker->context();
+    my $cr = $self->clicker->cairo();
     $cr->save();
 
     $cr->select_font_face($font->face(), $font->slant(), $font->weight());
@@ -152,7 +152,7 @@ sub draw {
     my $height = $self->height();
 
     $self->SUPER::draw($clicker);
-    my $cr = $self->clicker->context();
+    my $cr = $self->clicker->cairo();
 
     $cr->select_font_face($self->font->face(), $self->font->slant(), $self->font->weight());
     $cr->set_font_size($self->font->size());
