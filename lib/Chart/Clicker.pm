@@ -12,10 +12,10 @@ use Graphics::Color::RGB;
 use Graphics::Primitive::Insets;
 use Graphics::Primitive::Border;
 
+use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::Plot;
 use Chart::Clicker::Format::Png;
 use Chart::Clicker::Util;
-
 use Chart::Clicker::Drawing::ColorAllocator;
 
 use Cairo;
@@ -38,10 +38,22 @@ has 'color_allocator' => (
     default => sub { Chart::Clicker::Drawing::ColorAllocator->new()  }
 );
 
-has 'context' => (
+has 'cairo' => (
     is => 'rw',
     isa => 'Chart::Clicker::Cairo',
     clearer => 'clear_context'
+);
+
+has 'contexts' => (
+    metaclass => 'Collection::Hash',
+    is => 'rw',
+    isa => 'HashRef[Chart::Clicker::Context]',
+    default => sub { { default => Chart::Clicker::Context->new(name => 'default') } },
+    provides => {
+        get     => 'get_context',
+        count   => 'context_count',
+        delete  => 'delete_context'
+    }
 );
 
 has 'datasets' => (
@@ -56,38 +68,6 @@ has 'datasets' => (
     }
 );
 
-has 'dataset_domain_axes' => (
-    metaclass => 'Collection::Hash',
-    is => 'rw',
-    isa => 'HashRef',
-    default => sub { {} },
-    provides => {
-        'set' => 'set_dataset_domain_axis',
-        'get' => 'get_dataset_domain_axis',
-    }
-);
-
-has 'dataset_range_axes' => (
-    metaclass => 'Collection::Hash',
-    is => 'rw',
-    isa => 'HashRef',
-    default => sub { {} },
-    provides => {
-        'set' => 'set_dataset_range_axis',
-        'get' => 'get_dataset_range_axis',
-    }
-);
-
-has 'domain_axes' => (
-    metaclass => 'Collection::Array',
-    is => 'rw',
-    isa => 'ArrayRef[Chart::Clicker::Axis]',
-    default => sub { [] },
-    provides => {
-        'get' => 'get_domain_axis'
-    }
-);
-
 has 'format' => (
     is      => 'rw',
     isa     => 'Format',
@@ -99,38 +79,39 @@ has '+layout' => (
     default => sub { Layout::Manager::Compass->new() }
 );
 
-has 'markers' => (
-    metaclass => 'Collection::Array',
-    is => 'rw',
-    isa => 'ArrayRef[Chart::Clicker::Data::Marker]',
-    default => sub { [] },
-    provides => {
-        'count' => 'marker_count',
-        'push'  => 'add_to_markers'
-    }
-);
-
-has 'marker_domain_axes' => (
-    metaclass => 'Collection::Hash',
-    is => 'rw',
-    isa => 'HashRef',
-    default => sub { {} },
-    provides => {
-        'set' => 'set_marker_domain_axis',
-        'get' => 'get_marker_domain_axis'
-    }
-);
-
-has 'marker_range_axes' => (
-    metaclass => 'Collection::Hash',
-    is => 'rw',
-    isa => 'HashRef',
-    default => sub { {} },
-    provides => {
-        'set' => 'set_marker_range_axis',
-        'get' => 'get_marker_range_axis'
-    }
-);
+# TODO Add these to context!
+# has 'markers' => (
+#     metaclass => 'Collection::Array',
+#     is => 'rw',
+#     isa => 'ArrayRef[Chart::Clicker::Data::Marker]',
+#     default => sub { [] },
+#     provides => {
+#         'count' => 'marker_count',
+#         'push'  => 'add_to_markers'
+#     }
+# );
+# 
+# has 'marker_domain_axes' => (
+#     metaclass => 'Collection::Hash',
+#     is => 'rw',
+#     isa => 'HashRef',
+#     default => sub { {} },
+#     provides => {
+#         'set' => 'set_marker_domain_axis',
+#         'get' => 'get_marker_domain_axis'
+#     }
+# );
+# 
+# has 'marker_range_axes' => (
+#     metaclass => 'Collection::Hash',
+#     is => 'rw',
+#     isa => 'HashRef',
+#     default => sub { {} },
+#     provides => {
+#         'set' => 'set_marker_range_axis',
+#         'get' => 'get_marker_range_axis'
+#     }
+# );
 
 has 'plot' => (
     is => 'rw',
@@ -138,28 +119,6 @@ has 'plot' => (
     default => sub {
         Chart::Clicker::Decoration::Plot->new()
     }
-);
-
-has 'range_axes' => (
-    metaclass => 'Collection::Array',
-    is => 'rw',
-    isa => 'ArrayRef[Chart::Clicker::Axis]',
-    default => sub { [] },
-    provides => {
-        'get' => 'get_range_axis'
-    }
-);
-
-has 'renderer_domain_axes' => (
-    is => 'rw',
-    isa => 'HashRef',
-    default => sub { {} }
-);
-
-has 'renderer_range_axes' => (
-    is => 'rw',
-    isa => 'HashRef',
-    default => sub { {} }
 );
 
 has '+width' => (
@@ -249,11 +208,6 @@ override('draw', sub {
     }
 });
 
-# sub draw {
-#      my $self = shift();
-# 
-# }
-
 override('prepare', sub {
     my $self = shift();
 
@@ -266,21 +220,31 @@ override('prepare', sub {
             die("Dataset $count is empty.");
         }
 
-        my $rend = $plot->get_renderer($plot->get_dataset_renderer($count) || 0);
-        if(!defined($rend)) {
-            die("Can't find a renderer, that's fatal!");
-        }
         $ds->prepare();
 
-        my $daxisnum = $self->get_dataset_domain_axis($count);
-        my $daxis = $self->get_domain_axis($daxisnum || 0);
+        my $ctx = $self->get_context($ds->context);
+
+        unless(defined($ctx)) {
+            $ctx = $self->get_context('default');
+        }
+
+        unless(defined($ctx)) {
+            # TODO Could give more data?
+            die("Can't find a context for dataset.");
+        }
+
+        my $daxis = $ctx->domain_axis;
         if(defined($daxis)) {
             $daxis->range->combine($ds->domain());
         }
+        # TODO Blatant disregard for duplicate adds.  How would we know?
+        $self->add_component($daxis, 's'); # TODO Fix direction!
 
-        my $raxisnum = $self->get_dataset_range_axis($count);
-        my $raxis = $self->get_range_axis($raxisnum || 0);
+        my $rend = $ctx->renderer();
+        $self->plot->clicker($self);
+        $self->plot->add_component($rend);
 
+        my $raxis = $ctx->range_axis;
         if(defined($raxis)) {
             if($rend->additive()) {
                 $raxis->range->combine($ds->combined_range());
@@ -288,6 +252,8 @@ override('prepare', sub {
                 $raxis->range->combine($ds->range());
             }
         }
+        # TODO Blatant disregard for duplicate adds.  How would we know?
+        $self->add_component($raxis, 'w'); # TODO Fix direction!
 
         $count++;
     }
@@ -300,6 +266,8 @@ override('prepare', sub {
     foreach my $c (@{ $self->components }) {
         $c->{component}->clicker($self);
     }
+
+    $self->add_component($self->plot, 'c');
 
     super;
 

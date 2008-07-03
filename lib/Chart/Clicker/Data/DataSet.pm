@@ -5,16 +5,15 @@ use MooseX::AttributeHelpers;
 
 use Chart::Clicker::Data::Range;
 
-has 'series' => (
-    metaclass => 'Collection::Array',
+has 'combined_range' => (
     is => 'rw',
-    isa => 'ArrayRef',
-    default => sub { [] },
-    provides => {
-        'count' => 'count',
-        'push' => 'add_to_series',
-        'get' => 'get_series'
-    }
+    isa => 'Chart::Clicker::Data::Range',
+    default => sub { Chart::Clicker::Data::Range->new() }
+);
+has 'context' => (
+    is => 'rw',
+    isa => 'Str',
+    default => sub { 'default'}
 );
 has 'domain' => (
     is => 'rw',
@@ -27,10 +26,16 @@ has 'range' => (
     isa => 'Chart::Clicker::Data::Range',
     default => sub { Chart::Clicker::Data::Range->new() }
 );
-has 'combined_range' => (
+has 'series' => (
+    metaclass => 'Collection::Array',
     is => 'rw',
-    isa => 'Chart::Clicker::Data::Range',
-    default => sub { Chart::Clicker::Data::Range->new() }
+    isa => 'ArrayRef',
+    default => sub { [] },
+    provides => {
+        'count' => 'count',
+        'push' => 'add_to_series',
+        'get' => 'get_series'
+    }
 );
 
 sub prepare {

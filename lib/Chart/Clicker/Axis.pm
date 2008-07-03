@@ -176,6 +176,8 @@ sub mark {
     my $self = shift();
     my $value = shift();
 
+    # TODO Maybe cache repeat values?
+
     # 'caching' this here speeds things up.  Calling after changing the
     # range would result in a messed up chart anyway...
     if(!defined($self->{'LOWER'})) {

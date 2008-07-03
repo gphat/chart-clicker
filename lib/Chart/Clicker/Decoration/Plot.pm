@@ -145,7 +145,6 @@ handles rendering the markers that come from the Clicker object.
 
 Creates a new Plot object.
 
-=cut
 =back
 
 =head2 Class Methods

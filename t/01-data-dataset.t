@@ -1,9 +1,10 @@
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 BEGIN { use_ok('Chart::Clicker::Data::DataSet'); }
 BEGIN { use_ok('Chart::Clicker::Data::Series'); }
 
 my $dataset = Chart::Clicker::Data::DataSet->new();
+cmp_ok($dataset->context, 'eq', 'default', 'context');
 ok(defined($dataset), 'new Chart::Clicker::Data::DataSet');
 isa_ok($dataset, 'Chart::Clicker::Data::DataSet', 'isa Chart::Data::DataSet');
 
