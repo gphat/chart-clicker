@@ -4,6 +4,8 @@ use MooseX::AttributeHelpers;
 
 use IO::File;
 
+# TODO This shouldn't be a role...
+
 requires 'create_surface';
 
 has 'surface' => (

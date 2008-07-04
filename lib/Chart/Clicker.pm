@@ -25,15 +25,18 @@ use Cairo;
 
 our $VERSION = '2.0.0';
 
-subtype 'Format'
-    => as 'Object'
-    => where { $_->does('Chart::Clicker::Format') };
-
-coerce 'Format'
+coerce 'Chart::Clicker::Format'
     => from 'Str'
     => via {
         return Chart::Clicker::Util::load('Chart::Clicker::Format::'.$_)
     };
+
+coerce 'Chart::Clicker::Renderer'
+    => from 'Str'
+    => via {
+        return Chart::Clicker::Util::load('Chart::Clicker::Renderer::'.$_)
+    };
+
 
 has 'color_allocator' => (
     is => 'rw',
@@ -73,7 +76,7 @@ has 'datasets' => (
 
 has 'format' => (
     is      => 'rw',
-    isa     => 'Format',
+    isa     => 'Chart::Clicker::Format',
     coerce  => 1,
     default => sub { Chart::Clicker::Format::Png->new() }
 );

@@ -8,15 +8,6 @@ use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Renderer::Line;
 use Chart::Clicker::Util;
 
-subtype 'Renderer'
-    => as 'Chart::Clicker::Renderer';
-
-coerce 'Renderer'
-    => from 'Str'
-    => via {
-        return Chart::Clicker::Util::load('Chart::Clicker::Renderer::'.$_)
-    };
-
 has 'domain_axis' => (
     is => 'rw',
     isa => 'Chart::Clicker::Axis',
@@ -49,7 +40,7 @@ has 'range_axis' => (
 
 has 'renderer' => (
     is => 'rw',
-    isa => 'Renderer',
+    isa => 'Chart::Clicker::Renderer',
     default => sub { Chart::Clicker::Renderer::Line->new },
     coerce => 1
 );
