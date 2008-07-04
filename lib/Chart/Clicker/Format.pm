@@ -40,6 +40,8 @@ sub write {
     $fh->close();
 }
 
+no Moose;
+
 1;
 
 __END__

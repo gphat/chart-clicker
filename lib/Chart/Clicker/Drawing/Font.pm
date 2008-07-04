@@ -56,6 +56,8 @@ has 'weight' => (
     default => $CC_FONT_WEIGHT_NORMAL
 );
 
+no Moose;
+
 1;
 __END__
 =head1 NAME

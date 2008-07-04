@@ -34,6 +34,8 @@ has 'stroke' => (
     }
 );
 
+no Moose;
+
 1;
 __END__
 

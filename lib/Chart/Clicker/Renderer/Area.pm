@@ -97,6 +97,8 @@ sub draw {
     return 1;
 }
 
+no Moose;
+
 1;
 __END__
 

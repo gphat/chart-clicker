@@ -196,6 +196,8 @@ sub draw {
     }
 }
 
+no Moose;
+
 1;
 __END__
 

@@ -3,6 +3,8 @@ use Moose;
 
 extends 'Chart::Clicker::Drawing::Component';
 
+no Moose;
+
 1;
 __END__
 

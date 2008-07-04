@@ -24,12 +24,14 @@ our $CC_LINE_JOIN_MITER = 'miter';
 our $CC_LINE_JOIN_ROUND = 'round';
 our $CC_LINE_JOIN_BEVEL = 'bevel';
 
-enum 'LineCap' => ($CC_LINE_CAP_BUTT, $CC_LINE_CAP_ROUND, $CC_LINE_CAP_SQUARE);
-enum 'LineJoin' => ($CC_LINE_JOIN_MITER, $CC_LINE_JOIN_ROUND, $CC_LINE_JOIN_BEVEL);
+enum 'Chart::Clicker::LineCap' => ($CC_LINE_CAP_BUTT, $CC_LINE_CAP_ROUND, $CC_LINE_CAP_SQUARE);
+enum 'Chart::Clicker::LineJoin' => ($CC_LINE_JOIN_MITER, $CC_LINE_JOIN_ROUND, $CC_LINE_JOIN_BEVEL);
 
 has 'width' => ( is => 'rw', isa => 'Int', default => 1 );
-has 'line_cap' => ( is => 'rw', isa => 'LineCap', default => $CC_LINE_CAP_BUTT );
-has 'line_join' => ( is => 'rw', isa => 'LineJoin', default => $CC_LINE_JOIN_MITER );
+has 'line_cap' => ( is => 'rw', isa => 'Chart::Clicker::LineCap', default => $CC_LINE_CAP_BUTT );
+has 'line_join' => ( is => 'rw', isa => 'Chart::Clicker::LineJoin', default => $CC_LINE_JOIN_MITER );
+
+no Moose;
 
 1;
 __END__

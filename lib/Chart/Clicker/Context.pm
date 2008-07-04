@@ -45,6 +45,8 @@ has 'renderer' => (
     coerce => 1
 );
 
+no Moose;
+
 1;
 __END__
 

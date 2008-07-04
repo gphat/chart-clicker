@@ -318,6 +318,8 @@ sub format_value {
     return $value;
 }
 
+no Moose;
+
 1;
 __END__
 

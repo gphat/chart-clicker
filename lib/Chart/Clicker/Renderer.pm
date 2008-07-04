@@ -10,11 +10,10 @@ has 'additive' => ( is => 'ro', isa => 'Bool', default => 0 );
 sub prepare {
     my $self = shift();
 
-    # $self->width($dimension->width());
-    # $self->height($dimension->height());
-
     return 1;
 }
+
+no Moose;
 
 1;
 __END__

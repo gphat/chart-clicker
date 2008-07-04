@@ -17,4 +17,6 @@ sub write {
     $click->cairo->get_target->write_to_png($file);
 }
 
+no Moose;
+
 1;

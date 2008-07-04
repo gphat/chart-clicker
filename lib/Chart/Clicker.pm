@@ -25,6 +25,7 @@ use Cairo;
 
 our $VERSION = '2.0.0';
 
+# TODO Global coercions?
 coerce 'Chart::Clicker::Format'
     => from 'Str'
     => via {
@@ -299,6 +300,8 @@ sub data {
 
     return $self->format->surface_data();
 }
+
+no Moose;
 
 1;
 

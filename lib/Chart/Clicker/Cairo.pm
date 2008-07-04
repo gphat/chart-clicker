@@ -29,6 +29,8 @@ around qw(rectangle) => sub {
     $cont->($class, int($x) + .5, int($y) + .5, int($width), int($height));
 };
 
+no Moose;
+
 1;
 
 __END__

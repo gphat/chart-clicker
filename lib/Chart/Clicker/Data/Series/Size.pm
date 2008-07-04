@@ -15,6 +15,7 @@ has 'sizes' => (
     }
 );
 
+no Moose;
 
 1;
 

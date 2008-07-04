@@ -68,6 +68,8 @@ sub get {
     return $self->colors->[$index];
 }
 
+no Moose;
+
 1;
 __END__
 

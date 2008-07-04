@@ -42,6 +42,8 @@ sub resize {
     $self->radius($factor);
 }
 
+no Moose;
+
 1;
 __END__
 

@@ -20,4 +20,6 @@ sub create_surface {
     );
 }
 
+no Moose;
+
 1;

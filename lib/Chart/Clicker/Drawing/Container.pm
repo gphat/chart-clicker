@@ -79,6 +79,8 @@ extends 'Graphics::Primitive::Container';
 #     super;
 # });
 
+no Moose;
+
 1;
 __END__
 =head1 NAME

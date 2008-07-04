@@ -123,6 +123,8 @@ sub format_value {
     return $dt->strftime($self->format());
 }
 
+no Moose;
+
 1;
 __END__
 

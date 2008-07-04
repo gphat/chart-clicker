@@ -1,6 +1,8 @@
 package Chart::Clicker::Shape;
 use Moose;
 
+no Moose;
+
 1;
 __END__
 

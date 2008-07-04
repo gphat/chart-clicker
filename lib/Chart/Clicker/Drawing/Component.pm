@@ -54,6 +54,8 @@ override('draw', sub {
     }
 });
 
+no Moose;
+
 1;
 __END__
 

@@ -4,6 +4,8 @@ use Moose;
 has 'height' => ( is => 'rw', isa => 'Int' );
 has 'width' => ( is => 'rw', isa => 'Int' );
 
+no Moose;
+
 1;
 __END__
 

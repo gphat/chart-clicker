@@ -53,6 +53,8 @@ sub draw_point {
     $self->shape->create_path($cr, $x , $y);
 }
 
+no Moose;
+
 1;
 __END__
 

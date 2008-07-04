@@ -15,6 +15,8 @@ has 'label' => (
     isa => 'Str'
 );
 
+no Moose;
+
 1;
 __END__
 

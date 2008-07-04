@@ -24,6 +24,8 @@ our $CC_AXIS_BOTTOM = 8;
 our $CC_AXIS_LEFT = 9;
 our $CC_AXIS_RIGHT = 10;
 
+no Moose;
+
 1;
 __END__
 

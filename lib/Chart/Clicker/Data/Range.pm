@@ -96,6 +96,8 @@ sub divvy {
     return \@vals;
 }
 
+no Moose;
+
 1;
 __END__
 

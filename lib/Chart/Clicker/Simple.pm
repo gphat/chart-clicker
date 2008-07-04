@@ -129,6 +129,8 @@ sub BUILD {
     $self->chart($chart);
 }
 
+no Moose;
+
 1;
 
 __END__
