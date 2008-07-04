@@ -260,6 +260,9 @@ override('prepare', sub {
 
         my $raxis = $ctx->range_axis;
         if(defined($raxis)) {
+            # TODO Now a renderer gets it's entire list in a single draw or
+            # prepare pass.  This could be delegated down to the renderer's
+            # prepare.  No more additive renderers.
             if($rend->additive()) {
                 $raxis->range->combine($ds->combined_range());
             } else {
@@ -288,9 +291,21 @@ override('prepare', sub {
     return 1;
 });
 
+sub get_datasets_for_context {
+    my ($self, $name) = @_;
+
+    my @dses;
+    foreach my $ds (@{ $self->datasets }) {
+        if($ds->context eq $name) {
+            push(@dses, $ds);
+        }
+    }
+
+    return \@dses;
+}
+
 sub write {
-    my $self = shift();
-    my $file = shift();
+    my ($self, $file) = @_;
 
     return $self->format->write($self, $file);
 }
@@ -458,17 +473,10 @@ Draw this chart
 Get the format for this Chart.  Required in the constructor.  Must be on of
 Png, Pdf, Ps or Svg.
 
-=item get_dataset_domain_axis
+=item I<get_datasets_for_context>
 
-  my $axis = $chart->get_dataset_domain_axis($index)
-
-Returns the domain axis to which the specified dataset is affined.
-
-=item get_dataset_range_axis
-
-  my $axis = $chart->get_dataset_range_axis($index)
-
-Returns the range axis to which the specified dataset is affined.
+Returns an arrayref containing all datasets for the given context.  Used by
+renderers to get a list of datasets to chart.
 
 =item inside_width
 
@@ -483,20 +491,6 @@ insets and borders.
 =item prepare
 
 Prepare this chart for rendering.
-
-=item set_dataset_domain_axis
-
-  $chart->set_dataset_domain_axis($dataset_index, $axis_index)
-
-Affines the dataset at the specified index to the domain axis at the second
-index.
-
-=item set_dataset_range_axis
-
-  $chart->set_dataset_range_axis($dataset_index, $axis_index)
-
-Affines the dataset at the specified index to the range axis at the second
-index.
 
 =item write
 
