@@ -16,6 +16,8 @@ Revision history for Perl extension Chart::Clicker.
 	  - Rename Renderer::Base to just Renderer
 	  - Add resize method to Shape classes
 	  - Stop baselining axes by default, it breaks stuff.
+	  - Abandon $CC_* position/orientation junk for Moose roles with strings
+	  - Move out lots of generic functionality to new modules
 1.4.2
     - Packaging fixes.
 1.4.1

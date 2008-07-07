@@ -19,30 +19,39 @@ has 'shape' => (
 
 sub draw {
     my $self = shift();
-    my $clicker = shift();
-    my $cr = shift();
-    my $series = shift();
-    my $domain = shift();
-    my $range = shift();
 
-    my $min = $range->range->lower();
+    my $clicker = $self->clicker;
+    my $cr = $clicker->cairo;
 
-    my $xper = $domain->per();
-    my $yper = $range->per();
-    my $height = $self->height();
+    my $dses = $clicker->get_datasets_for_context($self->context);
+    foreach my $ds (@{ $dses }) {
+        foreach my $series (@{ $ds->series }) {
 
-    my @vals = @{ $series->values() };
-    my @keys = @{ $series->keys() };
-    for(0..($series->key_count() - 1)) {
-        my $x = $domain->mark($keys[$_]);
-        my $y = $height - $range->mark($vals[$_]);
+            # TODO if undef...
+            my $ctx = $clicker->get_context($ds->context);
+            my $domain = $ctx->domain_axis;
+            my $range = $ctx->range_axis;
 
-        $cr->move_to($x, $y);
-        $self->draw_point($cr, $x, $y, $series, $_);
+            my $min = $range->range->lower();
+
+            my $xper = $domain->per();
+            my $yper = $range->per();
+            my $height = $self->height();
+
+            my @vals = @{ $series->values() };
+            my @keys = @{ $series->keys() };
+            for(0..($series->key_count() - 1)) {
+                my $x = $domain->mark($keys[$_]);
+                my $y = $height - $range->mark($vals[$_]);
+
+                $cr->move_to($x, $y);
+                $self->draw_point($cr, $x, $y, $series, $_);
+            }
+            my $color = $clicker->color_allocator->next();
+            $cr->set_source_rgba($color->as_array_with_alpha());
+            $cr->fill();
+        }
     }
-    my $color = $clicker->color_allocator->next();
-    $cr->set_source_rgba($color->rgba());
-    $cr->fill();
 
     return 1;
 }

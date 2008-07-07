@@ -24,75 +24,82 @@ has 'stroke' => (
 
 sub draw {
     my $self = shift();
-    # my $clicker = shift();
-    # my $cr = shift();
-    my $series = shift();
-    my $domain = shift();
-    my $range = shift();
 
-    my $height = $self->height();
-    my $width = $self->width();
+    my $clicker = $self->clicker;
+    my $cr = $clicker->cairo;
 
-    my $cr = $self->clicker->cairo;
+    my $dses = $clicker->get_datasets_for_context($self->context);
+    foreach my $ds (@{ $dses }) {
+        foreach my $series (@{ $ds->series }) {
 
-    $cr->set_line_width($self->stroke->width());
-    $cr->set_line_cap($self->stroke->line_cap());
-    $cr->set_line_join($self->stroke->line_join());
+            # TODO if undef...
+            my $ctx = $clicker->get_context($ds->context);
+            my $domain = $ctx->domain_axis;
+            my $range = $ctx->range_axis;
 
-    $cr->new_path();
+            my $height = $self->height();
+            my $width = $self->width();
 
-    my $lastx; # used for completing the path
-    my @vals = @{ $series->values() };
-    my @keys = @{ $series->keys() };
+            $cr->set_line_width($self->stroke->width());
+            $cr->set_line_cap($self->stroke->line_cap());
+            $cr->set_line_join($self->stroke->line_join());
 
-    my $startx;
+            $cr->new_path();
 
-    for(0..($series->key_count() - 1)) {
+            my $lastx; # used for completing the path
+            my @vals = @{ $series->values() };
+            my @keys = @{ $series->keys() };
 
-        my $x = $domain->mark($keys[$_]);
+            my $startx;
 
-        my $y = $height - $range->mark($vals[$_]);
-        if($_ == 0) {
-            $startx = $x;
-            $cr->move_to($x, $y);
-        } else {
-            $cr->line_to($x, $y);
+            for(0..($series->key_count() - 1)) {
+
+                my $x = $domain->mark($keys[$_]);
+
+                my $y = $height - $range->mark($vals[$_]);
+                if($_ == 0) {
+                    $startx = $x;
+                    $cr->move_to($x, $y);
+                } else {
+                    $cr->line_to($x, $y);
+                }
+                $lastx = $x;
+            }
+            my $color = $self->clicker->color_allocator->next();
+            $cr->set_source_rgba($color->as_array_with_alpha());
+
+            my $path = $cr->copy_path();
+            $cr->stroke();
+
+            $cr->append_path($path);
+            $cr->line_to($lastx, $height);
+            $cr->line_to($startx, $height);
+            $cr->close_path();
+
+            if($self->opacity()) {
+
+                my $clone = $color->clone();
+                $clone->alpha($self->opacity());
+                $cr->set_source_rgba($clone->as_array_with_alpha());
+            } elsif($self->fade()) {
+
+                my $patt = Cairo::LinearGradient->create(0.0, 0.0, 1.0, $height);
+                $patt->add_color_stop_rgba(
+                    1.0, $color->red(), $color->green(), $color->blue(),
+                    $color->alpha()
+                );
+                $patt->add_color_stop_rgba(
+                    0.0, $color->red(), $color->green(), $color->blue(), 0
+                );
+                $cr->set_source($patt);
+            } else {
+
+                $cr->set_source_rgba($color->as_array_with_alpha());
+            }
+
+            $cr->fill();
         }
-        $lastx = $x;
     }
-    my $color = $self->clicker->color_allocator->next();
-    $cr->set_source_rgba($color->as_array_with_alpha());
-
-    my $path = $cr->copy_path();
-    $cr->stroke();
-
-    $cr->append_path($path);
-    $cr->line_to($lastx, $height);
-    $cr->line_to($startx, $height);
-    $cr->close_path();
-
-    if($self->opacity()) {
-
-        my $clone = $color->clone();
-        $clone->alpha($self->opacity());
-        $cr->set_source_rgba($clone->rgba());
-    } elsif($self->fade()) {
-
-        my $patt = Cairo::LinearGradient->create(0.0, 0.0, 1.0, $height);
-        $patt->add_color_stop_rgba(
-            1.0, $color->red(), $color->green(), $color->blue(),
-            $color->alpha()
-        );
-        $patt->add_color_stop_rgba(
-            0.0, $color->red(), $color->green(), $color->blue(), 0
-        );
-        $cr->set_source($patt);
-    } else {
-
-        $cr->set_source_rgba($color->rgba());
-    }
-
-    $cr->fill();
 
     return 1;
 }
