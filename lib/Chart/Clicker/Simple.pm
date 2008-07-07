@@ -77,7 +77,7 @@ sub BUILD {
 
     # Domain Axis
     my $daxis = Chart::Clicker::Axis->new({
-        orientation => $CC_HORIZONTAL,
+        orientation => 'horizontal',
         position    => $CC_BOTTOM,
         label       => $self->domain_label(),
         visible     => !$self->hide_axes()
@@ -92,7 +92,7 @@ sub BUILD {
 
     # Range Axis
     my $raxis = Chart::Clicker::Axis->new({
-        orientation => $CC_VERTICAL,
+        orientation => 'vertical',
         position    => $CC_LEFT,
         label       => $self->range_label(),
         visible     => !$self->hide_axes(),

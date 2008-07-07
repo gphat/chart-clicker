@@ -50,39 +50,13 @@ has 'dataset_renderers' => (
 
 sub prepare {
     my ($self) = @_;
-#     my $clicker = shift();
-#     my $dimension = shift();
-# 
-#     # $self->width($dimension->width());
-#     # $self->height($dimension->height());
-# 
-#     # my $idim = $self->inside_dimensions();
-# 
-    # my %dscount;
-    # my %rend_ds;
-    # my $count = 0;
-    # foreach my $dataset (@{ $self->clicker->datasets() }) {
-        # my $ridx = $self->get_dataset_renderer($count) || 0;
-    #     $dscount{$ridx} += scalar(@{ $dataset->series() });
-        # push(@{ $rend_ds{$ridx} }, $dataset);
-        # $count++;
-    # }
-# 
+
     # TODO This is also happening in Clicker.pm
     foreach my $c (@{ $self->components }) {
         $c->{component}->clicker($self->clicker);
     }
-# 
+
     super;
-# 
-#     # $count = 0;
-#     # foreach my $rend (@{ $self->renderers() }) {
-#     #     $rend->dataset_count($dscount{$count} || 0);
-#     #     $rend->prepare($clicker, $idim, $rend_ds{$count});
-#     #     $count++;
-#     # }
-# 
-#     return 1;
 }
 
 # sub draw {

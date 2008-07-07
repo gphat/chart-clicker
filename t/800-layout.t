@@ -35,10 +35,10 @@ $dataset->series([ $series, $series2 ]);
 
 $chart->datasets([ $dataset ]);
 
-my $tlabel = Chart::Clicker::Decoration::Label->new({ text => 'Danes', orientation => $CC_HORIZONTAL});
-my $tlabel2 = Chart::Clicker::Decoration::Label->new({ text => 'Footballs', orientation => $CC_VERTICAL});
-my $tlabel3 = Chart::Clicker::Decoration::Label->new({ text => 'Boots', orientation => $CC_VERTICAL});
-my $tlabel4 = Chart::Clicker::Decoration::Label->new({ text => 'Goals', orientation => $CC_HORIZONTAL});
+my $tlabel = Chart::Clicker::Decoration::Label->new({ text => 'Danes', orientation => 'horizontal' });
+my $tlabel2 = Chart::Clicker::Decoration::Label->new({ text => 'Footballs', orientation => 'vertical' });
+my $tlabel3 = Chart::Clicker::Decoration::Label->new({ text => 'Boots', orientation => 'vertical' });
+my $tlabel4 = Chart::Clicker::Decoration::Label->new({ text => 'Goals', orientation => 'horizontal' });
 $chart->add_component($tlabel, 'north');
 $chart->add_component($tlabel2, 'west');
 $chart->add_component($tlabel3, 'east');

@@ -2,14 +2,15 @@ package Chart::Clicker::Axis;
 use Moose;
 
 extends 'Chart::Clicker::Drawing::Component';
+with 'Chart::Clicker::Positioned';
 
 use MooseX::AttributeHelpers;
+use Moose::Util::TypeConstraints;
 
 use constant PI => 4 * atan2 1, 1;
 
 use Chart::Clicker::Cairo;
 use Chart::Clicker::Data::Range;
-use Chart::Clicker::Drawing qw(:positions);
 
 use Graphics::Color::RGB;
 
@@ -25,8 +26,6 @@ has 'format' => ( is => 'rw', isa => 'Str' );
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
 has 'label' => ( is => 'rw', isa => 'Str' );
 has 'per' => ( is => 'rw', isa => 'Num' );
-# TODO FIxme
-has 'position' => ( is => 'rw', isa => 'Num' );
 has 'show_ticks' => ( is => 'rw', isa => 'Bool', default => 1 );
 has 'tick_length' => ( is => 'rw', isa => 'Num', default => 3 );
 has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
@@ -75,7 +74,12 @@ has '+color' => (
     },
     coerce => 1
 );
-
+has '+orientation' => (
+    required => 1
+);
+has '+position' => (
+    required => 1
+);
 has 'baseline' => (
     is  => 'rw',
     isa => 'Num',
@@ -121,10 +125,10 @@ sub prepare {
     my $biggest = 0;
     my $key;
     if($self->visible()) {
-        if($self->orientation() == $CC_HORIZONTAL) {
-            $key = 'total_height';
-        } else {
+        if($self->is_vertical) {
             $key = 'width';
+        } else {
+            $key = 'total_height';
         }
         my @values = @{ $self->tick_values() };
         for(0..scalar(@values) - 1) {
@@ -148,16 +152,7 @@ sub prepare {
         $self->{'label_extents_cache'} = $ext;
     }
 
-    if($self->orientation() == $CC_HORIZONTAL) {
-        my $label_height = $self->label()
-            ? $self->{'label_extents_cache'}->{'total_height'}
-            : 0;
-        $self->minimum_height($biggest + $label_height + 4);
-        # TODO Wrong, need widest label + tick length + outside
-        $self->minimum_width($biggest + $self->outside_width);
-        # TODO This is wrong
-        # $self->per($self->width / ($self->range->span - 1));
-    } else {
+    if($self->is_vertical) {
         # The label will be rotated, so use height here too.
         my $label_width = $self->label()
             ? $self->{'label_extents_cache'}->{'total_height'}
@@ -165,8 +160,13 @@ sub prepare {
         $self->minimum_width($biggest + $label_width + 4);
         # TODO Wrong, need tallest label + tick length + outside
         $self->minimum_height($self->outside_height + $biggest);
-        # TODO This is wrong
-        # $self->per($self->height() / ($self->range->span() - 1));
+    } else {
+        my $label_height = $self->label()
+            ? $self->{'label_extents_cache'}->{'total_height'}
+            : 0;
+        $self->minimum_height($biggest + $label_height + 4);
+        # TODO Wrong, need widest label + tick length + outside
+        $self->minimum_width($biggest + $self->outside_width);
     }
 
     return 1;
@@ -189,10 +189,10 @@ sub mark {
 sub draw {
     my $self = shift();
 
-    if($self->orientation() == $CC_HORIZONTAL) {
-        $self->per($self->width / ($self->range->span - 1));
-    } else {
+    if($self->is_vertical) {
         $self->per($self->height() / ($self->range->span() - 1));
+    } else {
+        $self->per($self->width / ($self->range->span - 1));
     }
 
     unless($self->visible()) {
@@ -202,17 +202,14 @@ sub draw {
     my $x = 0;
     my $y = 0;
 
-    my $orient = $self->orientation();
-    my $pos = $self->position();
     my $width = $self->width();
     my $height = $self->height();
 
-
-    if($pos == $CC_LEFT) {
+    if($self->is_left) {
         $x += $width;
-    } elsif($pos == $CC_RIGHT) {
+    } elsif($self->is_right) {
         # nuffin
-    } elsif($pos == $CC_TOP) {
+    } elsif($self->is_top) {
         $y += $height;
     } else {
         # nuffin
@@ -239,40 +236,7 @@ sub draw {
     $cr->set_source_rgba($self->color->as_array_with_alpha());
 
     $cr->move_to($x, $y);
-    if($orient == $CC_HORIZONTAL) {
-        # Draw a line for our axis
-        $cr->line_to($x + $width, $y);
-
-        my @values = @{ $self->tick_values() };
-        # Draw a tick for each value.
-        for(0..scalar(@values) - 1) {
-            my $val = $values[$_];
-            # Grab the extent from the cache.
-            my $ext = $self->{'ticks_extents_cache'}->[$_];
-            my $ix = $x + ($val - $lower) * $per;
-            $cr->move_to($ix, $y);
-            if($pos == $CC_TOP) {
-                $cr->line_to($ix, $y - $tick_length);
-                $cr->rel_move_to(-($ext->{'width'} / 1.8), -2);
-            } else {
-                $cr->line_to($ix, $y + $tick_length);
-                $cr->rel_move_to(-($ext->{'width'} / 2), $ext->{'height'} + 2);
-            }
-            $cr->show_text($self->format_value($self->tick_labels->[$_] || $val));
-        }
-
-        # Draw the label
-        if($self->label()) {
-            my $ext = $self->{'label_extents_cache'};
-            if ($pos == $CC_BOTTOM) {
-                $cr->move_to(($width - $ext->{'width'}) / 2, $height);
-            } else {
-                $cr->move_to(($width - $ext->{'width'}) / 2, $ext->{'height'} + 2);
-            }
-            $cr->show_text($self->label());
-        }
-
-    } else {
+    if($self->is_vertical) {
         $cr->line_to($x, $y + $height);
 
         my @values = @{ $self->tick_values() };
@@ -281,7 +245,7 @@ sub draw {
             my $iy = $y + $height - (($val - $lower) * $per);
             my $ext = $self->{'ticks_extents_cache'}->[$_];
             $cr->move_to($x, $iy);
-            if($self->position() == $CC_LEFT) {
+            if($self->is_left) {
                 $cr->line_to($x - $tick_length, $iy);
                 $cr->rel_move_to(-$ext->{'width'} - 2, $ext->{'height'} / 2);
             } else {
@@ -294,12 +258,44 @@ sub draw {
         # Draw the label
         if($self->label()) {
             my $ext = $self->{'label_extents_cache'};
-            if ($pos == $CC_LEFT) {
+            if ($self->is_left) {
                 $cr->move_to($ext->{'height'}, ($height + $ext->{'width'}) / 2);
                 $cr->rotate(3*PI/2);
             } else {
                 $cr->move_to($width - $ext->{'height'}, ($height - $ext->{'width'}) / 2);
                 $cr->rotate(PI/2);
+            }
+            $cr->show_text($self->label());
+        }
+    } else {
+        # Draw a line for our axis
+        $cr->line_to($x + $width, $y);
+
+        my @values = @{ $self->tick_values() };
+        # Draw a tick for each value.
+        for(0..scalar(@values) - 1) {
+            my $val = $values[$_];
+            # Grab the extent from the cache.
+            my $ext = $self->{'ticks_extents_cache'}->[$_];
+            my $ix = $x + ($val - $lower) * $per;
+            $cr->move_to($ix, $y);
+            if($self->is_top) {
+                $cr->line_to($ix, $y - $tick_length);
+                $cr->rel_move_to(-($ext->{'width'} / 1.8), -2);
+            } else {
+                $cr->line_to($ix, $y + $tick_length);
+                $cr->rel_move_to(-($ext->{'width'} / 2), $ext->{'height'} + 2);
+            }
+            $cr->show_text($self->format_value($self->tick_labels->[$_] || $val));
+        }
+
+        # Draw the label
+        if($self->label()) {
+            my $ext = $self->{'label_extents_cache'};
+            if ($self->is_bottom) {
+                $cr->move_to(($width - $ext->{'width'}) / 2, $height);
+            } else {
+                $cr->move_to(($width - $ext->{'width'}) / 2, $ext->{'height'} + 2);
             }
             $cr->show_text($self->label());
         }
@@ -342,7 +338,7 @@ Chart::Clicker::Axis represents the plot of the chart.
   my $axis = Chart::Clicker::Axis->new({
     color => 'black',
     font  => Chart::Clicker::Drawing::Font->new(),
-    orientation => $CC_VERTICAL,
+    orientation => 'vertical',
     position => $CC_LEFT,
     show_ticks => 1,
     stroke = Chart::Clicker::Drawing::Stroke->new(),
@@ -408,7 +404,7 @@ Set/Get the label of the axis.
 
 =item orientation
 
-Set/Get the orientation of this axis.
+Set/Get the orientation of this axis.  See L<Chart::Clicker::Drawing>.
 
 =item per
 

@@ -16,7 +16,7 @@ use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::Grid;
 use Chart::Clicker::Decoration::Legend;
 use Chart::Clicker::Decoration::Plot;
-use Chart::Clicker::Drawing qw(:positions);
+#use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Format::Png;
 use Chart::Clicker::Util;
 use Chart::Clicker::Drawing::ColorAllocator;
@@ -219,7 +219,7 @@ override('prepare', sub {
     my $self = shift();
 
     # TODO Move this
-    my $legend = Chart::Clicker::Decoration::Legend->new(orientation => $CC_HORIZONTAL);
+    my $legend = Chart::Clicker::Decoration::Legend->new(orientation => 'horizontal');
     $self->add_component($legend, 's');
 
 
@@ -389,14 +389,14 @@ Clicker supports PNG and SVG output.
   $chart->add($legend, $CC_BOTTOM);
 
   my $daxis = Chart::Clicker::Axis->new({
-    orientation => $CC_HORIZONTAL,
+    orientation => 'hotizontal,
     position    => $CC_BOTTOM,
     format      => '%0.2f'
   });
   $chart->add($daxis, $CC_AXIS_BOTTOM);
 
   my $raxis = Chart::Clicker::Axis->new({
-    orientation => $CC_VERTICAL,
+    orientation => 'vertical',
     position    => $CC_LEFT,
     format      => '%0.2f'
   });

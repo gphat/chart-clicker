@@ -22,18 +22,18 @@ my $dataset = Chart::Clicker::Data::DataSet->new({
 });
 $chart->datasets([ $dataset ]);
 
-my $legend = Chart::Clicker::Decoration::Legend->new(orientation => $CC_HORIZONTAL);
+my $legend = Chart::Clicker::Decoration::Legend->new(orientation => 'horizontal');
 $chart->add_component($legend, 's');
 
 my $daxis = Chart::Clicker::Axis->new({
-  orientation => $CC_HORIZONTAL,
+  orientation => 'horizontal',
   position    => $CC_BOTTOM,
   format      => '%0.2f'
 });
 $chart->add_component($daxis, 's');
 
 my $raxis = Chart::Clicker::Axis->new({
-  orientation => $CC_VERTICAL,
+  orientation => 'vertical',
   position    => $CC_LEFT,
   format      => '%0.2f'
 });

@@ -109,18 +109,7 @@ sub prepare {
 
     $cr->restore();
 
-    if($self->orientation() == $CC_HORIZONTAL) {
-        $self->minimum_width($self->widest);
-        $self->minimum_height(
-            # The number of rows we need
-            # $rows
-            # The 'biggest' row (longest or tallest, depending on orientation)
-            $self->tallest + $self->outside_height
-            # and finally our insets
-            # + $self->insets->top() + $self->insets->bottom()
-            # + $self->border->stroke->width() * 2
-        );
-    } else {
+    if($self->is_vertical) {
         $self->height($self->tallest);
         $self->width(
             # The number of rows we need
@@ -129,6 +118,17 @@ sub prepare {
             $self->widest + $self->outside_width
             # and finally our insets
             # + $self->insets->right() + $self->insets->left()
+            # + $self->border->stroke->width() * 2
+        );
+    } else {
+        $self->minimum_width($self->widest);
+        $self->minimum_height(
+            # The number of rows we need
+            # $rows
+            # The 'biggest' row (longest or tallest, depending on orientation)
+            $self->tallest + $self->outside_height
+            # and finally our insets
+            # + $self->insets->top() + $self->insets->bottom()
             # + $self->border->stroke->width() * 2
         );
     }

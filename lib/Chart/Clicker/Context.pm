@@ -13,8 +13,8 @@ has 'domain_axis' => (
     isa => 'Chart::Clicker::Axis',
     default => sub {
         Chart::Clicker::Axis->new(
-            orientation => $CC_HORIZONTAL,
-            position    => $CC_BOTTOM,
+            orientation => 'horizontal',
+            position    => 'bottom',
             format      => '%0.2f'
         )
     }
@@ -31,8 +31,8 @@ has 'range_axis' => (
     isa => 'Chart::Clicker::Axis',
     default => sub {
         Chart::Clicker::Axis->new(
-            orientation => $CC_VERTICAL,
-            position    => $CC_LEFT,
+            orientation => 'vertical',
+            position    => 'left',
             format      => '%0.2f'
         )
     }

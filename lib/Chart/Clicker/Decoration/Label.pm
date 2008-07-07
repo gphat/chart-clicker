@@ -34,6 +34,10 @@ has 'text' => (
     isa => 'Str'
 );
 
+has '+orientation' => (
+    required => 1
+);
+
 my $VERTICAL = 4.71238898;
 
 sub prepare {
@@ -49,7 +53,7 @@ sub prepare {
     my $orientation = $self->orientation();
 
     my $extents;
-    if($orientation == $CC_VERTICAL) {
+    if($self->is_vertical) {
         $cr->save();
         $cr->rotate($VERTICAL);
         $extents = $cr->text_extents($self->text());
@@ -91,23 +95,23 @@ override('draw', sub {
 
     my $extents = $self->{'EXTENTS'};
     my ($x, $y);
-    if($self->orientation() == $CC_HORIZONTAL) {
-        $x = ($width / 2) - ($extents->{'width'} / 2);
-        $y = ($height / 2) + ($extents->{'height'} / 2);
-    } else {
+    if($self->is_vertical) {
         $x = ($width / 2) + ($extents->{'height'} / 2);
         $y = ($height / 2) + ($extents->{'width'} / 2);
+    } else {
+        $x = ($width / 2) - ($extents->{'width'} / 2);
+        $y = ($height / 2) + ($extents->{'height'} / 2);
     }
 
     $cr->move_to($x, $y);
 
-    if($self->orientation() == $CC_VERTICAL) {
+    if($self->is_vertical) {
+        $cr->show_text($self->text());
+    } else {
         $cr->save();
         $cr->rotate($VERTICAL);
         $cr->show_text($self->text());
         $cr->restore();
-    } else {
-        $cr->show_text($self->text());
     }
 });
 

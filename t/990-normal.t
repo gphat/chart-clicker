@@ -70,17 +70,17 @@ ok(defined($legend), 'new Legend');
 $chart->add($legend, $CC_TOP);
 
 my $daxis = Chart::Clicker::Axis->new({
-    orientation => $CC_HORIZONTAL,
+    orientation => 'horizontal',
     position => $CC_TOP
 });
-my $tlabel = Chart::Clicker::Decoration::Label->new({ text => 'Danes', orientation => $CC_HORIZONTAL});
+my $tlabel = Chart::Clicker::Decoration::Label->new({ text => 'Danes', orientation => 'horizontal' });
 $chart->add($tlabel, $CC_TOP);
 
-my $label = Chart::Clicker::Decoration::Label->new({text => 'Footballs', orientation => $CC_VERTICAL});
+my $label = Chart::Clicker::Decoration::Label->new({text => 'Footballs', orientation => 'vertical' });
 $chart->add($label, $CC_LEFT);
 
 my $raxis = Chart::Clicker::Axis->new({
-    orientation => $CC_VERTICAL,
+    orientation => 'vertical',
     position => $CC_LEFT
 });
 ok(defined($raxis), 'new Axis');

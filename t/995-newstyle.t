@@ -73,31 +73,31 @@ $chart->add($legend, $CC_BOTTOM);
 my $format = '%0.2f';
 
 my $daxis = Chart::Clicker::Axis->new({
-    orientation => $CC_HORIZONTAL,
+    orientation => 'horizontal',
     position    => $CC_TOP,
     format      => $format
 });
-my $tlabel = Chart::Clicker::Decoration::Label->new({ text => 'Danes', orientation => $CC_HORIZONTAL});
+my $tlabel = Chart::Clicker::Decoration::Label->new({ text => 'Danes', orientation => 'horizontal'});
 $chart->add($tlabel, $CC_TOP);
 
-my $label = Chart::Clicker::Decoration::Label->new({text => 'Footballs', orientation => $CC_VERTICAL});
+my $label = Chart::Clicker::Decoration::Label->new({text => 'Footballs', orientation => 'vertical'});
 $chart->add($label, $CC_LEFT);
 
 my $daxis2 = Chart::Clicker::Axis->new({
-    orientation => $CC_HORIZONTAL,
+    orientation => 'horizontal',
     position    => $CC_BOTTOM,
     format      => $format
 });
 
 my $raxis = Chart::Clicker::Axis->new({
-    orientation => $CC_VERTICAL,
+    orientation => 'certical',
     position    => $CC_LEFT,
     format      => $format
 });
 ok(defined($raxis), 'new Axis');
 
 my $raxis2 = Chart::Clicker::Axis->new({
-    orientation => $CC_VERTICAL,
+    orientation => 'vertical',
     position    => $CC_RIGHT,
     format      => $format
 });
