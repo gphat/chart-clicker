@@ -16,8 +16,8 @@ has 'padding' => (
 );
 has 'stroke' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { Chart::Clicker::Drawing::Stroke->new() }
+    isa => 'Graphics::Primitive::Stroke',
+    default => sub { Graphics::Primitive::Stroke->new() }
 );
 
 

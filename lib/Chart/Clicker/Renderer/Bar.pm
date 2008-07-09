@@ -3,7 +3,7 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer';
 
-use Chart::Clicker::Drawing::Stroke;
+use Graphics::Primitive::Stroke;
 
 has 'opacity' => (
     is => 'rw',
@@ -17,8 +17,8 @@ has 'padding' => (
 );
 has 'stroke' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { Chart::Clicker::Drawing::Stroke->new() }
+    isa => 'Graphics::Primitive::Stroke',
+    default => sub { Graphics::Primitive::Stroke->new() }
 );
 
 sub prepare {

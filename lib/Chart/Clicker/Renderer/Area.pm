@@ -4,7 +4,7 @@ use Cairo;
 
 extends 'Chart::Clicker::Renderer';
 
-use Chart::Clicker::Drawing::Stroke;
+use Graphics::Primitive::Stroke;
 
 has 'fade' => (
     is => 'rw',
@@ -18,8 +18,8 @@ has 'opacity' => (
 );
 has 'stroke' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { Chart::Clicker::Drawing::Stroke->new() }
+    isa => 'Graphics::Primitive::Stroke',
+    default => sub { Graphics::Primitive::Stroke->new() }
 );
 
 sub draw {
@@ -121,7 +121,7 @@ Chart::Clicker::Renderer::Area renders a dataset as lines.
 
   my $ar = Chart::Clicker::Renderer::Area->new({
       fade => 1,
-      stroke => Chart::Clicker::Drawing::Stroke->new({
+      stroke => Graphics::Primitive::Stroke->new({
           width => 2
       })
   });

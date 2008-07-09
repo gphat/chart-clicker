@@ -121,7 +121,7 @@ of like-named Series are totaled and keys are ignored.
   my $lr = Chart::Clicker::Renderer::Pie->new();
   # Optionally set the stroke
   $lr->options({
-    stroke => Chart::Clicker::Drawing::Stroke->new({
+    stroke => Graphics::Primitive::Stroke->new({
       ...
     })
   });

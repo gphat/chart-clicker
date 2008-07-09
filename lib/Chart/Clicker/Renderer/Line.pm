@@ -11,7 +11,7 @@ has 'shape' => (
 );
 has 'shape_stroke' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
+    isa => 'Graphics::Primitive::Stroke',
 );
 has 'stroke' => (
     is => 'rw',
@@ -102,7 +102,7 @@ Chart::Clicker::Renderer::Line renders a dataset as lines.
 =head1 SYNOPSIS
 
   my $lr = Chart::Clicker::Renderer::Line->new(
-    stroke => Chart::Clicker::Drawing::Stroke->new({
+    stroke => Graphics::Primitive::Stroke->new({
       ...
     })
   });

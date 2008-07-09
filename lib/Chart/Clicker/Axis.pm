@@ -332,18 +332,18 @@ Chart::Clicker::Axis represents the plot of the chart.
   use Chart::Clicker::Axis;
   use Chart::Clicker::Drawing qw(:positions);
   use Chart::Clicker::Drawing::Color;
-  use Chart::Clicker::Drawing::Font;
-  use Chart::Clicker::Drawing::Stroke;
+  use Graphics::Primitive::Font;
+  use Graphics::Primitive::Stroke;
 
   my $axis = Chart::Clicker::Axis->new({
     color => 'black',
-    font  => Chart::Clicker::Drawing::Font->new(),
+    font  => Graphics::Primitive::Font->new(),
     orientation => 'vertical',
     position => $CC_LEFT,
     show_ticks => 1,
-    stroke = Chart::Clicker::Drawing::Stroke->new(),
+    stroke = Graphics::Primitive::Stroke->new(),
     tick_length => 2,
-    tick_stroke => Chart::Clicker::Drawing::Stroke->new(),
+    tick_stroke => Graphics::Primitive::Stroke->new(),
     visible => 1,
   });
 

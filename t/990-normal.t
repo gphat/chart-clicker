@@ -100,7 +100,7 @@ ok(defined($plot), 'new Plot');
 
 my $area = Chart::Clicker::Renderer::Area->new(
     fade => 1,
-    stroke => Chart::Clicker::Drawing::Stroke->new({
+    stroke => Graphics::Primitive::Stroke->new({
         width => 2
     })
 );
