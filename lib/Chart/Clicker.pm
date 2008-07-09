@@ -16,7 +16,6 @@ use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::Grid;
 use Chart::Clicker::Decoration::Legend;
 use Chart::Clicker::Decoration::Plot;
-#use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Format::Png;
 use Chart::Clicker::Util;
 use Chart::Clicker::Drawing::ColorAllocator;
@@ -280,7 +279,6 @@ override('draw', sub {
         next unless defined($c);
 
         my $comp = $c->{component};
-        my $context = $self->cairo();
 
         $context->save;
         $context->translate($comp->origin->x, $comp->origin->y);
@@ -313,7 +311,7 @@ sub write {
 }
 
 sub data {
-    my $self = shift();
+    my ($self) = @_;
 
     return $self->format->surface_data();
 }

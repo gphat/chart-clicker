@@ -3,7 +3,7 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
-use Chart::Clicker::Drawing::Font;
+use Graphics::Primitive::Font;
 
 has 'font' => (
     is => 'rw',

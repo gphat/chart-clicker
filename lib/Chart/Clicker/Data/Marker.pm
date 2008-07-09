@@ -1,8 +1,8 @@
 package Chart::Clicker::Data::Marker;
 use Moose;
 
-use Chart::Clicker::Drawing::Color;
-use Chart::Clicker::Drawing::Stroke;
+use Graphics::Color::RGB;
+use graphics::Primitive::Stroke;
 
 has 'key' => ( is => 'rw', isa => 'Num' );
 has 'key2' => ( is => 'rw', isa => 'Num' );
@@ -10,27 +10,27 @@ has 'value' => ( is => 'rw', isa => 'Num' );
 has 'value2' => ( is => 'rw', isa => 'Num' );
 has 'inside_color' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Color',
+    isa => 'Graphics::Color',
     default => sub {
-        Chart::Clicker::Drawing::Color->new(
+        Graphics::Color::RGB->new(
             red => 0, green => 0, blue => 0, alpha => 1
         );
     }
 );
 has 'color' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Color',
+    isa => 'Graphics::Color',
     default => sub {
-        Chart::Clicker::Drawing::Color->new(
+        Graphics::Color::RGB->new(
             red => 0, green => 0, blue => 0, alpha => 1
         );
     }
 );
 has 'stroke' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
+    isa => 'Graphics::Primitive::Stroke',
     default => sub {
-        Chart::Clicker::Drawing::Stroke->new();
+        Graphics::Primitive::Stroke->new();
     }
 );
 
@@ -50,12 +50,12 @@ Used to highlight a particular key, value or range of either.
 =head1 SYNOPSIS
 
  use Chart::Clicker::Decoration::Marker;
- use Chart::Clicker::Drawing::Color;
- use Chart::Clicker::Drawing::Stroke;
+ use Graphics::Color::RGB;
+ use Graphics::Primitive::Stroke;
 
  my $mark = Chart::Clicker::Decoration::Marker->new({
-    color=  > Chart::Clicker::Drawing::Color->new({ name => 'red' }),
-    stroke  => CHart::Clicker::Drawing::Stroke->new(),
+    color=  > Graphics::Color::RGB->new({ name => 'red' }),
+    stroke  => Graphics::Primitive::Stroke->new(),
     key     => 12,
     value   => 123,
     # Optionally
