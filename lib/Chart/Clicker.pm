@@ -138,7 +138,9 @@ has '+height' => (
 
 has '+border' => (
     default => sub {
-        Graphics::Primitive::Border->new()
+        Graphics::Primitive::Border->new(
+            color => Graphics::Color::RGB->new
+        )
     }
 );
 

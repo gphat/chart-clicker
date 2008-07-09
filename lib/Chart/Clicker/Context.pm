@@ -3,6 +3,7 @@ use Moose;
 
 use Moose::Util::TypeConstraints;
 
+use Chart::Clicker;
 use Chart::Clicker::Axis;
 use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Renderer::Line;

@@ -5,6 +5,17 @@ extends 'Graphics::Primitive::Component';
 
 with 'Graphics::Primitive::Oriented';
 
+use Graphics::Primitive::Border;
+use Graphics::Color::RGB;
+
+has '+border' => (
+    default => sub {
+        Graphics::Primitive::Border->new(
+            color => Graphics::Color::RGB->new()
+        )
+    }
+);
+
 has 'clicker' => (
     is => 'rw',
     isa => 'Chart::Clicker'
