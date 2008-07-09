@@ -1,4 +1,4 @@
-use Test::More tests => 17;
+use Test::More tests => 19;
 
 BEGIN { use_ok('Chart::Clicker::Data::DataSet'); }
 BEGIN { use_ok('Chart::Clicker::Data::Series'); }
@@ -36,3 +36,9 @@ cmp_ok($dataset->range->lower(), '==', -1, 'Min Range');
 cmp_ok($dataset->range->upper(), '==', 102, 'Max Range');
 cmp_ok($dataset->domain->lower(), '==', 1, 'Min Domain');
 cmp_ok($dataset->domain->upper(), '==', 3, 'Max Domain');
+
+my @values = $dataset->get_series_values(0);
+cmp_ok(scalar(@values), '==', 2, '2 values for position 0');
+
+my @keys = $dataset->get_series_keys(2);
+cmp_ok(scalar(@keys), '==', 2, '2 keys for position 2');

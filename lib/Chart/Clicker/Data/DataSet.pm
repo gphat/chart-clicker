@@ -38,6 +38,18 @@ has 'series' => (
     }
 );
 
+sub get_series_keys {
+    my ($self, $position) = @_;
+
+    return map({ $_->keys->[$position] } @{ $self->series });
+}
+
+sub get_series_values {
+    my ($self, $position) = @_;
+
+    return map({ $_->values->[$position] } @{ $self->series });
+}
+
 sub prepare {
     my $self = shift();
 
@@ -123,6 +135,14 @@ Get the number of series in this dataset.
 =item I<domain>
 
 Get the Range for the domain values
+
+=item I<get_series_keys>
+
+Returns the key at the specified position for every series in this DataSet.
+
+=item I<get_series_values>
+
+Returns the value at the specified position for every series in this DataSet.
 
 =item I<max_key_count>
 
