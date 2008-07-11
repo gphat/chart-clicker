@@ -62,7 +62,7 @@ sub prepare {
         $series->prepare();
 
         $self->range->combine($series->range());
-        $self->combined_range->combine($series->range());
+        $self->combined_range->add($series->range());
 
         my @keys = @{ $series->keys() };
 

@@ -12,6 +12,8 @@ extends 'Chart::Clicker::Drawing::Container';
 # TODO Temporary
 has '+background_color' => ( default => sub { Graphics::Color::RGB->new( red => 1 ) });
 
+has '+border' => ( default => sub { Graphics::Primitive::Border->new( width => 0 )});
+
 has 'clicker' => (
     is => 'rw',
     isa => 'Chart::Clicker',
@@ -49,7 +51,7 @@ has 'dataset_renderers' => (
     }
 );
 
-sub prepare {
+override('prepare', sub {
     my ($self) = @_;
 
     # TODO This is also happening in Clicker.pm
@@ -58,7 +60,7 @@ sub prepare {
     }
 
     super;
-}
+});
 
 # sub draw {
 #     my $self = shift();

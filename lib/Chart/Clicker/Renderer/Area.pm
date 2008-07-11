@@ -22,7 +22,7 @@ has 'stroke' => (
     default => sub { Graphics::Primitive::Stroke->new() }
 );
 
-sub draw {
+override('draw', sub {
     my $self = shift();
 
     my $clicker = $self->clicker;
@@ -102,7 +102,7 @@ sub draw {
     }
 
     return 1;
-}
+});
 
 no Moose;
 

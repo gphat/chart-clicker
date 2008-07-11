@@ -132,11 +132,6 @@ sub prepare {
             # + $self->border->stroke->width() * 2
         );
     }
-    # if($self->margins()) {
-    #     my $margins = $self->margins();
-    #     $self->height($self->height() + $margins->top() + $margins->bottom());
-    #     $self->width($self->width() + $margins->left() + $margins->right());
-    # }
 
     $ca->reset();
 

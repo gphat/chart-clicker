@@ -1,4 +1,4 @@
-use inc::Module::Install;
+use inc::Module::Install 0.75;
 
 name        'Chart-Clicker';
 all_from    'lib/Chart/Clicker.pm';

@@ -158,9 +158,7 @@ override('prepare', sub {
     my $legend = Chart::Clicker::Decoration::Legend->new(orientation => 'horizontal');
     $self->add_component($legend, 's');
 
-
     my $plot = $self->plot();
-    $plot->clicker($self);
     $plot->add_component(Chart::Clicker::Decoration::Grid->new());
 
     # Prepare the datasets and establish ranges for the axes.
@@ -216,11 +214,11 @@ override('prepare', sub {
     );
     $self->cairo(Chart::Clicker::Cairo->create($self->format->surface()));
 
+    $self->add_component($self->plot, 'c');
+
     foreach my $c (@{ $self->components }) {
         $c->{component}->clicker($self);
     }
-
-    $self->add_component($self->plot, 'c');
 
     super;
 

@@ -13,6 +13,7 @@ has '+background_color' => (
         )
     }
 );
+has '+border' => ( default => sub { Graphics::Primitive::Border->new( width => 0 )});
 has '+color' => (
     default => sub {
         Graphics::Color::RGB->new(

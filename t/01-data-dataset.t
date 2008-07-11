@@ -1,4 +1,4 @@
-use Test::More tests => 19;
+use Test::More tests => 23;
 
 BEGIN { use_ok('Chart::Clicker::Data::DataSet'); }
 BEGIN { use_ok('Chart::Clicker::Data::Series'); }
@@ -18,8 +18,9 @@ eval { $dataset->prepare() };
 ok($@, 'Fail on empty dataset');
 
 my $series2 = Chart::Clicker::Data::Series->new();
-$series2->keys([1, 2]);
-$series2->values([-1, 102]);
+$series2->name('Second');
+$series2->keys([1, 2, 4]);
+$series2->values([-1, 102, 12]);
 
 $dataset->add_to_series($series);
 cmp_ok($dataset->count, '==', 1, 'count is correct');
@@ -35,10 +36,14 @@ cmp_ok($dataset->max_key_count(), '==', 3, 'Max Keys');
 cmp_ok($dataset->range->lower(), '==', -1, 'Min Range');
 cmp_ok($dataset->range->upper(), '==', 102, 'Max Range');
 cmp_ok($dataset->domain->lower(), '==', 1, 'Min Domain');
-cmp_ok($dataset->domain->upper(), '==', 3, 'Max Domain');
+cmp_ok($dataset->domain->upper(), '==', 4, 'Max Domain');
 
 my @values = $dataset->get_series_values(0);
 cmp_ok(scalar(@values), '==', 2, '2 values for position 0');
+cmp_ok($values[0], '==', 4, 'value 0');
+cmp_ok($values[1], '==', -1, 'value 1');
 
 my @keys = $dataset->get_series_keys(2);
+cmp_ok($keys[0], '==', 3, 'key 0');
+cmp_ok($keys[1], '==', 4, 'key 1');
 cmp_ok(scalar(@keys), '==', 2, '2 keys for position 2');
