@@ -15,7 +15,7 @@ requires    'IO::File';
 requires    'Geometry::Primitive' => 0.02;
 requires    'Graphics::Color' => 0.04;
 requires    'Graphics::Primitive' => 0.01;
-requires    'Layout::Manager' => 0.3;
+requires    'Layout::Manager' => 0.04;
 
 auto_install;
 

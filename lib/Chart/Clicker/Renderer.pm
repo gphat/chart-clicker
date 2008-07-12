@@ -5,7 +5,6 @@ extends 'Chart::Clicker::Drawing::Component';
 
 has '+border' => ( default => sub { Graphics::Primitive::Border->new( width => 0 )});
 has 'context' => ( is => 'rw', isa => 'Str' );
-has 'dataset_count' => ( is => 'rw', isa => 'Int' );
 has 'additive' => ( is => 'ro', isa => 'Bool', default => 0 );
 
 sub prepare {

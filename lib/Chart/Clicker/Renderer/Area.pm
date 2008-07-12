@@ -28,6 +28,9 @@ override('draw', sub {
     my $clicker = $self->clicker;
     my $cr = $clicker->cairo;
 
+    my $height = $self->height();
+    my $width = $self->width();
+
     my $dses = $clicker->get_datasets_for_context($self->context);
     foreach my $ds (@{ $dses }) {
         foreach my $series (@{ $ds->series }) {
@@ -36,9 +39,6 @@ override('draw', sub {
             my $ctx = $clicker->get_context($ds->context);
             my $domain = $ctx->domain_axis;
             my $range = $ctx->range_axis;
-
-            my $height = $self->height();
-            my $width = $self->width();
 
             $cr->set_line_width($self->stroke->width());
             $cr->set_line_cap($self->stroke->line_cap());

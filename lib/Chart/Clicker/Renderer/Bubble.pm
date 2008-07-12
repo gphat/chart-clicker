@@ -3,12 +3,12 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer::Point';
 
-sub draw_point {
+override('draw_point', sub {
     my ($self, $cr, $x, $y, $series, $count) = @_;
 
     $self->shape->radius($series->get_size($count));
     $self->shape->create_path($cr, $x , $y);
-}
+});
 
 no Moose;
 

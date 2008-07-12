@@ -17,7 +17,7 @@ has 'shape' => (
     }
 );
 
-sub draw {
+override('draw', sub {
     my $self = shift();
 
     my $clicker = $self->clicker;
@@ -54,7 +54,7 @@ sub draw {
     }
 
     return 1;
-}
+});
 
 sub draw_point {
     my ($self, $cr, $x, $y, $series, $count) = @_;

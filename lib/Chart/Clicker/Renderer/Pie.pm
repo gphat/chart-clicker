@@ -27,7 +27,6 @@ sub prepare {
     my $clicker = $self->clicker;
     # $self->SUPER::prepare($clicker, @_);
 
-    print STDERR "as\n";
     my $dses = $clicker->get_datasets_for_context($self->context);
     foreach my $ds (@{ $dses }) {
         foreach my $series (@{ $ds->series() }) {
@@ -89,10 +88,10 @@ sub draw {
 
             my $color = $clicker->color_allocator->next();
 
-            $cr->set_source_rgba($color->rgba());
+            $cr->set_source_rgba($color->as_array_with_alpha());
             $cr->fill_preserve();
 
-            $cr->set_source_rgba($self->border_color->rgba());
+            $cr->set_source_rgba($self->border_color->as_array_with_alpha());
             $cr->stroke();
 
             $self->{'POS'} = $degs;
