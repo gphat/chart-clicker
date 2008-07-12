@@ -9,7 +9,7 @@ has 'opacity' => (
     isa => 'Num',
     default => 0
 );
-has 'padding' => (
+has 'bar_padding' => (
     is => 'rw',
     isa => 'Int',
     default => 0
@@ -21,97 +21,104 @@ has 'stroke' => (
 );
 
 
-sub prepare {
+override('prepare', sub {
     my $self = shift();
 
-    $self->SUPER::prepare(@_);
+    super;
 
-    my $clicker = shift();
-    my $idim = shift();
-    my $datasets = shift();
+    my $dses = $self->clicker->get_datasets_for_context($self->context);
 
-    foreach my $ds (@{ $datasets }) {
-        if(!defined($self->{'KEYCOUNT'})) {
-            $self->{'KEYCOUNT'} = $ds->max_key_count();
-        } else {
-            if($self->{'KEYCOUNT'} < $ds->max_key_count()) {
-                $self->{'KEYCOUNT'} = $ds->max_key_count();
-            }
+    # Find the largest number of keys.  Should we really do this?  We could
+    # probably just take the first since stacked bars doesn't work if the data
+    # doesn't match up.
+    foreach my $ds (@{ $dses }) {
+        if(!defined($self->{KEYCOUNT})) {
+            $self->{KEYCOUNT} = $ds->max_key_count();
         }
+        $self->{SCOUNT} += $ds->count;
     }
 
-    $self->{'SCOUNT'} = 1;
-
     return 1;
-}
+});
 
-sub draw {
+override('draw', sub {
     my $self = shift();
-    my $clicker = shift();
-    my $cr = shift();
-    my $series = shift();
-    my $domain = shift();
-    my $range = shift();
 
-    my $height = $self->height();
-    my $width = $self->width();
+    my $clicker = $self->clicker;
+    my $cr = $clicker->cairo;
 
-    my @vals = @{ $series->values() };
-    my @keys = @{ $series->keys() };
+    my $height = $self->height;
+    my $width = $self->width;
 
-    my $color = $clicker->color_allocator->next();
+    my $dses = $clicker->get_datasets_for_context($self->context);
+    my $ctx = $clicker->get_context($dses->[0]->context);
+    my $domain = $ctx->domain_axis;
+    my $range = $ctx->range_axis;
 
-    my $padding = $self->padding();
+    my $padding = $self->bar_padding();
 
     my $strokewidth = $self->stroke->width();
     $padding += $strokewidth;
 
-    # Calculate the bar width we can use to fit all the datasets.
-    if(!$self->{'BWIDTH'}) {
-        $self->{'BWIDTH'} = int(($width / scalar(@vals)) / 2);
+    $self->{BWIDTH} = int($width / ($self->{KEYCOUNT}));
+    $self->{HBWIDTH} = $self->{BWIDTH} / 2;
+
+    # Fetch all the colors we'll need.  Since we build each vertical bar from
+    # top to bottom, we'll need to change colors vertically.
+    for (my $i = 0; $i < $self->{SCOUNT}; $i++) {
+        push(@{ $self->{COLORS} }, $clicker->color_allocator->next);
     }
 
-    if(!$self->{'XOFFSET'}) {
-        $self->{'XOFFSET'} = int(($self->{'BWIDTH'} + $padding) / 2);
+    my @keys = @{ $dses->[0]->get_series(0)->keys };
+
+    # Iterate over each key...
+    for (my $i = 0; $i < $self->{KEYCOUNT}; $i++) {
+
+        # Get all the values from every dataset's series for each key
+        my @values;
+        foreach my $ds (@{ $dses }) {
+            push(@values, $ds->get_series_values($i));
+        }
+
+        # Mark the x, since it's the same for each Y value
+        my $x = $domain->mark($keys[$i]);
+        my $accum = 0;
+
+        for(my $j = 0; $j < scalar(@values); $j++) {
+            my $y = $range->mark($values[$j]);
+
+            $cr->rectangle(
+                $x - $self->{HBWIDTH}, $height - $y - $accum,
+                $self->{BWIDTH}, $y
+            );
+            # Accumulate the Y value, as it dictates how much we bump up the
+            # next bar.
+            $accum += $y;
+
+            my $color = $self->{COLORS}->[$j];
+
+            my $fillcolor;
+            if($self->opacity()) {
+                $fillcolor = $color->clone();
+                $fillcolor->alpha($self->opacity());
+            } else {
+                $fillcolor = $color;
+            }
+
+            $cr->set_source_rgba($fillcolor->as_array_with_alpha());
+            $cr->fill_preserve();
+
+            $cr->set_line_width($strokewidth);
+            $cr->set_line_cap($self->stroke->line_cap());
+            $cr->set_line_join($self->stroke->line_join());
+
+            $cr->set_source_rgba($color->as_array_with_alpha());
+            $cr->stroke();
+        }
     }
-
-    my $sksent = $series->key_count() - 1;
-    for(0..$sksent) {
-        # Add the series_count times the width to so that each bar
-        # gets rendered with it's partner in the other series.
-        my $x = $domain->mark($keys[$_]);# + $self->{'BWIDTH'};
-        my $y = $range->mark($vals[$_]);
-
-        $cr->rectangle(
-            $x + $self->{'XOFFSET'}, $height - $y - ($self->{'KEY_HEIGHT'}->{$_} || 0),
-            -($self->{'BWIDTH'}), $y# + ($self->{'KEY_HEIGHT'}->{$_} || 0)
-        );
-
-        $self->{'KEY_HEIGHT'}->{$_} += $y + $strokewidth;
-    }
-
-	my $fillcolor;
-    if($self->opacity()) {
-        $fillcolor = $color->clone();
-        $fillcolor->alpha($self->opacity());
-    } else {
-        $fillcolor = $color;
-    }
-
-    $cr->set_source_rgba($fillcolor->rgba());
-    $cr->fill_preserve();
-
-    $cr->set_line_width($self->stroke->width());
-    $cr->set_line_cap($self->stroke->line_cap());
-    $cr->set_line_join($self->stroke->line_join());
-
-    $cr->set_source_rgba($color->rgba());
-    $cr->stroke();
-
-    $self->{'SCOUNT'}++;
 
     return 1;
-}
+});
 
 no Moose;
 

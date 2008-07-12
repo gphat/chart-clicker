@@ -12,10 +12,10 @@ requires    'DateTime'          => 0.4302;
 requires    'DateTime::Set'     => 0.25;
 requires    'IO::File';
 
-requires    'Geometry::Primitive';
-requires    'Graphics::Color';
-requires    'Graphics::Primitive';
-requires    'Layout::Manager';
+requires    'Geometry::Primitive' => 0.02;
+requires    'Graphics::Color' => 0.04;
+requires    'Graphics::Primitive' => 0.01;
+requires    'Layout::Manager' => 0.3;
 
 auto_install;
 
