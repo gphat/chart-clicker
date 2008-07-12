@@ -26,7 +26,6 @@ override('prepare', sub {
 
     super;
 
-
     my $datasets = $self->clicker->get_datasets_for_context($self->context);
 
     $self->{KEYCOUNT} = 0;
@@ -53,9 +52,7 @@ override('draw', sub {
     my $dses = $clicker->get_datasets_for_context($self->context);
     my $dscount = scalar(@{ $dses });
 
-    my $padding = $self->bar_padding();
-
-    $padding += $self->stroke->width();
+    my $padding = $self->bar_padding + $self->stroke->width;
 
     if(!$self->{BWIDTH}) {
         $self->{BWIDTH} = int(($width / $self->{KEYCOUNT}) / $dscount / 2);
