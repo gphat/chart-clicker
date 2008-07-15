@@ -5,6 +5,8 @@ use MooseX::AttributeHelpers;
 
 extends 'Chart::Clicker::Drawing::Container';
 
+use Carp;
+
 use Layout::Manager::Compass;
 
 use Graphics::Color::RGB;
@@ -56,6 +58,7 @@ has 'contexts' => (
     isa => 'HashRef[Chart::Clicker::Context]',
     default => sub { { default => Chart::Clicker::Context->new(name => 'default') } },
     provides => {
+        set    => 'set_context',
         get     => 'get_context',
         count   => 'context_count',
         delete  => 'delete_context'
@@ -151,6 +154,15 @@ has '+background_color' => (
     }
 );
 
+sub add_to_contexts {
+    my ($self, $ctx) = @_;
+
+    if(defined($self->get_context($ctx->name))) {
+        croak("Context named '".$ctx->name."' already exists.");
+    }
+    $self->set_context($ctx->name, $ctx);
+}
+
 override('prepare', sub {
     my $self = shift();
 
@@ -160,6 +172,10 @@ override('prepare', sub {
 
     my $plot = $self->plot();
     $plot->add_component(Chart::Clicker::Decoration::Grid->new());
+
+    # Sentinels to control the side that the axes will be drawn on.
+    my $dcount = 0;
+    my $rcount = 0;
 
     # Prepare the datasets and establish ranges for the axes.
     my $count = 0;
@@ -186,7 +202,13 @@ override('prepare', sub {
             $daxis->range->combine($ds->domain());
         }
         # TODO Blatant disregard for duplicate adds.  How would we know?
-        $self->add_component($daxis, 's'); # TODO Fix direction!
+
+        $daxis->position('bottom');
+        if($dcount % 2) {
+            $daxis->position('top')
+        }
+        $self->add_component($daxis, $daxis->is_top ? 'n' : 's'); # TODO Fix direction!
+        $dcount++;
 
         my $rend = $ctx->renderer();
         $rend->context($ctx->name);
@@ -204,7 +226,13 @@ override('prepare', sub {
             }
         }
         # TODO Blatant disregard for duplicate adds.  How would we know?
-        $self->add_component($raxis, 'w'); # TODO Fix direction!
+
+        $raxis->position('left');
+        if($rcount % 2) {
+            $raxis->position('right');
+        }
+        $self->add_component($raxis, $raxis->is_left ? 'w' : 'e'); # TODO Fix direction!
+        $rcount++;
 
         $count++;
     }
@@ -350,73 +378,62 @@ possible that new features will be added that may change behavior. You can
 find more information at L<http://www.onemogin.com/clicker>.  Feel free to
 send your criticisms, advice, patches or money to me as a way of helping.
 
+=head1 CONTEXTS
+
+The normal use case for a chart is a couple of datasets on the same axes.
+Sometimes you want to chart one or more datasets on different axes.  A common
+need for this is when you are comparing two datasets of vastly different scale
+such as the number of employees in an office (1-10) to monthly revenues (10s
+of thousands).  On a normal chart the number of employees would show up as a
+flat line at the bottom of the chart.
+
+To correct this, Clicker has contexts.  A context is a pair of axes, a
+renderer and a name.  The name is the 'key' by which you will refer to the
+context.
+
+  my $context = Chart::Clicker::Context->new( name => 'sales' );
+  $clicker->add_to_contexts($context);
+  
+  $dataset->context('sales');
+  
+  $clicker->add_to_datasets($dataset);
+  
+New contexts provide a fresh domain and range axis and default to a Line
+renderer. 
+
 =head1 FORMATS
 
-Clicker supports PNG and SVG output.
+Clicker supports PNG, SVG, PDF and PostScript output.
 
 =head1 SYNOPSIS
 
-  use Chart::Clicker;
-  use Chart::Clicker::Axis;
-  use Chart::Clicker::Data::DataSet;
-  use Chart::Clicker::Data::Series;
-  use Chart::Clicker::Decoration::Grid;
-  use Chart::Clicker::Decoration::Legend;
-  use Chart::Clicker::Decoration::Plot;
-  use Chart::Clicker::Drawing qw(:positions);
-  use Chart::Clicker::Drawing::Insets;
-  use Chart::Clicker::Renderer::Area;
+use Test::More tests => 3;
 
-  my $chart = Chart::Clicker->new({ format => 'Png', width => 500, height => 350 });
+use Chart::Clicker::Data::Series;
+use Chart::Clicker::Data::Series::Size;
+use Chart::Clicker::Data::DataSet;
+use Chart::Clicker::Renderer::Point;
 
-  my $series = Chart::Clicker::Data::Series->new({
-    keys    => [1, 2, 3, 4, 5, 6],
-    values  => [12, 9, 8, 3, 5, 1]
-  });
+my $cc = Chart::Clicker->new;
 
-  my $dataset = Chart::Clicker::Data::DataSet->new({
-    series => [ $series ]
-  });
-  $chart->datasets([ $dataset ]);
+my $series = Chart::Clicker::Data::Series->new(
+    keys    => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+    values  => [ 42, 25, 86, 23, 2, 19, 103, 12, 54, 9 ],
+);
 
-  my $legend = Chart::Clicker::Decoration::Legend->new({
-    margins => Chart::Clicker::Drawing::Insets->new({
-        top => 3
-    })
-  });
-  $chart->add($legend, $CC_BOTTOM);
+my $series2 = Chart::Clicker::Data::Series->new(
+    keys    => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+    values  => [ 67, 15, 6, 90, 11, 45, 83, 11, 9, 101 ],
+);
 
-  my $daxis = Chart::Clicker::Axis->new({
-    orientation => 'hotizontal,
-    position    => $CC_BOTTOM,
-    format      => '%0.2f'
-  });
-  $chart->add($daxis, $CC_AXIS_BOTTOM);
+my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series, $series2 ]);
 
-  my $raxis = Chart::Clicker::Axis->new({
-    orientation => 'vertical',
-    position    => $CC_LEFT,
-    format      => '%0.2f'
-  });
-  $chart->add($raxis, $CC_AXIS_LEFT);
+$cc->add_to_datasets($ds);
 
-  $chart->range_axes([ $raxis ]);
-  $chart->domain_axes([ $daxis ]);
-
-  my $grid = Chart::Clicker::Decoration::Grid->new();
-  $chart->add($grid, $CC_CENTER, 0);
-
-  my $renderer = Chart::Clicker::Renderer::Area->new(fade => 1);
-
-  my $plot = Chart::Clicker::Decoration::Plot->new();
-  $plot->renderers([$renderer]);
-  $chart->plot($plot);
-
-  $chart->add($plot, $CC_CENTER);
-
-  $chart->prepare();
-  $chart->draw();
-  $chart->write('/path/to/chart.png');
+$cc->prepare();
+$cc->do_layout($cc);
+$cc->draw();
+$cc->write('foo.png')
 
 =cut
 

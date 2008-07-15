@@ -190,7 +190,7 @@ sub draw {
     my $self = shift();
 
     if($self->is_vertical) {
-        $self->per($self->height() / ($self->range->span() - 1));
+        $self->per($self->height / ($self->range->span - 1));
     } else {
         $self->per($self->width / ($self->range->span - 1));
     }
