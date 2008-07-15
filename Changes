@@ -18,6 +18,8 @@ Revision history for Perl extension Chart::Clicker.
 	  - Stop baselining axes by default, it breaks stuff.
 	  - Abandon $CC_* position/orientation junk for Moose roles with strings
 	  - Move out lots of generic functionality to new modules
+	  - Add context support
+	  - Ignore duplicate axes
 1.4.2
     - Packaging fixes.
 1.4.1

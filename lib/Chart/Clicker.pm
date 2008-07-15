@@ -24,6 +24,8 @@ use Chart::Clicker::Drawing::ColorAllocator;
 
 use Cairo;
 
+use Scalar::Util qw(refaddr);
+
 our $VERSION = '2.0.0';
 
 # TODO Global coercions?
@@ -176,6 +178,10 @@ override('prepare', sub {
     # Sentinels to control the side that the axes will be drawn on.
     my $dcount = 0;
     my $rcount = 0;
+    # Hashes of axis we've already seen, as we don't want to add them
+    # again...
+    my %daxes;
+    my %raxes;
 
     # Prepare the datasets and establish ranges for the axes.
     my $count = 0;
@@ -198,17 +204,19 @@ override('prepare', sub {
         }
 
         my $daxis = $ctx->domain_axis;
-        if(defined($daxis)) {
-            $daxis->range->combine($ds->domain());
-        }
-        # TODO Blatant disregard for duplicate adds.  How would we know?
+        unless(exists($daxes{refaddr($daxis)})) {
+            if(defined($daxis)) {
+                $daxis->range->combine($ds->domain());
+            }
 
-        $daxis->position('bottom');
-        if($dcount % 2) {
-            $daxis->position('top')
+            $daxis->position('bottom');
+            if($dcount % 2) {
+                $daxis->position('top')
+            }
+            $self->add_component($daxis, $daxis->is_top ? 'n' : 's');
+            $daxes{refaddr($daxis)} = 1;
+            $dcount++;
         }
-        $self->add_component($daxis, $daxis->is_top ? 'n' : 's'); # TODO Fix direction!
-        $dcount++;
 
         my $rend = $ctx->renderer();
         $rend->context($ctx->name);
@@ -225,14 +233,16 @@ override('prepare', sub {
                 $raxis->range->combine($ds->range());
             }
         }
-        # TODO Blatant disregard for duplicate adds.  How would we know?
 
-        $raxis->position('left');
-        if($rcount % 2) {
-            $raxis->position('right');
+        unless(exists($raxes{refaddr($raxis)})) {
+            $raxis->position('left');
+            if($rcount % 2) {
+                $raxis->position('right');
+            }
+            $self->add_component($raxis, $raxis->is_left ? 'w' : 'e');
+            $rcount++;
+            $raxes{refaddr($raxis)} = 1;
         }
-        $self->add_component($raxis, $raxis->is_left ? 'w' : 'e'); # TODO Fix direction!
-        $rcount++;
 
         $count++;
     }
