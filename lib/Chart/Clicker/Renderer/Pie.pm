@@ -21,42 +21,46 @@ has 'stroke' => (
 
 my $TO_RAD = (4 * atan2(1, 1)) / 180;
 
-sub prepare {
+override('prepare', sub {
     my $self = shift();
 
+    super;
+
     my $clicker = $self->clicker;
-    # $self->SUPER::prepare($clicker, @_);
 
     my $dses = $clicker->get_datasets_for_context($self->context);
     foreach my $ds (@{ $dses }) {
         foreach my $series (@{ $ds->series() }) {
             foreach my $val (@{ $series->values() }) {
-                $self->{'ACCUM'}->{$series->name()} += $val;
-                $self->{'TOTAL'} += $val;
+                $self->{ACCUM}->{$series->name()} += $val;
+                $self->{TOTAL} += $val;
             }
         }
     }
 
-    $self->{'RADIUS'} = $self->height();
-    if($self->width() < $self->height()) {
-        $self->{'RADIUS'} = $self->width();
-    }
+});
 
-    $self->{'RADIUS'} = $self->{'RADIUS'} / 2;
-
-    # Take into acount the line around the edge when working out the radius
-    $self->{RADIUS} -= $self->stroke->width();
-
-    $self->{'MIDX'} = $self->width() / 2;
-    $self->{'MIDY'} = $self->height() / 2;
-    $self->{'POS'} = -90;
-}
-
-sub draw {
+override('draw', sub {
     my $self = shift();
 
     my $clicker = $self->clicker;
     my $cr = $clicker->cairo;
+
+    $self->{RADIUS} = $self->height();
+    if($self->width() < $self->height()) {
+        $self->{RADIUS} = $self->width();
+    }
+
+    $self->{RADIUS} = $self->{RADIUS} / 2;
+
+    # Take into acount the line around the edge when working out the radius
+    $self->{RADIUS} -= $self->stroke->width();
+
+    my $height = $self->height();
+    my $linewidth = 1;
+    my $midx = $self->width() / 2;
+    my $midy = $height / 2;
+    $self->{POS} = -90;
 
     my $dses = $clicker->get_datasets_for_context($self->context);
     foreach my $ds (@{ $dses }) {
@@ -67,22 +71,16 @@ sub draw {
             my $domain = $ctx->domain_axis;
             my $range = $ctx->range_axis;
 
-            my $height = $self->height();
-            my $linewidth = 1;
-
             $cr->set_line_cap($self->stroke->line_cap());
             $cr->set_line_join($self->stroke->line_join());
             $cr->set_line_width($self->stroke->width());
 
-            my $midx = $self->{'MIDX'};
-            my $midy = $self->{'MIDY'};
-
-            my $avg = $self->{'ACCUM'}->{$series->name()} / $self->{'TOTAL'};
-            my $degs = ($avg * 360) + $self->{'POS'};
+            my $avg = $self->{ACCUM}->{$series->name()} / $self->{TOTAL};
+            my $degs = ($avg * 360) + $self->{POS};
 
             $cr->line_to($midx, $midy);
 
-            $cr->arc_negative($midx, $midy, $self->{'RADIUS'}, $degs * $TO_RAD, $self->{'POS'} * $TO_RAD);
+            $cr->arc_negative($midx, $midy, $self->{RADIUS}, $degs * $TO_RAD, $self->{POS} * $TO_RAD);
             $cr->line_to($midx, $midy);
             $cr->close_path();
 
@@ -94,12 +92,12 @@ sub draw {
             $cr->set_source_rgba($self->border_color->as_array_with_alpha());
             $cr->stroke();
 
-            $self->{'POS'} = $degs;
+            $self->{POS} = $degs;
         }
     }
 
     return 1;
-}
+});
 
 no Moose;
 

@@ -27,7 +27,6 @@ override('draw', sub {
     my $width = $self->width();
     my $height = $self->height();
 
-    print STDERR ref($self)."\n";
     my $context = $self->clicker->cairo();
 
     if(defined($self->background_color())) {
