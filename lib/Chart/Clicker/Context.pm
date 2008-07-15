@@ -57,7 +57,9 @@ Chart::Clicker::Context
 
 =head1 DESCRIPTION
 
-TODO
+Contexts represent the way a dataset should be charted.  Multiple contexts
+allow a chart with multiple renderers and axes.  See the CONTEXTS section
+in L<Chart::Clicker>.
 
 =head1 SYNOPSIS
 
@@ -73,9 +75,25 @@ Creates a new Context object.
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
+
+=item domain_axis
+
+Set/get this context's domain axis
+
+=item name
+
+Set/get this context's name
+
+=item range_axis
+
+Set/get this context's range axis
+
+=item render
+
+Set/get this context's renderer
 
 =back
 

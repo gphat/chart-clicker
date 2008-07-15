@@ -24,7 +24,7 @@ my $series2 = Chart::Clicker::Data::Series->new(
 
 my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
 
-my $sales = Chart::Clicker::Context->new(name => 'sales');
+my $sales = Chart::Clicker::Context->new(name => 'sales', renderer => Chart::Clicker::Renderer::Point->new);
 $cc->add_to_contexts($sales);
 
 my $ds2 = Chart::Clicker::Data::DataSet->new(series => [ $series2 ]);
@@ -47,6 +47,5 @@ my $tdomain = $cc->get_context('sales')->domain_axis;
 
 cmp_ok($rrange->position, 'eq', 'right', 'second range axis position');
 cmp_ok($tdomain->position, 'eq', 'top', 'second domain axis position');
-
 
 ok(defined($cc->data()), 'data');

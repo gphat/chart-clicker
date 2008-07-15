@@ -2,10 +2,10 @@ package Chart::Clicker::Axis::DateTime;
 use Moose;
 
 use Chart::Clicker::Data::Marker;
-use Chart::Clicker::Drawing::Color;
 
 use DateTime;
 use DateTime::Set;
+use Graphics::Color::RGB;
 
 extends 'Chart::Clicker::Axis';
 
@@ -62,10 +62,10 @@ override 'prepare' => sub {
         start => $dstart, end => $dend
     );
 
-    my $linecolor = Chart::Clicker::Drawing::Color->new({
+    my $linecolor = Graphcis::Color::RGB->new({
         red => 0, green => 0, blue => 0, alpha => .35
     });
-    my $fillcolor = Chart::Clicker::Drawing::Color->new({
+    my $fillcolor = Graphics::Color::RGB->new({
         red => 0, green => 0, blue => 0, alpha => .10
     });
 
