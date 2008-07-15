@@ -47,7 +47,7 @@ has 'color_allocator' => (
 has 'cairo' => (
     is => 'rw',
     isa => 'Chart::Clicker::Cairo',
-    clearer => 'clear_context'
+    clearer => 'clear_cairo'
 );
 
 has 'contexts' => (

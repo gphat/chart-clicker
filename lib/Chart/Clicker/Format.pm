@@ -30,7 +30,7 @@ sub write {
     $cr->show_page();
 
     $cr = undef;
-    $click->clear_context();
+    $click->clear_cairo();
     $self->clear_surface();
 
     my $fh = IO::File->new($file, 'w')
