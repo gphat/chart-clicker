@@ -25,7 +25,7 @@ L<Chart::Clicker::Drawing::Component>.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Chart::Clicker::Decoration
 

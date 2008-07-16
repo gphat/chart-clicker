@@ -3,6 +3,10 @@ use Moose;
 
 extends 'Geometry::Primitive::Arc';
 
+with 'Chart::Clicker::Shape';
+
+use Geometry::Primitive::Util;
+
 sub create_path {
     my ($self, $cairo, $x, $y) = @_;
 
@@ -10,29 +14,11 @@ sub create_path {
 
     $cairo->arc(
         $x + $halfrad, $y + $halfrad, $self->radius,
-        Geometry::Primitve::Util->degrees_to_radians($self->angle_start),
-        Geometry::Primitve::Util->degrees_to_radians($self->angle_end)
+        Geometry::Primitive::Util->degrees_to_radians($self->angle_start),
+        Geometry::Primitive::Util->degrees_to_radians($self->angle_end)
     );
 
     return 1;
-}
-
-sub width {
-    my ($self) = @_;
-
-    return $self->radius * 2;
-}
-
-sub height {
-    my ($self) = @_;
-
-    return $self->radius * 2;
-}
-
-sub resize {
-    my ($self, $factor) = @_;
-
-    $self->radius($factor);
 }
 
 no Moose;
@@ -64,7 +50,7 @@ Chart::Clicker::Shape::Arc represents an arc.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Chart::Clicker::Arc.
 

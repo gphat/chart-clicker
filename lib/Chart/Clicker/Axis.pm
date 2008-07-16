@@ -344,7 +344,7 @@ Chart::Clicker::Axis represents the plot of the chart.
 
 =over 4
 
-=item Chart::Clicker::Axis->new()
+=item I<new>
 
 Creates a new Chart::Clicker::Axis.  If no arguments are given then sane
 defaults are chosen.

@@ -124,7 +124,7 @@ Chart::Clicker::Data::Range implements a range of values.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new, empty Series
 

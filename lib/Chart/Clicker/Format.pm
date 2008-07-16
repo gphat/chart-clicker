@@ -1,12 +1,8 @@
 package Chart::Clicker::Format;
-use Moose::Role;
+use Moose;
 use MooseX::AttributeHelpers;
 
 use IO::File;
-
-# TODO This shouldn't be a role...
-
-requires 'create_surface';
 
 has 'surface' => (
     is => 'rw',
@@ -22,6 +18,10 @@ has 'surface_data' => (
         append => 'append_surface_data'
     },
 );
+
+sub create_surface {
+    die('Implement Me!');
+}
 
 sub write {
     my ($self, $click, $file) = @_;
@@ -47,9 +47,25 @@ no Moose;
 __END__
 =head1 NAME
 
-Chart::Clicker::Format - Format role for Chart::Clicker
+Chart::Clicker::Format - Format for Chart::Clicker
 
 =head1 DESCRIPTION
+
+Base class for various output formats.
+
+=head1 METHODS
+
+=over 4
+
+=item I<create_surface>
+
+Create a new surface. Sublcasses must implement this.
+
+=item I<write>
+
+Write the surface data to a file.
+
+=back
 
 =head1 AUTHOR
 

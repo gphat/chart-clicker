@@ -57,7 +57,7 @@ handles rendering the markers that come from the Clicker object.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Plot object.
 

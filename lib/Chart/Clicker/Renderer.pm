@@ -36,7 +36,7 @@ Chart::Clicker::Renderer represents the plot of the chart.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Chart::Clicker::Renderer.
 

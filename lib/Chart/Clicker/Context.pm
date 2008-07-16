@@ -65,7 +65,7 @@ in L<Chart::Clicker>.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Context object.
 
@@ -75,19 +75,19 @@ Creates a new Context object.
 
 =over 4
 
-=item domain_axis
+=item I<domain_axis>
 
 Set/get this context's domain axis
 
-=item name
+=item I<name>
 
 Set/get this context's name
 
-=item range_axis
+=item I<range_axis>
 
 Set/get this context's range axis
 
-=item render
+=item I<render>
 
 Set/get this context's renderer
 

@@ -27,7 +27,7 @@ use Cairo;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.0.0';
+our $VERSION = '1.99_01';
 
 # TODO Global coercions?
 coerce 'Chart::Clicker::Format'
@@ -454,7 +454,7 @@ $cc->write('foo.png')
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Chart::Clicker object. If no format, width and height are
 specified then defaults of Png, 500 and 300 are chosen, respectively.
@@ -465,32 +465,36 @@ specified then defaults of Png, 500 and 300 are chosen, respectively.
 
 =over 4
 
-=item add_to_datasets
+=item I<add_to_contexts>
+
+Add the specified context to the chart.
+
+=item I<add_to_datasets>
 
 Add the specified dataset (or arrayref of datasets) to the chart.
 
-=item add_to_markers
+=item I<add_to_markers>
 
 Add the specified marker to the chart.
 
-=item color_allocator
+=item I<color_allocator>
 
 Set/Get the color_allocator for this chart.
 
-=item context
+=item I<context>
 
 Set/Get the context for this chart.
 
-=item data
+=item I<data>
 
 Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
 client.
 
-=item datasets
+=item I<datasets>
 
 Get/Set the datasets for this chart.
 
-=item draw
+=item I<draw>
 
 Draw this chart
 
@@ -504,21 +508,21 @@ Png, Pdf, Ps or Svg.
 Returns an arrayref containing all datasets for the given context.  Used by
 renderers to get a list of datasets to chart.
 
-=item inside_width
+=item I<inside_width>
 
 Get the width available in this container after taking away space for
 insets and borders.
 
-=item inside_height
+=item I<inside_height>
 
 Get the height available in this container after taking away space for
 insets and borders.
 
-=item prepare
+=item I<prepare>
 
 Prepare this chart for rendering.
 
-=item write
+=item I<write>
 
 Write the chart output to the specified location. Output is written in the
 format provided to the constructor (which defaults to Png).

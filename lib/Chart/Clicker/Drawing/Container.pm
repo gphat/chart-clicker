@@ -33,7 +33,7 @@ A Base 'container' for all components that want to hold other components.
 
 =over 4
 
-=item new
+=item I<new>
 
   my $c = Chart::Clicker::Drawing::Container->new({
     width => 500, height => 350
@@ -51,7 +51,7 @@ background_color and insets are all optional and will default to undef
 
 =over 4
 
-=item width
+=item I<width>
 
 Set/Get this Container's height
 

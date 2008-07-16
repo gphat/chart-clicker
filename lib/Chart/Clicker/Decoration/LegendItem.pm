@@ -46,7 +46,7 @@ Chart::Clicker::Decoration::LegendItem represents a single item in a legend.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new LegendItem object.
 

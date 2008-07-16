@@ -3,6 +3,8 @@ use Moose;
 
 extends 'Geometry::Primitive::Rectangle';
 
+with 'Chart::Clicker::Shape';
+
 sub create_path {
     my ($self, $cairo, $x, $y) = @_;
 

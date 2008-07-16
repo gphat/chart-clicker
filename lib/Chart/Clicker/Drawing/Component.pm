@@ -98,7 +98,7 @@ L<Graphics::Primitive::Component>.
 
 =over 4
 
-=item new
+=item I<new>
 
   my $c = Chart::Clicker::Drawing::Component->new({
     location => Chart::Clicker::Drawing::Point->new({

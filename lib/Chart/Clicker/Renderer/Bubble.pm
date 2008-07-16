@@ -38,7 +38,7 @@ the points' radiuses are deteremined by the size value of a Series::Size.
 
 =over 4
 
-=item shape
+=item I<shape>
 
 Specify the shape to be used at each point.  Defaults to 360 degree arc.  The
 radius will be determined by the size value of the series.

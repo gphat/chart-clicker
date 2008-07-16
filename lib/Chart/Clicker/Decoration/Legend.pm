@@ -208,7 +208,7 @@ Chart::Clicker::Decoration::Legend draws a legend on a Chart.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Legend object.
 

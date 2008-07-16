@@ -127,7 +127,7 @@ of like-named Series are totaled and keys are ignored.
 
 =over 4
 
-=item stroke
+=item I<stroke>
 
 Set a Stroke object to be used for the lines.
 
@@ -139,7 +139,7 @@ Set a Stroke object to be used for the lines.
 
 =over 4
 
-=item render
+=item I<render>
 
 Render the series.
 

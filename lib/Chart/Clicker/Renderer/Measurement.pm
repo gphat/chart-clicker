@@ -106,7 +106,7 @@ and error bars.
 
 =over 4
 
-=item render
+=item I<draw>
 
 Render the series.
 

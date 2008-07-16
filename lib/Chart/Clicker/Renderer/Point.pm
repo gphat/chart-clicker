@@ -7,7 +7,7 @@ use Chart::Clicker::Shape::Arc;
 
 has 'shape' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Shape',
+    does => 'Chart::Clicker::Shape',
     default => sub {
         Chart::Clicker::Shape::Arc->new({
            radius => 3,
@@ -89,7 +89,7 @@ Chart::Clicker::Renderer::Point renders a dataset as points.
 
 =over 4
 
-=item shape
+=item I<shape>
 
 Specify the shape to be used at each point.  Defaults to 360 degree arc with
 a radius of 3.
@@ -102,7 +102,7 @@ a radius of 3.
 
 =over 4
 
-=item new
+=item I<new>
 
 Create a new Point renderer
 

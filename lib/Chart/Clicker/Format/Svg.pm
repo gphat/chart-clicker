@@ -1,7 +1,7 @@
 package Chart::Clicker::Format::Svg;
 use Moose;
 
-with 'Chart::Clicker::Format';
+extends 'Chart::Clicker::Format';
 
 use Cairo;
 
@@ -11,14 +11,49 @@ sub BUILD {
         unless Cairo::HAS_SVG_SURFACE;
 }
 
-sub create_surface {
+override('create_surface', sub {
     my ($self, $width, $height) = @_;
 
     return Cairo::SvgSurface->create_for_stream(
         $self->can('append_surface_data'), $self, $width, $height
     );
-}
+});
 
 no Moose;
 
 1;
+__END__
+=head1 NAME
+
+Chart::Clicker::Format::Svg - SVG Format for Chart::Clicker
+
+=head1 DESCRIPTION
+
+Handles SVG output if your Cairo installation supports SVG
+
+=head1 METHODS
+
+=over 4
+
+=item I<BUILD>
+
+Verifies that Cairo supports this surface type.
+
+=item I<create_surface>
+
+Create a SVG surface
+
+=back
+
+=head1 AUTHOR
+
+Cory 'G' Watson <gphat@cpan.org>
+
+=head1 SEE ALSO
+
+perl(1), L<Chart::Clicker>
+
+=head1 LICENSE
+
+You can redistribute and/or modify this code under the same terms as Perl
+itself.

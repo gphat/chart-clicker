@@ -153,16 +153,16 @@ Chart::Clicker::Renderer::Bar renders a dataset as bars.
 
 =over 4
 
-=item opacity
+=item I<opacity>
 
 If true this value will be used when setting the opacity of the bar's fill.
 
-=item bar_padding
+=item I<bar_padding>
 
 How much padding to put around a bar.  A padding of 4 will result in 2 pixels
 on each side.
 
-=item stroke
+=item I<stroke>
 
 A stroke to use on each bar.
 

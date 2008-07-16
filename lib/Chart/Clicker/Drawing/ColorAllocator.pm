@@ -62,13 +62,6 @@ sub reset {
     return 1;
 }
 
-sub get {
-    my $self = shift();
-    my $index = shift();
-
-    return $self->colors->[$index];
-}
-
 no Moose;
 
 1;
@@ -105,7 +98,7 @@ corresponds to the series that will be colored.
 
 =over 4
 
-=item new
+=item I<new>
 
 Create a new ColorAllocator.  You can optionally pass an arrayref of colors
 to 'seed' the allocator.

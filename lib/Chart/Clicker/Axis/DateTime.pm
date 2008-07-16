@@ -148,7 +148,7 @@ unix format.
 
 =over 4
 
-=item Chart::Clicker::Axis::DateTime->new()
+=item I<new>
 
 Creates a new DateTime Axis.
 
