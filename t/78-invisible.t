@@ -37,7 +37,6 @@ cmp_ok($cc->plot->origin->y, '==', 0, 'plot origin y');
 
 $cc->draw();
 
-$cc->write('/Users/gphat/foo.png');
-# my $data = $cc->data();
-# ok(defined($data), 'data');
+my $data = $cc->data();
+ok(defined($data), 'data');
 
