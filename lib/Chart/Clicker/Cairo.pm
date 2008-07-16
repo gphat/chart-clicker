@@ -52,6 +52,14 @@ Chart::Clicker::Cairo wraps the Context from Cairo.
 This class wraps the move_to, rel_move_to and line_to to normalize the x and
 y values.
 
+=over
+
+=item I<create>
+
+Wraps and reblesses Cairo's create.
+
+=cut
+
 =head1 AUTHOR
 
 Cory 'G' Watson <gphat@cpan.org>

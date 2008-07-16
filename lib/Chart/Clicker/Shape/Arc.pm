@@ -1,13 +1,7 @@
 package Chart::Clicker::Shape::Arc;
 use Moose;
 
-extends 'Chart::Clicker::Shape';
-
-has 'angle1' => ( is => 'rw', isa => 'Num' );
-has 'angle2' => ( is => 'rw', isa => 'Num' );
-has 'radius' => ( is => 'rw', isa => 'Num' );
-
-my $TO_RAD = (4 * atan2(1, 1)) / 180;
+extends 'Geometry::Primitive::Arc';
 
 sub create_path {
     my ($self, $cairo, $x, $y) = @_;
@@ -15,25 +9,24 @@ sub create_path {
     my $halfrad = 0;
 
     $cairo->arc(
-        $x + $halfrad, $y + $halfrad, $self->radius(),
-        $self->angle1() * $TO_RAD,
-        $self->angle2() * $TO_RAD
+        $x + $halfrad, $y + $halfrad, $self->radius,
+        Geometry::Primitve::Util->degrees_to_radians($self->angle_start),
+        Geometry::Primitve::Util->degrees_to_radians($self->angle_end)
     );
 
     return 1;
 }
 
-# Convenience method...
 sub width {
-    my $self = shift();
+    my ($self) = @_;
 
-    return $self->radius();
+    return $self->radius * 2;
 }
 
 sub height {
-    my $self = shift();
+    my ($self) = @_;
 
-    return $self->radius();
+    return $self->radius * 2;
 }
 
 sub resize {
@@ -60,8 +53,8 @@ Chart::Clicker::Shape::Arc represents an arc.
  use Chart::Clicker::Shape::Arc;
 
  my $arc = Chart::Clicker::Shape::Arc->new({
-    angle1 => 0,
-    angle2 => 360,
+    angle_start => 0,
+    angle_end => 360,
     ragius => 5
  });
 
@@ -81,19 +74,7 @@ Creates a new Chart::Clicker::Arc.
 
 =over 4
 
-=item angle1
-
-Set/Get the starting angle for this arc.
-
-=item angle2
-
-Set/Get the ending angle for this arc.
-
-=item radius
-
-Set/Get the radius for this arc.
-
-=item create_path
+=item I<create_path>
 
   $arc->create_path($cairo, $x, $y);
 
@@ -107,7 +88,7 @@ Cory 'G' Watson <gphat@cpan.org>
 
 =head1 SEE ALSO
 
-perl(1)
+perl(1), L<Geometry::Primitive::Arc>
 
 =head1 LICENSE
 

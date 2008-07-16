@@ -158,12 +158,16 @@ Creates a new DateTime Axis.
 
 =over 4
 
-=item format
+=item I<format>
 
 Set/Get the formatting string used to format the DateTime.  See DateTime's
 strftime.
 
-=item time_zone
+=item I<format_value>
+
+Formats the value using L<DateTime>'s strftime.
+
+=item I<time_zone>
 
 Set/Get the time zone to use when creating DateTime objects!  Accepts an
 object or a string ('America/Chicago').

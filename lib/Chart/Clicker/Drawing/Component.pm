@@ -5,6 +5,7 @@ extends 'Graphics::Primitive::Component';
 
 with 'Graphics::Primitive::Oriented';
 
+use Geometry::Primitive::Point;
 use Graphics::Primitive::Border;
 use Graphics::Color::RGB;
 
@@ -18,6 +19,9 @@ has '+border' => (
 has 'clicker' => (
     is => 'rw',
     isa => 'Chart::Clicker'
+);
+has '+origin' => (
+    default => sub { Geometry::Primitive::Point->new(x => 0, y => 0) }
 );
 
 override('draw', sub {

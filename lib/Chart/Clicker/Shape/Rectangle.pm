@@ -1,17 +1,7 @@
 package Chart::Clicker::Shape::Rectangle;
 use Moose;
 
-extends 'Chart::Clicker::Shape';
-
-has 'width' => ( is => 'rw', isa => 'Num' );
-has 'height' => ( is => 'rw', isa => 'Num' );
-
-sub resize {
-    my ($self, $factor) = @_;
-
-    $self->width($factor);
-    $self->height($factor);
-}
+extends 'Geometry::Primitive::Rectangle';
 
 sub create_path {
     my ($self, $cairo, $x, $y) = @_;
@@ -47,7 +37,7 @@ Chart::Clicker::Shape::Rectangle represents an rectangle.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Chart::Clicker::Rectangle.
 
@@ -57,15 +47,7 @@ Creates a new Chart::Clicker::Rectangle.
 
 =over 4
 
-=item width
-
-Set/Get the width of this rectangle.
-
-=item height
-
-Set/Get the height of this rectangle.
-
-=item create_path
+=item I<create_path>
 
   $rect->create_path($cairo, $x, $y);
 
@@ -79,7 +61,7 @@ Cory 'G' Watson <gphat@cpan.org>
 
 =head1 SEE ALSO
 
-perl(1)
+perl(1), L<Geometry::Primitive::Rectangle>
 
 =head1 LICENSE
 

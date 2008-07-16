@@ -12,7 +12,7 @@ override('draw', sub {
     my $width = $self->width();
     my $height = $self->height();
 
-    foreach my $ctx (@{ $clicker->contexts }) {
+    foreach my $ctx (@{ $self->clicker->contexts }) {
         foreach my $marker (@{ $ctx->markers() }) {
 
             my $key = $marker->key();

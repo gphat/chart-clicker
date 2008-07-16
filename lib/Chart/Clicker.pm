@@ -174,7 +174,7 @@ override('prepare', sub {
     $self->add_component($legend, 's');
 
     my $plot = $self->plot();
-    $plot->add_component(Chart::Clicker::Decoration::Grid->new());
+    $plot->add_component(Chart::Clicker::Decoration::Grid->new( name => 'grid' ));
 
     # Sentinels to control the side that the axes will be drawn on.
     my $dcount = 0;

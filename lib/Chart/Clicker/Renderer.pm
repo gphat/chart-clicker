@@ -3,15 +3,15 @@ use Moose;
 
 extends 'Chart::Clicker::Drawing::Component';
 
+has 'additive' => ( is => 'ro', isa => 'Bool', default => 0 );
 has '+border' => ( default => sub { Graphics::Primitive::Border->new( width => 0 )});
 has 'context' => ( is => 'rw', isa => 'Str' );
-has 'additive' => ( is => 'ro', isa => 'Bool', default => 0 );
 
-sub prepare {
+override('prepare', sub {
     my $self = shift();
 
     return 1;
-}
+});
 
 no Moose;
 
