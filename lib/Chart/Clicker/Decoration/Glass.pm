@@ -26,7 +26,7 @@ override('prepare', sub {
     $self->height($dimension->height());
 
     return 1;
-}
+});
 
 override('draw', sub {
     my $self = shift();
@@ -52,7 +52,7 @@ override('draw', sub {
 
     $cr->set_source_rgba($self->glare_color->as_array_with_alpha());
     $cr->fill();
-}
+});
 
 no Moose;
 

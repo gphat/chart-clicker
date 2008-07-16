@@ -70,7 +70,7 @@ override('prepare', sub {
     $self->{'EXTENTS'} = $extents;
 
     return 1;
-}
+});
 
 override('draw', sub {
     my $self = shift();
