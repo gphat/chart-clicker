@@ -84,11 +84,14 @@ corresponds to the series that will be colored.
 
 =head1 SYNOPSIS
 
+    use Graphics::Color::RGB;
     use Chart::Clicker::Drawing::ColorAllocator;
 
     my $ca = Chart::Clicker::Drawing::ColorAllocator->new({
         colors => (
-            Chart::Clicker::Drawing::Color(1.0, 0, 0, 1.0)->new,
+            Graphics::Color::RGB->new(
+                red => 1.0, green => 0, blue => 0, alpha => 1.0
+            ),
             ...
         )
     });

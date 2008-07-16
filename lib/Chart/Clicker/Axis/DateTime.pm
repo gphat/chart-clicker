@@ -134,7 +134,7 @@ Chart::Clicker::Axis::DateTime
 
 =head1 DESCRIPTION
 
-A temporal Axis.  Requires DateTime and DateTime::Set.  Inherits from
+A temporal Axis.  Requires L<DateTime> and L<DateTime::Set>.  Inherits from
 Axis, so check the methods there as well.  Expects that times will be in
 unix format.
 

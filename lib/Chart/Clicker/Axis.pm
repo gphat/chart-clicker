@@ -29,7 +29,6 @@ has 'per' => ( is => 'rw', isa => 'Num' );
 has 'show_ticks' => ( is => 'rw', isa => 'Bool', default => 1 );
 has 'tick_length' => ( is => 'rw', isa => 'Num', default => 3 );
 has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
-has 'visible' => ( is => 'rw', isa => 'Bool', default => 1 );
 
 has 'stroke' => (
     is => 'rw',
@@ -331,12 +330,10 @@ Chart::Clicker::Axis represents the plot of the chart.
 
   use Chart::Clicker::Axis;
   use Chart::Clicker::Drawing qw(:positions);
-  use Chart::Clicker::Drawing::Color;
   use Graphics::Primitive::Font;
   use Graphics::Primitive::Stroke;
 
   my $axis = Chart::Clicker::Axis->new({
-    color => 'black',
     font  => Graphics::Primitive::Font->new(),
     orientation => 'vertical',
     position => $CC_LEFT,
@@ -360,31 +357,31 @@ defaults are chosen.
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
-=item baseline
+=item I<baseline>
 
 Set the 'baseline' value of this axis.  This is used by some renderers to
 change the way a value is marked.  The Bar render, for instance, considers
 values below the base to be 'negative'.
 
-=item color
+=item I<color>
 
 Set/Get the color of the axis.
 
-=item font
+=item I<font>
 
 Set/Get the font used for the axis' labels.
 
-=item format
+=item I<format>
 
 Set/Get the format to use for the axis values.  The format is applied to each
 value 'tick' via sprintf().  See sprintf()s perldoc for details!  This is
 useful for situations where the values end up with repeating decimals.
 
-=item fudge_amount
+=item I<fudge_amount>
 
 Set/Get the amount to 'fudge' the span of this axis.  You should supply a
 percentage (in decimal form) and the axis will grow at both ends by the
@@ -394,50 +391,50 @@ below the dataset.
 As an example, a fugdge_amount of .10 on an axis with a span of 10 to 50
 would add 5 to the top and bottom of the axis.
 
-=item height
+=item I<height>
 
 Set/Get the height of the axis.
 
-=item label
+=item I<label>
 
 Set/Get the label of the axis.
 
-=item orientation
+=item I<orientation>
 
 Set/Get the orientation of this axis.  See L<Chart::Clicker::Drawing>.
 
-=item per
+=item I<per>
 
 Set/Get the 'per' value for the axis.  This is how many physical pixels a unit
 on the axis represents.  If the axis represents a range of 0-100 and the axis
 is 200 pixels high then the per value will be 2.
 
-=item position
+=item I<position>
 
 Set/Get the position of the axis on the chart.
 
-=item range
+=item I<range>
 
 Set/Get the Range for this axis.
 
-=item show_ticks
+=item I<show_ticks>
 
 Set/Get the show ticks flag.  If this is value then the small tick marks at
 each mark on the axis will not be drawn.
 
-=item stroke
+=item I<stroke>
 
 Set/Get the stroke for this axis.
 
-=item tick_length
+=item I<tick_length>
 
 Set/Get the tick length.
 
-=item tick_stroke
+=item I<tick_stroke>
 
 Set/Get the stroke for the tick markers.
 
-=item tick_values
+=item I<tick_values>
 
 Set/Get the arrayref of values show as ticks on this Axis.
 
@@ -453,44 +450,40 @@ Clear all tick values.
 
 Get a count of tick values.
 
-=item tick_labels
+=item I<tick_labels>
 
 Set/Get the arrayref of labels to show for ticks on this Axis.  This arrayref
 is consulted for every tick, in order.  So placing a string at the zeroeth
 index will result in it being displayed on the zeroeth tick, etc, etc.
 
-=item ticks
+=item I<ticks>
 
 Set/Get the number of 'ticks' to show.  Setting this will divide the
 range on this axis by the specified value to establish tick values.  This
 will have no effect if you specify tick_values.
 
-=item mark
+=item I<mark>
 
 Given a value, returns it's pixel position on this Axis.
 
-=item format_value
+=item I<format_value>
 
 Given a value, returns it formatted using this Axis' formatter.
 
-=item examine_values
-
-Gives the axis an opportunity to examine values.
-
-=item prepare
+=item I<prepare>
 
 Prepare this Axis by determining the size required.  If the orientation is
 CC_HORIZONTAL this method sets the height.  Otherwise sets the width.
 
-=item draw
+=item I<draw>
 
 Draw this axis.
 
-=item visible
+=item I<visible>
 
 Set/Get this axis visibility flag.
 
-=item width
+=item I<width>
 
 Set/Get this axis' width.
 

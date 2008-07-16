@@ -31,12 +31,10 @@ Chart::Clicker::Decoration::LegendItem represents a single item in a legend.
 =head1 SYNOPSIS
 
   use Chart::Clicker::Decoration::LegendItem;
-  use Chart::Clicker::Drawing::Color;
   use Graphics::Primitive::Font;
   use Chart::Clicker::Drawing::Insets;
 
   my $li = Chart::Clicker::Decoration::LegendItem->new({
-    color   => 'black',
     insets  => Chart::Clicker::Drawings::Insets->new(),
     label   => 'foo',
     font    => Graphics::Primitive::Font->new()
