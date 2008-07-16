@@ -61,6 +61,10 @@ Creates a new, empty Series::Size
 
 Adds a size to this series.
 
+=item I<get_size>
+
+Get a size by it's index.
+
 =item I<sizes>
 
 Set/Get the sizes for this series.

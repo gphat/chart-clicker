@@ -52,25 +52,17 @@ Creates a new LegendItem object.
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
-=item color
-
-Set/Get this legend item's color.
-
-=item insets
-
-Set/Get this legend item's insets.
-
-=item label
-
-Set/Get this legend item's label.
-
-=item font
+=item I<font>
 
 Set/Get this legend item's font.
+
+=item I<label>
+
+Set/Get this legend item's label.
 
 =back
 

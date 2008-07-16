@@ -5,7 +5,6 @@ use Moose::Util::TypeConstraints;
 
 use Chart::Clicker;
 use Chart::Clicker::Axis;
-use Chart::Clicker::Drawing qw(:positions);
 use Chart::Clicker::Renderer::Line;
 use Chart::Clicker::Util;
 
@@ -20,13 +19,11 @@ has 'domain_axis' => (
         )
     }
 );
-
 has 'name' => (
     is => 'rw',
     isa => 'Str',
     required => 1
 );
-
 has 'range_axis' => (
     is => 'rw',
     isa => 'Chart::Clicker::Axis',
@@ -38,7 +35,6 @@ has 'range_axis' => (
         )
     }
 );
-
 has 'renderer' => (
     is => 'rw',
     isa => 'Chart::Clicker::Renderer',

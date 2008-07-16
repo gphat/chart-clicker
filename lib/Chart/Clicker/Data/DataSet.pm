@@ -124,9 +124,13 @@ Creates a new, empty DataSet
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
+
+=item I<add_to_series>
+
+Add a series to this dataset.
 
 =item I<count>
 
@@ -151,10 +155,6 @@ Get the number of keys in the longest series.
 =item I<range>
 
 Get the Range for the... range values...
-
-=item I<add_to_series>
-
-Add a series to this dataset.
 
 =item I<series>
 

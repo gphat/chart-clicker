@@ -108,7 +108,7 @@ Create a new Point renderer
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 

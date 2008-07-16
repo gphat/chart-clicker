@@ -135,7 +135,7 @@ Set a Stroke object to be used for the lines.
 
 =head1 METHODS
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 

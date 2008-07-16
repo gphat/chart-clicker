@@ -9,11 +9,8 @@ BEGIN {
     use_ok('Chart::Clicker::Decoration::Grid');
     use_ok('Chart::Clicker::Decoration::Label');
     use_ok('Chart::Clicker::Decoration::Legend');
-    use_ok('Chart::Clicker::Drawing');
     use_ok('Chart::Clicker::Renderer::Area');
 }
-
-use Chart::Clicker::Drawing qw(:positions);
 
 my $chart = Chart::Clicker->new({ width => 300, height => 250 });
 ok(defined($chart), 'new Chart::Clicker');

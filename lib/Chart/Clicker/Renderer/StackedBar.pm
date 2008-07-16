@@ -158,7 +158,7 @@ A stroke to use on each bar.
 
 =head1 METHODS
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 

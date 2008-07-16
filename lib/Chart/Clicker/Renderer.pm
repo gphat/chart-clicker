@@ -42,27 +42,23 @@ Creates a new Chart::Clicker::Renderer.
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
-=item additive
+=item I<additive>
 
 Read-only value that informs Clicker that this renderer uses the combined ranges
 of all the series it charts in total.  Used for 'stacked' renderers like
 StackedBar.
 
-=item get_option
-
-Returns a value for the specified key (if it exists) from the options hashref.
-
-=item prepare
+=item I<prepare>
 
 Prepare the component.
 
-=item render
+=item I<draw>
 
-Render the series.
+Draw the renderer.
 
 =back
 

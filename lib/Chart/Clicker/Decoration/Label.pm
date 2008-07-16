@@ -3,8 +3,6 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
-use Chart::Clicker::Drawing qw(:positions);
-
 use Graphics::Color::RGB;
 
 use Graphics::Primitive::Font;
@@ -20,7 +18,6 @@ has 'color' => (
     },
     coerce => 1
 );
-
 has 'font' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Font',
@@ -28,19 +25,17 @@ has 'font' => (
         Graphics::Primitive::Font->new()
     }
 );
-
+has '+orientation' => (
+    required => 1
+);
 has 'text' => (
     is => 'rw',
     isa => 'Str'
 );
 
-has '+orientation' => (
-    required => 1
-);
-
 my $VERTICAL = 4.71238898;
 
-sub prepare {
+override('prepare', sub {
     my $self = shift();
 
     my $font = $self->font();
@@ -108,7 +103,6 @@ override('draw', sub {
     if($self->is_horizontal) {
         $cr->show_text($self->text());
     } else {
-        print STDERR "Horizontal : ".$self->text()."\n";
         $cr->save();
         $cr->rotate($VERTICAL);
         $cr->show_text($self->text());
@@ -143,7 +137,7 @@ Creates a new Label object.
 
 =back
 
-=head2 Methods
+=head2 Instance Methods
 
 =over 4
 
@@ -151,17 +145,33 @@ Creates a new Label object.
 
 Set/Get this Label's border.
 
-=item I<insets>
+=item I<color>
 
-Set/Get this Label's insets.
+Set/Get the color of this label.
 
 =item I<draw>
 
 Draw this Label
 
+=item I<font>
+
+Set/Get the font for this label.
+
+=item I<insets>
+
+Set/Get this label's insets.
+
+=item I<orientation>
+
+Set/Get this label's orientation.
+
 =item I<prepare>
 
 Prepare this Label by determining how much space it needs.
+
+=item I<text>
+
+Set/Get this label's text.
 
 =back
 

@@ -4,22 +4,10 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
-sub prepare {
+override('draw', sub {
     my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
 
-    $self->width($dimension->width());
-    $self->height($dimension->height());
-
-    return 1;
-}
-
-sub draw {
-    my $self = shift();
-    my $clicker = shift();
-
-    my $cr = $clicker->cairo();
+    my $cr = $self->clicker->cairo();
 
     my $width = $self->width();
     my $height = $self->height();
@@ -117,7 +105,7 @@ A Component that handles the rendering of Markers.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new MarkerOverlay object.
 

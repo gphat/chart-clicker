@@ -4,14 +4,17 @@ use Moose;
 extends 'Chart::Clicker::Decoration';
 
 use Chart::Clicker::Decoration::LegendItem;
-use Chart::Clicker::Drawing qw(:positions);
 
 use Graphics::Primitive::Font;
 use Graphics::Primitive::Insets;
 
-has 'tallest' => ( is => 'rw', isa => 'Num' );
-has 'widest' => ( is => 'rw', isa => 'Num' );
-
+has 'font' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Font',
+    default => sub {
+        Graphics::Primitive::Font->new()
+    }
+);
 has 'item_padding' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Insets',
@@ -21,22 +24,15 @@ has 'item_padding' => (
         })
     }
 );
-
 has 'legend_items' => (
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [ ] }
 );
+has 'tallest' => ( is => 'rw', isa => 'Num' );
+has 'widest' => ( is => 'rw', isa => 'Num' );
 
-has 'font' => (
-    is => 'rw',
-    isa => 'Graphics::Primitive::Font',
-    default => sub {
-        Graphics::Primitive::Font->new()
-    }
-);
-
-sub prepare {
+override('prepare', sub {
     my $self = shift();
     my $clicker = shift();
     my $dimension = shift();
@@ -136,9 +132,9 @@ sub prepare {
     $ca->reset();
 
     return 1;
-}
+});
 
-sub draw {
+override('draw', sub {
     my $self = shift();
     my $clicker = shift();
 
@@ -189,7 +185,7 @@ sub draw {
             $y += $self->tallest();
         }
     }
-}
+});
 
 no Moose;
 
@@ -218,7 +214,7 @@ Creates a new Legend object.
 
 =back
 
-=head2 Methods
+=head2 Instance Methods
 
 =over 4
 
@@ -226,18 +222,38 @@ Creates a new Legend object.
 
 Set/Get this Legend's border.
 
+=item I<draw>
+
+Draw this Legend
+
+=item I<font>
+
+Set/Get the font used for this legend's items.
+
 =item I<insets>
 
 Set/Get this Legend's insets.
+
+=item I<item_padding>
+
+Set/Get the padding for this legend's items.
+
+=item I<legend_items>
+
+Set/Get this legend's items.
 
 =item I<prepare>
 
 Prepare this Legend by creating the LegendItems based on the datasets
 provided and testing the lengths of the series names.
 
-=item I<draw>
+=item I<tallest>
 
-Draw this Legend
+Set/Get the height of the tallest label.
+
+=item I<widest>
+
+Set/Get the width of the widest label.
 
 =back
 

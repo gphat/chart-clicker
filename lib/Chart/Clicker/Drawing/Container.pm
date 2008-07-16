@@ -47,55 +47,11 @@ background_color and insets are all optional and will default to undef
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
-=item background_color
-
-Set/Get this Container's background color.
-
-=item border
-
-Set/Get this Container's border
-
-=item components
-
-Get the components in this container. The return value is an arrayref of
-hashrefs.  Each hashref has a 'component' and 'position' key.
-
-=item draw
-
-Draw this container and all of it's children.
-
-=item height
-
-Set/Get this Container's height
-
-=item insets
-
-Set/Get this Container's insets.
-
-=item prepare
-
-Prepare this container for rendering.  All of it's child components will be
-prepared as well.
-
-=item add
-
-Add a component to this container.
-
-  $cont1->add($foo);
-  $cont2->add($cont1, $CC_TOP);
-  $cont2->add($cont1, $CC_TOP, 1);
-
-The first argument must be some other entity that is renderable by
-Chart::Clicker.  The second argument is an optional position.  The positioning
-of elements is very rudimentary.  If you do not specify a position then
-$CC_CENTER is used.  The third argument is a flag that controls whether this
-component will actually affect the layout of items after it.  This is used
-to make renderers render 'over' each other.  A normal use of this would be
-to stack the Grid and Renderer.
+=back
 
 =cut
 
@@ -111,7 +67,7 @@ Cory 'G' Watson <gphat@cpan.org>
 
 =head1 SEE ALSO
 
-perl(1)
+perl(1), L<Graphics::Primitive>, L<Layout::Manager>
 
 =head1 LICENSE
 

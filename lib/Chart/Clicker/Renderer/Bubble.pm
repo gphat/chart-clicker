@@ -57,7 +57,7 @@ Create a new Bubble renderer
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 

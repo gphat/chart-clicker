@@ -14,7 +14,8 @@ Chart::Clicker::Decoration
 
 =head1 DESCRIPTION
 
-Chart::Clicker::Decoration
+Chart::Clicker::Decoration is a straight subclass of
+L<Chart::Clicker::Drawing::Component>.
 
 =head1 SYNOPSIS
 
@@ -30,7 +31,7 @@ Creates a new Chart::Clicker::Decoration
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 

@@ -461,7 +461,7 @@ specified then defaults of Png, 500 and 300 are chosen, respectively.
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 

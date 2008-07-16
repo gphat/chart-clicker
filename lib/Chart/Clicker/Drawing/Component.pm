@@ -15,7 +15,6 @@ has '+border' => (
         )
     }
 );
-
 has 'clicker' => (
     is => 'rw',
     isa => 'Chart::Clicker'
@@ -77,7 +76,8 @@ Chart::Clicker::Drawing::Component
 
 =head1 DESCRIPTION
 
-A Component is an entity with a graphical representation.
+A Component is an entity with a graphical representation.  Subclasses
+L<Graphics::Primitive::Component>.
 
 =head1 SYNOPSIS
 
@@ -107,51 +107,13 @@ Creates a new Component.
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
-=item dimensions
+=item I<clicker>
 
-Get this Component's dimensions.
-
-=item draw
-
-Draw this component.
-
-=item inside_width
-
-Get the width available in this container after taking away space for
-insets and borders.
-
-=item inside_dimension
-
-Get the dimension of this container's inside.
-
-=item inside_height
-
-Get the height available in this container after taking away space for
-insets and borders.
-
-=item height
-
-Set/Get this Component's height
-
-=item location
-
-Set/Get this Component's location
-
-=item width
-
-Set/Get this Component's height
-
-=item upper_left_inside_point
-
-Get the Point for this container's upper left inside.
-
-=item upper_right_inside_point
-
-Get the Point for this container's upper right inside.
+Get this Component's instance of Chart::Clicker.
 
 =back
 
@@ -161,7 +123,7 @@ Cory 'G' Watson <gphat@cpan.org>
 
 =head1 SEE ALSO
 
-perl(1)
+perl(1), L<Graphics::Primitive>
 
 =head1 LICENSE
 

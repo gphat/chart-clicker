@@ -17,7 +17,7 @@ has 'glare_color' => (
     coerce => 1
 );
 
-sub prepare {
+override('prepare', sub {
     my $self = shift();
     my $clicker = shift();
     my $dimension = shift();
@@ -28,7 +28,7 @@ sub prepare {
     return 1;
 }
 
-sub draw {
+override('draw', sub {
     my $self = shift();
     my $clicker = shift();
 
@@ -61,11 +61,11 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Decoration::Grid
+Chart::Clicker::Decoration::Glass
 
 =head1 DESCRIPTION
 
-Generates a collection of Markers for use as a background.
+A glass-like decoration.
 
 =head1 SYNOPSIS
 
@@ -75,39 +75,31 @@ Generates a collection of Markers for use as a background.
 
 =over 4
 
-=item new
+=item I<new>
 
-Creates a new Chart::Clicker::Decoration::Grid object.
-
-=item prepare
-
-Prepare this Grid for drawing
+Creates a new Chart::Clicker::Decoration::Glass object.
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
-=item color
+=item I<background_color>
 
-Set/Get the color for this Grid.
+Set/Get the background color for this glass.
 
-=item domain_ticks
-
-Set/Get the domain ticks for this Grid.
-
-=item range_ticks
-
-Set/Get the range ticks for this Grid.
-
-=item stroke
-
-Set/Get the Stroke for this Grid.
-
-=item draw
+=item I<draw>
 
 Draw this Grid.
+
+=item I<glare_color>
+
+Set/Get the glare color for this glass.
+
+=item I<prepare>
+
+Prepare this Glass for drawing
 
 =cut
 

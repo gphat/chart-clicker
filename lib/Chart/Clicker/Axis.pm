@@ -17,6 +17,18 @@ use Graphics::Color::RGB;
 use Graphics::Primitive::Font;
 use Graphics::Primitive::Stroke;
 
+has 'baseline' => (
+    is  => 'rw',
+    isa => 'Num',
+);
+has '+color' => (
+    default => sub {
+        Graphics::Color::RGB->new({
+            red => 0, green => 0, blue => 0, alpha => 1
+        })
+    },
+    coerce => 1
+);
 has 'font' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Font',
@@ -25,23 +37,36 @@ has 'font' => (
 has 'format' => ( is => 'rw', isa => 'Str' );
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
 has 'label' => ( is => 'rw', isa => 'Str' );
+has '+orientation' => (
+    required => 1
+);
 has 'per' => ( is => 'rw', isa => 'Num' );
+has '+position' => (
+    required => 1
+);
+has 'range' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Data::Range',
+    default => sub { Chart::Clicker::Data::Range->new() }
+);
 has 'show_ticks' => ( is => 'rw', isa => 'Bool', default => 1 );
-has 'tick_length' => ( is => 'rw', isa => 'Num', default => 3 );
-has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
-
 has 'stroke' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Stroke',
     default => sub { Graphics::Primitive::Stroke->new(); }
 );
-
+has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
+has 'tick_labels' => (
+    is => 'rw',
+    isa => 'ArrayRef',
+    default => sub { [] }
+);
+has 'tick_length' => ( is => 'rw', isa => 'Num', default => 3 );
 has 'tick_stroke' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Stroke',
     default => sub { Graphics::Primitive::Stroke->new(); }
 );
-
 has 'tick_values' => (
     metaclass => 'Collection::Array',
     is => 'rw',
@@ -52,36 +77,6 @@ has 'tick_values' => (
         'clear' => 'clear_tick_values',
         'count' => 'tick_value_count'
     }
-);
-has 'tick_labels' => (
-    is => 'rw',
-    isa => 'ArrayRef',
-    default => sub { [] }
-);
-
-has 'range' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Data::Range',
-    default => sub { Chart::Clicker::Data::Range->new() }
-);
-
-has '+color' => (
-    default => sub {
-        Graphics::Color::RGB->new({
-            red => 0, green => 0, blue => 0, alpha => 1
-        })
-    },
-    coerce => 1
-);
-has '+orientation' => (
-    required => 1
-);
-has '+position' => (
-    required => 1
-);
-has 'baseline' => (
-    is  => 'rw',
-    isa => 'Num',
 );
 
 sub prepare {
@@ -329,14 +324,13 @@ Chart::Clicker::Axis represents the plot of the chart.
 =head1 SYNOPSIS
 
   use Chart::Clicker::Axis;
-  use Chart::Clicker::Drawing qw(:positions);
   use Graphics::Primitive::Font;
   use Graphics::Primitive::Stroke;
 
   my $axis = Chart::Clicker::Axis->new({
     font  => Graphics::Primitive::Font->new(),
     orientation => 'vertical',
-    position => $CC_LEFT,
+    position => 'left',
     show_ticks => 1,
     stroke = Graphics::Primitive::Stroke->new(),
     tick_length => 2,

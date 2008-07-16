@@ -21,11 +21,6 @@ has '+color' => (
         )
     }
 );
-has 'stroke' => (
-    is => 'rw',
-    isa => 'Graphics::Primitive::Stroke',
-    default => sub { Graphics::Primitive::Stroke->new() }
-);
 has 'show_domain' => (
     is => 'rw',
     isa => 'Bool',
@@ -36,8 +31,13 @@ has 'show_range' => (
     isa => 'Bool',
     default => 1
 );
+has 'stroke' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Stroke',
+    default => sub { Graphics::Primitive::Stroke->new() }
+);
 
-sub draw {
+override('draw', sub {
     my $self = shift();
 
     return unless ($self->show_domain || $self->show_range);
@@ -77,7 +77,7 @@ sub draw {
     $cr->set_line_cap($stroke->line_cap());
     $cr->set_line_join($stroke->line_join());
     $cr->stroke();
-}
+});
 
 no Moose;
 
@@ -110,29 +110,33 @@ Creates a new Chart::Clicker::Decoration::Grid object.
 
 =over 4
 
-=item I<prepare>
+=item I<background_color>
 
-Prepare this Grid for drawing
+Set/Get the background_color for this Grid.
+
+=item I<border>
+
+Set/Get the border for this Grid.
 
 =item I<color>
 
 Set/Get the color for this Grid.
 
-=item I<domain_ticks>
+=item I<draw>
 
-Set/Get the domain ticks for this Grid.
+Prepare this Grid for drawing
 
-=item I<range_ticks>
+=item I<show_domain>
 
-Set/Get the range ticks for this Grid.
+Flag show or not show the domain lines.
+
+=item I<show_range>
+
+Flag show or not show the range lines.
 
 =item I<stroke>
 
 Set/Get the Stroke for this Grid.
-
-=item I<draw>
-
-Draw this Grid.
 
 =cut
 

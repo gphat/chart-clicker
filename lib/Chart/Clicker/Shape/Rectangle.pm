@@ -53,7 +53,7 @@ Creates a new Chart::Clicker::Rectangle.
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 

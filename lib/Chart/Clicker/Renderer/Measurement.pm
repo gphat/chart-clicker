@@ -102,7 +102,7 @@ and error bars.
 
 =head1 METHODS
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 

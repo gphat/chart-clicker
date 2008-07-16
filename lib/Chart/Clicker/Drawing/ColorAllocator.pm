@@ -15,7 +15,8 @@ has 'colors' => (
     provides => {
         'push' => 'add_to_colors',
         'clear' => 'clear_colors',
-        'count' => 'color_count'
+        'count' => 'color_count',
+        'get'   => 'get_color'
     }
 );
 has 'position' => ( is => 'rw', isa => 'Int', default => -1 );
@@ -127,23 +128,23 @@ Clear this allocator's colors
 
 Get the number of colors in this allocator.
 
-=item position
+=item <get_color>
+
+Gets the color at the specified index.  Returns undef if that position has no
+color.
+
+=item I<position>
 
 Gets the current position.
 
-=item next
+=item I<next>
 
 Returns the next color.  Each call to next increments the position, so
 subsequent calls will return different colors.
 
-=item reset
+=item I<reset>
 
 Resets this allocator back to the beginning.
-
-=item get
-
-Gets the color at the specified index.  Returns undef if that position has no
-color.
 
 =back
 

@@ -2,13 +2,9 @@ package Chart::Clicker::Data::Marker;
 use Moose;
 
 use Graphics::Color::RGB;
-use graphics::Primitive::Stroke;
+use Graphics::Primitive::Stroke;
 
-has 'key' => ( is => 'rw', isa => 'Num' );
-has 'key2' => ( is => 'rw', isa => 'Num' );
-has 'value' => ( is => 'rw', isa => 'Num' );
-has 'value2' => ( is => 'rw', isa => 'Num' );
-has 'inside_color' => (
+has 'color' => (
     is => 'rw',
     isa => 'Graphics::Color',
     default => sub {
@@ -17,7 +13,11 @@ has 'inside_color' => (
         );
     }
 );
-has 'color' => (
+has 'key' => ( is => 'rw', isa => 'Num' );
+has 'key2' => ( is => 'rw', isa => 'Num' );
+has 'value' => ( is => 'rw', isa => 'Num' );
+has 'value2' => ( is => 'rw', isa => 'Num' );
+has 'inside_color' => (
     is => 'rw',
     isa => 'Graphics::Color',
     default => sub {
@@ -53,15 +53,15 @@ Used to highlight a particular key, value or range of either.
  use Graphics::Color::RGB;
  use Graphics::Primitive::Stroke;
 
- my $mark = Chart::Clicker::Decoration::Marker->new({
-    color=  > Graphics::Color::RGB->new({ name => 'red' }),
-    stroke  => Graphics::Primitive::Stroke->new(),
+ my $mark = Chart::Clicker::Decoration::Marker->new(
+    color   => Graphics::Color::RGB->new,
+    stroke  => Graphics::Primitive::Stroke->new,
     key     => 12,
     value   => 123,
     # Optionally
     key2    => 13,
     value   => 146
- });
+ );
 
 =head1 METHODS
 
@@ -69,36 +69,36 @@ Used to highlight a particular key, value or range of either.
 
 =over 4
 
-=item new
+=item I<new>
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
-=item color
+=item I<color>
 
 Set/Get the color for this marker.
 
-=item stroke
-
-Set/Get the stroke for this Marker.
-
-=item key
+=item I<key>
 
 Set/Get the key for this marker.  This represents a point on the domain.
 
-=item key2
+=item I<key2>
 
 Set/Get the key2 for this marker.  This represents a second point on the domain
 and is used to specify a range.
 
-=item value
+=item I<stroke>
+
+Set/Get the stroke for this Marker.
+
+=item I<value>
 
 Set/Get the value for this marker.  This represents a point on the range.
 
-=item value2
+=item I<value2>
 
 Set/Get the value2 for this marker.  This represents a second point on the
 range and is used to specify a range.

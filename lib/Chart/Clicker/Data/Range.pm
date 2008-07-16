@@ -2,9 +2,9 @@ package Chart::Clicker::Data::Range;
 use Moose;
 
 has 'lower' => ( is => 'rw', isa => 'Num' );
-has 'upper' => ( is => 'rw', isa => 'Num' );
-has 'min' => ( is => 'rw', isa => 'Num' );
 has 'max' => ( is => 'rw', isa => 'Num' );
+has 'min' => ( is => 'rw', isa => 'Num' );
+has 'upper' => ( is => 'rw', isa => 'Num' );
 
 after 'lower' => sub {
     my $self = shift();
@@ -38,10 +38,19 @@ after 'max' => sub {
     }
 };
 
-sub span {
+sub add {
     my $self = shift();
+    my $range = shift();
 
-    return ($self->upper() - $self->lower()) + 1;
+    if(defined($self->upper())) {
+        $self->upper($self->upper() + $range->upper());
+    } else {
+        $self->upper($range->upper());
+    }
+
+    if(!defined($self->lower()) || ($range->lower() < $self->lower())) {
+        $self->lower($range->lower());
+    }
 }
 
 sub combine {
@@ -63,21 +72,6 @@ sub combine {
     return 1;
 }
 
-sub add {
-    my $self = shift();
-    my $range = shift();
-
-    if(defined($self->upper())) {
-        $self->upper($self->upper() + $range->upper());
-    } else {
-        $self->upper($range->upper());
-    }
-
-    if(!defined($self->lower()) || ($range->lower() < $self->lower())) {
-        $self->lower($range->lower());
-    }
-}
-
 sub divvy {
     my $self = shift();
     my $n = shift();
@@ -94,6 +88,12 @@ sub divvy {
     }
 
     return \@vals;
+}
+
+sub span {
+    my $self = shift();
+
+    return ($self->upper() - $self->lower()) + 1;
 }
 
 no Moose;
@@ -120,7 +120,7 @@ Chart::Clicker::Data::Range implements a range of values.
 
 =head1 METHODS
 
-=head2 Constructors
+=head2 Constructor
 
 =over 4
 
@@ -128,45 +128,51 @@ Chart::Clicker::Data::Range implements a range of values.
 
 Creates a new, empty Series
 
-=item lower
+=back
 
-Set/Get the lower bound for this Range
+=head2 Instance Methods
 
-=item min
+=over 4
 
-Set/Get the minimum value allowed for this Range.  This value should only be
-set if you want to EXPLICITLY set the lower value.
+=item I<add>
 
-=item upper
+Adds the specified range to this one.  The lower is reduced to that of the
+provided one if it is lower, and the upper is ADDED to this range's upper.
 
-Set/Get the upper bound for this Range
-
-=item max
-
-Set/Get the maximum value allowed for this Range.  This value should only be
-set if you want to EXPLICITLY set the upper value.
-
-=item span
-
-Returns the span of this range, or UPPER - LOWER.
-
-=item combine
+=item I<combine>
 
 Combine this range with the specified so that this range encompasses the
 values specified.  For example, adding a range with an upper-lower of 1-10
 with one of 5-20 will result in a combined range of 1-20.
 
-=item add
-
-Adds the specified range to this one.  The lower is reduced to that of the
-provided one if it is lower, and the upper is ADDED to this range's upper.
-
-=item divvy
+=item I<divvy>
 
   my $values = $range->divvy(5);
 
 Returns an arrayref of $N - 1 values equally spaced in the range so that
 it may be divided into $N pieces.
+
+=item I<lower>
+
+Set/Get the lower bound for this Range
+
+=item I<max>
+
+Set/Get the maximum value allowed for this Range.  This value should only be
+set if you want to EXPLICITLY set the upper value.
+
+=item I<min>
+
+Set/Get the minimum value allowed for this Range.  This value should only be
+set if you want to EXPLICITLY set the lower value.
+
+=item I<span>
+
+Returns the span of this range, or UPPER - LOWER.
+
+=item I<upper>
+
+Set/Get the upper bound for this Range
 
 =back
 
