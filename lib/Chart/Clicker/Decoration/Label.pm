@@ -105,9 +105,10 @@ override('draw', sub {
 
     $cr->move_to($x, $y);
 
-    if($self->is_vertical) {
+    if($self->is_horizontal) {
         $cr->show_text($self->text());
     } else {
+        print STDERR "Horizontal : ".$self->text()."\n";
         $cr->save();
         $cr->rotate($VERTICAL);
         $cr->show_text($self->text());

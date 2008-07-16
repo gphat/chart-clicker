@@ -19,6 +19,7 @@ use Chart::Clicker::Decoration::Grid;
 use Chart::Clicker::Decoration::Legend;
 use Chart::Clicker::Decoration::Plot;
 use Chart::Clicker::Format::Png;
+use Chart::Clicker::Renderer;
 use Chart::Clicker::Util;
 use Chart::Clicker::Drawing::ColorAllocator;
 

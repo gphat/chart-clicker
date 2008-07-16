@@ -112,6 +112,8 @@ sub prepare {
         $self->tick_values($self->range->divvy($self->ticks()));
     }
 
+    return unless $self->visible;
+
     my $cairo = $self->clicker->cairo();
 
     my $font = $self->font();
@@ -195,9 +197,7 @@ sub draw {
         $self->per($self->width / ($self->range->span - 1));
     }
 
-    unless($self->visible()) {
-        return;
-    }
+    return unless $self->visible;
 
     my $x = 0;
     my $y = 0;

@@ -1,9 +1,11 @@
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 BEGIN {
     use_ok('Chart::Clicker::Decoration::Label');
 }
 
-# Test Moose coercion
-my $label = Chart::Clicker::Decoration::Label->new(color => 'black');
-cmp_ok($label->color->red(), '==', 0, 'Red');
+my $label = Chart::Clicker::Decoration::Label->new(
+    text => 'Test', orientation => 'horizontal'
+);
+isa_ok($label, 'Chart::Clicker::Decoration::Label');
+cmp_ok($label->text, 'eq', 'Test');
