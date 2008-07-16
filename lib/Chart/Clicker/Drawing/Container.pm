@@ -51,10 +51,6 @@ background_color and insets are all optional and will default to undef
 
 =over 4
 
-=back
-
-=cut
-
 =item width
 
 Set/Get this Container's height
