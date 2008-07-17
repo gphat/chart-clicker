@@ -123,27 +123,26 @@ override('prepare', sub {
     # Determine all this once... much faster.
     my $biggest = 0;
     my $key;
-    # if($self->visible()) {
-        if($self->is_vertical) {
-            $key = 'width';
-        } else {
-            $key = 'total_height';
-        }
-        my @values = @{ $self->tick_values() };
-        for(0..scalar(@values) - 1) {
-            my $val = $self->format_value($self->tick_labels->[$_] || $values[$_]);
-            my $ext = $cairo->text_extents($val);
-            $ext->{total_height} = $ext->{height} - $ext->{y_bearing};
-            $self->{'ticks_extents_cache'}->[$_] = $ext;
-            if($ext->{$key} > $biggest) {
-                $biggest = $ext->{$key};
-            }
-        }
 
-        if($self->show_ticks()) {
-            $biggest += $self->tick_length();
+    if($self->is_vertical) {
+        $key = 'width';
+    } else {
+        $key = 'total_height';
+    }
+    my @values = @{ $self->tick_values() };
+    for(0..scalar(@values) - 1) {
+        my $val = $self->format_value($self->tick_labels->[$_] || $values[$_]);
+        my $ext = $cairo->text_extents($val);
+        $ext->{total_height} = $ext->{height} - $ext->{y_bearing};
+        $self->{'ticks_extents_cache'}->[$_] = $ext;
+        if($ext->{$key} > $biggest) {
+            $biggest = $ext->{$key};
         }
-    # }
+    }
+
+    if($self->show_ticks()) {
+        $biggest += $self->tick_length();
+    }
 
     if ($self->label()) {
         my $ext = $cairo->text_extents($self->label());
