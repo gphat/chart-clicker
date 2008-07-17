@@ -27,7 +27,7 @@ use Cairo;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '1.99_01';
+our $VERSION = '1.99_02';
 
 # TODO Global coercions?
 coerce 'Chart::Clicker::Format'
@@ -179,10 +179,14 @@ override('prepare', sub {
     # Sentinels to control the side that the axes will be drawn on.
     my $dcount = 0;
     my $rcount = 0;
-    # Hashes of axis we've already seen, as we don't want to add them
-    # again...
+    # Hashes of axes & renderers we've already seen, as we don't want to add
+    # them again...
     my %daxes;
     my %raxes;
+    my %rends;
+
+    my $dflt_ctx = $self->get_context('default');
+    die('Clicker must have a default context') unless defined($dflt_ctx);
 
     # Prepare the datasets and establish ranges for the axes.
     my $count = 0;
@@ -196,19 +200,12 @@ override('prepare', sub {
         my $ctx = $self->get_context($ds->context);
 
         unless(defined($ctx)) {
-            $ctx = $self->get_context('default');
-        }
-
-        unless(defined($ctx)) {
-            # TODO Could give more data?
-            die("Can't find a context for dataset.");
+            $ctx = $dflt_ctx;
         }
 
         my $daxis = $ctx->domain_axis;
         unless(exists($daxes{refaddr($daxis)})) {
-            if(defined($daxis)) {
-                $daxis->range->combine($ds->domain());
-            }
+            $daxis->range->combine($ds->domain());
 
             $daxis->position('bottom');
             if($dcount % 2) {
@@ -220,8 +217,10 @@ override('prepare', sub {
         }
 
         my $rend = $ctx->renderer();
-        $rend->context($ctx->name);
-        $plot->add_component($rend);
+        unless(exists($rends{$ctx->name})) {
+            $rend->context($ctx->name);
+            $plot->add_component($rend);
+        }
 
         my $raxis = $ctx->range_axis;
         if(defined($raxis)) {
@@ -352,6 +351,8 @@ sub data {
 
     return $self->format->surface_data();
 }
+
+__PACKAGE__->meta->make_immutable;
 
 no Moose;
 

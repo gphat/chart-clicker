@@ -32,10 +32,11 @@ has '+color' => (
 has 'font' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Font',
-    default => sub { Graphics::Primitive::Font->new(); }
+    default => sub { Graphics::Primitive::Font->new }
 );
 has 'format' => ( is => 'rw', isa => 'Str' );
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
+has 'hidden' => ( is => 'rw', isa => 'Bool', default => 0 );
 has 'label' => ( is => 'rw', isa => 'Str' );
 has '+orientation' => (
     required => 1
@@ -79,7 +80,7 @@ has 'tick_values' => (
     }
 );
 
-sub prepare {
+override('prepare', sub {
     my $self = shift();
 
     if($self->range->span() == 0) {
@@ -106,7 +107,9 @@ sub prepare {
         $self->tick_values($self->range->divvy($self->ticks()));
     }
 
-    return unless $self->visible;
+    # Return now without setting a min height or width and allow 
+    # Layout::Manager to to set it for us, this is how we 'hide'
+    return if $self->hidden;
 
     my $cairo = $self->clicker->cairo();
 
@@ -120,7 +123,7 @@ sub prepare {
     # Determine all this once... much faster.
     my $biggest = 0;
     my $key;
-    if($self->visible()) {
+    # if($self->visible()) {
         if($self->is_vertical) {
             $key = 'width';
         } else {
@@ -140,7 +143,7 @@ sub prepare {
         if($self->show_ticks()) {
             $biggest += $self->tick_length();
         }
-    }
+    # }
 
     if ($self->label()) {
         my $ext = $cairo->text_extents($self->label());
@@ -166,7 +169,7 @@ sub prepare {
     }
 
     return 1;
-}
+});
 
 sub mark {
     my $self = shift();
@@ -179,7 +182,7 @@ sub mark {
     if(!defined($self->{'LOWER'})) {
         $self->{'LOWER'} = $self->range->lower();
     }
-    return $self->per() * ($value - $self->{'LOWER'} || 0);
+    return $self->per * ($value - $self->{'LOWER'} || 0);
 }
 
 sub draw {
@@ -191,7 +194,7 @@ sub draw {
         $self->per($self->width / ($self->range->span - 1));
     }
 
-    return unless $self->visible;
+    return if $self->hidden;
 
     my $x = 0;
     my $y = 0;
@@ -307,6 +310,8 @@ sub format_value {
     }
     return $value;
 }
+
+__PACKAGE__->meta->make_immutable;
 
 no Moose;
 
@@ -473,9 +478,9 @@ CC_HORIZONTAL this method sets the height.  Otherwise sets the width.
 
 Draw this axis.
 
-=item I<visible>
+=item I<hidden>
 
-Set/Get this axis visibility flag.
+Set/Get this axis' hidden flag.
 
 =item I<width>
 

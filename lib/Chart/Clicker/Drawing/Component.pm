@@ -12,7 +12,7 @@ use Graphics::Color::RGB;
 has '+border' => (
     default => sub {
         Graphics::Primitive::Border->new(
-            color => Graphics::Color::RGB->new()
+            color => Graphics::Color::RGB->new( red => 0, green => 0, blue => 0)
         )
     }
 );
@@ -68,6 +68,8 @@ override('draw', sub {
         $context->stroke();
     }
 });
+
+__PACKAGE__->meta->make_immutable;
 
 no Moose;
 

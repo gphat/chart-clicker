@@ -96,6 +96,8 @@ sub span {
     return ($self->upper() - $self->lower()) + 1;
 }
 
+__PACKAGE__->meta->make_immutable;
+
 no Moose;
 
 1;

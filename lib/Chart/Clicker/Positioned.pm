@@ -34,7 +34,6 @@ sub is_bottom {
     return $self->position eq 'top';
 }
 
-
 no Moose;
 1;
 __END__

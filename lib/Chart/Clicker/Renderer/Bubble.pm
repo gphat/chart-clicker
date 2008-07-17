@@ -10,6 +10,8 @@ override('draw_point', sub {
     $self->shape->create_path($cr, $x , $y);
 });
 
+__PACKAGE__->meta->make_immutable;
+
 no Moose;
 
 1;

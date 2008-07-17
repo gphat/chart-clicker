@@ -4,6 +4,8 @@ use MooseX::AttributeHelpers;
 
 extends 'Graphics::Primitive::Container';
 
+__PACKAGE__->meta->make_immutable;
+
 no Moose;
 
 1;

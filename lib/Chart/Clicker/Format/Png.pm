@@ -17,6 +17,8 @@ override('write', sub {
     $click->cairo->get_target->write_to_png($file);
 });
 
+__PACKAGE__->meta->make_immutable;
+
 no Moose;
 
 1;

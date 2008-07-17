@@ -17,8 +17,6 @@ sub load {
     return $instance;
 }
 
-no Moose;
-
 1;
 __END__
 =head1 NAME

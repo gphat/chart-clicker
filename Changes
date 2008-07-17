@@ -20,6 +20,8 @@ Revision history for Perl extension Chart::Clicker.
 	  - Move out lots of generic functionality to new modules
 	  - Add context support
 	  - Ignore duplicate axes
+	  - Change Axis 'visible' attribute to 'hidden' to avoid clashing with
+	    Layout::Manager
 1.4.2
     - Packaging fixes.
 1.4.1

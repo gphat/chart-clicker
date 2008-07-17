@@ -12,7 +12,7 @@ has 'font' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Font',
     default => sub {
-        Graphics::Primitive::Font->new()
+        Graphics::Primitive::Font->new
     }
 );
 has 'item_padding' => (
@@ -29,6 +29,9 @@ has 'legend_items' => (
     isa => 'ArrayRef',
     default => sub { [ ] }
 );
+has '+padding' => ( default => sub {
+    Graphics::Primitive::Insets->new( top => 5, left => 5, right => 5, bottom => 5)
+});
 has 'tallest' => ( is => 'rw', isa => 'Num' );
 has 'widest' => ( is => 'rw', isa => 'Num' );
 
@@ -136,30 +139,25 @@ override('prepare', sub {
 
 override('draw', sub {
     my $self = shift();
-    my $clicker = shift();
+
+    super;
 
     my $width = $self->width();
     my $height = $self->height();
 
-    $self->SUPER::draw($clicker);
     my $cr = $self->clicker->cairo();
 
     $cr->select_font_face($self->font->face(), $self->font->slant(), $self->font->weight());
     $cr->set_font_size($self->font->size());
 
-    my $mx = 0;
-    my $my = 0;
-    if(defined($self->margins())) {
-        $mx = $self->margins->left();
-        $my = $self->margins->top();
+    my $x = 0;
+    my $y = 0;
+    # If we have padding, honor it.
+    if(defined($self->padding())) {
+        $x = $self->padding->left();
+        $y = $self->padding->top();
     }
 
-    # TODO honor padding/margin
-    my $x = 0;# + $self->insets->left() + $mx;
-    # This will break if there are no items...
-    # Start at the top + insets...
-    # TODO honor padding/margin
-    my $y = 0;# + $my + $self->insets->top();
     foreach my $item (@{ $self->legend_items() }) {
 
         my $extents = $cr->text_extents($item->label());
@@ -186,6 +184,8 @@ override('draw', sub {
         }
     }
 });
+
+__PACKAGE__->meta->make_immutable;
 
 no Moose;
 
