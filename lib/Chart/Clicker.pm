@@ -102,6 +102,21 @@ has '+height' => (
 has '+layout' => (
     default => sub { Layout::Manager::Compass->new() }
 );
+has 'legend' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Decoration::Legend',
+    default => sub {
+        Chart::Clicker::Decoration::Legend->new(
+            name => 'legend', orientation => 'horizontal'
+        );
+    }
+);
+has 'legend_position' => (
+    is => 'rw',
+    isa => 'Str',
+    default => sub { 's' }
+);
+
 
 # TODO Add these to context!
 # has 'markers' => (
@@ -160,11 +175,9 @@ sub add_to_contexts {
 override('prepare', sub {
     my $self = shift();
 
-    # TODO Move this
-    my $legend = Chart::Clicker::Decoration::Legend->new(
-        name => 'legend', orientation => 'horizontal'
-    );
-    $self->add_component($legend, 's');
+    if(defined($self->legend)) {
+        $self->add_component($self->legend, $self->legend_position);
+    }
 
     my $plot = $self->plot();
     $plot->add_component(Chart::Clicker::Decoration::Grid->new( name => 'grid' ));
@@ -260,6 +273,7 @@ override('draw', sub {
     my ($self) = @_;
 
     # super;
+    $self->do_layout($self);
 
     # This is here because we can't actually use G:P::Container's draw method,
     # so we have to implement it ourselves... working on somthing else now,
@@ -312,6 +326,7 @@ override('draw', sub {
         next unless defined($c);
 
         my $comp = $c->{component};
+        next unless defined($comp) && $comp->visible;
 
         $cairo->save;
         # $cairo->translate($comp->origin->x, $comp->origin->y);
@@ -441,7 +456,6 @@ my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series, $series2 ]);
 $cc->add_to_datasets($ds);
 
 $cc->prepare();
-$cc->do_layout($cc);
 $cc->draw();
 $cc->write('foo.png')
 
@@ -516,6 +530,15 @@ insets and borders.
 
 Get the height available in this container after taking away space for
 insets and borders.
+
+=item I<legend>
+
+The legend that will be used with this chart.
+
+=item I<legend_position>
+
+The position this legend will be added.  Should be one of north, south, east,
+west or center as required by L<Layout::Manager::Compass>.
 
 =item I<prepare>
 

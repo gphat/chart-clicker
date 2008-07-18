@@ -30,7 +30,6 @@ my $def = $cc->get_context('default');
 $def->range_axis->visible(0);
 
 $cc->prepare();
-$cc->do_layout($cc);
 
 cmp_ok($cc->plot->origin->x, '==', 0, 'plot origin x');
 cmp_ok($cc->plot->origin->y, '==', 0, 'plot origin y');

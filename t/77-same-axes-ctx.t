@@ -35,7 +35,6 @@ $ds2->context('sales');
 $cc->add_to_datasets($ds, $ds2);
 
 $cc->prepare();
-$cc->do_layout($cc);
 $cc->draw();
 
 my $lrange = $cc->get_context('default')->range_axis;
