@@ -12,7 +12,8 @@ use Graphics::Color::RGB;
 has '+border' => (
     default => sub {
         Graphics::Primitive::Border->new(
-            color => Graphics::Color::RGB->new( red => 0, green => 0, blue => 0)
+            color => Graphics::Color::RGB->new( red => 0, green => 0, blue => 0),
+            width => 1
         )
     }
 );
@@ -38,8 +39,6 @@ override('draw', sub {
         $context->paint();
     }
 
-    my $x = 0;
-    my $y = 0;
     my $bwidth = $width;
     my $bheight = $height;
 

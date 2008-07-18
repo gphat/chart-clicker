@@ -34,7 +34,7 @@ has 'show_range' => (
 has 'stroke' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Stroke',
-    default => sub { Graphics::Primitive::Stroke->new() }
+    default => sub { Graphics::Primitive::Stroke->new( ) }
 );
 
 override('draw', sub {
@@ -53,9 +53,9 @@ override('draw', sub {
 
     # Make the grid
     my $height = $self->height();
+    my $width = $self->width();
 
     if($self->show_domain()) {
-        my $per = $daxis->per();
         foreach my $val (@{ $daxis->tick_values() }) {
             $cr->move_to($daxis->mark($val), 0);
             $cr->rel_line_to(0, $height);
@@ -63,8 +63,6 @@ override('draw', sub {
     }
 
     if($self->show_range()) {
-        my $per = $raxis->per();
-        my $width = $self->width();
         foreach my $val (@{ $raxis->tick_values() }) {
             $cr->move_to(0, $height - $raxis->mark($val));
             $cr->rel_line_to($width, 0);

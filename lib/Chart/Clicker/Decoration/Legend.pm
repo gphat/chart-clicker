@@ -29,6 +29,9 @@ has 'legend_items' => (
     isa => 'ArrayRef',
     default => sub { [ ] }
 );
+has '+margins' => ( default => sub {
+    Graphics::Primitive::Insets->new( bottom => 3 )
+});
 has '+padding' => ( default => sub {
     Graphics::Primitive::Insets->new( top => 5, left => 5, right => 5, bottom => 5)
 });

@@ -43,18 +43,30 @@ coerce 'Chart::Clicker::Renderer'
     };
 
 
+has '+background_color' => (
+    default => sub {
+        Graphics::Color::RGB->new(
+            { red => 1, green => 1, blue => 1, alpha => 1 }
+        )
+    }
+);
+has '+border' => (
+    default => sub {
+        Graphics::Primitive::Border->new(
+            color => Graphics::Color::RGB->new( red => 0, green => 0, blue => 0)
+        )
+    }
+);
 has 'color_allocator' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::ColorAllocator',
     default => sub { Chart::Clicker::Drawing::ColorAllocator->new()  }
 );
-
 has 'cairo' => (
     is => 'rw',
     isa => 'Chart::Clicker::Cairo',
     clearer => 'clear_cairo'
 );
-
 has 'contexts' => (
     metaclass => 'Collection::Hash',
     is => 'rw',
@@ -67,7 +79,6 @@ has 'contexts' => (
         delete  => 'delete_context'
     }
 );
-
 has 'datasets' => (
     metaclass => 'Collection::Array',
     is => 'rw',
@@ -79,14 +90,15 @@ has 'datasets' => (
         'get' => 'get_dataset'
     }
 );
-
 has 'format' => (
     is      => 'rw',
     isa     => 'Chart::Clicker::Format',
     coerce  => 1,
     default => sub { Chart::Clicker::Format::Png->new() }
 );
-
+has '+height' => (
+    default => 300
+);
 has '+layout' => (
     default => sub { Layout::Manager::Compass->new() }
 );
@@ -124,7 +136,6 @@ has '+layout' => (
 #         'get' => 'get_marker_range_axis'
 #     }
 # );
-
 has 'plot' => (
     is => 'rw',
     isa => 'Chart::Clicker::Decoration::Plot',
@@ -135,26 +146,6 @@ has 'plot' => (
 
 has '+width' => (
     default => 500
-);
-
-has '+height' => (
-    default => 300
-);
-
-has '+border' => (
-    default => sub {
-        Graphics::Primitive::Border->new(
-            color => Graphics::Color::RGB->new
-        )
-    }
-);
-
-has '+background_color' => (
-    default => sub {
-        Graphics::Color::RGB->new(
-            { red => 1, green => 1, blue => 1, alpha => 1 }
-        )
-    }
 );
 
 sub add_to_contexts {
@@ -170,7 +161,9 @@ override('prepare', sub {
     my $self = shift();
 
     # TODO Move this
-    my $legend = Chart::Clicker::Decoration::Legend->new(orientation => 'horizontal');
+    my $legend = Chart::Clicker::Decoration::Legend->new(
+        name => 'legend', orientation => 'horizontal'
+    );
     $self->add_component($legend, 's');
 
     my $plot = $self->plot();
@@ -268,62 +261,67 @@ override('draw', sub {
 
     # super;
 
-    # TODO This should be elsewhere...
+    # This is here because we can't actually use G:P::Container's draw method,
+    # so we have to implement it ourselves... working on somthing else now,
+    # will come back to this...
     my $width = $self->width();
     my $height = $self->height();
 
-    my $context = $self->cairo();
+    my $cairo = $self->cairo;
 
     if(defined($self->background_color())) {
-        $context->set_source_rgba($self->background_color->as_array_with_alpha());
-        $context->rectangle(0, 0, $width, $height);
-        $context->paint();
+        $cairo->set_source_rgba($self->background_color->as_array_with_alpha());
+        $cairo->rectangle(0, 0, $width, $height);
+        $cairo->paint();
     }
 
-    my $x = 0;
-    my $y = 0;
-    my $bwidth = $width;
-    my $bheight = $height;
+    # Borders aren't working either
 
-    my $margins = $self->margins();
-    my ($mx, $my, $mw, $mh) = (0, 0, 0, 0);
-    if($margins) {
-        $mx = $margins->left();
-        $my = $margins->top();
-        $mw = $margins->right();
-        $mh = $margins->bottom();
-    }
+    # my $bwidth = $width;
+    # my $bheight = $height;
 
-    if(defined($self->border())) {
-        my $stroke = $self->border();
-        my $bswidth = $stroke->width();
-        $context->set_source_rgba($self->border->color->as_array_with_alpha());
-        $context->set_line_width($bswidth);
-        $context->set_line_cap($stroke->line_cap());
-        $context->set_line_join($stroke->line_join());
-        $context->new_path();
-        my $swhalf = $bswidth / 2;
-        $context->rectangle(
-            $mx + $swhalf, $my + $swhalf,
-            $width - $bswidth - $mw - $mx, $height - $bswidth - $mh - $my
-        );
-        $context->stroke();
-    }
-    # TODO END This should be elsewhere...
+    # Margins are broken here.
+    # my $margins = $self->margins();
+    # my ($mx, $my, $mw, $mh) = (0, 0, 0, 0);
+    # if($margins) {
+    #     $mx = $margins->left();
+    #     $my = $margins->top();
+    #     $mw = $margins->right();
+    #     $mh = $margins->bottom();
+    # }
+
+    # if(defined($self->border())) {
+    #     my $stroke = $self->border();
+    #     my $bswidth = $stroke->width();
+    #     $cairo->set_source_rgba($self->border->color->as_array_with_alpha());
+    #     $cairo->set_line_width($bswidth);
+    #     $cairo->set_line_cap($stroke->line_cap());
+    #     $cairo->set_line_join($stroke->line_join());
+    #     $cairo->new_path();
+    #     my $swhalf = $bswidth / 2;
+    #     $cairo->rectangle(
+    #         # $mx + $swhalf, $my + $swhalf,
+    #         # $width - $bswidth - $mw - $mx, $height - $bswidth - $mh - $my
+    #         $swhalf, $swhalf,
+    #         $width - $bswidth, $height - $bswidth
+    #     );
+    #     $cairo->stroke();
+    # }
 
     foreach my $c (@{ $self->components }) {
         next unless defined($c);
 
         my $comp = $c->{component};
 
-        $context->save;
-        $context->translate($comp->origin->x, $comp->origin->y);
-        $context->rectangle(0, 0, $comp->width, $comp->height);
-        $context->clip;
+        $cairo->save;
+        # $cairo->translate($comp->origin->x, $comp->origin->y);
+        $cairo->translate(int($comp->origin->x), int($comp->origin->y));
+        $cairo->rectangle(0, 0, $comp->width, $comp->height);
+        $cairo->clip;
 
         $comp->draw();
 
-        $context->restore();
+        $cairo->restore();
     }
 });
 
