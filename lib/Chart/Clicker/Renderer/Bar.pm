@@ -30,12 +30,11 @@ override('prepare', sub {
 
     $self->{KEYCOUNT} = 0;
     foreach my $ds (@{ $datasets }) {
-        if($ds->max_key_count() > $self->{KEYCOUNT}) {
-            $self->{KEYCOUNT} = $ds->max_key_count();
+        $self->{SCOUNT} += $ds->count;
+        if($ds->max_key_count > $self->{KEYCOUNT}) {
+            $self->{KEYCOUNT} = $ds->max_key_count;
         }
     }
-
-    $self->{SCOUNT} = 1;
 
     return 1;
 });
@@ -50,32 +49,26 @@ override('draw', sub {
     my $width = $self->width();
 
     my $dses = $clicker->get_datasets_for_context($self->context);
-    my $dscount = scalar(@{ $dses });
 
     my $padding = $self->bar_padding + $self->stroke->width;
 
-    if(!$self->{BWIDTH}) {
-        $self->{BWIDTH} = int(($width / $self->{KEYCOUNT}) / $dscount / 2);
-    }
+    my $bwidth = int(($width / $self->{KEYCOUNT}) / $self->{SCOUNT} );
+    my $hbwidth = $bwidth / 2;
 
-    if(!$self->{XOFFSET}) {
-        $self->{XOFFSET} = int((($self->{BWIDTH} + $padding) * $dscount) / 2);
-    }
-
+    my $offset = $self->{SCOUNT} - 1;
     foreach my $ds (@{ $dses }) {
         foreach my $series (@{ $ds->series }) {
-
             # TODO if undef...
             my $ctx = $clicker->get_context($ds->context);
             my $domain = $ctx->domain_axis;
             my $range = $ctx->range_axis;
 
-            my @vals = @{ $series->values() };
-            my @keys = @{ $series->keys() };
+            # Fudge amounts change mess up the calculation of bar widths, so
+            # we compensate for them here.
+            my $cbwidth = $bwidth - ($bwidth * $domain->fudge_amount);
+            my $chbwidth = int($cbwidth / 2);
 
             my $color = $clicker->color_allocator->next();
-
-            # Calculate the bar width we can use to fit all the datasets.
 
             my $base = $range->baseline();
             my $basey;
@@ -83,25 +76,32 @@ override('draw', sub {
                 $basey = $height - $range->mark($base);
             } else {
                 $basey = $height;
-                $base = $range->range->lower();
+                $base = $range->range->lower;
             }
 
-            my $sksent = $series->key_count() - 1;
-            for(0..$sksent) {
-                # Add the series_count times the width to so that each bar
-                # gets rendered with it's partner in the other series.
-                my $x = $domain->mark($keys[$_]) + ($self->{'SCOUNT'} * $self->{'BWIDTH'});
+            my @vals = @{ $series->values() };
+            my @keys = @{ $series->keys() };
+
+            my $sksent = $series->key_count;
+            for(0..($sksent - 1)) {
+                # I don't remember why all this math is here, but it works
+                # perfectly now. ;)
+                my $x = $domain->mark($keys[$_]) + (($self->{'SCOUNT'} * $cbwidth) / 2) - $chbwidth;
                 my $y = $range->mark($vals[$_]);
 
                 if($vals[$_] >= $base) {
                     $cr->rectangle(
-                        ($x + $padding) - $self->{'XOFFSET'}, $basey,
-                        - ($self->{'BWIDTH'} - $padding), -int($y - ($height - $basey)),
+                        $x + $chbwidth - int($offset * $cbwidth), $basey,
+                        -int($cbwidth), -int($y - ($height - $basey))
+                        # ($x + $padding) - $self->{'XOFFSET'}, $basey,
+                        # - ($self->{'BWIDTH'} - $padding), -int($y - ($height - $basey)),
                     );
                 } else {
                     $cr->rectangle(
-                        ($x + $padding) - $self->{'XOFFSET'}, $basey,
-                        - ($self->{'BWIDTH'} - $padding), int($height - $basey - $y),
+                        $x + $chbwidth - int($offset * $cbwidth), $basey,
+                        -int($cbwidth), int($height - $basey - $y)
+                        # ($x + $padding) - $self->{'XOFFSET'}, $basey,
+                        # - ($self->{'BWIDTH'} - $padding), int($height - $basey - $y),
                     );
                 }
             }
@@ -125,7 +125,7 @@ override('draw', sub {
             $cr->set_source_rgba($color->as_array_with_alpha());
             $cr->stroke();
 
-            $self->{'SCOUNT'}++;
+            $offset--;
         }
     }
 

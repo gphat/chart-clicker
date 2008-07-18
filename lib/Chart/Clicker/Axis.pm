@@ -4,9 +4,7 @@ use Moose;
 extends 'Chart::Clicker::Drawing::Component';
 with 'Chart::Clicker::Positioned';
 
-use MooseX::AttributeHelpers;
-use Moose::Util::TypeConstraints;
-
+# TODO Geometry::Primitive
 use constant PI => 4 * atan2 1, 1;
 
 use Chart::Clicker::Cairo;
@@ -16,6 +14,11 @@ use Graphics::Color::RGB;
 
 use Graphics::Primitive::Font;
 use Graphics::Primitive::Stroke;
+
+use Moose::Util::TypeConstraints;
+use MooseX::AttributeHelpers;
+
+type 'StrOrCodeRef' => where { (ref($_) eq "") || ref($_) eq 'CODE' };
 
 has 'baseline' => (
     is  => 'rw',
@@ -34,7 +37,7 @@ has 'font' => (
     isa => 'Graphics::Primitive::Font',
     default => sub { Graphics::Primitive::Font->new }
 );
-has 'format' => ( is => 'rw', isa => 'Str' );
+has 'format' => ( is => 'rw', isa => 'StrOrCodeRef' );
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
 has 'hidden' => ( is => 'rw', isa => 'Bool', default => 0 );
 has 'label' => ( is => 'rw', isa => 'Str' );
@@ -304,10 +307,15 @@ sub format_value {
     my $self = shift;
     my $value = shift;
 
-    if($self->format()) {
-        return sprintf($self->format(), $value);
+    my $format = $self->format;
+    if($format) {
+        if(ref($format) eq 'CODE') {
+            return &$format($value);
+        } else {
+            return sprintf($format, $value);
+        }
+
     }
-    return $value;
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -375,9 +383,17 @@ Set/Get the font used for the axis' labels.
 
 =item I<format>
 
-Set/Get the format to use for the axis values.  The format is applied to each
-value 'tick' via sprintf().  See sprintf()s perldoc for details!  This is
-useful for situations where the values end up with repeating decimals.
+Set/Get the format to use for the axis values.
+
+If the format is a string then format is applied to each value 'tick' via
+sprintf().  See sprintf()s perldoc for details!  This is useful for situations
+where the values end up with repeating decimals.
+
+If the format is a coderef then that coderef will be executed and the value
+passed to it as an argument.
+
+  my $nf = Number::Format->new;
+  $default->domain_axis->format(sub { return $nf->format_number(shift); });
 
 =item I<fudge_amount>
 
