@@ -96,6 +96,13 @@ has 'format' => (
     coerce  => 1,
     default => sub { Chart::Clicker::Format::Png->new() }
 );
+has 'grid' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Decoration::Grid',
+    default => sub {
+        Chart::Clicker::Decoration::Grid->new( name => 'grid' )
+    }
+);
 has '+height' => (
     default => 300
 );
@@ -175,12 +182,17 @@ sub add_to_contexts {
 override('prepare', sub {
     my $self = shift();
 
-    if(defined($self->legend)) {
+    # We check visible in these components because it's a waste to add them
+    # if we aren't showing them.
+
+    if($self->legend->visible) {
         $self->add_component($self->legend, $self->legend_position);
     }
 
     my $plot = $self->plot();
-    $plot->add_component(Chart::Clicker::Decoration::Grid->new( name => 'grid' ));
+    if($self->grid->visible) {
+        $plot->add_component($self->grid);
+    }
 
     # Sentinels to control the side that the axes will be drawn on.
     my $dcount = 0;
@@ -521,6 +533,10 @@ Png, Pdf, Ps or Svg.
 Returns an arrayref containing all datasets for the given context.  Used by
 renderers to get a list of datasets to chart.
 
+=item I<grid>
+
+Set/Get the Grid that will be displayed on this Cart
+
 =item I<inside_width>
 
 Get the width available in this container after taking away space for
@@ -533,7 +549,7 @@ insets and borders.
 
 =item I<legend>
 
-The legend that will be used with this chart.
+Set/Get the legend that will be used with this chart.
 
 =item I<legend_position>
 
