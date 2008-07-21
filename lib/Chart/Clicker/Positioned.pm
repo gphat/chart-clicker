@@ -31,7 +31,7 @@ sub is_top {
 sub is_bottom {
     my ($self) = @_;
 
-    return $self->position eq 'top';
+    return $self->position eq 'bottom';
 }
 
 no Moose;

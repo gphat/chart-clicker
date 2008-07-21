@@ -63,7 +63,6 @@ has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
 has 'tick_labels' => (
     is => 'rw',
     isa => 'ArrayRef',
-    default => sub { [] }
 );
 has 'tick_length' => ( is => 'rw', isa => 'Num', default => 3 );
 has 'tick_stroke' => (
@@ -107,7 +106,7 @@ override('prepare', sub {
     }
 
     if(!scalar(@{ $self->tick_values() })) {
-        $self->tick_values($self->range->divvy($self->ticks()));
+        $self->tick_values($self->range->divvy($self->ticks() + 1));
     }
 
     # Return now without setting a min height or width and allow 
@@ -123,28 +122,39 @@ override('prepare', sub {
         $font->face(), $font->slant(), $font->weight()
     );
 
+    my %biggest;
     # Determine all this once... much faster.
-    my $biggest = 0;
-    my $key;
-
-    if($self->is_vertical) {
-        $key = 'width';
-    } else {
-        $key = 'total_height';
-    }
     my @values = @{ $self->tick_values() };
     for(0..scalar(@values) - 1) {
-        my $val = $self->format_value($self->tick_labels->[$_] || $values[$_]);
+        my $val = $values[$_];
+        if(defined($self->tick_labels)) {
+            $val = $self->tick_labels->[$_];
+        } else {
+            $val = $self->format_value($val);
+        }
+        push(@{ $self->{LABELS} }, $val);
         my $ext = $cairo->text_extents($val);
         $ext->{total_height} = $ext->{height} - $ext->{y_bearing};
         $self->{'ticks_extents_cache'}->[$_] = $ext;
-        if($ext->{$key} > $biggest) {
-            $biggest = $ext->{$key};
+        if(!(defined($biggest{width}))
+            || ($ext->{'width'} > $biggest{'width'})) {
+            $biggest{'width'} = $ext->{'width'};
+        }
+        if(!defined($biggest{'height'})
+            || ($ext->{'total_height'} > $biggest{'height'})) {
+            $biggest{'height'} = $ext->{'total_height'};
         }
     }
 
+    $self->{'BIGGEST_TICKS'} = \%biggest;
+
+    my $big = $biggest{'height'};
+    if($self->is_vertical) {
+        $big = $biggest{'width'};
+    }
+
     if($self->show_ticks()) {
-        $biggest += $self->tick_length();
+        $big += $self->tick_length();
     }
 
     if ($self->label()) {
@@ -158,16 +168,16 @@ override('prepare', sub {
         my $label_width = $self->label()
             ? $self->{'label_extents_cache'}->{'total_height'}
             : 0;
-        $self->minimum_width($biggest + $label_width + 4);
+        $self->minimum_width($big + $label_width + 4);
         # TODO Wrong, need tallest label + tick length + outside
-        $self->minimum_height($self->outside_height + $biggest);
+        $self->minimum_height($self->outside_height + $big);
     } else {
         my $label_height = $self->label()
             ? $self->{'label_extents_cache'}->{'total_height'}
             : 0;
-        $self->minimum_height($biggest + $label_height + 4);
+        $self->minimum_height($big + $label_height);
         # TODO Wrong, need widest label + tick length + outside
-        $self->minimum_width($biggest + $self->outside_width);
+        $self->minimum_width($big + $self->outside_width);
     }
 
     return 1;
@@ -270,7 +280,7 @@ sub draw {
         # Draw a line for our axis
         $cr->line_to($x + $width, $y);
 
-        my @values = @{ $self->tick_values() };
+        my @values = @{ $self->tick_values };
         # Draw a tick for each value.
         for(0..scalar(@values) - 1) {
             my $val = $values[$_];
@@ -283,16 +293,16 @@ sub draw {
                 $cr->rel_move_to(-($ext->{'width'} / 1.8), -2);
             } else {
                 $cr->line_to($ix, $y + $tick_length);
-                $cr->rel_move_to(-($ext->{'width'} / 2), $ext->{'height'} + 2);
+                $cr->rel_move_to(-($ext->{'width'} / 2), $self->{'BIGGEST_TICKS'}->{'height'} - 5);
             }
-            $cr->show_text($self->format_value($self->tick_labels->[$_] || $val));
+            $cr->show_text($self->{LABELS}->[$_]);
         }
 
         # Draw the label
         if($self->label()) {
             my $ext = $self->{'label_extents_cache'};
             if ($self->is_bottom) {
-                $cr->move_to(($width - $ext->{'width'}) / 2, $height);
+                $cr->move_to(($width - $ext->{'width'}) / 2, $height - 5);
             } else {
                 $cr->move_to(($width - $ext->{'width'}) / 2, $ext->{'height'} + 2);
             }
