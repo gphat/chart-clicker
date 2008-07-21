@@ -52,10 +52,10 @@ override('draw', sub {
 
     my $padding = $self->bar_padding + $self->stroke->width;
 
-    my $bwidth = int(($width / $self->{KEYCOUNT}) / $self->{SCOUNT} );
-    my $hbwidth = $bwidth / 2;
+    my $bwidth = int(($width / $self->{KEYCOUNT})) - $self->stroke->width;
+    my $hbwidth = int($bwidth / 2);
 
-    my $offset = $self->{SCOUNT} - 1;
+    my $offset = 1;
     foreach my $ds (@{ $dses }) {
         foreach my $series (@{ $ds->series }) {
             # TODO if undef...
@@ -65,7 +65,7 @@ override('draw', sub {
 
             # Fudge amounts change mess up the calculation of bar widths, so
             # we compensate for them here.
-            my $cbwidth = $bwidth - ($bwidth * $domain->fudge_amount);
+            my $cbwidth = ($bwidth - ($bwidth * $domain->fudge_amount)) / $self->{SCOUNT};
             my $chbwidth = int($cbwidth / 2);
 
             my $color = $clicker->color_allocator->next();
@@ -86,22 +86,25 @@ override('draw', sub {
             for(0..($sksent - 1)) {
                 # I don't remember why all this math is here, but it works
                 # perfectly now. ;)
-                my $x = $domain->mark($keys[$_]) + (($self->{'SCOUNT'} * $cbwidth) / 2) - $chbwidth;
+                my $x = $domain->mark($keys[$_]);
                 my $y = $range->mark($vals[$_]);
 
                 if($vals[$_] >= $base) {
-                    $cr->rectangle(
-                        $x + $chbwidth - int($offset * $cbwidth), $basey,
-                        -int($cbwidth), -int($y - ($height - $basey))
-                        # ($x + $padding) - $self->{'XOFFSET'}, $basey,
-                        # - ($self->{'BWIDTH'} - $padding), -int($y - ($height - $basey)),
-                    );
+                    if($self->{SCOUNT} == 1) {
+                        $cr->rectangle(
+                            $x + $chbwidth , $basey,
+                            -int($cbwidth), -int($y - ($height - $basey))
+                        );
+                    } else {
+                        $cr->rectangle(
+                            $x - $hbwidth + ($offset * $cbwidth), $basey,
+                            -int($cbwidth), -int($y - ($height - $basey))
+                        );
+                    }
                 } else {
                     $cr->rectangle(
-                        $x + $chbwidth - int($offset * $cbwidth), $basey,
+                        $x - $hbwidth + ($offset * $cbwidth), $basey,
                         -int($cbwidth), int($height - $basey - $y)
-                        # ($x + $padding) - $self->{'XOFFSET'}, $basey,
-                        # - ($self->{'BWIDTH'} - $padding), int($height - $basey - $y),
                     );
                 }
             }
@@ -125,7 +128,7 @@ override('draw', sub {
             $cr->set_source_rgba($color->as_array_with_alpha());
             $cr->stroke();
 
-            $offset--;
+            $offset++;
         }
     }
 
