@@ -4,16 +4,17 @@ use Moose;
 extends 'Chart::Clicker::Renderer';
 
 has '+additive' => ( default => 1 );
-has 'opacity' => (
-    is => 'rw',
-    isa => 'Num',
-    default => 0
-);
 has 'bar_padding' => (
     is => 'rw',
     isa => 'Int',
     default => 0
 );
+has 'opacity' => (
+    is => 'rw',
+    isa => 'Num',
+    default => 0
+);
+has '+orientation' => ( default => sub { 'vertical'} );
 has 'stroke' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Stroke',
@@ -82,11 +83,11 @@ override('draw', sub {
         }
 
         # Mark the x, since it's the same for each Y value
-        my $x = $domain->mark($keys[$i]);
+        my $x = $domain->mark($width, $keys[$i],);
         my $accum = 0;
 
         for(my $j = 0; $j < scalar(@values); $j++) {
-            my $y = $range->mark($values[$j]);
+            my $y = $range->mark($height, $values[$j]);
 
             $cr->rectangle(
                 $x - $self->{HBWIDTH}, $height - $y - $accum,

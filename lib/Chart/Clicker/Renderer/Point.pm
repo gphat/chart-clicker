@@ -11,8 +11,8 @@ has 'shape' => (
     default => sub {
         Chart::Clicker::Shape::Arc->new({
            radius => 3,
-           angle1 => 0,
-           angle2 => 360
+           angle_start => 0,
+           angle_end => 360
         });
     }
 );
@@ -22,6 +22,9 @@ override('draw', sub {
 
     my $clicker = $self->clicker;
     my $cr = $clicker->cairo;
+
+    my $width = $self->width;
+    my $height = $self->height;
 
     my $dses = $clicker->get_datasets_for_context($self->context);
     foreach my $ds (@{ $dses }) {
@@ -34,15 +37,13 @@ override('draw', sub {
 
             my $min = $range->range->lower();
 
-            my $xper = $domain->per();
-            my $yper = $range->per();
             my $height = $self->height();
 
             my @vals = @{ $series->values() };
             my @keys = @{ $series->keys() };
             for(0..($series->key_count() - 1)) {
-                my $x = $domain->mark($keys[$_]);
-                my $y = $height - $range->mark($vals[$_]);
+                my $x = $domain->mark($width, $keys[$_]);
+                my $y = $height - $range->mark($height, $vals[$_]);
 
                 $cr->move_to($x, $y);
                 $self->draw_point($cr, $x, $y, $series, $_);

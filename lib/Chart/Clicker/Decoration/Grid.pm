@@ -48,26 +48,13 @@ override('draw', sub {
     $cr->set_source_rgba($self->background_color->as_array_with_alpha());
     $cr->paint();
 
-    my $daxis = $clicker->get_context('default')->domain_axis;
-    my $raxis = $clicker->get_context('default')->range_axis;
+    my $dflt = $clicker->get_context('default');
+    my $daxis = $dflt->domain_axis;
+    my $raxis = $dflt->range_axis;
 
-    # Make the grid
-    my $height = $self->height();
-    my $width = $self->width();
+    $self->draw_lines($cr, $daxis) if $self->show_domain;
 
-    if($self->show_domain()) {
-        foreach my $val (@{ $daxis->tick_values() }) {
-            $cr->move_to($daxis->mark($val), 0);
-            $cr->rel_line_to(0, $height);
-        }
-    }
-
-    if($self->show_range()) {
-        foreach my $val (@{ $raxis->tick_values() }) {
-            $cr->move_to(0, $height - $raxis->mark($val));
-            $cr->rel_line_to($width, 0);
-        }
-    }
+    $self->draw_lines($cr, $raxis) if $self->show_range;
 
     $cr->set_source_rgba($self->color->as_array_with_alpha());
     my $stroke = $self->stroke();
@@ -76,6 +63,27 @@ override('draw', sub {
     $cr->set_line_join($stroke->line_join());
     $cr->stroke();
 });
+
+sub draw_lines {
+    my ($self, $cr, $axis) = @_;
+
+    my $height = $self->height;
+    my $width = $self->width;
+
+    if($axis->is_horizontal) {
+
+        foreach my $val (@{ $axis->tick_values() }) {
+            $cr->move_to($axis->mark($width, $val), 0);
+            $cr->rel_line_to(0, $height);
+        }
+    } else {
+
+        foreach my $val (@{ $axis->tick_values() }) {
+            $cr->move_to(0, $height - $axis->mark($height, $val));
+            $cr->rel_line_to($width, 0);
+        }
+    }
+}
 
 __PACKAGE__->meta->make_immutable;
 

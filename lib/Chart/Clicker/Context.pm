@@ -19,6 +19,11 @@ has 'domain_axis' => (
         )
     }
 );
+has 'flip_axes' => (
+    is => 'rw',
+    isa => 'Bool',
+    default => sub { 0 }
+);
 has 'name' => (
     is => 'rw',
     isa => 'Str',

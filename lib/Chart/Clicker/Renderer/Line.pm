@@ -25,7 +25,8 @@ override('draw', sub {
     my $clicker = $self->clicker;
     my $cr = $clicker->cairo;
 
-    my $height = $self->height();
+    my $width = $self->width;
+    my $height = $self->height;
 
     my $dses = $clicker->get_datasets_for_context($self->context);
     foreach my $ds (@{ $dses }) {
@@ -51,8 +52,8 @@ override('draw', sub {
             my $kcount = $series->key_count() - 1;
 
             for(0..$kcount) {
-                my $x = $domain->mark($keys[$_]);
-                my $y = $height - $range->mark($vals[$_]);
+                my $x = $domain->mark($width, $keys[$_]);
+                my $y = $height - $range->mark($height, $vals[$_]);
                 if($_ == 0) {
                     $cr->move_to($x, $y);
                 } else {

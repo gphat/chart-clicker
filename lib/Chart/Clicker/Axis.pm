@@ -44,7 +44,6 @@ has 'label' => ( is => 'rw', isa => 'Str' );
 has '+orientation' => (
     required => 1
 );
-has 'per' => ( is => 'rw', isa => 'Num' );
 has '+position' => (
     required => 1
 );
@@ -165,14 +164,14 @@ override('prepare', sub {
 
     if($self->is_vertical) {
         # The label will be rotated, so use height here too.
-        my $label_width = $self->label()
+        my $label_width = $self->label
             ? $self->{'label_extents_cache'}->{'total_height'}
             : 0;
-        $self->minimum_width($big + $label_width + 4);
+        $self->minimum_width($big + $label_width);
         # TODO Wrong, need tallest label + tick length + outside
         $self->minimum_height($self->outside_height + $big);
     } else {
-        my $label_height = $self->label()
+        my $label_height = $self->label
             ? $self->{'label_extents_cache'}->{'total_height'}
             : 0;
         $self->minimum_height($big + $label_height);
@@ -184,27 +183,24 @@ override('prepare', sub {
 });
 
 sub mark {
-    my $self = shift();
-    my $value = shift();
-
-    # TODO Maybe cache repeat values?
+    my ($self, $span, $value) = @_;
 
     # 'caching' this here speeds things up.  Calling after changing the
     # range would result in a messed up chart anyway...
     if(!defined($self->{'LOWER'})) {
-        $self->{'LOWER'} = $self->range->lower();
+        $self->{'LOWER'} = $self->range->lower;
     }
-    return $self->per * ($value - $self->{'LOWER'} || 0);
+    return ($span / ($self->range->span - 1)) * ($value - $self->{'LOWER'} || 0);
 }
 
-sub draw {
+override('draw', sub {
     my $self = shift();
 
-    if($self->is_vertical) {
-        $self->per($self->height / ($self->range->span - 1));
-    } else {
-        $self->per($self->width / ($self->range->span - 1));
-    }
+    # if($self->is_vertical) {
+    #     $self->per($self->height / ($self->range->span - 1));
+    # } else {
+    #     $self->per($self->width / ($self->range->span - 1));
+    # }
 
     return if $self->hidden;
 
@@ -238,7 +234,6 @@ sub draw {
     );
 
     my $tick_length = $self->tick_length();
-    my $per = $self->per();
 
     my $lower = $self->range->lower();
 
@@ -251,7 +246,7 @@ sub draw {
         my @values = @{ $self->tick_values() };
         for(0..scalar(@values) - 1) {
             my $val = $values[$_];
-            my $iy = $y + $height - (($val - $lower) * $per);
+            my $iy = $height - $self->mark($height, $val);
             my $ext = $self->{'ticks_extents_cache'}->[$_];
             $cr->move_to($x, $iy);
             if($self->is_left) {
@@ -286,7 +281,7 @@ sub draw {
             my $val = $values[$_];
             # Grab the extent from the cache.
             my $ext = $self->{'ticks_extents_cache'}->[$_];
-            my $ix = $x + ($val - $lower) * $per;
+            my $ix = $self->mark($width, $val);
             $cr->move_to($ix, $y);
             if($self->is_top) {
                 $cr->line_to($ix, $y - $tick_length);
@@ -311,7 +306,7 @@ sub draw {
     }
 
     $cr->stroke();
-}
+});
 
 sub format_value {
     my $self = shift;
@@ -427,12 +422,6 @@ Set/Get the label of the axis.
 
 Set/Get the orientation of this axis.  See L<Chart::Clicker::Drawing>.
 
-=item I<per>
-
-Set/Get the 'per' value for the axis.  This is how many physical pixels a unit
-on the axis represents.  If the axis represents a range of 0-100 and the axis
-is 200 pixels high then the per value will be 2.
-
 =item I<position>
 
 Set/Get the position of the axis on the chart.
@@ -488,7 +477,7 @@ will have no effect if you specify tick_values.
 
 =item I<mark>
 
-Given a value, returns it's pixel position on this Axis.
+Given a span and a value, returns it's pixel position on this Axis.
 
 =item I<format_value>
 
@@ -525,3 +514,4 @@ perl(1)
 
 You can redistribute and/or modify this code under the same terms as Perl
 itself.
+

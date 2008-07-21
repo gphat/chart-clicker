@@ -27,7 +27,7 @@ use Cairo;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '1.99_02';
+our $VERSION = '1.99_03';
 
 # TODO Global coercions?
 coerce 'Chart::Clicker::Format'
@@ -199,8 +199,8 @@ override('prepare', sub {
     my $rcount = 0;
     # Hashes of axes & renderers we've already seen, as we don't want to add
     # them again...
-    my %daxes;
-    my %raxes;
+    my %xaxes;
+    my %yaxes;
     my %rends;
 
     my $dflt_ctx = $self->get_context('default');
@@ -221,45 +221,52 @@ override('prepare', sub {
             $ctx = $dflt_ctx;
         }
 
-        my $daxis = $ctx->domain_axis;
-        unless(exists($daxes{refaddr($daxis)})) {
-            $daxis->range->combine($ds->domain());
+        # Find our x axis and add it.
+        my $xaxis = $ctx->flip_axes ? $ctx->range_axis : $ctx->domain_axis;
+        unless(exists($xaxes{refaddr($xaxis)})) {
+            $xaxis->range->combine($ctx->flip_axes ? $ds->range : $ds->domain());
 
-            $daxis->position('bottom');
+            $xaxis->orientation('horizontal');
+            $xaxis->position('bottom');
             if($dcount % 2) {
-                $daxis->position('top')
+                $xaxis->position('top')
             }
-            $self->add_component($daxis, $daxis->is_top ? 'n' : 's');
-            $daxes{refaddr($daxis)} = 1;
+            $self->add_component($xaxis, $xaxis->is_top ? 'n' : 's');
+            $xaxes{refaddr($xaxis)} = 1;
             $dcount++;
         }
+
+        # Find our y axis and add it.
+        my $yaxis = $ctx->flip_axes ? $ctx->domain_axis : $ctx->range_axis;
+        unless(exists($yaxes{refaddr($yaxis)})) {
+            $yaxis->range->combine($ctx->flip_axes ? $ds->domain : $ds->range());
+
+            $yaxis->orientation('vertical');
+            $yaxis->position('left');
+            if($rcount % 2) {
+                $yaxis->position('right');
+            }
+            $self->add_component($yaxis, $yaxis->is_left ? 'w' : 'e');
+            $rcount++;
+            $yaxes{refaddr($yaxis)} = 1;
+        }
+
+        # my $raxis = $ctx->range_axis;
+        # if(defined($raxis)) {
+            # TODO Now a renderer gets it's entire list in a single draw or
+            # prepare pass.  This could be delegated down to the renderer's
+            # prepare.  No more additive renderers.
+            # if($rend->additive()) {
+            #     $raxis->range->combine($ds->combined_range());
+            # } else {
+                # $raxis->range->combine($ds->range());
+            # }
+        # }
 
         my $rend = $ctx->renderer();
         unless(exists($rends{$ctx->name})) {
             $rend->context($ctx->name);
             $plot->add_component($rend);
-        }
-
-        my $raxis = $ctx->range_axis;
-        if(defined($raxis)) {
-            # TODO Now a renderer gets it's entire list in a single draw or
-            # prepare pass.  This could be delegated down to the renderer's
-            # prepare.  No more additive renderers.
-            if($rend->additive()) {
-                $raxis->range->combine($ds->combined_range());
-            } else {
-                $raxis->range->combine($ds->range());
-            }
-        }
-
-        unless(exists($raxes{refaddr($raxis)})) {
-            $raxis->position('left');
-            if($rcount % 2) {
-                $raxis->position('right');
-            }
-            $self->add_component($raxis, $raxis->is_left ? 'w' : 'e');
-            $rcount++;
-            $raxes{refaddr($raxis)} = 1;
         }
 
         $count++;

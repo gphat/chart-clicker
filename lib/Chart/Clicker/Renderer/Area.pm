@@ -54,9 +54,9 @@ override('draw', sub {
 
             for(0..($series->key_count() - 1)) {
 
-                my $x = $domain->mark($keys[$_]);
+                my $x = $domain->mark($width, $keys[$_]);
 
-                my $y = $height - $range->mark($vals[$_]);
+                my $y = $height - $range->mark($height, $vals[$_]);
                 if($_ == 0) {
                     $startx = $x;
                     $cr->move_to($x, $y);
