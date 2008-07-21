@@ -28,7 +28,6 @@ $cc->add_to_datasets($ds);
 
 $cc->prepare();
 $cc->draw();
-$cc->write('/Users/gphat/foo.png');
-# my $data = $cc->data();
-# ok(defined($data), 'data');
+my $data = $cc->data();
+ok(defined($data), 'data');
 

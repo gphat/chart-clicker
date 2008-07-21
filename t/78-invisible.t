@@ -27,7 +27,7 @@ my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series, $series2 ]);
 $cc->add_to_datasets($ds);
 
 my $def = $cc->get_context('default');
-$def->range_axis->visible(0);
+$def->range_axis->hidden(0);
 
 $cc->prepare();
 
