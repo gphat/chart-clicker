@@ -60,7 +60,8 @@ override('draw', sub {
     my $strokewidth = $self->stroke->width();
     $padding += $strokewidth;
 
-    $self->{BWIDTH} = int($width / ($self->{KEYCOUNT}));
+    $self->{BWIDTH} = int(($width - ($width * $domain->fudge_amount)
+        - ($padding / 2 * $self->{KEYCOUNT})) / ($self->{KEYCOUNT}));
     $self->{HBWIDTH} = $self->{BWIDTH} / 2;
 
     # Fetch all the colors we'll need.  Since we build each vertical bar from
@@ -143,14 +144,14 @@ Chart::Clicker::Renderer::StackedBar renders a dataset as stacked bars.
 
 =over 4
 
-=item I<opacity>
-
-If true this value will be used when setting the opacity of the bar's fill.
-
-=item I<padding>
+=item I<bar_padding>
 
 How much padding to put around a bar.  A padding of 4 will result in 2 pixels
 on each side.
+
+=item I<opacity>
+
+If true this value will be used when setting the opacity of the bar's fill.
 
 =item I<stroke>
 
