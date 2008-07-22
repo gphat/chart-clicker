@@ -37,7 +37,7 @@ has 'stroke' => (
     default => sub { Graphics::Primitive::Stroke->new( ) }
 );
 
-override('draw', sub {
+sub draw {
     my $self = shift();
 
     return unless ($self->show_domain || $self->show_range);
@@ -62,7 +62,7 @@ override('draw', sub {
     $cr->set_line_cap($stroke->line_cap());
     $cr->set_line_join($stroke->line_join());
     $cr->stroke();
-});
+}
 
 sub draw_lines {
     my ($self, $cr, $axis) = @_;

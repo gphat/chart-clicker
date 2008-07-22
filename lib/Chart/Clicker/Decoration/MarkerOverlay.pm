@@ -4,7 +4,7 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
-override('draw', sub {
+sub draw {
     my $self = shift();
 
     my $cr = $self->clicker->cairo();
@@ -74,7 +74,7 @@ override('draw', sub {
             }
         }
     }
-});
+}
 
 __PACKAGE__->meta->make_immutable;
 

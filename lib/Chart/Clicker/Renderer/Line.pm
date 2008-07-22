@@ -19,7 +19,7 @@ has 'stroke' => (
     default => sub { Graphics::Primitive::Stroke->new() }
 );
 
-override('draw', sub {
+sub draw {
     my $self = shift();
 
     my $clicker = $self->clicker;
@@ -83,7 +83,7 @@ override('draw', sub {
     }
 
     return 1;
-});
+}
 
 __PACKAGE__->meta->make_immutable;
 

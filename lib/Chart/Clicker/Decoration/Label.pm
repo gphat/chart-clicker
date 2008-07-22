@@ -72,7 +72,7 @@ override('prepare', sub {
     return 1;
 });
 
-override('draw', sub {
+sub draw {
     my $self = shift();
 
     super;
@@ -108,7 +108,7 @@ override('draw', sub {
         $cr->show_text($self->text());
         $cr->restore();
     }
-});
+}
 
 __PACKAGE__->meta->make_immutable;
 

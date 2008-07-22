@@ -193,7 +193,7 @@ sub mark {
     return ($span / ($self->range->span - 1)) * ($value - $self->{'LOWER'} || 0);
 }
 
-override('draw', sub {
+sub draw {
     my $self = shift();
 
     # if($self->is_vertical) {
@@ -306,7 +306,7 @@ override('draw', sub {
     }
 
     $cr->stroke();
-});
+}
 
 sub format_value {
     my $self = shift;

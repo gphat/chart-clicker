@@ -288,7 +288,7 @@ override('prepare', sub {
     return 1;
 });
 
-override('draw', sub {
+sub draw {
     my ($self) = @_;
 
     # super;
@@ -357,7 +357,7 @@ override('draw', sub {
 
         $cairo->restore();
     }
-});
+}
 
 sub get_datasets_for_context {
     my ($self, $name) = @_;

@@ -25,7 +25,7 @@ has '+origin' => (
     default => sub { Geometry::Primitive::Point->new(x => 0, y => 0) }
 );
 
-override('draw', sub {
+sub draw {
     my $self = shift();
 
     my $width = $self->width();
@@ -66,7 +66,7 @@ override('draw', sub {
         );
         $context->stroke();
     }
-});
+};
 
 __PACKAGE__->meta->make_immutable;
 

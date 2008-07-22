@@ -28,7 +28,7 @@ override('prepare', sub {
     return 1;
 });
 
-override('draw', sub {
+sub draw {
     my $self = shift();
     my $clicker = shift();
 
@@ -52,7 +52,7 @@ override('draw', sub {
 
     $cr->set_source_rgba($self->glare_color->as_array_with_alpha());
     $cr->fill();
-});
+};
 
 __PACKAGE__->meta->make_immutable;
 
