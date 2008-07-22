@@ -14,7 +14,6 @@ has 'opacity' => (
     isa => 'Num',
     default => 0
 );
-has '+orientation' => ( default => sub { 'vertical'} );
 has 'stroke' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Stroke',

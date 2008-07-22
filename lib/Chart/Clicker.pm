@@ -222,9 +222,9 @@ override('prepare', sub {
         }
 
         # Find our x axis and add it.
-        my $xaxis = $ctx->flip_axes ? $ctx->range_axis : $ctx->domain_axis;
+        my $xaxis = $ctx->domain_axis;
         unless(exists($xaxes{refaddr($xaxis)})) {
-            $xaxis->range->combine($ctx->flip_axes ? $ds->range : $ds->domain());
+            $xaxis->range->combine($ds->domain());
 
             $xaxis->orientation('horizontal');
             $xaxis->position('bottom');
@@ -237,9 +237,9 @@ override('prepare', sub {
         }
 
         # Find our y axis and add it.
-        my $yaxis = $ctx->flip_axes ? $ctx->domain_axis : $ctx->range_axis;
+        my $yaxis = $ctx->range_axis;
         unless(exists($yaxes{refaddr($yaxis)})) {
-            $yaxis->range->combine($ctx->flip_axes ? $ds->domain : $ds->range());
+            $yaxis->range->combine($ds->range());
 
             $yaxis->orientation('vertical');
             $yaxis->position('left');
