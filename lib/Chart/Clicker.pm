@@ -3,7 +3,7 @@ use Moose;
 use Moose::Util::TypeConstraints;
 use MooseX::AttributeHelpers;
 
-extends 'Chart::Clicker::Drawing::Container';
+extends 'Chart::Clicker::Container';
 
 use Carp;
 
@@ -53,7 +53,8 @@ has '+background_color' => (
 has '+border' => (
     default => sub {
         Graphics::Primitive::Border->new(
-            color => Graphics::Color::RGB->new( red => 0, green => 0, blue => 0)
+            color => Graphics::Color::RGB->new( red => 0, green => 0, blue => 0),
+            width => 1
         )
     }
 );
@@ -106,15 +107,16 @@ has 'grid' => (
 has '+height' => (
     default => 300
 );
-has '+layout' => (
-    default => sub { Layout::Manager::Compass->new() }
-);
+# has '+layout' => (
+#     default => sub { Layout::Manager::Compass->new() }
+# );
 has 'legend' => (
     is => 'rw',
     isa => 'Chart::Clicker::Decoration::Legend',
     default => sub {
         Chart::Clicker::Decoration::Legend->new(
-            name => 'legend', orientation => 'horizontal'
+            name => 'legend',
+            background_color => Graphics::Color::RGB->new(red => 0, green => 0, blue => 1)
         );
     }
 );
@@ -123,7 +125,11 @@ has 'legend_position' => (
     isa => 'Str',
     default => sub { 's' }
 );
-
+has '+padding' => (
+    default => sub {
+        Graphics::Primitive::Insets->new( top => 5, bottom => 5, right => 5, left => 5)
+    }
+);
 
 # TODO Add these to context!
 # has 'markers' => (
@@ -162,7 +168,7 @@ has 'plot' => (
     is => 'rw',
     isa => 'Chart::Clicker::Decoration::Plot',
     default => sub {
-        Chart::Clicker::Decoration::Plot->new()
+        Chart::Clicker::Decoration::Plot->new
     }
 );
 
@@ -180,18 +186,18 @@ sub add_to_contexts {
 }
 
 override('prepare', sub {
-    my $self = shift();
+    my ($self) = @_;
 
     # We check visible in these components because it's a waste to add them
     # if we aren't showing them.
-
     if($self->legend->visible) {
         $self->add_component($self->legend, $self->legend_position);
     }
 
-    my $plot = $self->plot();
+    my $plot = $self->plot;
+
     if($self->grid->visible) {
-        $plot->add_component($self->grid);
+        $plot->render_area->add_component($self->grid, 'c');
     }
 
     # Sentinels to control the side that the axes will be drawn on.
@@ -213,7 +219,7 @@ override('prepare', sub {
             die("Dataset $count is empty.");
         }
 
-        $ds->prepare();
+        $ds->prepare;
 
         my $ctx = $self->get_context($ds->context);
 
@@ -231,7 +237,7 @@ override('prepare', sub {
             if($dcount % 2) {
                 $xaxis->position('top')
             }
-            $self->add_component($xaxis, $xaxis->is_top ? 'n' : 's');
+            $plot->add_component($xaxis, $xaxis->is_top ? 'n' : 's');
             $xaxes{refaddr($xaxis)} = 1;
             $dcount++;
         }
@@ -246,7 +252,7 @@ override('prepare', sub {
             if($rcount % 2) {
                 $yaxis->position('right');
             }
-            $self->add_component($yaxis, $yaxis->is_left ? 'w' : 'e');
+            $plot->add_component($yaxis, $yaxis->is_left ? 'w' : 'e');
             $rcount++;
             $yaxes{refaddr($yaxis)} = 1;
         }
@@ -266,7 +272,7 @@ override('prepare', sub {
         my $rend = $ctx->renderer();
         unless(exists($rends{$ctx->name})) {
             $rend->context($ctx->name);
-            $plot->add_component($rend);
+            $plot->render_area->add_component($rend, 'c');
         }
 
         $count++;
@@ -288,7 +294,7 @@ override('prepare', sub {
     return 1;
 });
 
-sub draw {
+sub dontdraw {
     my ($self) = @_;
 
     # super;

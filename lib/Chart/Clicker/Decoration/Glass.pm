@@ -28,7 +28,7 @@ override('prepare', sub {
     return 1;
 });
 
-sub draw {
+sub dontdraw {
     my $self = shift();
     my $clicker = shift();
 

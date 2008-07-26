@@ -17,7 +17,7 @@ has 'shape' => (
     }
 );
 
-sub draw {
+sub dontdraw {
     my $self = shift();
 
     my $clicker = $self->clicker;

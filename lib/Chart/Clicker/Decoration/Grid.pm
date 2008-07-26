@@ -37,7 +37,7 @@ has 'stroke' => (
     default => sub { Graphics::Primitive::Stroke->new( ) }
 );
 
-sub draw {
+sub dontdraw {
     my $self = shift();
 
     return unless ($self->show_domain || $self->show_range);

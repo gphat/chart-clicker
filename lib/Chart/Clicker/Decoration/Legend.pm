@@ -1,13 +1,23 @@
 package Chart::Clicker::Decoration::Legend;
 use Moose;
 
-extends 'Chart::Clicker::Decoration';
+extends 'Chart::Clicker::Container';
+with 'Graphics::Primitive::Oriented';
 
 use Chart::Clicker::Decoration::LegendItem;
 
 use Graphics::Primitive::Font;
 use Graphics::Primitive::Insets;
+use Graphics::Primitive::TextBox;
 
+has '+border' => (
+    default => sub {
+        Graphics::Primitive::Border->new(
+            color => Graphics::Color::RGB->new( red => 0, green => 0, blue => 0),
+            width => 2
+        )
+    }
+);
 has 'font' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Font',
@@ -20,173 +30,118 @@ has 'item_padding' => (
     isa => 'Graphics::Primitive::Insets',
     default => sub {
         Graphics::Primitive::Insets->new({
-            top => 3, left => 3, bottom => 0, right => 0
+            top => 3, left => 3, bottom => 3, right => 0
         })
     }
 );
-has 'legend_items' => (
-    is => 'rw',
-    isa => 'ArrayRef',
-    default => sub { [ ] }
+has '+layout_manager' => (
+    default => sub { Layout::Manager::Compass->new }
 );
-has '+margins' => ( default => sub {
-    Graphics::Primitive::Insets->new( bottom => 3 )
-});
-has '+padding' => ( default => sub {
-    Graphics::Primitive::Insets->new( top => 5, left => 5, right => 5, bottom => 5)
-});
+# has '+margins' => ( default => sub {
+#     Graphics::Primitive::Insets->new( bottom => 0 )
+# });
+# has '+padding' => ( default => sub {
+#     Graphics::Primitive::Insets->new( top => 0, left => 0, right => 5, bottom => 5)
+# });
 has 'tallest' => ( is => 'rw', isa => 'Num' );
 has 'widest' => ( is => 'rw', isa => 'Num' );
 
 override('prepare', sub {
-    my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
+    my ($self, $driver) = @_;
 
-    my $ca = $self->clicker->color_allocator();
+    my $ca = $self->clicker->color_allocator;
 
-    my $font = $self->font();
+    my $font = $self->font;
 
-    my $cr = $self->clicker->cairo();
-    $cr->save();
-
-    $cr->select_font_face($font->face(), $font->slant(), $font->weight());
-    $cr->set_font_size($font->size());
-
-    my $ii = $self->item_padding();
+    my $ii = $self->item_padding;
 
     my $count = 0;
     my $long = 0;
     my $tall = 0;
     my @items;
-    foreach my $ds (@{ $self->clicker->datasets() }) {
-        foreach my $s (@{ $ds->series() }) {
+    foreach my $ds (@{ $self->clicker->datasets }) {
+        foreach my $s (@{ $ds->series }) {
 
             my $label = $s->name();
             unless(defined($label)) {
                 $s->name("Series $count");
                 $label = "Series $count";
             }
-            my $extents = $cr->text_extents($label);
-            if($long < $extents->{'width'}) {
-                $long = $extents->{'width'};
+
+            my $tb = Graphics::Primitive::TextBox->new(
+                color => $ca->next,
+                font => $self->font,
+                padding => $self->item_padding,
+                text => $label
+            );
+
+            # Add this to the container in the right direction based on
+            # our orientation
+            my $dir = 'w';
+            if($self->is_vertical) {
+                $dir = 'n';
             }
-            if($tall < $extents->{'height'}) {
-                $tall = $extents->{'height'};
-            }
-            push(@items, Chart::Clicker::Decoration::LegendItem->new({
-                color   => $ca->next(),
-                font    => $font,
-                insets  => $ii,
-                label   => $label
-            }));
+
+            $self->add_component($tb, $dir);
+
             $count++;
         }
     }
 
-    $self->widest($long + $ii->left() + $ii->right());
-    $self->tallest($tall + $ii->top() + $ii->bottom());
-
-    $self->legend_items(\@items);
-
-    # my $per;
-    # my $insets;
-    # my $biggest;
-    # if($self->orientation() == $CC_HORIZONTAL) {
-    #     $biggest = $self->widest();
-    #     # Calculate the maximum width needed for a 'cell'
-    #     $per = ($dimension->width() / $long);
-    # } else {
-    #     $biggest = $self->tallest();
-    #     # Calculate the maximum height needed for a 'cell'
-    #     $per = ($dimension->height() / $tall);
-    # }
-    # if($per < 1) {
-    #     $per = 1;
-    # }
-    # my $rows = $count / $per;
-    # if($rows != int($rows)) {
-    #     $rows = int($rows) + 1;
-    # }
-
-    $cr->restore();
-
-    if($self->is_vertical) {
-        $self->height($self->tallest);
-        $self->width(
-            # The number of rows we need
-            # $rows
-            # The 'biggest' row (longest or tallest, depending on orientation)
-            $self->widest + $self->outside_width
-            # and finally our insets
-            # + $self->insets->right() + $self->insets->left()
-            # + $self->border->stroke->width() * 2
-        );
-    } else {
-        $self->minimum_width($self->widest);
-        $self->minimum_height(
-            # The number of rows we need
-            # $rows
-            # The 'biggest' row (longest or tallest, depending on orientation)
-            $self->tallest + $self->outside_height
-            # and finally our insets
-            # + $self->insets->top() + $self->insets->bottom()
-            # + $self->border->stroke->width() * 2
-        );
-    }
-
-    $ca->reset();
-
-    return 1;
-});
-
-sub draw {
-    my $self = shift();
-
     super;
 
-    my $width = $self->width();
-    my $height = $self->height();
+    $ca->reset;
 
-    my $cr = $self->clicker->cairo();
-
-    $cr->select_font_face($self->font->face(), $self->font->slant(), $self->font->weight());
-    $cr->set_font_size($self->font->size());
-
-    my $x = 0;
-    my $y = 0;
-    # If we have padding, honor it.
-    if(defined($self->padding())) {
-        $x = $self->padding->left();
-        $y = $self->padding->top();
-    }
-
-    foreach my $item (@{ $self->legend_items() }) {
-
-        my $extents = $cr->text_extents($item->label());
-
-        # This item's label might not be as tall as the tallest (or wide as the
-        # widest) one we will draw, so we must center this item in the
-        # available space.
-        my $vcenter = ($self->tallest() - $extents->{'height'}) / 2;
-        my $center = ($self->widest() - $extents->{'width'}) / 2;
-
-        $cr->move_to($x + $center, $y + $extents->{'height'} + $vcenter);
-        $cr->text_path($item->label());
-        $cr->set_source_rgba($item->color->as_array_with_alpha());
-        $cr->fill();
-
-        # Check to see if we need to wrap
-        if(($x + $self->widest()) < $self->inside_width()) {
-            # No need to wrap.
-            $x += $self->widest();
-        } else {
-            # Wrap!  TODO Honor insets...
-            $x = 0;#$self->insets->left();
-            $y += $self->tallest();
-        }
-    }
-}
+    # return 1;
+});
+# 
+# sub dontdraw {
+#     my $self = shift();
+# 
+#     super;
+# 
+#     my $width = $self->width();
+#     my $height = $self->height();
+# 
+#     my $cr = $self->clicker->cairo();
+# 
+#     $cr->select_font_face($self->font->face(), $self->font->slant(), $self->font->weight());
+#     $cr->set_font_size($self->font->size());
+# 
+#     my $x = 0;
+#     my $y = 0;
+#     # If we have padding, honor it.
+#     if(defined($self->padding())) {
+#         $x = $self->padding->left();
+#         $y = $self->padding->top();
+#     }
+# 
+#     foreach my $item (@{ $self->legend_items() }) {
+# 
+#         my $extents = $cr->text_extents($item->label());
+# 
+#         # This item's label might not be as tall as the tallest (or wide as the
+#         # widest) one we will draw, so we must center this item in the
+#         # available space.
+#         my $vcenter = ($self->tallest() - $extents->{'height'}) / 2;
+#         my $center = ($self->widest() - $extents->{'width'}) / 2;
+# 
+#         $cr->move_to($x + $center, $y + $extents->{'height'} + $vcenter);
+#         $cr->text_path($item->label());
+#         $cr->set_source_rgba($item->color->as_array_with_alpha());
+#         $cr->fill();
+# 
+#         # Check to see if we need to wrap
+#         if(($x + $self->widest()) < $self->inside_width()) {
+#             # No need to wrap.
+#             $x += $self->widest();
+#         } else {
+#             # Wrap!  TODO Honor insets...
+#             $x = 0;#$self->insets->left();
+#             $y += $self->tallest();
+#         }
+#     }
+# }
 
 __PACKAGE__->meta->make_immutable;
 

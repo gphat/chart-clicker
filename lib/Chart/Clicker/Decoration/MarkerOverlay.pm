@@ -4,7 +4,7 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
-sub draw {
+sub dontdraw {
     my $self = shift();
 
     my $cr = $self->clicker->cairo();

@@ -2,12 +2,13 @@ package Chart::Clicker::Decoration::Plot;
 use Moose;
 use MooseX::AttributeHelpers;
 
+use Layout::Manager::Axis;
 use Layout::Manager::Single;
 # TODO READD THIS
 #use Chart::Clicker::Decoration::MarkerOverlay;
 
 # TODO MOve this class?  It's not decoration anymore.
-extends 'Chart::Clicker::Drawing::Container';
+extends 'Chart::Clicker::Container';
 
 has '+background_color' => ( default => sub { Graphics::Color::RGB->new( red => 1 ) });
 has '+border' => ( default => sub { Graphics::Primitive::Border->new( width => 0 )});
@@ -15,27 +16,44 @@ has 'clicker' => (
     is => 'rw',
     isa => 'Chart::Clicker',
 );
-has '+layout' => (
-    default => sub { Layout::Manager::Single->new }
+has '+layout_manager' => (
+    default => sub { Layout::Manager::Axis->new }
 );
 has 'markers' => (
     is => 'rw',
     isa => 'Bool',
     default => 1
 );
+has 'render_area' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Container',
+    default => sub {
+        Chart::Clicker::Container->new(
+            name => 'render_area',
+            layout_manager => Layout::Manager::Single->new
+        )
+    }
+);
 
 override('prepare', sub {
     my ($self) = @_;
+
+    $self->add_component($self->render_area, 'c');
 
     # TODO This is also happening in Clicker.pm
     foreach my $c (@{ $self->components }) {
         $c->{component}->clicker($self->clicker);
     }
 
+    # TODO This is kinda messy...
+    foreach my $c (@{ $self->render_area->components }) {
+        $c->{component}->clicker($self->clicker);
+    }
+
     super;
 });
 
-sub draw { }
+sub dontdraw { }
 
 __PACKAGE__->meta->make_immutable;
 

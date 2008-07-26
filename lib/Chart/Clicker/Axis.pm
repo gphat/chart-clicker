@@ -193,7 +193,7 @@ sub mark {
     return ($span / ($self->range->span - 1)) * ($value - $self->{'LOWER'} || 0);
 }
 
-sub draw {
+sub dontdraw {
     my $self = shift();
 
     # if($self->is_vertical) {

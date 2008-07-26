@@ -19,7 +19,7 @@ has 'stroke' => (
     default => sub { Graphics::Primitive::Stroke->new() }
 );
 
-sub draw {
+sub dontdraw {
     my $self = shift();
 
     my $clicker = $self->clicker;

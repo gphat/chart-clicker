@@ -25,7 +25,7 @@ has '+origin' => (
     default => sub { Geometry::Primitive::Point->new(x => 0, y => 0) }
 );
 
-sub draw {
+sub dontdraw {
     my $self = shift();
 
     my $width = $self->width();

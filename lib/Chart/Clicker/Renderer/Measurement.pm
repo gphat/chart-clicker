@@ -5,7 +5,7 @@ extends 'Chart::Clicker::Renderer';
 
 use Chart::Clicker::Shape::Arc;
 
-sub draw {
+sub dontdraw {
     my $self = shift();
     my $clicker = shift();
     my $cr = shift();
