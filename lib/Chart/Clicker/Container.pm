@@ -3,6 +3,8 @@ use Moose;
 
 extends 'Graphics::Primitive::Container';
 
+with 'Graphics::Primitive::Oriented';
+
 has 'clicker' => (
     is => 'rw',
     isa => 'Chart::Clicker'

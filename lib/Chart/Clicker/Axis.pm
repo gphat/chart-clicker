@@ -1,7 +1,7 @@
 package Chart::Clicker::Axis;
 use Moose;
 
-extends 'Chart::Clicker::Drawing::Component';
+extends 'Chart::Clicker::Container';
 with 'Chart::Clicker::Positioned';
 
 # TODO Geometry::Primitive
@@ -14,6 +14,8 @@ use Graphics::Color::RGB;
 
 use Graphics::Primitive::Font;
 use Graphics::Primitive::Stroke;
+
+use Layout::Manager::Absolute;
 
 use Moose::Util::TypeConstraints;
 use MooseX::AttributeHelpers;
@@ -41,6 +43,7 @@ has 'format' => ( is => 'rw', isa => 'StrOrCodeRef' );
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
 has 'hidden' => ( is => 'rw', isa => 'Bool', default => 0 );
 has 'label' => ( is => 'rw', isa => 'Str' );
+has '+layout_manager' => ( default => sub { Layout::Manager::Absolute->new });
 has '+orientation' => (
     required => 1
 );
@@ -82,44 +85,42 @@ has 'tick_values' => (
 );
 
 override('prepare', sub {
-    my $self = shift();
+    my ($self, $driver) = @_;
 
-    if($self->range->span() == 0) {
+    if($self->range->span == 0) {
         die('This axis has a span of 0, that\'s fatal!');
     }
 
-    if(defined($self->baseline())) {
-        if($self->range->lower() > $self->baseline()) {
-            $self->range->lower($self->baseline());
+    if(defined($self->baseline)) {
+        if($self->range->lower > $self->baseline) {
+            $self->range->lower($self->baseline);
         }
     } else {
-        $self->baseline($self->range->lower());
+        $self->baseline($self->range->lower);
     }
 
-    if($self->fudge_amount()) {
-        my $span = $self->range->span();
-        my $lower = $self->range->lower();
-        $self->range->lower($lower - abs($span * $self->fudge_amount()));
-        my $upper = $self->range->upper();
-        $self->range->upper($upper + ($span * $self->fudge_amount()));
+    if($self->fudge_amount) {
+        my $span = $self->range->span;
+        my $lower = $self->range->lower;
+        $self->range->lower($lower - abs($span * $self->fudge_amount));
+        my $upper = $self->range->upper;
+        $self->range->upper($upper + ($span * $self->fudge_amount));
     }
 
-    if(!scalar(@{ $self->tick_values() })) {
-        $self->tick_values($self->range->divvy($self->ticks() + 1));
+    if(!scalar(@{ $self->tick_values })) {
+        $self->tick_values($self->range->divvy($self->ticks + 1));
     }
 
     # Return now without setting a min height or width and allow 
     # Layout::Manager to to set it for us, this is how we 'hide'
     return if $self->hidden;
 
-    my $cairo = $self->clicker->cairo();
+    my $font = $self->font;
 
-    my $font = $self->font();
-
-    $cairo->set_font_size($font->size());
-    $cairo->select_font_face(
-        $font->face(), $font->slant(), $font->weight()
-    );
+    # $cairo->set_font_size($font->size());
+    # $cairo->select_font_face(
+    #     $font->face(), $font->slant(), $font->weight()
+    # );
 
     my %biggest;
     # Determine all this once... much faster.
@@ -132,17 +133,26 @@ override('prepare', sub {
             $val = $self->format_value($val);
         }
         push(@{ $self->{LABELS} }, $val);
-        my $ext = $cairo->text_extents($val);
-        $ext->{total_height} = $ext->{height} - $ext->{y_bearing};
-        $self->{'ticks_extents_cache'}->[$_] = $ext;
+        # my $ext = $cairo->text_extents($val);
+        my $tbox = $driver->get_text_bounding_box($font, $val);
+
+        # $ext->{total_height} = $ext->{height} - $ext->{y_bearing};
+        $self->{'ticks_box_cache'}->[$_] = $tbox;
         if(!(defined($biggest{width}))
-            || ($ext->{'width'} > $biggest{'width'})) {
-            $biggest{'width'} = $ext->{'width'};
+            || ($tbox->width > $biggest{'width'})) {
+            $biggest{'width'} = $tbox->width
         }
         if(!defined($biggest{'height'})
-            || ($ext->{'total_height'} > $biggest{'height'})) {
-            $biggest{'height'} = $ext->{'total_height'};
+            || ($tbox->height > $biggest{'height'})) {
+            $biggest{'height'} = $tbox->height;
         }
+
+        my $label = Graphics::Primitive::TextBox->new(
+            font => $self->font, lines => [ { text => $self->{LABELS}->[$_], box => $tbox } ],
+            width => $tbox->width - $tbox->origin->x, height => $tbox->height - $tbox->origin->y,
+            color => Graphics::Color::RGB->new( green => 0, blue => 0, red => 0)
+        );
+        $self->add_component($label);
     }
 
     $self->{'BIGGEST_TICKS'} = \%biggest;
@@ -152,27 +162,28 @@ override('prepare', sub {
         $big = $biggest{'width'};
     }
 
-    if($self->show_ticks()) {
-        $big += $self->tick_length();
+    if($self->show_ticks) {
+        $big += $self->tick_length;
     }
 
-    if ($self->label()) {
-        my $ext = $cairo->text_extents($self->label());
-        $ext->{total_height} = $ext->{height} - $ext->{y_bearing};
-        $self->{'label_extents_cache'} = $ext;
+    if ($self->label) {
+        # my $ext = $cairo->text_extents($self->label());
+        my $tbox = $driver->get_text_bounding_box($self->font, $self->label);
+        # $ext->{total_height} = $ext->{height} - $ext->{y_bearing};
+        $self->{'label_box_cache'} = $tbox;
     }
 
     if($self->is_vertical) {
         # The label will be rotated, so use height here too.
         my $label_width = $self->label
-            ? $self->{'label_extents_cache'}->{'total_height'}
+            ? $self->{'label_box_cache'}->height
             : 0;
         $self->minimum_width($big + $label_width);
         # TODO Wrong, need tallest label + tick length + outside
         $self->minimum_height($self->outside_height + $big);
     } else {
         my $label_height = $self->label
-            ? $self->{'label_extents_cache'}->{'total_height'}
+            ? $self->{'label_box_cache'}->height
             : 0;
         $self->minimum_height($big + $label_height);
         # TODO Wrong, need widest label + tick length + outside
@@ -192,6 +203,143 @@ sub mark {
     }
     return ($span / ($self->range->span - 1)) * ($value - $self->{'LOWER'} || 0);
 }
+
+override('pack', sub {
+    my ($self) = @_;
+
+    super;
+
+    # if($self->is_vertical) {
+    #     $self->per($self->height / ($self->range->span - 1));
+    # } else {
+    #     $self->per($self->width / ($self->range->span - 1));
+    # }
+
+    return if $self->hidden;
+
+    my $x = 0;
+    my $y = 0;
+
+    my $width = $self->width;
+    my $height = $self->height;
+
+    if($self->is_left) {
+        $x += $width;
+    } elsif($self->is_right) {
+        # nuffin
+    } elsif($self->is_top) {
+        $y += $height;
+    } else {
+        # nuffin
+    }
+
+    # my $cr = $self->clicker->cairo();
+    # 
+    # my $stroke = $self->stroke();
+    # $cr->set_line_width($stroke->width());
+    # $cr->set_line_cap($stroke->line_cap());
+    # $cr->set_line_join($stroke->line_join());
+    # 
+    # my $font = $self->font();
+    # $cr->set_font_size($font->size());
+    # $cr->select_font_face(
+    #     $font->face(), $font->slant(), $font->weight()
+    # );
+
+    my $tick_length = $self->tick_length();
+
+    my $lower = $self->range->lower();
+
+    # $cr->set_source_rgba($self->color->as_array_with_alpha());
+
+    # $cr->move_to($x, $y);
+    my @values = @{ $self->tick_values };
+
+    if($self->is_vertical) {
+        # $cr->line_to($x, $y + $height);
+
+        for(0..scalar(@values) - 1) {
+            my $val = $values[$_];
+            my $iy = $height - $self->mark($height, $val);
+            my $tbox = $self->{'ticks_box_cache'}->[$_];
+            # $cr->move_to($x, $iy);
+
+            # my $label = Graphics::Primitive::TextBox->new(
+            #     font => $self->font, lines => [ { text => $self->{LABELS}->[$_], box => $tbox } ],
+            #     width => $tbox->width -$tbox->origin->x, height => $tbox->height - $tbox->origin->y,
+            #     background_color => Graphics::Color::RGB->new( red => 1 ),
+            #     color => Graphics::Color::RGB->new( green => 1)
+            # );
+            my $label = $self->get_component($_);
+
+            if($self->is_left) {
+                # $cr->line_to($x - $tick_length, $iy);
+
+                # $cr->rel_move_to(-$ext->{'width'} - 2, $ext->{'height'} / 2);
+                $label->origin->x($x - $tick_length - $label->width - 2);
+                $label->origin->y($iy - ($label->height / 2));
+                # $self->add_component($label);
+            } else {
+                # $cr->line_to($x + $tick_length, $iy);
+                # $cr->rel_move_to(0, $ext->{'height'} / 2);
+            }
+            # $cr->show_text($self->format_value($val));
+        }
+
+        # Draw the label
+        if($self->label) {
+            # my $ext = $self->{'label_extents_cache'};
+            if ($self->is_left) {
+                # $cr->move_to($ext->{'height'}, ($height + $ext->{'width'}) / 2);
+                # $cr->rotate(3*PI/2);
+            } else {
+                # $cr->move_to($width - $ext->{'height'}, ($height - $ext->{'width'}) / 2);
+                # $cr->rotate(PI/2);
+            }
+            # $cr->show_text($self->label());
+        }
+    } else {
+        # Draw a line for our axis
+        # $cr->line_to($x + $width, $y);
+
+        # Draw a tick for each value.
+        for(0..scalar(@values) - 1) {
+            my $val = $values[$_];
+            # Grab the extent from the cache.
+            # my $ext = $self->{'ticks_extents_cache'}->[$_];
+            my $ix = $self->mark($width, $val);
+            # $cr->move_to($ix, $y);
+
+            my $label = $self->get_component($_);
+
+            if($self->is_top) {
+                # $cr->line_to($ix, $y - $tick_length);
+                # $cr->rel_move_to(-($ext->{'width'} / 1.8), -2);
+                $label->origin->x($ix - ($label->width / 1.8));
+                $label->origin->y($y - $tick_length - 2);
+            } else {
+                # $cr->line_to($ix, $y + $tick_length);
+                # $cr->rel_move_to(-($ext->{'width'} / 2), $self->{'BIGGEST_TICKS'}->{'height'} - 5);
+                $label->origin->x($ix - ($label->width / 1.8));
+                $label->origin->y($y + $tick_length + $self->{'BIGGEST_TICKS'}->{'height'} - 5);
+            }
+            # $cr->show_text($self->{LABELS}->[$_]);
+        }
+
+        # Draw the label
+        if($self->label) {
+            my $ext = $self->{'label_extents_cache'};
+            if ($self->is_bottom) {
+                # $cr->move_to(($width - $ext->{'width'}) / 2, $height - 5);
+            } else {
+                # $cr->move_to(($width - $ext->{'width'}) / 2, $ext->{'height'} + 2);
+            }
+            # $cr->show_text($self->label());
+        }
+    }
+
+    # $cr->stroke();
+});
 
 sub dontdraw {
     my $self = shift();
