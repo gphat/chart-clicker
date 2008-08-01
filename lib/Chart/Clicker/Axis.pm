@@ -13,7 +13,6 @@ use Chart::Clicker::Data::Range;
 use Graphics::Color::RGB;
 
 use Graphics::Primitive::Font;
-use Graphics::Primitive::Stroke;
 
 use Layout::Manager::Absolute;
 
@@ -53,13 +52,13 @@ has '+position' => (
 has 'range' => (
     is => 'rw',
     isa => 'Chart::Clicker::Data::Range',
-    default => sub { Chart::Clicker::Data::Range->new() }
+    default => sub { Chart::Clicker::Data::Range->new }
 );
 has 'show_ticks' => ( is => 'rw', isa => 'Bool', default => 1 );
-has 'stroke' => (
+has 'brush' => (
     is => 'rw',
-    isa => 'Graphics::Primitive::Stroke',
-    default => sub { Graphics::Primitive::Stroke->new(); }
+    isa => 'Graphics::Primitive::Brush',
+    default => sub { Graphics::Primitive::Brush->new }
 );
 has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
 has 'tick_labels' => (
@@ -69,8 +68,8 @@ has 'tick_labels' => (
 has 'tick_length' => ( is => 'rw', isa => 'Num', default => 3 );
 has 'tick_stroke' => (
     is => 'rw',
-    isa => 'Graphics::Primitive::Stroke',
-    default => sub { Graphics::Primitive::Stroke->new(); }
+    isa => 'Graphics::Primitive::Brush',
+    default => sub { Graphics::Primitive::Brush->new }
 );
 has 'tick_values' => (
     metaclass => 'Collection::Array',
@@ -148,9 +147,10 @@ override('prepare', sub {
         }
 
         my $label = Graphics::Primitive::TextBox->new(
-            font => $self->font, lines => [ { text => $self->{LABELS}->[$_], box => $tbox } ],
-            width => $tbox->width - $tbox->origin->x, height => $tbox->height - $tbox->origin->y,
-            color => Graphics::Color::RGB->new( green => 0, blue => 0, red => 0)
+            font => $self->font,
+            lines => [ { text => $self->{LABELS}->[$_], box => $tbox } ],
+            width => $tbox->width, height => $tbox->height,
+            color => Graphics::Color::RGB->new( green => 0, blue => 0, red => 0),
         );
         $self->add_component($label);
     }
@@ -287,6 +287,7 @@ override('pack', sub {
         }
 
         # Draw the label
+        # FIXME Not working, rotated text labels...
         if($self->label) {
             # my $ext = $self->{'label_extents_cache'};
             if ($self->is_left) {
@@ -327,6 +328,7 @@ override('pack', sub {
         }
 
         # Draw the label
+        # FIXME Not working, rotated text labels...
         if($self->label) {
             my $ext = $self->{'label_extents_cache'};
             if ($self->is_bottom) {

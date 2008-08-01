@@ -1,14 +1,15 @@
 package Chart::Clicker::Renderer;
 use Moose;
 
-extends 'Chart::Clicker::Drawing::Component';
+extends 'Graphics::Primitive::Canvas';
 
 has 'additive' => ( is => 'ro', isa => 'Bool', default => 0 );
 has '+border' => ( default => sub { Graphics::Primitive::Border->new( width => 0 )});
+has 'clicker' => ( is => 'rw', isa => 'Chart::Clicker' );
 has 'context' => ( is => 'rw', isa => 'Str' );
 
 override('prepare', sub {
-    my $self = shift();
+    my ($self) = @_;
 
     return 1;
 });

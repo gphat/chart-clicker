@@ -14,7 +14,7 @@ has '+border' => (
     default => sub {
         Graphics::Primitive::Border->new(
             color => Graphics::Color::RGB->new( red => 0, green => 0, blue => 0),
-            width => 2
+            width => 1
         )
     }
 );
@@ -30,7 +30,7 @@ has 'item_padding' => (
     isa => 'Graphics::Primitive::Insets',
     default => sub {
         Graphics::Primitive::Insets->new({
-            top => 3, left => 3, bottom => 3, right => 0
+            top => 3, left => 3, bottom => 3, right => 5
         })
     }
 );

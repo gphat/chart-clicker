@@ -4,7 +4,12 @@ use Cairo;
 
 extends 'Chart::Clicker::Renderer';
 
-use Graphics::Primitive::Stroke;
+use Graphics::Primitive::Brush;
+use Graphics::Primitive::Path;
+use Graphics::Primitive::Operation::Fill;
+use Graphics::Primitive::Operation::Stroke;
+use Graphics::Primitive::Paint::Gradient;
+use Graphics::Primitive::Paint::Solid;
 
 has 'fade' => (
     is => 'rw',
@@ -16,20 +21,18 @@ has 'opacity' => (
     isa => 'Num',
     default => 0
 );
-has 'stroke' => (
+has 'brush' => (
     is => 'rw',
-    isa => 'Graphics::Primitive::Stroke',
-    default => sub { Graphics::Primitive::Stroke->new() }
+    isa => 'Graphics::Primitive::Brush',
+    default => sub { Graphics::Primitive::Brush->new }
 );
 
-sub dontdraw {
-    my $self = shift();
+sub pack {
+    my ($self) = @_;
 
+    my $height = $self->height;
+    my $width = $self->width;
     my $clicker = $self->clicker;
-    my $cr = $clicker->cairo;
-
-    my $height = $self->height();
-    my $width = $self->width();
 
     my $dses = $clicker->get_datasets_for_context($self->context);
     foreach my $ds (@{ $dses }) {
@@ -40,64 +43,71 @@ sub dontdraw {
             my $domain = $ctx->domain_axis;
             my $range = $ctx->range_axis;
 
-            $cr->set_line_width($self->stroke->width());
-            $cr->set_line_cap($self->stroke->line_cap());
-            $cr->set_line_join($self->stroke->line_join());
-
-            $cr->new_path();
-
             my $lastx; # used for completing the path
-            my @vals = @{ $series->values() };
-            my @keys = @{ $series->keys() };
+            my @vals = @{ $series->values };
+            my @keys = @{ $series->keys };
 
             my $startx;
 
-            for(0..($series->key_count() - 1)) {
+            for(0..($series->key_count - 1)) {
 
                 my $x = $domain->mark($width, $keys[$_]);
 
                 my $y = $height - $range->mark($height, $vals[$_]);
                 if($_ == 0) {
                     $startx = $x;
-                    $cr->move_to($x, $y);
+                    $self->move_to($x, $y);
                 } else {
-                    $cr->line_to($x, $y);
+                    $self->line_to($x, $y);
                 }
                 $lastx = $x;
             }
-            my $color = $self->clicker->color_allocator->next();
-            $cr->set_source_rgba($color->as_array_with_alpha());
+            my $color = $self->clicker->color_allocator->next;
 
-            my $path = $cr->copy_path();
-            $cr->stroke();
+            my $op = Graphics::Primitive::Operation::Stroke->new;
+            $op->brush($self->brush->clone);
+            $op->brush->color($color);
 
-            $cr->append_path($path);
-            $cr->line_to($lastx, $height);
-            $cr->line_to($startx, $height);
-            $cr->close_path();
+            $self->save;
+            $self->do($op);
 
-            if($self->opacity()) {
+            $self->restore;
+            $self->line_to($lastx, $height);
+            $self->line_to($startx, $height);
+            $self->close_path;
 
-                my $clone = $color->clone();
-                $clone->alpha($self->opacity());
-                $cr->set_source_rgba($clone->as_array_with_alpha());
-            } elsif($self->fade()) {
+            my $fillop = Graphics::Primitive::Operation::Fill->new;
+            if($self->opacity) {
 
-                my $patt = Cairo::LinearGradient->create(0.0, 0.0, 1.0, $height);
-                $patt->add_color_stop_rgba(
-                    1.0, $color->red(), $color->green(), $color->blue(),
-                    $color->alpha()
+                my $clone = $color->clone;
+                $clone->alpha($self->opacity);
+                $fillop->paint(Graphics::Primitive::Paint::Solid->new(
+                    color => $clone
+                ));
+            } elsif($self->fade) {
+
+                my $clone = $color->clone;
+                $clone->alpha($self->opacity);
+
+                my $grad = Graphics::Primitive::Paint::Gradient->new(
+                    line => Geometry::Primitive::Line->new(
+                        start => Geometry::Primitive::Point->new(x => 0, y => 0),
+                        end => Geometry::Primitive::Point->new(x => 1, y => $height),
+                    ),
+                    style => 'linear'
                 );
-                $patt->add_color_stop_rgba(
-                    0.0, $color->red(), $color->green(), $color->blue(), 0
-                );
-                $cr->set_source($patt);
+                $grad->add_stop(1.0, $color);
+                $grad->add_stop(0, $clone);
+
+                $fillop->paint($grad);
             } else {
 
-                $cr->set_source_rgba($color->as_array_with_alpha());
+                $fillop->paint(Graphics::Primitive::Paint::Solid->new(
+                    color => $color->clone
+                ));
             }
 
-            $cr->fill();
+            $self->do($fillop);
         }
     }
 

@@ -61,7 +61,7 @@ has '+border' => (
 has 'color_allocator' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::ColorAllocator',
-    default => sub { Chart::Clicker::Drawing::ColorAllocator->new()  }
+    default => sub { Chart::Clicker::Drawing::ColorAllocator->new }
 );
 has 'cairo' => (
     is => 'rw',
@@ -95,7 +95,7 @@ has 'format' => (
     is      => 'rw',
     isa     => 'Chart::Clicker::Format',
     coerce  => 1,
-    default => sub { Chart::Clicker::Format::Png->new() }
+    default => sub { Chart::Clicker::Format::Png->new }
 );
 has 'grid' => (
     is => 'rw',
@@ -107,16 +107,15 @@ has 'grid' => (
 has '+height' => (
     default => 300
 );
-# has '+layout' => (
-#     default => sub { Layout::Manager::Compass->new() }
-# );
+has '+layout_manager' => (
+    default => sub { Layout::Manager::Compass->new }
+);
 has 'legend' => (
     is => 'rw',
     isa => 'Chart::Clicker::Decoration::Legend',
     default => sub {
         Chart::Clicker::Decoration::Legend->new(
             name => 'legend',
-            background_color => Graphics::Color::RGB->new(red => 0, green => 0, blue => 1)
         );
     }
 );
@@ -214,8 +213,8 @@ override('prepare', sub {
 
     # Prepare the datasets and establish ranges for the axes.
     my $count = 0;
-    foreach my $ds (@{ $self->datasets() }) {
-        unless($ds->count() > 0) {
+    foreach my $ds (@{ $self->datasets }) {
+        unless($ds->count > 0) {
             die("Dataset $count is empty.");
         }
 
@@ -230,7 +229,7 @@ override('prepare', sub {
         # Find our x axis and add it.
         my $xaxis = $ctx->domain_axis;
         unless(exists($xaxes{refaddr($xaxis)})) {
-            $xaxis->range->combine($ds->domain());
+            $xaxis->range->combine($ds->domain);
 
             $xaxis->orientation('horizontal');
             $xaxis->position('bottom');
@@ -245,7 +244,7 @@ override('prepare', sub {
         # Find our y axis and add it.
         my $yaxis = $ctx->range_axis;
         unless(exists($yaxes{refaddr($yaxis)})) {
-            $yaxis->range->combine($ds->range());
+            $yaxis->range->combine($ds->range);
 
             $yaxis->orientation('vertical');
             $yaxis->position('left');
@@ -269,7 +268,7 @@ override('prepare', sub {
             # }
         # }
 
-        my $rend = $ctx->renderer();
+        my $rend = $ctx->renderer;
         unless(exists($rends{$ctx->name})) {
             $rend->context($ctx->name);
             $plot->render_area->add_component($rend, 'c');
@@ -281,7 +280,7 @@ override('prepare', sub {
     $self->format->surface(
         $self->format->create_surface($self->width, $self->height)
     );
-    $self->cairo(Chart::Clicker::Cairo->create($self->format->surface()));
+    $self->cairo(Chart::Clicker::Cairo->create($self->format->surface));
 
     $self->add_component($self->plot, 'c');
 
@@ -293,77 +292,6 @@ override('prepare', sub {
 
     return 1;
 });
-
-sub dontdraw {
-    my ($self) = @_;
-
-    # super;
-    $self->do_layout($self);
-
-    # This is here because we can't actually use G:P::Container's draw method,
-    # so we have to implement it ourselves... working on somthing else now,
-    # will come back to this...
-    my $width = $self->width();
-    my $height = $self->height();
-
-    my $cairo = $self->cairo;
-
-    if(defined($self->background_color())) {
-        $cairo->set_source_rgba($self->background_color->as_array_with_alpha());
-        $cairo->rectangle(0, 0, $width, $height);
-        $cairo->paint();
-    }
-
-    # Borders aren't working either
-
-    # my $bwidth = $width;
-    # my $bheight = $height;
-
-    # Margins are broken here.
-    # my $margins = $self->margins();
-    # my ($mx, $my, $mw, $mh) = (0, 0, 0, 0);
-    # if($margins) {
-    #     $mx = $margins->left();
-    #     $my = $margins->top();
-    #     $mw = $margins->right();
-    #     $mh = $margins->bottom();
-    # }
-
-    # if(defined($self->border())) {
-    #     my $stroke = $self->border();
-    #     my $bswidth = $stroke->width();
-    #     $cairo->set_source_rgba($self->border->color->as_array_with_alpha());
-    #     $cairo->set_line_width($bswidth);
-    #     $cairo->set_line_cap($stroke->line_cap());
-    #     $cairo->set_line_join($stroke->line_join());
-    #     $cairo->new_path();
-    #     my $swhalf = $bswidth / 2;
-    #     $cairo->rectangle(
-    #         # $mx + $swhalf, $my + $swhalf,
-    #         # $width - $bswidth - $mw - $mx, $height - $bswidth - $mh - $my
-    #         $swhalf, $swhalf,
-    #         $width - $bswidth, $height - $bswidth
-    #     );
-    #     $cairo->stroke();
-    # }
-
-    foreach my $c (@{ $self->components }) {
-        next unless defined($c);
-
-        my $comp = $c->{component};
-        next unless defined($comp) && $comp->visible;
-
-        $cairo->save;
-        # $cairo->translate($comp->origin->x, $comp->origin->y);
-        $cairo->translate(int($comp->origin->x), int($comp->origin->y));
-        $cairo->rectangle(0, 0, $comp->width, $comp->height);
-        $cairo->clip;
-
-        $comp->draw();
-
-        $cairo->restore();
-    }
-}
 
 sub get_datasets_for_context {
     my ($self, $name) = @_;
@@ -387,7 +315,7 @@ sub write {
 sub data {
     my ($self) = @_;
 
-    return $self->format->surface_data();
+    return $self->format->surface_data;
 }
 
 __PACKAGE__->meta->make_immutable;

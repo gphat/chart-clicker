@@ -7,7 +7,7 @@ Revision history for Perl extension Chart::Clicker.
     - Add PostScript and PDF support
     - Use clipping rather than a bunch of surface painting (thanks to ash)
     - Create all surfaces as streams and use IO::File to write out the surface
-    data.
+      data.
     - Add show_range and show_domain flags to Grid
     - Make Range's span inclusive
     - Add lots of convenient methods via MooseX::AttributeHelpers
