@@ -3,7 +3,11 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer';
 
-use Graphics::Primitive::Stroke;
+use Graphics::Primitive::Brush;
+
+use Graphics::Primitive::Operation::Fill;
+use Graphics::Primitive::Operation::Stroke;
+use Graphics::Primitive::Paint::Solid;
 
 has 'opacity' => (
     is => 'rw',
@@ -15,10 +19,10 @@ has 'bar_padding' => (
     isa => 'Int',
     default => 0
 );
-has 'stroke' => (
+has 'brush' => (
     is => 'rw',
-    isa => 'Graphics::Primitive::Stroke',
-    default => sub { Graphics::Primitive::Stroke->new() }
+    isa => 'Graphics::Primitive::Brush',
+    default => sub { Graphics::Primitive::Brush->new }
 );
 
 override('prepare', sub {
@@ -39,20 +43,19 @@ override('prepare', sub {
     return 1;
 });
 
-sub dontdraw {
+override('pack', sub {
     my $self = shift();
 
     my $clicker = $self->clicker;
-    my $cr = $clicker->cairo;
 
-    my $height = $self->height();
-    my $width = $self->width();
+    my $height = $self->height;
+    my $width = $self->width;
 
     my $dses = $clicker->get_datasets_for_context($self->context);
 
-    my $padding = $self->bar_padding + $self->stroke->width;
+    my $padding = $self->bar_padding + $self->brush->width;
 
-    my $bwidth = int(($width / $self->{KEYCOUNT})) - $self->stroke->width;
+    my $bwidth = int(($width / $self->{KEYCOUNT})) - $self->brush->width;
     my $hbwidth = int($bwidth / 2);
 
     my $offset = 1;
@@ -68,72 +71,78 @@ sub dontdraw {
             my $cbwidth = ($bwidth - ($bwidth * $domain->fudge_amount)) / $self->{SCOUNT};
             my $chbwidth = int($cbwidth / 2);
 
-            my $color = $clicker->color_allocator->next();
+            my $color = $clicker->color_allocator->next;
 
-            my $base = $range->baseline();
+            my $base = $range->baseline;
             my $basey;
             if(defined($base)) {
-                $basey = $height - $range->mark($base);
+                $basey = $height - $range->mark($height, $base);
             } else {
                 $basey = $height;
                 $base = $range->range->lower;
             }
 
-            my @vals = @{ $series->values() };
-            my @keys = @{ $series->keys() };
+            my @vals = @{ $series->values };
+            my @keys = @{ $series->keys };
 
             my $sksent = $series->key_count;
             for(0..($sksent - 1)) {
-                # I don't remember why all this math is here, but it works
-                # perfectly now. ;)
-                my $x = $domain->mark($keys[$_]);
-                my $y = $range->mark($vals[$_]);
+                my $x = $domain->mark($width, $keys[$_]);
+                my $y = $range->mark($height, $vals[$_]);
 
                 if($vals[$_] >= $base) {
                     if($self->{SCOUNT} == 1) {
-                        $cr->rectangle(
-                            $x + $chbwidth , $basey,
+                        $self->move_to($x + $chbwidth, $basey);
+                        $self->rectangle(
+                        #     $x + $chbwidth , $basey,
                             -int($cbwidth), -int($y - ($height - $basey))
                         );
                     } else {
-                        $cr->rectangle(
-                            $x - $hbwidth + ($offset * $cbwidth), $basey,
+                        $self->move_to(
+                            $x - $hbwidth + ($offset * $cbwidth), $basey
+                        );
+                        $self->rectangle(
                             -int($cbwidth), -int($y - ($height - $basey))
                         );
                     }
                 } else {
-                    $cr->rectangle(
-                        $x - $hbwidth + ($offset * $cbwidth), $basey,
+                    $self->move_to(
+                        $x - $hbwidth + ($offset * $cbwidth), $basey
+                    );
+                    $self->rectangle(
                         -int($cbwidth), int($height - $basey - $y)
                     );
                 }
             }
 
-            my $fillcolor;
-            if($self->opacity()) {
-                $fillcolor = $color->clone();
-                $fillcolor->alpha($self->opacity());
+            my $fillop = Graphics::Primitive::Operation::Fill->new(
+                paint => Graphics::Primitive::Paint::Solid->new
+            );
+
+            if($self->opacity) {
+                my $fillcolor = $color->clone;
+                $fillcolor->alpha($self->opacity);
+                $fillop->paint->color($fillcolor);
+                # Since we're going to stroke this, we want to preserve it.
+                $fillop->preserve(1);
             } else {
-                $fillcolor = $color;
+                $fillop->paint->color($color);
             }
 
-            $cr->set_source_rgba($fillcolor->as_array_with_alpha());
-            $cr->fill_preserve();
+            $self->do($fillop);
 
-
-            $cr->set_line_width($self->stroke->width());
-            $cr->set_line_cap($self->stroke->line_cap());
-            $cr->set_line_join($self->stroke->line_join());
-
-            $cr->set_source_rgba($color->as_array_with_alpha());
-            $cr->stroke();
+            if($self->opacity) {
+                my $strokeop = Graphics::Primitive::Operation::Stroke->new;
+                $strokeop->brush->color($color);
+                $self->do($strokeop);
+            }
 
             $offset++;
         }
     }
 
     return 1;
-}
+});
 
 __PACKAGE__->meta->make_immutable;
 
