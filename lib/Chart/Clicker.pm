@@ -261,14 +261,16 @@ override('prepare', sub {
             # TODO Now a renderer gets it's entire list in a single draw or
             # prepare pass.  This could be delegated down to the renderer's
             # prepare.  No more additive renderers.
-            # if($rend->additive()) {
             #     $raxis->range->combine($ds->combined_range());
-            # } else {
-                # $raxis->range->combine($ds->range());
             # }
         # }
 
         my $rend = $ctx->renderer;
+        if($rend->additive) {
+            $yaxis->range->upper($ds->largest_value_slice - 5);
+        } else {
+            $yaxis->range->combine($ds->range);
+        }
         unless(exists($rends{$ctx->name})) {
             $rend->context($ctx->name);
             $plot->render_area->add_component($rend, 'c');
