@@ -5,11 +5,6 @@ use MooseX::AttributeHelpers;
 
 use Chart::Clicker::Data::Range;
 
-has 'combined_range' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Data::Range',
-    default => sub { Chart::Clicker::Data::Range->new() }
-);
 has 'context' => (
     is => 'rw',
     isa => 'Str',
@@ -18,13 +13,13 @@ has 'context' => (
 has 'domain' => (
     is => 'rw',
     isa => 'Chart::Clicker::Data::Range',
-    default => sub { Chart::Clicker::Data::Range->new() }
+    default => sub { Chart::Clicker::Data::Range->new }
 );
 has 'max_key_count' => ( is => 'rw', isa => 'Int', default => 0 );
 has 'range' => (
     is => 'rw',
     isa => 'Chart::Clicker::Data::Range',
-    default => sub { Chart::Clicker::Data::Range->new() }
+    default => sub { Chart::Clicker::Data::Range->new }
 );
 has 'series' => (
     metaclass => 'Collection::Array',
@@ -50,21 +45,37 @@ sub get_series_values {
     return map({ $_->values->[$position] } @{ $self->series });
 }
 
-sub prepare {
-    my $self = shift();
+sub largest_value_slice {
+    my ($self) = @_;
 
-    unless($self->count() && $self->count() > 0) {
+    # Prime out big variable with the value of the first slice
+    my $big;
+    foreach ($self->get_series_values(0)) { $big += $_; }
+
+    # Check that value against all the remaining slices
+    my $count = $self->max_key_count;
+    for(my $i = 1; $i < $count; $i++) {
+        my $t;
+        foreach ($self->get_series_values($i)) { $t += $_; }
+        $big = $t if(($t > $big) || !defined($big));
+    }
+    return $big;
+}
+
+sub prepare {
+    my ($self) = @_;
+
+    unless($self->count && $self->count > 0) {
         die('Dataset has no series.');
     }
 
     my $stotal;
-    foreach my $series (@{ $self->series() }) {
-        $series->prepare();
+    foreach my $series (@{ $self->series }) {
+        $series->prepare;
 
-        $self->range->combine($series->range());
-        $self->combined_range->add($series->range());
+        $self->range->combine($series->range);
 
-        my @keys = @{ $series->keys() };
+        my @keys = @{ $series->keys };
 
         $self->domain->combine(
             Chart::Clicker::Data::Range->new({
@@ -72,8 +83,8 @@ sub prepare {
             })
         );
 
-        if($series->key_count() > $self->max_key_count()) {
-            $self->max_key_count($series->key_count());
+        if($series->key_count > $self->max_key_count) {
+            $self->max_key_count($series->key_count);
         }
     }
 

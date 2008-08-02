@@ -7,7 +7,7 @@ has 'min' => ( is => 'rw', isa => 'Num' );
 has 'upper' => ( is => 'rw', isa => 'Num' );
 
 after 'lower' => sub {
-    my $self = shift();
+    my $self = shift;
 
     if(defined($self->{'min'})) {
         $self->{'lower'} = $self->{'min'};
@@ -15,7 +15,7 @@ after 'lower' => sub {
 };
 
 after 'upper' => sub {
-    my $self = shift();
+    my $self = shift;
 
     if(defined($self->{'max'})) {
         $self->{'upper'} = $self->{'max'};
@@ -23,7 +23,7 @@ after 'upper' => sub {
 };
 
 after 'min' => sub {
-    my $self = shift();
+    my $self = shift;
 
     if(defined($self->{'min'})) {
         $self->{'lower'} = $self->{'min'};
@@ -31,7 +31,7 @@ after 'min' => sub {
 };
 
 after 'max' => sub {
-    my $self = shift();
+    my $self = shift;
 
     if(defined($self->{'max'})) {
         $self->{'upper'} = $self->{'max'};
@@ -39,33 +39,33 @@ after 'max' => sub {
 };
 
 sub add {
-    my $self = shift();
-    my $range = shift();
+    my $self = shift;
+    my $range = shift;
 
-    if(defined($self->upper())) {
-        $self->upper($self->upper() + $range->upper());
+    if(defined($self->upper)) {
+        $self->upper($self->upper + $range->upper);
     } else {
-        $self->upper($range->upper());
+        $self->upper($range->upper);
     }
 
-    if(!defined($self->lower()) || ($range->lower() < $self->lower())) {
-        $self->lower($range->lower());
+    if(!defined($self->lower) || ($range->lower < $self->lower)) {
+        $self->lower($range->lower);
     }
 }
 
 sub combine {
-    my $self = shift();
-    my $range = shift();
+    my $self = shift;
+    my $range = shift;
 
-    unless(defined($self->min())) {
-        if(!defined($self->lower()) || ($range->lower() < $self->lower())) {
-            $self->lower($range->lower());
+    unless(defined($self->min)) {
+        if(!defined($self->lower) || ($range->lower < $self->lower)) {
+            $self->lower($range->lower);
         }
     }
 
-    unless(defined($self->max())) {
-        if(!defined($self->upper()) || ($range->upper() > $self->upper())) {
-            $self->upper($range->upper());
+    unless(defined($self->max)) {
+        if(!defined($self->upper) || ($range->upper > $self->upper)) {
+            $self->upper($range->upper);
         }
     }
 
@@ -73,27 +73,27 @@ sub combine {
 }
 
 sub divvy {
-    my $self = shift();
-    my $n = shift();
+    my $self = shift;
+    my $n = shift;
 
     if(!$n) {
         return [];
     }
 
-    my $per = ($self->span() - 1) / $n;
+    my $per = ($self->span - 1) / $n;
 
     my @vals;
     for(1..($n - 1)) {
-        push(@vals, $self->lower() + ($_ * $per));
+        push(@vals, $self->lower + ($_ * $per));
     }
 
     return \@vals;
 }
 
 sub span {
-    my $self = shift();
+    my $self = shift;
 
-    return ($self->upper() - $self->lower()) + 1;
+    return ($self->upper - $self->lower) + 1;
 }
 
 __PACKAGE__->meta->make_immutable;
