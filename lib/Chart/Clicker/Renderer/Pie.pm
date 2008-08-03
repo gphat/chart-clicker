@@ -44,7 +44,6 @@ override('pack', sub {
     my $self = shift;
 
     my $clicker = $self->clicker;
-    # my $cr = $clicker->cairo;
 
     $self->{RADIUS} = $self->height;
     if($self->width < $self->height) {
