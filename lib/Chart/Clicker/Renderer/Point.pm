@@ -3,16 +3,15 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer';
 
-use Chart::Clicker::Shape::Arc;
+use Geometry::Primitive::Circle;
+use Graphics::Primitive::Operation::Fill;
 
 has 'shape' => (
     is => 'rw',
-    does => 'Chart::Clicker::Shape',
+    does => 'Geometry::Primitive::Shape',
     default => sub {
-        Chart::Clicker::Shape::Arc->new({
+        Geometry::Primitive::Circle->new({
            radius => 3,
-           angle_start => 0,
-           angle_end => 360
         });
     }
 );
@@ -21,7 +20,6 @@ override('pack', sub {
     my ($self) = @_;
 
     my $clicker = $self->clicker;
-    # my $cr = $clicker->cairo;
 
     my $width = $self->width;
     my $height = $self->height;
@@ -45,62 +43,26 @@ override('pack', sub {
                 my $x = $domain->mark($width, $keys[$_]);
                 my $y = $height - $range->mark($height, $vals[$_]);
 
-                # $cr->move_to($x, $y);
-                # $self->draw_point($cr, $x, $y, $series, $_);
+                $self->move_to($x, $y);
+                $self->draw_point($x, $y, $series, $_);
             }
-            my $color = $clicker->color_allocator->next;
-            # $cr->set_source_rgba($color->as_array_with_alpha);
-            # $cr->fill;
+            my $op = Graphics::Primitive::Operation::Fill->new;
+            $op->paint(Graphics::Primitive::Paint::Solid->new(
+                color => $clicker->color_allocator->next
+            ));
+            $self->do($op);
         }
     }
 
     return 1;
 });
 
-# sub dontdraw {
-#     my $self = shift;
-# 
-#     my $clicker = $self->clicker;
-#     my $cr = $clicker->cairo;
-# 
-#     my $width = $self->width;
-#     my $height = $self->height;
-# 
-#     my $dses = $clicker->get_datasets_for_context($self->context);
-#     foreach my $ds (@{ $dses }) {
-#         foreach my $series (@{ $ds->series }) {
-# 
-#             # TODO if undef...
-#             my $ctx = $clicker->get_context($ds->context);
-#             my $domain = $ctx->domain_axis;
-#             my $range = $ctx->range_axis;
-# 
-#             my $min = $range->range->lower;
-# 
-#             my $height = $self->height;
-# 
-#             my @vals = @{ $series->values };
-#             my @keys = @{ $series->keys };
-#             for(0..($series->key_count - 1)) {
-#                 my $x = $domain->mark($width, $keys[$_]);
-#                 my $y = $height - $range->mark($height, $vals[$_]);
-# 
-#                 $cr->move_to($x, $y);
-#                 $self->draw_point($cr, $x, $y, $series, $_);
-#             }
-#             my $color = $clicker->color_allocator->next;
-#             $cr->set_source_rgba($color->as_array_with_alpha);
-#             $cr->fill;
-#         }
-#     }
-# 
-#     return 1;
-# }
-
 sub draw_point {
-    my ($self, $cr, $x, $y, $series, $count) = @_;
+    my ($self, $x, $y, $series, $count) = @_;
 
-    $self->shape->create_path($cr, $x , $y);
+    my $shape = $self->shape->clone;
+    $shape->origin(Geometry::Primitive::Point->new(x => $x, y => $y));
+    $self->path->add_primitive($shape);
 }
 
 __PACKAGE__->meta->make_immutable;
