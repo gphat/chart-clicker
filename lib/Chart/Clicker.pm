@@ -14,6 +14,8 @@ use Graphics::Color::RGB;
 use Graphics::Primitive::Insets;
 use Graphics::Primitive::Border;
 
+use Graphics::Primitive::Driver::Cairo;
+
 use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::Grid;
 use Chart::Clicker::Decoration::Legend;
@@ -77,6 +79,12 @@ has 'datasets' => (
         'push' => 'add_to_datasets',
         'get' => 'get_dataset'
     }
+);
+has 'driver' => (
+    is => 'rw',
+    does => 'Graphics::Primitive::Driver',
+    default => sub { Graphics::Primitive::Driver::Cairo->new },
+    handles => [ qw(data write) ]
 );
 has 'grid' => (
     is => 'rw',
@@ -165,8 +173,23 @@ sub add_to_contexts {
     $self->set_context($ctx->name, $ctx);
 }
 
-override('prepare', sub {
+sub draw {
     my ($self) = @_;
+
+    $self->driver->draw($self);
+}
+
+override('prepare', sub {
+    my ($self, $driver) = @_;
+
+    # If we get no driver, assume we are being used as a standalone
+    # component and act accordingly at the end.  So look down there!
+    my $standalone = 0;
+    unless(defined($driver)) {
+        $driver = $self->driver;
+        $driver->component($self);
+        $standalone = 1;
+    }
 
     # We check visible in these components because it's a waste to add them
     # if we aren't showing them.
@@ -257,9 +280,15 @@ override('prepare', sub {
         $c->{component}->clicker($self);
     }
 
-    super;
+    $self->SUPER::prepare($driver);
+    # super;
 
-    return 1;
+    # If we didn't get a driver then we'll assume we are being used as a
+    # stand-alone.
+    if($standalone) {
+        $self->layout_manager->do_layout($self);
+        $self->pack;
+    }
 });
 
 sub get_datasets_for_context {
