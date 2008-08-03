@@ -1,7 +1,7 @@
 package Chart::Clicker::Decoration::Glass;
 use Moose;
 
-extends 'Chart::Clicker::Decoration';
+extends 'Graphics::Primitive::Canvas';
 
 use Graphics::Color::RGB;
 

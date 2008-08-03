@@ -2,7 +2,7 @@ package Chart::Clicker::Decoration::MarkerOverlay;
 
 use Moose;
 
-extends 'Chart::Clicker::Decoration';
+extends 'Graphics::Primitive::Canvas';
 
 sub dontdraw {
     my $self = shift();

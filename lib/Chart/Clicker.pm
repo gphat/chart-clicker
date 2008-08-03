@@ -362,8 +362,8 @@ my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series, $series2 ]);
 
 $cc->add_to_datasets($ds);
 
-$cc->prepare();
-$cc->draw();
+$cc->prepare;
+$cc->draw;
 $cc->write('foo.png')
 
 =cut
