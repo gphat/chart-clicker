@@ -12,9 +12,9 @@ requires    'DateTime'          => 0.4302;
 requires    'DateTime::Set'     => 0.25;
 requires    'IO::File';
 
-requires    'Geometry::Primitive' => 0.04;
+requires    'Geometry::Primitive' => 0.07;
 requires    'Graphics::Color' => 0.04;
-requires    'Graphics::Primitive' => 0.08;
+requires    'Graphics::Primitive' => 0.10;
 requires    'Layout::Manager' => 0.08;
 requires    'Scalar::Util' => 1.19;
 

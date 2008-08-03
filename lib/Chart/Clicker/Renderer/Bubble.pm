@@ -4,10 +4,12 @@ use Moose;
 extends 'Chart::Clicker::Renderer::Point';
 
 override('draw_point', sub {
-    my ($self, $cr, $x, $y, $series, $count) = @_;
+    my ($self, $x, $y, $series, $count) = @_;
 
-    $self->shape->radius($series->get_size($count));
-    $self->shape->create_path($cr, $x , $y);
+    my $shape = $self->shape->clone;
+    $shape->origin(Geometry::Primitive::Point->new(x => $x, y => $y));
+    $self->shape->grow($series->get_size($count));
+    $self->path->add_primitive($shape);
 });
 
 __PACKAGE__->meta->make_immutable;
