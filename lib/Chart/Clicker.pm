@@ -18,7 +18,6 @@ use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::Grid;
 use Chart::Clicker::Decoration::Legend;
 use Chart::Clicker::Decoration::Plot;
-use Chart::Clicker::Format::Png;
 use Chart::Clicker::Renderer;
 use Chart::Clicker::Util;
 use Chart::Clicker::Drawing::ColorAllocator;
@@ -28,13 +27,6 @@ use Cairo;
 use Scalar::Util qw(refaddr);
 
 our $VERSION = '1.99_03';
-
-# TODO Global coercions?
-coerce 'Chart::Clicker::Format'
-    => from 'Str'
-    => via {
-        return Chart::Clicker::Util::load('Chart::Clicker::Format::'.$_)
-    };
 
 coerce 'Chart::Clicker::Renderer'
     => from 'Str'
@@ -301,17 +293,14 @@ Chart::Clicker aims to be a powerful, extensible charting package that creates
 really pretty output.  Charts can be saved in png, svg, pdf and postscript
 format.
 
-Clicker leverages the power of Cairo to create snazzy 2D graphics easily and
-quickly.
+Clicker leverages the power of Graphics::Primitive to create snazzy graphics
+without being tied to specific backend.
 
 At it's core Clicker is more of a toolkit for creating charts.  It's interface
 is a bit more complex because making pretty charts requires attention and care.
 Some fine defaults are established to make getting started easier, but to really
 unleash the potential of Clicker you must roll up your sleeves and build
 things by hand.
-
-The API is a bit intimidating, so it is recommended that you begin with
-L<Chart::Clicker::Simple>.
 
 =head1 WARNING
 
