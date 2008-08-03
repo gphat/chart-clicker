@@ -7,7 +7,6 @@ with 'Chart::Clicker::Positioned';
 # TODO Geometry::Primitive
 use constant PI => 4 * atan2 1, 1;
 
-use Chart::Clicker::Cairo;
 use Chart::Clicker::Data::Range;
 
 use Graphics::Color::RGB;
@@ -209,12 +208,6 @@ override('pack', sub {
 
     super;
 
-    # if($self->is_vertical) {
-    #     $self->per($self->height / ($self->range->span - 1));
-    # } else {
-    #     $self->per($self->width / ($self->range->span - 1));
-    # }
-
     return if $self->hidden;
 
     my $x = 0;
@@ -233,49 +226,21 @@ override('pack', sub {
         # nuffin
     }
 
-    # my $cr = $self->clicker->cairo();
-    # 
-    # my $stroke = $self->stroke();
-    # $cr->set_line_width($stroke->width());
-    # $cr->set_line_cap($stroke->line_cap());
-    # $cr->set_line_join($stroke->line_join());
-    # 
-    # my $font = $self->font();
-    # $cr->set_font_size($font->size());
-    # $cr->select_font_face(
-    #     $font->face(), $font->slant(), $font->weight()
-    # );
-
     my $tick_length = $self->tick_length();
 
     my $lower = $self->range->lower();
 
-    # $cr->set_source_rgba($self->color->as_array_with_alpha());
-
-    # $cr->move_to($x, $y);
     my @values = @{ $self->tick_values };
 
     if($self->is_vertical) {
-        # $cr->line_to($x, $y + $height);
 
         for(0..scalar(@values) - 1) {
             my $val = $values[$_];
             my $iy = $height - $self->mark($height, $val);
             my $tbox = $self->{'ticks_box_cache'}->[$_];
-            # $cr->move_to($x, $iy);
-
-            # my $label = Graphics::Primitive::TextBox->new(
-            #     font => $self->font, lines => [ { text => $self->{LABELS}->[$_], box => $tbox } ],
-            #     width => $tbox->width -$tbox->origin->x, height => $tbox->height - $tbox->origin->y,
-            #     background_color => Graphics::Color::RGB->new( red => 1 ),
-            #     color => Graphics::Color::RGB->new( green => 1)
-            # );
             my $label = $self->get_component($_);
 
             if($self->is_left) {
-                # $cr->line_to($x - $tick_length, $iy);
-
-                # $cr->rel_move_to(-$ext->{'width'} - 2, $ext->{'height'} / 2);
                 $label->origin->x($x - $tick_length - $label->width - 2);
                 $label->origin->y($iy - ($label->height / 2));
                 # $self->add_component($label);
@@ -300,16 +265,11 @@ override('pack', sub {
             # $cr->show_text($self->label());
         }
     } else {
-        # Draw a line for our axis
-        # $cr->line_to($x + $width, $y);
-
         # Draw a tick for each value.
         for(0..scalar(@values) - 1) {
             my $val = $values[$_];
             # Grab the extent from the cache.
-            # my $ext = $self->{'ticks_extents_cache'}->[$_];
             my $ix = $self->mark($width, $val);
-            # $cr->move_to($ix, $y);
 
             my $label = $self->get_component($_);
 
@@ -342,121 +302,6 @@ override('pack', sub {
 
     # $cr->stroke();
 });
-
-sub dontdraw {
-    my $self = shift();
-
-    # if($self->is_vertical) {
-    #     $self->per($self->height / ($self->range->span - 1));
-    # } else {
-    #     $self->per($self->width / ($self->range->span - 1));
-    # }
-
-    return if $self->hidden;
-
-    my $x = 0;
-    my $y = 0;
-
-    my $width = $self->width();
-    my $height = $self->height();
-
-    if($self->is_left) {
-        $x += $width;
-    } elsif($self->is_right) {
-        # nuffin
-    } elsif($self->is_top) {
-        $y += $height;
-    } else {
-        # nuffin
-    }
-
-    my $cr = $self->clicker->cairo();
-
-    my $stroke = $self->stroke();
-    $cr->set_line_width($stroke->width());
-    $cr->set_line_cap($stroke->line_cap());
-    $cr->set_line_join($stroke->line_join());
-
-    my $font = $self->font();
-    $cr->set_font_size($font->size());
-    $cr->select_font_face(
-        $font->face(), $font->slant(), $font->weight()
-    );
-
-    my $tick_length = $self->tick_length();
-
-    my $lower = $self->range->lower();
-
-    $cr->set_source_rgba($self->color->as_array_with_alpha());
-
-    $cr->move_to($x, $y);
-    if($self->is_vertical) {
-        $cr->line_to($x, $y + $height);
-
-        my @values = @{ $self->tick_values() };
-        for(0..scalar(@values) - 1) {
-            my $val = $values[$_];
-            my $iy = $height - $self->mark($height, $val);
-            my $ext = $self->{'ticks_extents_cache'}->[$_];
-            $cr->move_to($x, $iy);
-            if($self->is_left) {
-                $cr->line_to($x - $tick_length, $iy);
-                $cr->rel_move_to(-$ext->{'width'} - 2, $ext->{'height'} / 2);
-            } else {
-                $cr->line_to($x + $tick_length, $iy);
-                $cr->rel_move_to(0, $ext->{'height'} / 2);
-            }
-            $cr->show_text($self->format_value($val));
-        }
-
-        # Draw the label
-        if($self->label()) {
-            my $ext = $self->{'label_extents_cache'};
-            if ($self->is_left) {
-                $cr->move_to($ext->{'height'}, ($height + $ext->{'width'}) / 2);
-                $cr->rotate(3*PI/2);
-            } else {
-                $cr->move_to($width - $ext->{'height'}, ($height - $ext->{'width'}) / 2);
-                $cr->rotate(PI/2);
-            }
-            $cr->show_text($self->label());
-        }
-    } else {
-        # Draw a line for our axis
-        $cr->line_to($x + $width, $y);
-
-        my @values = @{ $self->tick_values };
-        # Draw a tick for each value.
-        for(0..scalar(@values) - 1) {
-            my $val = $values[$_];
-            # Grab the extent from the cache.
-            my $ext = $self->{'ticks_extents_cache'}->[$_];
-            my $ix = $self->mark($width, $val);
-            $cr->move_to($ix, $y);
-            if($self->is_top) {
-                $cr->line_to($ix, $y - $tick_length);
-                $cr->rel_move_to(-($ext->{'width'} / 1.8), -2);
-            } else {
-                $cr->line_to($ix, $y + $tick_length);
-                $cr->rel_move_to(-($ext->{'width'} / 2), $self->{'BIGGEST_TICKS'}->{'height'} - 5);
-            }
-            $cr->show_text($self->{LABELS}->[$_]);
-        }
-
-        # Draw the label
-        if($self->label()) {
-            my $ext = $self->{'label_extents_cache'};
-            if ($self->is_bottom) {
-                $cr->move_to(($width - $ext->{'width'}) / 2, $height - 5);
-            } else {
-                $cr->move_to(($width - $ext->{'width'}) / 2, $ext->{'height'} + 2);
-            }
-            $cr->show_text($self->label());
-        }
-    }
-
-    $cr->stroke();
-}
 
 sub format_value {
     my $self = shift;
