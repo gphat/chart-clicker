@@ -63,11 +63,6 @@ has 'color_allocator' => (
     isa => 'Chart::Clicker::Drawing::ColorAllocator',
     default => sub { Chart::Clicker::Drawing::ColorAllocator->new }
 );
-has 'cairo' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Cairo',
-    clearer => 'clear_cairo'
-);
 has 'contexts' => (
     metaclass => 'Collection::Hash',
     is => 'rw',
@@ -90,12 +85,6 @@ has 'datasets' => (
         'push' => 'add_to_datasets',
         'get' => 'get_dataset'
     }
-);
-has 'format' => (
-    is      => 'rw',
-    isa     => 'Chart::Clicker::Format',
-    coerce  => 1,
-    default => sub { Chart::Clicker::Format::Png->new }
 );
 has 'grid' => (
     is => 'rw',
@@ -256,15 +245,6 @@ override('prepare', sub {
             $yaxes{refaddr($yaxis)} = 1;
         }
 
-        # my $raxis = $ctx->range_axis;
-        # if(defined($raxis)) {
-            # TODO Now a renderer gets it's entire list in a single draw or
-            # prepare pass.  This could be delegated down to the renderer's
-            # prepare.  No more additive renderers.
-            #     $raxis->range->combine($ds->combined_range());
-            # }
-        # }
-
         my $rend = $ctx->renderer;
         if($rend->additive) {
             $yaxis->range->upper($ds->largest_value_slice - 5);
@@ -278,11 +258,6 @@ override('prepare', sub {
 
         $count++;
     }
-
-    $self->format->surface(
-        $self->format->create_surface($self->width, $self->height)
-    );
-    $self->cairo(Chart::Clicker::Cairo->create($self->format->surface));
 
     $self->add_component($self->plot, 'c');
 
@@ -306,18 +281,6 @@ sub get_datasets_for_context {
     }
 
     return \@dses;
-}
-
-sub write {
-    my ($self, $file) = @_;
-
-    return $self->format->write($self, $file);
-}
-
-sub data {
-    my ($self) = @_;
-
-    return $self->format->surface_data;
 }
 
 __PACKAGE__->meta->make_immutable;
