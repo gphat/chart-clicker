@@ -161,6 +161,10 @@ Returns the key at the specified position for every series in this DataSet.
 
 Returns the value at the specified position for every series in this DataSet.
 
+=item I<largest_value_slice>
+
+Finds the largest cumulative 'slice' in this dataset.
+
 =item I<max_key_count>
 
 Get the number of keys in the longest series.

@@ -1,6 +1,5 @@
 package Chart::Clicker::Renderer::Area;
 use Moose;
-use Cairo;
 
 extends 'Chart::Clicker::Renderer';
 
@@ -11,6 +10,11 @@ use Graphics::Primitive::Operation::Stroke;
 use Graphics::Primitive::Paint::Gradient;
 use Graphics::Primitive::Paint::Solid;
 
+has 'brush' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Brush',
+    default => sub { Graphics::Primitive::Brush->new }
+);
 has 'fade' => (
     is => 'rw',
     isa => 'Bool',
@@ -21,13 +25,8 @@ has 'opacity' => (
     isa => 'Num',
     default => 0
 );
-has 'brush' => (
-    is => 'rw',
-    isa => 'Graphics::Primitive::Brush',
-    default => sub { Graphics::Primitive::Brush->new }
-);
 
-sub pack {
+override('pack', sub {
     my ($self) = @_;
 
     my $height = $self->height;
@@ -112,7 +111,7 @@ sub pack {
     }
 
     return 1;
-}
+});
 
 __PACKAGE__->meta->make_immutable;
 
@@ -133,7 +132,7 @@ Chart::Clicker::Renderer::Area renders a dataset as lines.
 
   my $ar = Chart::Clicker::Renderer::Area->new({
       fade => 1,
-      stroke => Graphics::Primitive::Stroke->new({
+      brush => Graphics::Primitive::Brush->new({
           width => 2
       })
   });
@@ -165,7 +164,7 @@ series' line.
 
 =over 4
 
-=item I<draw>
+=item I<pack>
 
 Draw the data.
 

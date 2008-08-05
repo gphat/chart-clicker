@@ -5,6 +5,7 @@ extends 'Chart::Clicker::Renderer';
 
 use Geometry::Primitive::Circle;
 use Graphics::Primitive::Operation::Fill;
+use Graphics::Primitive::Paint::Solid;
 
 has 'shape' => (
     is => 'rw',

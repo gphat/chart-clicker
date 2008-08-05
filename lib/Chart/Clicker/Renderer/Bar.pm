@@ -192,7 +192,7 @@ A stroke to use on each bar.
 
 Prepare the renderer
 
-=item I<draw>
+=item I<pack>
 
 Draw the data!
 

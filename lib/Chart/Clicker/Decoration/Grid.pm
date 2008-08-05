@@ -39,7 +39,7 @@ has 'show_range' => (
     default => 1
 );
 
-sub pack {
+override('pack', sub {
     my $self = shift();
 
     return unless ($self->show_domain || $self->show_range);
@@ -58,7 +58,7 @@ sub pack {
     $op->brush($self->brush);
     $op->brush->color($self->color);
     $self->do($op);
-}
+});
 
 sub draw_lines {
     my ($self, $axis) = @_;
@@ -126,7 +126,11 @@ Set/Get the border for this Grid.
 
 Set/Get the color for this Grid.
 
-=item I<draw>
+=item I<draw_lines>
+
+Called by pack, draws the lines for a given axis.
+
+=item I<pack>
 
 Prepare this Grid for drawing
 

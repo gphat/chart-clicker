@@ -21,10 +21,9 @@ use Chart::Clicker::Decoration::Grid;
 use Chart::Clicker::Decoration::Legend;
 use Chart::Clicker::Decoration::Plot;
 use Chart::Clicker::Renderer;
-use Chart::Clicker::Util;
 use Chart::Clicker::Drawing::ColorAllocator;
 
-use Cairo;
+use Class::MOP;
 
 use Scalar::Util qw(refaddr);
 
@@ -33,9 +32,10 @@ our $VERSION = '1.99_03';
 coerce 'Chart::Clicker::Renderer'
     => from 'Str'
     => via {
-        return Chart::Clicker::Util::load('Chart::Clicker::Renderer::'.$_)
+        my $class = 'Chart::Clicker::Renderer::'.$_;
+        Class::MOP::load_class($class);
+        return $class->new
     };
-
 
 has '+background_color' => (
     default => sub {

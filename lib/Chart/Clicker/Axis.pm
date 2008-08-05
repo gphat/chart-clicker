@@ -23,6 +23,12 @@ has 'baseline' => (
     is  => 'rw',
     isa => 'Num',
 );
+# Remove for border...
+has 'brush' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Brush',
+    default => sub { Graphics::Primitive::Brush->new }
+);
 has '+color' => (
     default => sub {
         Graphics::Color::RGB->new({
@@ -53,22 +59,16 @@ has 'range' => (
     default => sub { Chart::Clicker::Data::Range->new }
 );
 has 'show_ticks' => ( is => 'rw', isa => 'Bool', default => 1 );
-has 'brush' => (
+has 'tick_brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
     default => sub { Graphics::Primitive::Brush->new }
 );
-has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
 has 'tick_labels' => (
     is => 'rw',
     isa => 'ArrayRef',
 );
 has 'tick_length' => ( is => 'rw', isa => 'Num', default => 3 );
-has 'tick_stroke' => (
-    is => 'rw',
-    isa => 'Graphics::Primitive::Brush',
-    default => sub { Graphics::Primitive::Brush->new }
-);
 has 'tick_values' => (
     metaclass => 'Collection::Array',
     is => 'rw',
@@ -80,6 +80,7 @@ has 'tick_values' => (
         'count' => 'tick_value_count'
     }
 );
+has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
 
 override('prepare', sub {
     my ($self, $driver) = @_;
@@ -336,16 +337,16 @@ Chart::Clicker::Axis represents the plot of the chart.
 
   use Chart::Clicker::Axis;
   use Graphics::Primitive::Font;
-  use Graphics::Primitive::Stroke;
+  use Graphics::Primitive::Brush;
 
   my $axis = Chart::Clicker::Axis->new({
-    font  => Graphics::Primitive::Font->new(),
+    font  => Graphics::Primitive::Font->new,
     orientation => 'vertical',
     position => 'left',
     show_ticks => 1,
-    stroke = Graphics::Primitive::Stroke->new(),
+    brush = Graphics::Primitive::Brush->new,
     tick_length => 2,
-    tick_stroke => Graphics::Primitive::Stroke->new(),
+    tick_brush => Graphics::Primitive::Brush->new,
     visible => 1,
   });
 
@@ -372,6 +373,10 @@ Set the 'baseline' value of this axis.  This is used by some renderers to
 change the way a value is marked.  The Bar render, for instance, considers
 values below the base to be 'negative'.
 
+=item I<brush>
+
+Set/Get the brush for this axis.
+
 =item I<color>
 
 Set/Get the color of the axis.
@@ -385,7 +390,7 @@ Set/Get the font used for the axis' labels.
 Set/Get the format to use for the axis values.
 
 If the format is a string then format is applied to each value 'tick' via
-sprintf().  See sprintf()s perldoc for details!  This is useful for situations
+sprintf.  See sprintf perldoc for details!  This is useful for situations
 where the values end up with repeating decimals.
 
 If the format is a coderef then that coderef will be executed and the value
@@ -429,17 +434,9 @@ Set/Get the Range for this axis.
 Set/Get the show ticks flag.  If this is value then the small tick marks at
 each mark on the axis will not be drawn.
 
-=item I<stroke>
-
-Set/Get the stroke for this axis.
-
 =item I<tick_length>
 
 Set/Get the tick length.
-
-=item I<tick_stroke>
-
-Set/Get the stroke for the tick markers.
 
 =item I<tick_values>
 
@@ -452,6 +449,10 @@ Add a value to the list of tick values.
 =item I<clear_tick_values>
 
 Clear all tick values.
+
+=item I<tick_brush>
+
+Set/Get the stroke for the tick markers.
 
 =item I<tick_value_count>
 

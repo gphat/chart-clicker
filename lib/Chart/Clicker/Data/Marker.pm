@@ -2,8 +2,15 @@ package Chart::Clicker::Data::Marker;
 use Moose;
 
 use Graphics::Color::RGB;
-use Graphics::Primitive::Stroke;
+use Graphics::Primitive::Brush;
 
+has 'brush' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Brush',
+    default => sub {
+        Graphics::Primitive::Brush->new;
+    }
+);
 has 'color' => (
     is => 'rw',
     isa => 'Graphics::Color',
@@ -26,13 +33,6 @@ has 'inside_color' => (
         );
     }
 );
-has 'stroke' => (
-    is => 'rw',
-    isa => 'Graphics::Primitive::Stroke',
-    default => sub {
-        Graphics::Primitive::Stroke->new();
-    }
-);
 
 __PACKAGE__->meta->make_immutable;
 
@@ -53,11 +53,11 @@ Used to highlight a particular key, value or range of either.
 
  use Chart::Clicker::Decoration::Marker;
  use Graphics::Color::RGB;
- use Graphics::Primitive::Stroke;
+ use Graphics::Primitive::Brush;
 
  my $mark = Chart::Clicker::Decoration::Marker->new(
     color   => Graphics::Color::RGB->new,
-    stroke  => Graphics::Primitive::Stroke->new,
+    brush  => Graphics::Primitive::Brush->new,
     key     => 12,
     value   => 123,
     # Optionally
@@ -79,6 +79,10 @@ Used to highlight a particular key, value or range of either.
 
 =over 4
 
+=item I<brush>
+
+Set/Get the brush for this Marker.
+
 =item I<color>
 
 Set/Get the color for this marker.
@@ -91,10 +95,6 @@ Set/Get the key for this marker.  This represents a point on the domain.
 
 Set/Get the key2 for this marker.  This represents a second point on the domain
 and is used to specify a range.
-
-=item I<stroke>
-
-Set/Get the stroke for this Marker.
 
 =item I<value>
 

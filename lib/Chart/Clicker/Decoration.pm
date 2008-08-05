@@ -1,12 +1,7 @@
 package Chart::Clicker::Decoration;
 use Moose;
 
-extends 'Chart::Clicker::Drawing::Component';
-
-has 'clicker' => (
-    is => 'rw',
-    isa => 'Chart::Clicker'
-);
+extends 'Chart::Clicker::Component';
 
 __PACKAGE__->meta->make_immutable;
 

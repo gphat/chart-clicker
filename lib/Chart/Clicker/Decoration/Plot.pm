@@ -53,8 +53,6 @@ override('prepare', sub {
     super;
 });
 
-sub dontdraw { }
-
 __PACKAGE__->meta->make_immutable;
 
 no Moose;

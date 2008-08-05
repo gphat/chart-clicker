@@ -91,57 +91,7 @@ override('prepare', sub {
     super;
 
     $ca->reset;
-
-    # return 1;
 });
-# 
-# sub dontdraw {
-#     my $self = shift();
-# 
-#     super;
-# 
-#     my $width = $self->width();
-#     my $height = $self->height();
-# 
-#     my $cr = $self->clicker->cairo();
-# 
-#     $cr->select_font_face($self->font->face(), $self->font->slant(), $self->font->weight());
-#     $cr->set_font_size($self->font->size());
-# 
-#     my $x = 0;
-#     my $y = 0;
-#     # If we have padding, honor it.
-#     if(defined($self->padding())) {
-#         $x = $self->padding->left();
-#         $y = $self->padding->top();
-#     }
-# 
-#     foreach my $item (@{ $self->legend_items() }) {
-# 
-#         my $extents = $cr->text_extents($item->label());
-# 
-#         # This item's label might not be as tall as the tallest (or wide as the
-#         # widest) one we will draw, so we must center this item in the
-#         # available space.
-#         my $vcenter = ($self->tallest() - $extents->{'height'}) / 2;
-#         my $center = ($self->widest() - $extents->{'width'}) / 2;
-# 
-#         $cr->move_to($x + $center, $y + $extents->{'height'} + $vcenter);
-#         $cr->text_path($item->label());
-#         $cr->set_source_rgba($item->color->as_array_with_alpha());
-#         $cr->fill();
-# 
-#         # Check to see if we need to wrap
-#         if(($x + $self->widest()) < $self->inside_width()) {
-#             # No need to wrap.
-#             $x += $self->widest();
-#         } else {
-#             # Wrap!  TODO Honor insets...
-#             $x = 0;#$self->insets->left();
-#             $y += $self->tallest();
-#         }
-#     }
-# }
 
 __PACKAGE__->meta->make_immutable;
 

@@ -6,19 +6,20 @@ extends 'Chart::Clicker::Renderer';
 use Graphics::Primitive::Brush;
 use Graphics::Primitive::Operation::Stroke;
 
+has 'brush' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Brush',
+    default => sub { Graphics::Primitive::Brush->new }
+);
 has 'shape' => (
     is => 'rw',
     isa => 'Chart::Clicker::Shape'
 );
 has 'shape_brush' => (
     is => 'rw',
-    isa => 'Graphics::Primitive::Stroke',
-);
-has 'brush' => (
-    is => 'rw',
     isa => 'Graphics::Primitive::Brush',
-    default => sub { Graphics::Primitive::Brush->new }
 );
+# TODO Readd shapes
 
 sub pack {
     my ($self) = @_;
@@ -81,7 +82,7 @@ Chart::Clicker::Renderer::Line renders a dataset as lines.
 =head1 SYNOPSIS
 
   my $lr = Chart::Clicker::Renderer::Line->new(
-    stroke => Graphics::Primitive::Stroke->new({
+    brush => Graphics::Primitive::Brush->new({
       ...
     })
   });
@@ -111,7 +112,7 @@ Set a Stroke object to be used for the lines.
 
 =over 4
 
-=item I<draw>
+=item I<pack>
 
 Draw it!
 
