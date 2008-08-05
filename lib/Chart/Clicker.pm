@@ -238,8 +238,12 @@ override('prepare', sub {
             $xaxis->orientation('horizontal');
             $xaxis->position('bottom');
             if($dcount % 2) {
-                $xaxis->position('top')
+                $xaxis->position('top');
             }
+
+            $xaxis->padding->bottom(5);
+            $xaxis->padding->top(5);
+
             $plot->add_component($xaxis, $xaxis->is_top ? 'n' : 's');
             $xaxes{refaddr($xaxis)} = 1;
             $dcount++;
@@ -255,6 +259,9 @@ override('prepare', sub {
             if($rcount % 2) {
                 $yaxis->position('right');
             }
+            $yaxis->padding->left(5);
+            $yaxis->padding->right(5);
+
             $plot->add_component($yaxis, $yaxis->is_left ? 'w' : 'e');
             $rcount++;
             $yaxes{refaddr($yaxis)} = 1;
@@ -288,6 +295,7 @@ override('prepare', sub {
     if($standalone) {
         $self->layout_manager->do_layout($self);
         $self->pack;
+        $driver->reset;
     }
 });
 

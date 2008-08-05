@@ -4,9 +4,6 @@ use Moose;
 extends 'Chart::Clicker::Container';
 with 'Chart::Clicker::Positioned';
 
-# TODO Geometry::Primitive
-use constant PI => 4 * atan2 1, 1;
-
 use Chart::Clicker::Data::Range;
 
 use Graphics::Color::RGB;
@@ -14,6 +11,8 @@ use Graphics::Color::RGB;
 use Graphics::Primitive::Font;
 
 use Layout::Manager::Absolute;
+
+use Math::Trig ':pi';
 
 use Moose::Util::TypeConstraints;
 use MooseX::AttributeHelpers;
@@ -85,6 +84,8 @@ has 'tick_values' => (
 override('prepare', sub {
     my ($self, $driver) = @_;
 
+    super;
+
     if($self->range->span == 0) {
         die('This axis has a span of 0, that\'s fatal!');
     }
@@ -115,78 +116,81 @@ override('prepare', sub {
 
     my $font = $self->font;
 
-    # $cairo->set_font_size($font->size());
-    # $cairo->select_font_face(
-    #     $font->face(), $font->slant(), $font->weight()
-    # );
-
-    my %biggest;
+    my $bheight = 0;
+    my $bwidth = 0;
     # Determine all this once... much faster.
-    my @values = @{ $self->tick_values() };
-    for(0..scalar(@values) - 1) {
-        my $val = $values[$_];
+    foreach my $val (@{ $self->tick_values }) {
         if(defined($self->tick_labels)) {
             $val = $self->tick_labels->[$_];
         } else {
             $val = $self->format_value($val);
         }
-        push(@{ $self->{LABELS} }, $val);
-        # my $ext = $cairo->text_extents($val);
         my $tbox = $driver->get_text_bounding_box($font, $val);
 
-        # $ext->{total_height} = $ext->{height} - $ext->{y_bearing};
-        $self->{'ticks_box_cache'}->[$_] = $tbox;
-        if(!(defined($biggest{width}))
-            || ($tbox->width > $biggest{'width'})) {
-            $biggest{'width'} = $tbox->width
-        }
-        if(!defined($biggest{'height'})
-            || ($tbox->height > $biggest{'height'})) {
-            $biggest{'height'} = $tbox->height;
-        }
-
-        my $label = Graphics::Primitive::TextBox->new(
-            font => $self->font,
-            lines => [ { text => $self->{LABELS}->[$_], box => $tbox } ],
-            width => $tbox->width, height => $tbox->height,
+        my $tlabel = Graphics::Primitive::TextBox->new(
+            font => $font,
+            text => $val,
             color => Graphics::Color::RGB->new( green => 0, blue => 0, red => 0),
         );
-        $self->add_component($label);
+        $tlabel->prepare($driver);
+
+        $tlabel->width($tlabel->minimum_width);
+        $tlabel->height($tlabel->minimum_height);
+
+        $bwidth = $tlabel->width if($tlabel->width > $bwidth);
+        $bheight = $tlabel->height if($tlabel->height > $bheight);
+
+        $self->add_component($tlabel);
     }
 
-    $self->{'BIGGEST_TICKS'} = \%biggest;
-
-    my $big = $biggest{'height'};
+    my $big = $bheight;
     if($self->is_vertical) {
-        $big = $biggest{'width'};
+        $big = $bwidth;
     }
 
     if($self->show_ticks) {
         $big += $self->tick_length;
     }
 
+    my $label_width = 0;
+    my $label_height = 0;
+
     if ($self->label) {
-        # my $ext = $cairo->text_extents($self->label());
-        my $tbox = $driver->get_text_bounding_box($self->font, $self->label);
-        # $ext->{total_height} = $ext->{height} - $ext->{y_bearing};
-        $self->{'label_box_cache'} = $tbox;
+
+        my $angle = 0;
+        if($self->is_vertical) {
+            if ($self->is_left) {
+                $angle -= pip2;
+            } else {
+                $angle = pip2;
+            }
+        }
+
+        my $label = Graphics::Primitive::TextBox->new(
+            name => 'label',
+            font => $self->font,
+            text => $self->label,
+            angle => $angle,
+            color => Graphics::Color::RGB->new( green => 0, blue => 0, red => 0),
+        );
+        $label->font->size($label->font->size);
+
+        $label->prepare($driver);
+
+        $label->width($label->minimum_width);
+        $label->height($label->minimum_height);
+
+        $label_width = $label->width;
+        $label_height = $label->height;
+        $self->add_component($label);
     }
 
     if($self->is_vertical) {
-        # The label will be rotated, so use height here too.
-        my $label_width = $self->label
-            ? $self->{'label_box_cache'}->height
-            : 0;
-        $self->minimum_width($big + $label_width);
-        # TODO Wrong, need tallest label + tick length + outside
-        $self->minimum_height($self->outside_height + $big);
+        $self->minimum_width($self->minimum_width + $big + $label_width);
+        $self->minimum_height($self->minimum_height + $self->outside_height + $big);
     } else {
-        my $label_height = $self->label
-            ? $self->{'label_box_cache'}->height
-            : 0;
-        $self->minimum_height($big + $label_height);
-        # TODO Wrong, need widest label + tick length + outside
-        $self->minimum_width($big + $self->outside_width);
+        $self->minimum_height($self->minimum_height + $big + $label_height);
+        $self->minimum_width($self->minimum_width + $big + $self->outside_width);
     }
 
     return 1;
@@ -215,6 +219,7 @@ override('pack', sub {
 
     my $width = $self->width;
     my $height = $self->height;
+    my $ibb = $self->inside_bounding_box;
 
     if($self->is_left) {
         $x += $width;
@@ -226,9 +231,9 @@ override('pack', sub {
         # nuffin
     }
 
-    my $tick_length = $self->tick_length();
+    my $tick_length = $self->tick_length;
 
-    my $lower = $self->range->lower();
+    my $lower = $self->range->lower;
 
     my @values = @{ $self->tick_values };
 
@@ -237,32 +242,31 @@ override('pack', sub {
         for(0..scalar(@values) - 1) {
             my $val = $values[$_];
             my $iy = $height - $self->mark($height, $val);
-            my $tbox = $self->{'ticks_box_cache'}->[$_];
             my $label = $self->get_component($_);
 
             if($self->is_left) {
-                $label->origin->x($x - $tick_length - $label->width - 2);
+                $label->origin->x($ibb->origin->x + $ibb->width - $label->width);
                 $label->origin->y($iy - ($label->height / 2));
-                # $self->add_component($label);
             } else {
-                # $cr->line_to($x + $tick_length, $iy);
-                # $cr->rel_move_to(0, $ext->{'height'} / 2);
+                $label->origin->x($ibb->origin->x);
+                $label->origin->y($iy - ($label->height / 2));
             }
-            # $cr->show_text($self->format_value($val));
         }
 
         # Draw the label
         # FIXME Not working, rotated text labels...
         if($self->label) {
-            # my $ext = $self->{'label_extents_cache'};
-            if ($self->is_left) {
-                # $cr->move_to($ext->{'height'}, ($height + $ext->{'width'}) / 2);
-                # $cr->rotate(3*PI/2);
+            my $label = $self->find_component('label');
+
+            if($self->is_left) {
+
+                $label->origin->x($ibb->origin->x);
+                $label->origin->y(($height - $label->height) / 2);
             } else {
-                # $cr->move_to($width - $ext->{'height'}, ($height - $ext->{'width'}) / 2);
-                # $cr->rotate(PI/2);
+
+                $label->origin->x($ibb->origin->x + $ibb->width - $label->width);
+                $label->origin->y(($height - $label->height) / 2);
             }
-            # $cr->show_text($self->label());
         }
     } else {
         # Draw a tick for each value.
@@ -274,33 +278,28 @@ override('pack', sub {
             my $label = $self->get_component($_);
 
             if($self->is_top) {
-                # $cr->line_to($ix, $y - $tick_length);
-                # $cr->rel_move_to(-($ext->{'width'} / 1.8), -2);
-                $label->origin->x($ix - ($label->width / 1.8));
-                $label->origin->y($y - $tick_length - 2);
+                $label->origin->x($x - ($label->width / 1.8));
+                $label->origin->y($ibb->origin->y + $ibb->height - $label->height);
             } else {
-                # $cr->line_to($ix, $y + $tick_length);
-                # $cr->rel_move_to(-($ext->{'width'} / 2), $self->{'BIGGEST_TICKS'}->{'height'} - 5);
                 $label->origin->x($ix - ($label->width / 1.8));
-                $label->origin->y($y + $tick_length + $self->{'BIGGEST_TICKS'}->{'height'} - 5);
+                $label->origin->y($ibb->origin->y);
             }
-            # $cr->show_text($self->{LABELS}->[$_]);
         }
 
         # Draw the label
         # FIXME Not working, rotated text labels...
         if($self->label) {
+            my $label = $self->find_component('label');
+
             my $ext = $self->{'label_extents_cache'};
             if ($self->is_bottom) {
-                # $cr->move_to(($width - $ext->{'width'}) / 2, $height - 5);
+                $label->origin->x(($width - $label->width) / 2);
+                $label->origin->y($height - $label->height - ($self->padding->bottom + $self->margins->bottom + $self->border->width));
             } else {
-                # $cr->move_to(($width - $ext->{'width'}) / 2, $ext->{'height'} + 2);
+                $label->origin->x(($width - $label->width) / 2);
             }
-            # $cr->show_text($self->label());
         }
     }
-
-    # $cr->stroke();
 });
 
 sub format_value {
