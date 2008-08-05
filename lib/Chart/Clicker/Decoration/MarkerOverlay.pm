@@ -2,79 +2,95 @@ package Chart::Clicker::Decoration::MarkerOverlay;
 
 use Moose;
 
-extends 'Graphics::Primitive::Canvas';
+extends 'Chart::Clicker::Decoration';
 
-sub dontdraw {
-    my $self = shift();
+use Graphics::Primitive::Operation::Stroke;
+use Graphics::Primitive::Operation::Fill;
+use Graphics::Primitive::Paint::Solid;
 
-    my $cr = $self->clicker->cairo();
+override('pack', sub {
+    my ($self) = @_;
 
-    my $width = $self->width();
-    my $height = $self->height();
+    my $width = $self->width;
+    my $height = $self->height;
 
-    foreach my $ctx (@{ $self->clicker->contexts }) {
-        foreach my $marker (@{ $ctx->markers() }) {
+    my $clicker = $self->clicker;
 
-            my $key = $marker->key();
-            my $key2 = $marker->key2();
-            my $value = $marker->value();
-            my $value2 = $marker->value2();
+    foreach my $cname ($clicker->context_names) {
+        my $ctx = $clicker->get_context($cname);
+        foreach my $marker (@{ $ctx->markers }) {
 
-            $cr->set_line_width($marker->stroke->width());
-            $cr->set_source_rgba($marker->color->rgba());
+            my $key = $marker->key;
+            my $key2 = $marker->key2;
+            my $value = $marker->value;
+            my $value2 = $marker->value2;
 
             if($key && $value) {
             } elsif(defined($key)) {
                 my $domain = $ctx->domain_axis;
 
-                my $x = $domain->mark($key);
+                my $x = $domain->mark($self->width, $key);
                 my $x2;
 
                 if($key2) {
-                    $x2 = $domain->mark($key2);
-                    $cr->rectangle($x, 0, ($x2 - $x), $height);
-                    $cr->save();
-                    $cr->set_source_rgba($marker->inside_color->as_array_with_alpha());
-                    $cr->fill();
-                    $cr->restore();
+                    $x2 = $domain->mark($self->width, $key2);
+                    $self->move_to($x, 0);
+                    $self->rectangle(($x2 - $x), $height);
+                    my $fillop = Graphics::Primitive::Operation::Fill->new(
+                        paint => Graphics::Primitive::Paint::Solid->new(
+                            color => $marker->inside_color
+                        ),
+                    );
+                    $self->do($fillop);
                 }
 
-                $cr->move_to($x, 0);
-                $cr->rel_line_to(0, $height);
+                $self->move_to($x, 0);
+                $self->rel_line_to(0, $height);
 
                 if($x2) {
-                    $cr->move_to($x2, 0);
-                    $cr->rel_line_to(0, $height);
+                    $self->move_to($x2, 0);
+                    $self->rel_line_to(0, $height);
                 }
 
-                $cr->stroke();
+                my $op = Graphics::Primitive::Operation::Stroke->new;
+                $op->brush($marker->brush);
+
+                $self->do($op);
             } elsif(defined($value)) {
                 my $range = $ctx->range_axis;
-
-                my $y = $range->mark($value);
+                # 
+                my $y = $range->mark($height, $value);
                 my $y2;
 
                 if($value2) {
-                    $y2 = $range->mark($value2);
-                    $cr->rectangle(0, $y, $width, ($y2 - $y));
-                    $cr->save();
-                    $cr->set_source_rgba($marker->inside_color->as_array_with_alpha());
-                    $cr->fill();
-                    $cr->restore();
+                    $y2 = $range->mark($self->height, $value2);
+                    $self->move_to(0, $y);
+                    $self->rectangle($width, ($y2 - $y));
+                    my $fillop = Graphics::Primitive::Operation::Fill->new(
+                        paint => Graphics::Primitive::Paint::Solid->new(
+                            color => $marker->inside_color
+                        ),
+                    );
+                    $self->do($fillop);
+
                 }
 
-                $cr->move_to(0, $y);
-                $cr->rel_line_to($width, 0);
+                $self->move_to(0, $y);
+                $self->rel_line_to($width, 0);
 
                 if($y2) {
-                    $cr->move_to(0, $y2);
-                    $cr->rel_line_to($width, 0);
+                    $self->move_to(0, $y2);
+                    $self->rel_line_to($width, 0);
                 }
-                $cr->stroke();
+
+                my $op = Graphics::Primitive::Operation::Stroke->new;
+                $op->brush($marker->brush);
+
+                $self->do($op);
             }
         }
     }
-}
+});
 
 __PACKAGE__->meta->make_immutable;
 
