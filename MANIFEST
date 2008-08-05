@@ -1,5 +1,4 @@
 Changes
-document.pl
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
@@ -14,7 +13,8 @@ inc/Module/Install/WriteAll.pm
 lib/Chart/Clicker.pm
 lib/Chart/Clicker/Axis.pm
 lib/Chart/Clicker/Axis/DateTime.pm
-lib/Chart/Clicker/Cairo.pm
+lib/Chart/Clicker/Component.pm
+lib/Chart/Clicker/Container.pm
 lib/Chart/Clicker/Context.pm
 lib/Chart/Clicker/Data/DataSet.pm
 lib/Chart/Clicker/Data/Marker.pm
@@ -24,19 +24,11 @@ lib/Chart/Clicker/Data/Series/Size.pm
 lib/Chart/Clicker/Decoration.pm
 lib/Chart/Clicker/Decoration/Glass.pm
 lib/Chart/Clicker/Decoration/Grid.pm
-lib/Chart/Clicker/Decoration/Label.pm
 lib/Chart/Clicker/Decoration/Legend.pm
 lib/Chart/Clicker/Decoration/LegendItem.pm
 lib/Chart/Clicker/Decoration/MarkerOverlay.pm
 lib/Chart/Clicker/Decoration/Plot.pm
 lib/Chart/Clicker/Drawing/ColorAllocator.pm
-lib/Chart/Clicker/Drawing/Component.pm
-lib/Chart/Clicker/Drawing/Container.pm
-lib/Chart/Clicker/Format.pm
-lib/Chart/Clicker/Format/Pdf.pm
-lib/Chart/Clicker/Format/Png.pm
-lib/Chart/Clicker/Format/Ps.pm
-lib/Chart/Clicker/Format/Svg.pm
 lib/Chart/Clicker/Positioned.pm
 lib/Chart/Clicker/Renderer.pm
 lib/Chart/Clicker/Renderer/Area.pm
@@ -48,18 +40,13 @@ lib/Chart/Clicker/Renderer/Pie.pm
 lib/Chart/Clicker/Renderer/Point.pm
 lib/Chart/Clicker/Renderer/StackedBar.pm
 lib/Chart/Clicker/Shape.pm
-lib/Chart/Clicker/Shape/Arc.pm
-lib/Chart/Clicker/Shape/Rectangle.pm
-lib/Chart/Clicker/Util.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
 META.yml
-perlcriticrc
 README
 t/00-basic.t
 t/00-drawing-colorallocator.t
-t/00-util.t
 t/01-data-dataset.t
 t/01-data-marker.t
 t/01-data-range.t
@@ -76,7 +63,6 @@ t/04-renderer-pie.t
 t/04-renderer-point.t
 t/05-decoration-glass.t
 t/05-decoration-grid.t
-t/05-decoration-label.t
 t/05-decoration-legend.t
 t/05-decoration-legenditem.t
 t/05-decoration-markeroverlay.t
