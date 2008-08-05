@@ -1,11 +1,13 @@
 package Chart::Clicker::Decoration::Glass;
 use Moose;
 
-extends 'Graphics::Primitive::Canvas';
+extends 'Chart::Clicker::Decoration';
 
 use Graphics::Color::RGB;
+use Graphics::Primitive::Operation::Fill;
+use Graphics::Primitive::Paint::Solid;
 
-has 'background_color' => ( is => 'rw', isa => 'Graphics::Color::RGB' );
+has 'background_color' => ( is => 'rw', isa => 'Graphics::Color::RGB', default => sub { Graphics::Color::RGB->new(red => 1, green => 0, blue => 0, alpha => 1) });
 has 'glare_color' => (
     is => 'rw',
     isa => 'Graphics::Color::RGB',
@@ -17,42 +19,41 @@ has 'glare_color' => (
     coerce => 1
 );
 
-override('prepare', sub {
-    my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
+# override('prepare', sub {
+#     my $self = shift();
+#     my $clicker = shift();
+#     my $dimension = shift();
+# 
+#     $self->width($dimension->width());
+#     $self->height($dimension->height());
+# 
+#     return 1;
+# });
 
-    $self->width($dimension->width());
-    $self->height($dimension->height());
+override('pack', sub {
+    my ($self) = @_;
 
-    return 1;
-});
+    my $twentypofheight = $self->height * .20;
 
-sub dontdraw {
-    my $self = shift();
-    my $clicker = shift();
+    $self->move_to(1, $twentypofheight);
 
-    my $cr = $clicker->cairo();
-
-    if($self->background_color()) {
-        $cr->set_source_rgba($self->background_color->as_array_with_alpha());
-        $cr->fill();
-    }
-
-    my $twentypofheight = $self->height() * .20;
-
-    $cr->move_to(1, $twentypofheight);
-    $cr->rel_curve_to(
-        0, 0, $self->width() / 2, -$self->height() * .30,
-        $self->width(), 0
+    $self->rel_curve_to(
+        0, 0,
+        $self->width / 2, $self->height * .30,
+        $self->width, 0
     );
-    $cr->line_to($self->width(), 0);
-    $cr->line_to(0, 0);
-    $cr->line_to(0, $twentypofheight);
 
-    $cr->set_source_rgba($self->glare_color->as_array_with_alpha());
-    $cr->fill();
-};
+    $self->line_to($self->width, 0);
+    $self->line_to(0, 0);
+    $self->line_to(0, $twentypofheight);
+
+    my $fillop = Graphics::Primitive::Operation::Fill->new(
+        paint => Graphics::Primitive::Paint::Solid->new(
+            color => $self->glare_color
+        )
+    );
+    $self->do($fillop);
+});
 
 __PACKAGE__->meta->make_immutable;
 

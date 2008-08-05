@@ -1,8 +1,8 @@
 use Test::More tests => 3;
 
 use Chart::Clicker::Data::Series;
-use Chart::Clicker::Data::Series::Size;
 use Chart::Clicker::Data::DataSet;
+use Chart::Clicker::Data::Marker;
 use Chart::Clicker::Renderer::Point;
 
 BEGIN {
@@ -26,8 +26,18 @@ my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series, $series2 ]);
 
 $cc->add_to_datasets($ds);
 
-$cc->prepare();
-$cc->draw();
-my $data = $cc->data();
+my $ctx = $cc->get_context('default');
+my $mark = Chart::Clicker::Data::Marker->new(key => 5, key2 => 6);
+$mark->brush->color(Graphics::Color::RGB->new(red => 1, green => 0, blue => 0, alpha => 1));
+$mark->inside_color(Graphics::Color::RGB->new(red => .5, green => .5, blue => .5, alpha => .5));
+$ctx->add_marker($mark);
+
+my $mark2 = Chart::Clicker::Data::Marker->new(value => 40, value2 => 60);
+$mark2->brush->color(Graphics::Color::RGB->new(red => 1, green => 0, blue => 0, alpha => 1));
+$mark2->inside_color(Graphics::Color::RGB->new(red => .5, green => .5, blue => .5, alpha => .5));
+$ctx->add_marker($mark2);
+
+$cc->draw;
+my $data = $cc->data;
 ok(defined($data), 'data');
 

@@ -3,6 +3,8 @@ use Moose;
 
 extends 'Chart::Clicker::Component';
 
+# TODO Hmmm...
+
 use Graphics::Primitive::Font;
 
 has 'font' => (

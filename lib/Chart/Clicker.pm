@@ -19,6 +19,7 @@ use Graphics::Primitive::Driver::Cairo;
 use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::Grid;
 use Chart::Clicker::Decoration::Legend;
+use Chart::Clicker::Decoration::MarkerOverlay;
 use Chart::Clicker::Decoration::Plot;
 use Chart::Clicker::Renderer;
 use Chart::Clicker::Drawing::ColorAllocator;
@@ -65,6 +66,7 @@ has 'contexts' => (
     provides => {
         set    => 'set_context',
         get     => 'get_context',
+        keys    => 'context_names',
         count   => 'context_count',
         delete  => 'delete_context'
     }
@@ -118,40 +120,6 @@ has '+padding' => (
         Graphics::Primitive::Insets->new( top => 5, bottom => 5, right => 5, left => 5)
     }
 );
-
-# TODO Add these to context!
-# has 'markers' => (
-#     metaclass => 'Collection::Array',
-#     is => 'rw',
-#     isa => 'ArrayRef[Chart::Clicker::Data::Marker]',
-#     default => sub { [] },
-#     provides => {
-#         'count' => 'marker_count',
-#         'push'  => 'add_to_markers'
-#     }
-# );
-# 
-# has 'marker_domain_axes' => (
-#     metaclass => 'Collection::Hash',
-#     is => 'rw',
-#     isa => 'HashRef',
-#     default => sub { {} },
-#     provides => {
-#         'set' => 'set_marker_domain_axis',
-#         'get' => 'get_marker_domain_axis'
-#     }
-# );
-# 
-# has 'marker_range_axes' => (
-#     metaclass => 'Collection::Hash',
-#     is => 'rw',
-#     isa => 'HashRef',
-#     default => sub { {} },
-#     provides => {
-#         'set' => 'set_marker_range_axis',
-#         'get' => 'get_marker_range_axis'
-#     }
-# );
 has 'plot' => (
     is => 'rw',
     isa => 'Chart::Clicker::Decoration::Plot',
@@ -176,20 +144,19 @@ sub add_to_contexts {
 sub draw {
     my ($self) = @_;
 
+    my $driver = $self->driver;
+    $driver->component($self);
+    $self->prepare($driver);
+
+    $self->layout_manager->do_layout($self);
+    $self->pack;
+    $driver->reset;
+
     $self->driver->draw($self);
 }
 
 override('prepare', sub {
-    my ($self, $driver) = @_;
-
-    # If we get no driver, assume we are being used as a standalone
-    # component and act accordingly at the end.  So look down there!
-    my $standalone = 0;
-    unless(defined($driver)) {
-        $driver = $self->driver;
-        $driver->component($self);
-        $standalone = 1;
-    }
+    my ($self, $driver, $standalone) = @_;
 
     # We check visible in these components because it's a waste to add them
     # if we aren't showing them.
@@ -202,6 +169,11 @@ override('prepare', sub {
     if($self->grid->visible) {
         $plot->render_area->add_component($self->grid, 'c');
     }
+
+    # TODO Boolean this?
+    $plot->render_area->add_component(
+        Chart::Clicker::Decoration::MarkerOverlay->new
+    );
 
     # Sentinels to control the side that the axes will be drawn on.
     my $dcount = 0;
@@ -287,16 +259,17 @@ override('prepare', sub {
         $c->{component}->clicker($self);
     }
 
-    $self->SUPER::prepare($driver);
-    # super;
+    super;
+});
 
-    # If we didn't get a driver then we'll assume we are being used as a
-    # stand-alone.
-    if($standalone) {
-        $self->layout_manager->do_layout($self);
-        $self->pack;
-        $driver->reset;
+around('prepare', sub {
+    my ($cont, $class, $driver) = @_;
+
+    my $standalone = 0;
+    unless(defined($driver)) {
+        $standalone = 1;
     }
+    $cont->($class, $driver, $standalone);
 });
 
 sub get_datasets_for_context {
@@ -376,12 +349,9 @@ Clicker supports PNG, SVG, PDF and PostScript output.
 
 =head1 SYNOPSIS
 
-use Test::More tests => 3;
-
+use Chart::Clicker
 use Chart::Clicker::Data::Series;
-use Chart::Clicker::Data::Series::Size;
 use Chart::Clicker::Data::DataSet;
-use Chart::Clicker::Renderer::Point;
 
 my $cc = Chart::Clicker->new;
 
@@ -399,7 +369,6 @@ my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series, $series2 ]);
 
 $cc->add_to_datasets($ds);
 
-$cc->prepare;
 $cc->draw;
 $cc->write('foo.png')
 
@@ -453,7 +422,7 @@ Get/Set the datasets for this chart.
 
 =item I<draw>
 
-Draw this chart
+Draw this chart.
 
 =item I<format>
 
@@ -487,10 +456,6 @@ Set/Get the legend that will be used with this chart.
 
 The position this legend will be added.  Should be one of north, south, east,
 west or center as required by L<Layout::Manager::Compass>.
-
-=item I<prepare>
-
-Prepare this chart for rendering.
 
 =item I<write>
 

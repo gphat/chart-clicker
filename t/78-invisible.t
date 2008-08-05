@@ -29,12 +29,10 @@ $cc->add_to_datasets($ds);
 my $def = $cc->get_context('default');
 $def->range_axis->hidden(0);
 
-$cc->prepare();
+$cc->draw();
 
 cmp_ok($cc->plot->origin->x, '==', 0, 'plot origin x');
 cmp_ok($cc->plot->origin->y, '==', 0, 'plot origin y');
-
-$cc->draw();
 
 my $data = $cc->data();
 ok(defined($data), 'data');

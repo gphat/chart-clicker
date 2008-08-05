@@ -18,6 +18,16 @@ has 'domain_axis' => (
         )
     }
 );
+has 'markers' => (
+    metaclass => 'Collection::Array',
+    is => 'rw',
+    isa => 'ArrayRef[Chart::Clicker::Data::Marker]',
+    default => sub { [] },
+    provides => {
+        'count' => 'marker_count',
+        'push'  => 'add_marker'
+    }
+);
 has 'name' => (
     is => 'rw',
     isa => 'Str',

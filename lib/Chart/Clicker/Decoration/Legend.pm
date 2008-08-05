@@ -4,6 +4,8 @@ use Moose;
 extends 'Chart::Clicker::Container';
 with 'Graphics::Primitive::Oriented';
 
+# TODO Move me out of decoration
+
 use Chart::Clicker::Decoration::LegendItem;
 
 use Graphics::Primitive::Font;
