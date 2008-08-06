@@ -15,7 +15,7 @@ requires    'Geometry::Primitive' => 0.08;
 requires    'Graphics::Color' => 0.04;
 requires    'Graphics::Primitive' => 0.12;
 requires    'Graphics::Primitive::Driver::Cairo' => 0.06;
-requires    'Layout::Manager' => 0.08;
+requires    'Layout::Manager' => 0.10;
 requires    'Scalar::Util' => 1.19;
 
 auto_install;

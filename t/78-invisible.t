@@ -31,11 +31,8 @@ $def->range_axis->hidden(1);
 
 $cc->draw;
 
-SKIP: {
-    skip "next release", 2;
-    cmp_ok($cc->plot->origin->x, '==', 0, 'plot origin x');
-    cmp_ok($cc->plot->origin->y, '==', 0, 'plot origin y');
-}
+cmp_ok($cc->plot->origin->x, '==', 6, 'plot origin x');
+cmp_ok($cc->plot->origin->y, '==', 6, 'plot origin y');
 
 my $data = $cc->data();
 ok(defined($data), 'data');
