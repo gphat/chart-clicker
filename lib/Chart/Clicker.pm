@@ -145,14 +145,11 @@ sub draw {
     my ($self) = @_;
 
     my $driver = $self->driver;
-    $driver->component($self);
-    $self->prepare($driver);
+    $driver->prepare($self);
 
     $self->layout_manager->do_layout($self);
-    $self->pack;
-    $driver->reset;
-
-    $self->driver->draw($self);
+    $driver->pack($self);
+    $driver->draw($self);
 }
 
 override('prepare', sub {
