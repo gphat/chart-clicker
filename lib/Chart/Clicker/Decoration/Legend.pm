@@ -64,7 +64,7 @@ override('prepare', sub {
     foreach my $ds (@{ $self->clicker->datasets }) {
         foreach my $s (@{ $ds->series }) {
 
-            my $label = $s->name();
+            my $label = $s->name;
             unless(defined($label)) {
                 $s->name("Series $count");
                 $label = "Series $count";

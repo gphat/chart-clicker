@@ -153,7 +153,7 @@ sub draw {
 }
 
 override('prepare', sub {
-    my ($self, $driver, $standalone) = @_;
+    my ($self, $driver) = @_;
 
     # We check visible in these components because it's a waste to add them
     # if we aren't showing them.
@@ -257,16 +257,6 @@ override('prepare', sub {
     }
 
     super;
-});
-
-around('prepare', sub {
-    my ($cont, $class, $driver) = @_;
-
-    my $standalone = 0;
-    unless(defined($driver)) {
-        $standalone = 1;
-    }
-    $cont->($class, $driver, $standalone);
 });
 
 sub get_datasets_for_context {
