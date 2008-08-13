@@ -86,7 +86,8 @@ has 'driver' => (
     is => 'rw',
     does => 'Graphics::Primitive::Driver',
     default => sub { Graphics::Primitive::Driver::Cairo->new },
-    handles => [ qw(data write) ]
+    handles => [ qw(data write) ],
+    lazy => 1
 );
 has 'grid' => (
     is => 'rw',

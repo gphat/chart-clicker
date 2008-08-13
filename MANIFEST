@@ -51,7 +51,6 @@ t/01-data-dataset.t
 t/01-data-marker.t
 t/01-data-range.t
 t/01-data-series.t
-t/010-data-series-size.pm
 t/03-axis-datetime.t
 t/03-axis.t
 t/03-renderer-base.t
@@ -70,6 +69,7 @@ t/05-decoration-plot.t
 t/05-decoration.t
 t/06-data-marker.t
 t/10-context.t
+t/10-data-series-size.t
 t/75-example.t
 t/76-simple-ctx.t
 t/77-same-axes-ctx.t
