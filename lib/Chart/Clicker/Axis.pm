@@ -85,6 +85,10 @@ has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
 override('prepare', sub {
     my ($self, $driver) = @_;
 
+    # return if $self->prepared;
+
+    $self->clear_components;
+
     super;
 
     if($self->range->span == 0) {
@@ -119,6 +123,7 @@ override('prepare', sub {
 
     my $bheight = 0;
     my $bwidth = 0;
+
     # Determine all this once... much faster.
     foreach my $val (@{ $self->tick_values }) {
         if(defined($self->tick_labels)) {

@@ -17,7 +17,7 @@ use Graphics::Primitive::Border;
 use Graphics::Primitive::Driver::Cairo;
 
 use Chart::Clicker::Context;
-use Chart::Clicker::Decoration::Grid;
+
 use Chart::Clicker::Decoration::Legend;
 use Chart::Clicker::Decoration::MarkerOverlay;
 use Chart::Clicker::Decoration::Plot;
@@ -89,13 +89,6 @@ has 'driver' => (
     handles => [ qw(data write) ],
     lazy => 1
 );
-has 'grid' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Decoration::Grid',
-    default => sub {
-        Chart::Clicker::Decoration::Grid->new( name => 'grid' )
-    }
-);
 has '+height' => (
     default => 300
 );
@@ -153,25 +146,39 @@ sub draw {
     $driver->draw($self);
 }
 
-override('prepare', sub {
-    my ($self, $driver) = @_;
+sub BUILD {
+    my ($self) = @_;
 
-    # We check visible in these components because it's a waste to add them
-    # if we aren't showing them.
+    $self->add_component($self->plot, 'c');
+
     if($self->legend->visible) {
         $self->add_component($self->legend, $self->legend_position);
     }
+}
+
+override('prepare', sub {
+    my ($self, $driver) = @_;
+
+    return if $self->prepared;
 
     my $plot = $self->plot;
 
-    if($self->grid->visible) {
-        $plot->render_area->add_component($self->grid, 'c');
+    $plot->clear_components;
+    $self->plot->render_area->clear_components;
+
+    # These two adds are here because the plot is too dependant on changes
+    # in the axes and such to trust it across multiple prepares.  Putting all
+    # of this here made it easier to digest, although this has some codestink
+    # to it...
+    if($plot->grid->visible) {
+        $plot->render_area->add_component($plot->grid, 'c');
     }
 
-    # TODO Boolean this?
-    $plot->render_area->add_component(
-        Chart::Clicker::Decoration::MarkerOverlay->new
-    );
+    if($plot->markers) {
+        $plot->render_area->add_component(
+            Chart::Clicker::Decoration::MarkerOverlay->new
+        );
+    }
 
     # Sentinels to control the side that the axes will be drawn on.
     my $dcount = 0;
@@ -245,13 +252,12 @@ override('prepare', sub {
         }
         unless(exists($rends{$ctx->name})) {
             $rend->context($ctx->name);
+            $rend->clicker($self);
             $plot->render_area->add_component($rend, 'c');
         }
 
         $count++;
     }
-
-    $self->add_component($self->plot, 'c');
 
     foreach my $c (@{ $self->components }) {
         $c->{component}->clicker($self);
@@ -419,10 +425,6 @@ Png, Pdf, Ps or Svg.
 
 Returns an arrayref containing all datasets for the given context.  Used by
 renderers to get a list of datasets to chart.
-
-=item I<grid>
-
-Set/Get the Grid that will be displayed on this Cart
 
 =item I<inside_width>
 

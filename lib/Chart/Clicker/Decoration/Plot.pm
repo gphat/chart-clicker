@@ -4,6 +4,9 @@ use MooseX::AttributeHelpers;
 
 use Layout::Manager::Axis;
 use Layout::Manager::Single;
+
+use Chart::Clicker::Decoration::Grid;
+
 # TODO READD THIS
 #use Chart::Clicker::Decoration::MarkerOverlay;
 
@@ -15,6 +18,13 @@ has '+border' => ( default => sub { Graphics::Primitive::Border->new( width => 0
 has 'clicker' => (
     is => 'rw',
     isa => 'Chart::Clicker',
+);
+has 'grid' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Decoration::Grid',
+    default => sub {
+        Chart::Clicker::Decoration::Grid->new( name => 'grid' )
+    }
 );
 has '+layout_manager' => (
     default => sub { Layout::Manager::Axis->new }
@@ -38,6 +48,9 @@ has 'render_area' => (
 override('prepare', sub {
     my ($self) = @_;
 
+    # return if $self->prepared;
+    # $self->clear_components;
+
     $self->add_component($self->render_area, 'c');
 
     # TODO This is also happening in Clicker.pm
@@ -52,6 +65,31 @@ override('prepare', sub {
 
     super;
 });
+
+# override('pack', sub {
+#     my ($self) = @_;
+# 
+#     if($self->grid->visible) {
+#         $self->grid->clicker($self->clicker);
+#         $self->grid->width($self->width);
+#         $self->grid->height($self->height);
+#         $self->render_area->add_component($self->grid, 'c');
+#     }
+# 
+#     if($self->markers) {
+#         $self->render_area->add_component(
+#             Chart::Clicker::Decoration::MarkerOverlay->new(
+#                 width => $self->width,
+#                 height => $self->height,
+#                 clicker => $self->clicker
+#             )
+#         );
+#     }
+#     $self->render_area->clicker;
+#     $self->render_area->width($self->width);
+#     $self->render_area->height($self->height);
+#     $self->add_component($self->render_area, 'c');
+# });
 
 __PACKAGE__->meta->make_immutable;
 
@@ -102,6 +140,10 @@ Set/Get this Plot's clicker instance.
 =item I<draw>
 
 Draw this Plot
+
+=item I<grid>
+
+Set/Get the Grid component used on this plot.
 
 =item I<layout>
 
