@@ -452,6 +452,10 @@ format provided to the constructor (which defaults to Png).
 
   $c->write('/path/to/the.png');
 
+=item I<BUILD>
+
+Documenting so tests pass.  Moose stuff.
+
 =back
 
 =head1 AUTHOR
