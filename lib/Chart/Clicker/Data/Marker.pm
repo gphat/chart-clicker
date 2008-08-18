@@ -8,10 +8,19 @@ has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
     default => sub {
-        Graphics::Primitive::Brush->new;
+        Graphics::Primitive::Brush->new(width => 1);
     }
 );
 has 'color' => (
+    is => 'rw',
+    isa => 'Graphics::Color',
+    default => sub {
+        Graphics::Color::RGB->new(
+            red => 0, green => 0, blue => 0, alpha => 1
+        );
+    }
+);
+has 'inside_color' => (
     is => 'rw',
     isa => 'Graphics::Color',
     default => sub {
@@ -24,15 +33,6 @@ has 'key' => ( is => 'rw', isa => 'Num' );
 has 'key2' => ( is => 'rw', isa => 'Num' );
 has 'value' => ( is => 'rw', isa => 'Num' );
 has 'value2' => ( is => 'rw', isa => 'Num' );
-has 'inside_color' => (
-    is => 'rw',
-    isa => 'Graphics::Color',
-    default => sub {
-        Graphics::Color::RGB->new(
-            red => 0, green => 0, blue => 0, alpha => 1
-        );
-    }
-);
 
 __PACKAGE__->meta->make_immutable;
 

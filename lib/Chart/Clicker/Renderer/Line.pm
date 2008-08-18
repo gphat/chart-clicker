@@ -9,7 +9,7 @@ use Graphics::Primitive::Operation::Stroke;
 has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
-    default => sub { Graphics::Primitive::Brush->new }
+    default => sub { Graphics::Primitive::Brush->new(width => 2) }
 );
 has 'shape' => (
     is => 'rw',

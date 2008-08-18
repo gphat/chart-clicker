@@ -300,7 +300,11 @@ override('pack', sub {
             my $ext = $self->{'label_extents_cache'};
             if ($self->is_bottom) {
                 $label->origin->x(($width - $label->width) / 2);
-                $label->origin->y($height - $label->height - ($self->padding->bottom + $self->margins->bottom + $self->border->width));
+                $label->origin->y($height - $label->height
+                    - ($self->padding->bottom + $self->margins->bottom
+                        + $self->border->top->width
+                    )
+                );
             } else {
                 $label->origin->x(($width - $label->width) / 2);
             }

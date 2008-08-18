@@ -14,11 +14,10 @@ has '+background_color' => (
         )
     }
 );
-has '+border' => ( default => sub { Graphics::Primitive::Border->new( width => 0 )});
 has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
-    default => sub { Graphics::Primitive::Brush->new }
+    default => sub { Graphics::Primitive::Brush->new(width => 1) }
 );
 has 'clicker' => ( is => 'rw', isa => 'Chart::Clicker' );
 has '+color' => (

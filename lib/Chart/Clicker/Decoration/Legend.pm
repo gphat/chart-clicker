@@ -14,10 +14,10 @@ use Graphics::Primitive::TextBox;
 
 has '+border' => (
     default => sub {
-        Graphics::Primitive::Border->new(
-            color => Graphics::Color::RGB->new( red => 0, green => 0, blue => 0),
-            width => 1
-        )
+        my $b = Graphics::Primitive::Border->new;
+        $b->color(Graphics::Color::RGB->new( red => 0, green => 0, blue => 0));
+        $b->width(1);
+        return $b;
     }
 );
 has 'font' => (

@@ -47,10 +47,10 @@ has '+background_color' => (
 );
 has '+border' => (
     default => sub {
-        Graphics::Primitive::Border->new(
-            color => Graphics::Color::RGB->new( red => 0, green => 0, blue => 0),
-            width => 1
-        )
+        my $b = Graphics::Primitive::Border->new;
+        $b->color(Graphics::Color::RGB->new(red => 0, green => 0, blue => 0));
+        $b->width(1);
+        return $b;
     }
 );
 has 'color_allocator' => (
@@ -213,9 +213,15 @@ override('prepare', sub {
             $xaxis->range->combine($ds->domain);
 
             $xaxis->orientation('horizontal');
-            $xaxis->position('bottom');
+
             if($dcount % 2) {
+                $xaxis->border->bottom->width(1);
+                $xaxis->border->bottom->color($xaxis->color);
                 $xaxis->position('top');
+            } else {
+                $xaxis->border->top->width(1);
+                $xaxis->border->top->color($xaxis->color);
+                $xaxis->position('bottom');
             }
 
             $xaxis->padding->bottom(5);
@@ -232,9 +238,15 @@ override('prepare', sub {
             $yaxis->range->combine($ds->range);
 
             $yaxis->orientation('vertical');
-            $yaxis->position('left');
+
             if($rcount % 2) {
                 $yaxis->position('right');
+                $yaxis->border->left->width(1);
+                $yaxis->border->left->color($xaxis->color);
+            } else {
+                $yaxis->position('left');
+                $yaxis->border->right->width(1);
+                $yaxis->border->right->color($xaxis->color);
             }
             $yaxis->padding->left(5);
             $yaxis->padding->right(5);
@@ -260,7 +272,7 @@ override('prepare', sub {
     }
 
     foreach my $c (@{ $self->components }) {
-        $c->{component}->clicker($self);
+        $c->clicker($self);
     }
 
     super;

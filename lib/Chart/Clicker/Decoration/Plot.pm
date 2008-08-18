@@ -14,7 +14,6 @@ use Chart::Clicker::Decoration::Grid;
 extends 'Chart::Clicker::Container';
 
 has '+background_color' => ( default => sub { Graphics::Color::RGB->new( red => 1 ) });
-has '+border' => ( default => sub { Graphics::Primitive::Border->new( width => 0 )});
 has 'clicker' => (
     is => 'rw',
     isa => 'Chart::Clicker',
@@ -55,12 +54,12 @@ override('prepare', sub {
 
     # TODO This is also happening in Clicker.pm
     foreach my $c (@{ $self->components }) {
-        $c->{component}->clicker($self->clicker);
+        $c->clicker($self->clicker);
     }
 
     # TODO This is kinda messy...
     foreach my $c (@{ $self->render_area->components }) {
-        $c->{component}->clicker($self->clicker);
+        $c->clicker($self->clicker);
     }
 
     super;
