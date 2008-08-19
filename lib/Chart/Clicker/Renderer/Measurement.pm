@@ -3,6 +3,10 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer';
 
+sub prepare {
+    die('Measurement is unsupported at the moment.');
+}
+
 # sub dontdraw {
 #     my $self = shift();
 #     my $clicker = shift();

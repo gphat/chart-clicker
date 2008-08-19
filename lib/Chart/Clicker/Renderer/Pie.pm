@@ -7,6 +7,8 @@ use Graphics::Color::RGB;
 use Geometry::Primitive::Arc;
 use Graphics::Primitive::Brush;
 
+use Scalar::Util qw(refaddr);
+
 has 'border_color' => (
     is => 'rw',
     isa => 'Graphics::Color::RGB',
@@ -32,7 +34,7 @@ override('prepare', sub {
     foreach my $ds (@{ $dses }) {
         foreach my $series (@{ $ds->series }) {
             foreach my $val (@{ $series->values }) {
-                $self->{ACCUM}->{$series->name} += $val;
+                $self->{ACCUM}->{refaddr($series)} += $val;
                 $self->{TOTAL} += $val;
             }
         }
@@ -70,7 +72,7 @@ override('pack', sub {
             my $domain = $ctx->domain_axis;
             my $range = $ctx->range_axis;
 
-            my $avg = $self->{ACCUM}->{$series->name} / $self->{TOTAL};
+            my $avg = $self->{ACCUM}->{refaddr($series)} / $self->{TOTAL};
             my $degs = ($avg * 360) + $self->{POS};
 
             $self->move_to($midx, $midy);

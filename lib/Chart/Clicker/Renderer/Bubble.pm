@@ -27,7 +27,10 @@ Chart::Clicker::Renderer::Bubble
 =head1 DESCRIPTION
 
 Chart::Clicker::Renderer::Bubble is a subclass of the Point renderer where
-the points' radiuses are deteremined by the size value of a Series::Size.
+the points' radiuses are determined by the size value of a Series::Size.
+
+Note: B<This renderer requires you to use a
+Chart::Clicker::Data::Series::Size>.
 
 =head1 SYNOPSIS
 
