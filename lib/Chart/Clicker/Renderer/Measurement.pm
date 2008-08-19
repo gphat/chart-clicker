@@ -114,9 +114,9 @@ and error bars.
 
 =over 4
 
-=item I<draw>
+=item I<prepare>
 
-Render the series.
+Prepare the series.
 
 =back
 
