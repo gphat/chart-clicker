@@ -85,9 +85,19 @@ has 'datasets' => (
 has 'driver' => (
     is => 'rw',
     does => 'Graphics::Primitive::Driver',
-    default => sub { Graphics::Primitive::Driver::Cairo->new },
+    default => sub {
+        my ($self) = @_;
+        Graphics::Primitive::Driver::Cairo->new(
+            format => $self->format
+        )
+    },
     handles => [ qw(data write) ],
     lazy => 1
+);
+has 'format' => (
+    is => 'rw',
+    isa => 'Str',
+    default => sub { 'PNG' }
 );
 has '+height' => (
     default => 300
