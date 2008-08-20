@@ -1,29 +1,31 @@
 package Chart::Clicker::Decoration::Grid;
 use Moose;
 
-extends 'Chart::Clicker::Decoration';
+extends 'Graphics::Primitive::Canvas';
 
-use Chart::Clicker::Drawing::Color;
-use Chart::Clicker::Drawing::Stroke;
+with 'Graphics::Primitive::Oriented';
+
+use Graphics::Color::RGB;
 
 has '+background_color' => (
     default => sub {
-        Chart::Clicker::Drawing::Color->new(
+        Graphics::Color::RGB->new(
             red => 0.9, green => 0.9, blue => 0.9, alpha => 1
         )
     }
 );
+has 'brush' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Brush',
+    default => sub { Graphics::Primitive::Brush->new(width => 1) }
+);
+has 'clicker' => ( is => 'rw', isa => 'Chart::Clicker' );
 has '+color' => (
     default => sub {
-        Chart::Clicker::Drawing::Color->new(
+        Graphics::Color::RGB->new(
             red => 0, green => 0, blue => 0, alpha => .30
         )
     }
-);
-has 'stroke' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { Chart::Clicker::Drawing::Stroke->new() }
 );
 has 'show_domain' => (
     is => 'rw',
@@ -36,61 +38,51 @@ has 'show_range' => (
     default => 1
 );
 
-sub prepare {
+override('pack', sub {
     my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
-
-    $self->width($dimension->width());
-    $self->height($dimension->height());
-
-    return 1;
-}
-
-sub draw {
-    my $self = shift();
-    my $clicker = shift();
 
     return unless ($self->show_domain || $self->show_range);
 
-    $self->SUPER::draw($clicker);
+    my $clicker = $self->clicker;
 
-    my $cr = $clicker->context();
+    my $dflt = $clicker->get_context('default');
+    my $daxis = $dflt->domain_axis;
+    my $raxis = $dflt->range_axis;
 
-    $cr->set_source_rgba($self->background_color->rgba());
-    $cr->paint();
+    $self->draw_lines($daxis) if $self->show_domain;
 
-    my $daxis = $clicker->domain_axes->[0];
-    my $raxis = $clicker->range_axes->[0];
+    $self->draw_lines($raxis) if $self->show_range;
 
-    # Make the grid
+    my $op = Graphics::Primitive::Operation::Stroke->new;
+    $op->brush($self->brush);
+    $op->brush->color($self->color);
+    $self->do($op);
+});
 
-    my $height = $self->height();
+sub draw_lines {
+    my ($self, $axis) = @_;
 
-    if($self->show_domain()) {
-        my $per = $daxis->per();
-        foreach my $val (@{ $daxis->tick_values() }) {
-            $cr->move_to($daxis->mark($val), 0);
-            $cr->rel_line_to(0, $height);
+    my $height = $self->height;
+    my $width = $self->width;
+
+    if($axis->is_horizontal) {
+
+        foreach my $val (@{ $axis->tick_values }) {
+            $self->move_to($axis->mark($width, $val), 0);
+            $self->rel_line_to(0, $height);
+        }
+    } else {
+
+        foreach my $val (@{ $axis->tick_values }) {
+            $self->move_to(0, $height - $axis->mark($height, $val));
+            $self->rel_line_to($width, 0);
         }
     }
-
-    if($self->show_range()) {
-        my $per = $raxis->per();
-        my $width = $self->width();
-        foreach my $val (@{ $raxis->tick_values() }) {
-            $cr->move_to(0, $height - $raxis->mark($val));
-            $cr->rel_line_to($width, 0);
-        }
-    }
-
-    $cr->set_source_rgba($self->color->rgba());
-    my $stroke = $self->stroke();
-    $cr->set_line_width($stroke->width());
-    $cr->set_line_cap($stroke->line_cap());
-    $cr->set_line_join($stroke->line_join());
-    $cr->stroke();
 }
+
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
 
 1;
 __END__
@@ -121,29 +113,37 @@ Creates a new Chart::Clicker::Decoration::Grid object.
 
 =over 4
 
-=item I<prepare>
+=item I<background_color>
 
-Prepare this Grid for drawing
+Set/Get the background_color for this Grid.
+
+=item I<border>
+
+Set/Get the border for this Grid.
 
 =item I<color>
 
 Set/Get the color for this Grid.
 
-=item I<domain_ticks>
+=item I<draw_lines>
 
-Set/Get the domain ticks for this Grid.
+Called by pack, draws the lines for a given axis.
 
-=item I<range_ticks>
+=item I<pack>
 
-Set/Get the range ticks for this Grid.
+Prepare this Grid for drawing
+
+=item I<show_domain>
+
+Flag show or not show the domain lines.
+
+=item I<show_range>
+
+Flag show or not show the range lines.
 
 =item I<stroke>
 
 Set/Get the Stroke for this Grid.
-
-=item I<draw>
-
-Draw this Grid.
 
 =cut
 

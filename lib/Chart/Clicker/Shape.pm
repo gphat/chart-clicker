@@ -1,5 +1,9 @@
 package Chart::Clicker::Shape;
-use Moose;
+use Moose::Role;
+
+requires 'create_path';
+
+no Moose;
 
 1;
 __END__
@@ -10,7 +14,8 @@ Chart::Clicker::Shape
 
 =head1 DESCRIPTION
 
-Chart::Clicker::Shape represents a geometric shape.
+Chart::Clicker::Shape is a role that can wraps Geometry::Primitive shapes
+and requires a create_path.
 
 =head1 SYNOPSIS
 
@@ -20,13 +25,13 @@ Chart::Clicker::Shape represents a geometric shape.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Chart::Clicker::Shape.
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 

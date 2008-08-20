@@ -1,21 +1,26 @@
 Revision history for Perl extension Chart::Clicker.
 
 2.0.0
-    - Work with latest Cairo
     - Pretty up some un-Moosey behaviour
-		- Add Bubble renderer and Series::Size
-	  - Add PostScript and PDF support
-	  - Use clipping rather than a bunch of surface painting (thanks to ash)
-	  - Create all surfaces as streams and use IO::File to write out the surface
-	    data.
-	  - Add show_range and show_domain flags to Grid
-	  - Make Range's span inclusive
-	  - Add lots of convenient methods via MooseX::AttributeHelpers
-	  - Get rid of all indirect method calls (ewww!)
-	  - Fix broken bar renderer alignment
-	  - Rename Renderer::Base to just Renderer
-	  - Add resize method to Shape classes
-	  - Stop baselining axes by default, it breaks stuff.
+    - Add Bubble renderer and Series::Size
+    - Add PostScript and PDF support
+    - Use Graphics::Primitive
+    - Add show_range and show_domain flags to Grid
+    - Make Range's span inclusive
+    - Add lots of convenient methods via MooseX::AttributeHelpers
+    - Get rid of all indirect method calls (ewww!)
+    - Fix broken bar renderer alignment
+    - Rename Renderer::Base to just Renderer
+    - Stop baselining axes by default, it breaks stuff.
+    - Abandon $CC_* position/orientation junk for Moose roles with strings
+    - Move out lots of generic functionality to new modules
+    - Add context support
+    - Ignore duplicate axes
+    - Change Axis 'visible' attribute to 'hidden' to avoid clashing with
+      Layout::Manager
+    - Axis' ticks attribute now yields the correct number of ticks, not -1
+    - Horizontal axes' tick labels now align their baselines properly
+    - Make axes position independent, as they were intended
 1.4.2
     - Packaging fixes.
 1.4.1

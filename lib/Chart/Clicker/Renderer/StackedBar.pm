@@ -3,115 +3,132 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer';
 
+use Graphics::Primitive::Brush;
+use Graphics::Primitive::Paint::Solid;
+use Graphics::Primitive::Operation::Fill;
+use Graphics::Primitive::Operation::Stroke;
+
 has '+additive' => ( default => 1 );
+has 'bar_padding' => (
+    is => 'rw',
+    isa => 'Int',
+    default => 0
+);
+has 'brush' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Brush',
+    default => sub { Graphics::Primitive::Brush->new }
+);
 has 'opacity' => (
     is => 'rw',
     isa => 'Num',
     default => 0
 );
-has 'padding' => (
-    is => 'rw',
-    isa => 'Int',
-    default => 0
-);
-has 'stroke' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { Chart::Clicker::Drawing::Stroke->new() }
-);
 
+override('prepare', sub {
+    my ($self) = @_;
 
-sub prepare {
-    my $self = shift();
+    super;
 
-    $self->SUPER::prepare(@_);
+    my $dses = $self->clicker->get_datasets_for_context($self->context);
+    # my $raxis = $self->clicker->get_context($self->context)->range_axis;
 
-    my $clicker = shift();
-    my $idim = shift();
-    my $datasets = shift();
+    foreach my $ds (@{ $dses }) {
+        if(!defined($self->{KEYCOUNT})) {
+            $self->{KEYCOUNT} = $ds->max_key_count;
+        }
+        $self->{SCOUNT} += $ds->count;
+    }
 
-    foreach my $ds (@{ $datasets }) {
-        if(!defined($self->{'KEYCOUNT'})) {
-            $self->{'KEYCOUNT'} = $ds->max_key_count();
-        } else {
-            if($self->{'KEYCOUNT'} < $ds->max_key_count()) {
-                $self->{'KEYCOUNT'} = $ds->max_key_count();
+    return 1;
+});
+
+override('pack', sub {
+    my ($self) = @_;
+
+    my $clicker = $self->clicker;
+
+    my $height = $self->height;
+    my $width = $self->width;
+
+    my $dses = $clicker->get_datasets_for_context($self->context);
+    my $ctx = $clicker->get_context($dses->[0]->context);
+    my $domain = $ctx->domain_axis;
+    my $range = $ctx->range_axis;
+
+    my $padding = $self->bar_padding;
+
+    my $strokewidth = $self->brush->width;
+    $padding += $strokewidth;
+
+    $self->{BWIDTH} = int(($width - ($width * $domain->fudge_amount)
+        - ($padding / 2 * $self->{KEYCOUNT})) / ($self->{KEYCOUNT}));
+    $self->{HBWIDTH} = $self->{BWIDTH} / 2;
+
+    # Fetch all the colors we'll need.  Since we build each vertical bar from
+    # top to bottom, we'll need to change colors vertically.
+    for (my $i = 0; $i < $self->{SCOUNT}; $i++) {
+        push(@{ $self->{COLORS} }, $clicker->color_allocator->next);
+    }
+
+    my @keys = @{ $dses->[0]->get_series(0)->keys };
+
+    # Iterate over each key...
+    for (my $i = 0; $i < scalar(@keys); $i++) {
+
+        # Get all the values from every dataset's series for each key
+        my @values;
+        foreach my $ds (@{ $dses }) {
+            push(@values, $ds->get_series_values($i));
+        }
+
+        # Mark the x, since it's the same for each Y value
+        my $x = $domain->mark($width, $keys[$i],);
+        my $accum = 0;
+
+        my $val = 0;
+        for(my $j = 0; $j < scalar(@values); $j++) {
+            $val += $values[$j];
+            my $y = $range->mark($height, $val);
+
+            $self->move_to($x - $self->{HBWIDTH}, $height - $y + $self->brush->width * 2);
+            $self->rectangle($self->{BWIDTH}, $y - $accum - 1);
+            # Accumulate the Y value, as it dictates how much we bump up the
+            # next bar.
+            $accum += $y - $accum;
+
+            my $color = $self->{COLORS}->[$j];
+
+            my $fillop = Graphics::Primitive::Operation::Fill->new(
+                paint => Graphics::Primitive::Paint::Solid->new
+            );
+
+            if($self->opacity) {
+                my $fillcolor = $color->clone;
+                $fillcolor->alpha($self->opacity);
+                $fillop->paint->color($fillcolor);
+                # Since we're going to stroke this, we want to preserve it.
+                $fillop->preserve(1);
+            } else {
+                $fillop->paint->color($color);
+            }
+
+            $self->do($fillop);
+
+            if($self->opacity) {
+                my $strokeop = Graphics::Primitive::Operation::Stroke->new;
+                $strokeop->brush->color($color);
+                $self->do($strokeop);
             }
         }
     }
 
-    $self->{'SCOUNT'} = 1;
-
     return 1;
-}
+});
 
-sub draw {
-    my $self = shift();
-    my $clicker = shift();
-    my $cr = shift();
-    my $series = shift();
-    my $domain = shift();
-    my $range = shift();
+__PACKAGE__->meta->make_immutable;
 
-    my $height = $self->height();
-    my $width = $self->width();
-
-    my @vals = @{ $series->values() };
-    my @keys = @{ $series->keys() };
-
-    my $color = $clicker->color_allocator->next();
-
-    my $padding = $self->padding();
-
-    my $strokewidth = $self->stroke->width();
-    $padding += $strokewidth;
-
-    # Calculate the bar width we can use to fit all the datasets.
-    if(!$self->{'BWIDTH'}) {
-        $self->{'BWIDTH'} = int(($width / scalar(@vals)) / 2);
-    }
-
-    if(!$self->{'XOFFSET'}) {
-        $self->{'XOFFSET'} = int(($self->{'BWIDTH'} + $padding) / 2);
-    }
-
-    my $sksent = $series->key_count() - 1;
-    for(0..$sksent) {
-        # Add the series_count times the width to so that each bar
-        # gets rendered with it's partner in the other series.
-        my $x = $domain->mark($keys[$_]);# + $self->{'BWIDTH'};
-        my $y = $range->mark($vals[$_]);
-
-        $cr->rectangle(
-            $x + $self->{'XOFFSET'}, $height - $y - ($self->{'KEY_HEIGHT'}->{$_} || 0),
-            -($self->{'BWIDTH'}), $y# + ($self->{'KEY_HEIGHT'}->{$_} || 0)
-        );
-
-        $self->{'KEY_HEIGHT'}->{$_} += $y + $strokewidth;
-    }
-
-	my $fillcolor;
-    if($self->opacity()) {
-        $fillcolor = $color->clone();
-        $fillcolor->alpha($self->opacity());
-    } else {
-        $fillcolor = $color;
-    }
-
-    $cr->set_source_rgba($fillcolor->rgba());
-    $cr->fill_preserve();
-
-    $cr->set_line_width($self->stroke->width());
-    $cr->set_line_cap($self->stroke->line_cap());
-    $cr->set_line_join($self->stroke->line_join());
-
-    $cr->set_source_rgba($color->rgba());
-    $cr->stroke();
-
-    $self->{'SCOUNT'}++;
-
-    return 1;
-}
+no Moose;
 
 1;
 __END__
@@ -132,14 +149,14 @@ Chart::Clicker::Renderer::StackedBar renders a dataset as stacked bars.
 
 =over 4
 
-=item I<opacity>
-
-If true this value will be used when setting the opacity of the bar's fill.
-
-=item I<padding>
+=item I<bar_padding>
 
 How much padding to put around a bar.  A padding of 4 will result in 2 pixels
 on each side.
+
+=item I<opacity>
+
+If true this value will be used when setting the opacity of the bar's fill.
 
 =item I<stroke>
 
@@ -149,7 +166,7 @@ A stroke to use on each bar.
 
 =head1 METHODS
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 

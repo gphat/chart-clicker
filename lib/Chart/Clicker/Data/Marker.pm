@@ -1,38 +1,42 @@
 package Chart::Clicker::Data::Marker;
 use Moose;
 
-use Chart::Clicker::Drawing::Color;
-use Chart::Clicker::Drawing::Stroke;
+use Graphics::Color::RGB;
+use Graphics::Primitive::Brush;
 
-has 'key' => ( is => 'rw', isa => 'Num' );
-has 'key2' => ( is => 'rw', isa => 'Num' );
-has 'value' => ( is => 'rw', isa => 'Num' );
-has 'value2' => ( is => 'rw', isa => 'Num' );
-has 'inside_color' => (
+has 'brush' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Color',
+    isa => 'Graphics::Primitive::Brush',
     default => sub {
-        Chart::Clicker::Drawing::Color->new(
-            red => 0, green => 0, blue => 0, alpha => 1
-        );
+        Graphics::Primitive::Brush->new(width => 1);
     }
 );
 has 'color' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Color',
+    isa => 'Graphics::Color',
     default => sub {
-        Chart::Clicker::Drawing::Color->new(
+        Graphics::Color::RGB->new(
             red => 0, green => 0, blue => 0, alpha => 1
         );
     }
 );
-has 'stroke' => (
+has 'inside_color' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
+    isa => 'Graphics::Color',
     default => sub {
-        Chart::Clicker::Drawing::Stroke->new();
+        Graphics::Color::RGB->new(
+            red => 0, green => 0, blue => 0, alpha => 1
+        );
     }
 );
+has 'key' => ( is => 'rw', isa => 'Num' );
+has 'key2' => ( is => 'rw', isa => 'Num' );
+has 'value' => ( is => 'rw', isa => 'Num' );
+has 'value2' => ( is => 'rw', isa => 'Num' );
+
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
 
 1;
 __END__
@@ -48,18 +52,18 @@ Used to highlight a particular key, value or range of either.
 =head1 SYNOPSIS
 
  use Chart::Clicker::Decoration::Marker;
- use Chart::Clicker::Drawing::Color;
- use Chart::Clicker::Drawing::Stroke;
+ use Graphics::Color::RGB;
+ use Graphics::Primitive::Brush;
 
- my $mark = Chart::Clicker::Decoration::Marker->new({
-    color=  > Chart::Clicker::Drawing::Color->new({ name => 'red' }),
-    stroke  => CHart::Clicker::Drawing::Stroke->new(),
+ my $mark = Chart::Clicker::Decoration::Marker->new(
+    color   => Graphics::Color::RGB->new,
+    brush  => Graphics::Primitive::Brush->new,
     key     => 12,
     value   => 123,
     # Optionally
     key2    => 13,
     value   => 146
- });
+ );
 
 =head1 METHODS
 
@@ -67,36 +71,36 @@ Used to highlight a particular key, value or range of either.
 
 =over 4
 
-=item new
+=item I<new>
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
-=item color
+=item I<brush>
+
+Set/Get the brush for this Marker.
+
+=item I<color>
 
 Set/Get the color for this marker.
 
-=item stroke
-
-Set/Get the stroke for this Marker.
-
-=item key
+=item I<key>
 
 Set/Get the key for this marker.  This represents a point on the domain.
 
-=item key2
+=item I<key2>
 
 Set/Get the key2 for this marker.  This represents a second point on the domain
 and is used to specify a range.
 
-=item value
+=item I<value>
 
 Set/Get the value for this marker.  This represents a point on the range.
 
-=item value2
+=item I<value2>
 
 Set/Get the value2 for this marker.  This represents a second point on the
 range and is used to specify a range.

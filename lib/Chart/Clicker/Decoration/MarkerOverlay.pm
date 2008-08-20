@@ -4,101 +4,97 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
-use Chart::Clicker::Context;
+use Graphics::Primitive::Operation::Stroke;
+use Graphics::Primitive::Operation::Fill;
+use Graphics::Primitive::Paint::Solid;
 
-sub prepare {
-    my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
+override('pack', sub {
+    my ($self) = @_;
 
-    $self->width($dimension->width());
-    $self->height($dimension->height());
+    my $width = $self->width;
+    my $height = $self->height;
 
-    return 1;
-}
+    my $clicker = $self->clicker;
 
-sub draw {
-    my $self = shift();
-    my $clicker = shift();
+    foreach my $cname ($clicker->context_names) {
+        my $ctx = $clicker->get_context($cname);
+        foreach my $marker (@{ $ctx->markers }) {
 
-    # my $surface = $self->SUPER::draw($clicker);
-    # my $cr = Chart::Clicker::Context->create($surface);
-    my $cr = $clicker->context();
+            my $key = $marker->key;
+            my $key2 = $marker->key2;
+            my $value = $marker->value;
+            my $value2 = $marker->value2;
 
-    my $width = $self->width();
-    my $height = $self->height();
+            if($key && $value) {
+            } elsif(defined($key)) {
+                my $domain = $ctx->domain_axis;
 
-    my $count = 0;
-    foreach my $marker (@{ $clicker->markers() }) {
-        my $range = $clicker->get_range_axis(
-            $clicker->get_marker_range_axis($count) || 0
-        );
+                my $x = $domain->mark($self->width, $key);
+                my $x2;
 
-        my $key = $marker->key();
-        my $key2 = $marker->key2();
-        my $value = $marker->value();
-        my $value2 = $marker->value2();
+                if($key2) {
+                    $x2 = $domain->mark($self->width, $key2);
+                    $self->move_to($x, 0);
+                    $self->rectangle(($x2 - $x), $height);
+                    my $fillop = Graphics::Primitive::Operation::Fill->new(
+                        paint => Graphics::Primitive::Paint::Solid->new(
+                            color => $marker->inside_color
+                        ),
+                    );
+                    $self->do($fillop);
+                }
 
-        $cr->set_line_width($marker->stroke->width());
-        $cr->set_source_rgba($marker->color->rgba());
+                $self->move_to($x, 0);
+                $self->rel_line_to(0, $height);
 
-        if($key && $value) {
-        } elsif(defined($key)) {
-            my $domain = $clicker->get_domain_axis(
-                $clicker->get_marker_domain_axis($count) || 0
-            );
+                if($x2) {
+                    $self->move_to($x2, 0);
+                    $self->rel_line_to(0, $height);
+                }
 
-            my $x = $domain->mark($key);
-            my $x2;
+                my $op = Graphics::Primitive::Operation::Stroke->new;
+                $op->brush($marker->brush);
 
-            if($key2) {
-                $x2 = $domain->mark($key2);
-                $cr->rectangle($x, 0, ($x2 - $x), $height);
-                $cr->save();
-                $cr->set_source_rgba($marker->inside_color->rgba());
-                $cr->fill();
-                $cr->restore();
+                $self->do($op);
+            } elsif(defined($value)) {
+                my $range = $ctx->range_axis;
+                # 
+                my $y = $range->mark($height, $value);
+                my $y2;
+
+                if($value2) {
+                    $y2 = $range->mark($self->height, $value2);
+                    $self->move_to(0, $y);
+                    $self->rectangle($width, ($y2 - $y));
+                    my $fillop = Graphics::Primitive::Operation::Fill->new(
+                        paint => Graphics::Primitive::Paint::Solid->new(
+                            color => $marker->inside_color
+                        ),
+                    );
+                    $self->do($fillop);
+
+                }
+
+                $self->move_to(0, $y);
+                $self->rel_line_to($width, 0);
+
+                if($y2) {
+                    $self->move_to(0, $y2);
+                    $self->rel_line_to($width, 0);
+                }
+
+                my $op = Graphics::Primitive::Operation::Stroke->new;
+                $op->brush($marker->brush);
+
+                $self->do($op);
             }
-
-            $cr->move_to($x, 0);
-            $cr->rel_line_to(0, $height);
-
-            if($x2) {
-                $cr->move_to($x2, 0);
-                $cr->rel_line_to(0, $height);
-            }
-
-            $cr->stroke();
-        } elsif(defined($value)) {
-            my $range = $clicker->get_range_axis(
-                $clicker->get_marker_range_axis($count) || 0
-            );
-
-            my $y = $range->mark($value);
-            my $y2;
-
-            if($value2) {
-                $y2 = $range->mark($value2);
-                $cr->rectangle(0, $y, $width, ($y2 - $y));
-                $cr->save();
-                $cr->set_source_rgba($marker->inside_color->rgba());
-                $cr->fill();
-                $cr->restore();
-            }
-
-            $cr->move_to(0, $y);
-            $cr->rel_line_to($width, 0);
-
-            if($y2) {
-                $cr->move_to(0, $y2);
-                $cr->rel_line_to($width, 0);
-            }
-            $cr->stroke();
         }
-
-        $count++;
     }
-}
+});
+
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
 
 1;
 __END__
@@ -119,7 +115,7 @@ A Component that handles the rendering of Markers.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new MarkerOverlay object.
 

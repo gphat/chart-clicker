@@ -1,25 +1,21 @@
 package Chart::Clicker::Renderer;
 use Moose;
 
-extends 'Chart::Clicker::Drawing::Component';
+extends 'Graphics::Primitive::Canvas';
 
-has 'dataset_count' => ( is => 'rw', isa => 'Int' );
 has 'additive' => ( is => 'ro', isa => 'Bool', default => 0 );
+has 'clicker' => ( is => 'rw', isa => 'Chart::Clicker' );
+has 'context' => ( is => 'rw', isa => 'Str' );
 
-sub prepare {
-    my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
-
-    $self->width($dimension->width());
-    $self->height($dimension->height());
+override('prepare', sub {
+    my ($self) = @_;
 
     return 1;
-}
+});
 
-sub render {
-    die('Override me.');
-}
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
 
 1;
 __END__
@@ -42,33 +38,29 @@ Chart::Clicker::Renderer represents the plot of the chart.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Chart::Clicker::Renderer.
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
-=item additive
+=item I<additive>
 
 Read-only value that informs Clicker that this renderer uses the combined ranges
 of all the series it charts in total.  Used for 'stacked' renderers like
 StackedBar.
 
-=item get_option
-
-Returns a value for the specified key (if it exists) from the options hashref.
-
-=item prepare
+=item I<prepare>
 
 Prepare the component.
 
-=item render
+=item I<draw>
 
-Render the series.
+Draw the renderer.
 
 =back
 

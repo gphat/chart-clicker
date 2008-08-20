@@ -1,36 +1,61 @@
 package Chart::Clicker::Context;
 use Moose;
 
-use Cairo;
+use Moose::Util::TypeConstraints;
 
-extends 'Cairo::Context';
+use Chart::Clicker;
+use Chart::Clicker::Axis;
+use Chart::Clicker::Renderer::Line;
 
-sub create {
-    my $proto = shift();
-    my $class = ref($proto) || $proto;
+has 'domain_axis' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Axis',
+    default => sub {
+        Chart::Clicker::Axis->new(
+            orientation => 'horizontal',
+            position    => 'bottom',
+            format      => '%0.2f'
+        )
+    }
+);
+has 'markers' => (
+    metaclass => 'Collection::Array',
+    is => 'rw',
+    isa => 'ArrayRef[Chart::Clicker::Data::Marker]',
+    default => sub { [] },
+    provides => {
+        'count' => 'marker_count',
+        'push'  => 'add_marker'
+    }
+);
+has 'name' => (
+    is => 'rw',
+    isa => 'Str',
+    required => 1
+);
+has 'range_axis' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Axis',
+    default => sub {
+        Chart::Clicker::Axis->new(
+            orientation => 'vertical',
+            position    => 'left',
+            format      => '%0.2f'
+        )
+    }
+);
+has 'renderer' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Renderer',
+    default => sub { Chart::Clicker::Renderer::Line->new },
+    coerce => 1
+);
 
-    my $cairo = $class->SUPER::create(@_);
-    $class->meta->rebless_instance($cairo);
-    return $cairo;
-}
+__PACKAGE__->meta->make_immutable;
 
-around qw(move_to rel_move_to line_to rel_line_to) => sub {
-    my ($cont, $class, $x, $y) = @_;
-
-    $x = int($x) + .5 if $x > 0;
-    $y = int($y) + .5 if $y > 0;
-
-    $cont->($class, $x, $y);
-};
-
-around qw(rectangle) => sub {
-    my ($cont, $class, $x, $y, $width, $height) = @_;
-
-    $cont->($class, int($x) + .5, int($y) + .5, int($width), int($height));
-};
+no Moose;
 
 1;
-
 __END__
 
 =head1 NAME
@@ -39,16 +64,45 @@ Chart::Clicker::Context
 
 =head1 DESCRIPTION
 
-Chart::Clicker::Context wraps the Context from Cairo.
+Contexts represent the way a dataset should be charted.  Multiple contexts
+allow a chart with multiple renderers and axes.  See the CONTEXTS section
+in L<Chart::Clicker>.
 
 =head1 SYNOPSIS
 
- my $context = Chart::Clicker::Context->new();
-
 =head1 METHODS
 
-This class wraps the move_to, rel_move_to and line_to to normalize the x and
-y values.
+=head2 Constructor
+
+=over 4
+
+=item I<new>
+
+Creates a new Context object.
+
+=back
+
+=head2 Instance Methods
+
+=over 4
+
+=item I<domain_axis>
+
+Set/get this context's domain axis
+
+=item I<name>
+
+Set/get this context's name
+
+=item I<range_axis>
+
+Set/get this context's range axis
+
+=item I<render>
+
+Set/get this context's renderer
+
+=back
 
 =head1 AUTHOR
 

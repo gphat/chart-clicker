@@ -3,68 +3,72 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
-use Chart::Clicker::Context;
-use Chart::Clicker::Drawing::Color;
+use Graphics::Color::RGB;
+use Graphics::Primitive::Operation::Fill;
+use Graphics::Primitive::Paint::Solid;
 
-has 'background_color' => ( is => 'rw', isa => 'Chart::Clicker::Drawing::Color' );
+has 'background_color' => ( is => 'rw', isa => 'Graphics::Color::RGB', default => sub { Graphics::Color::RGB->new(red => 1, green => 0, blue => 0, alpha => 1) });
 has 'glare_color' => (
     is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Color',
+    isa => 'Graphics::Color::RGB',
     default => sub {
-        Chart::Clicker::Drawing::Color->new(
+       Graphics::Color::RGB->new(
             red => 1, green => 1, blue => 1, alpha => 1
         )
     },
     coerce => 1
 );
 
-sub prepare {
-    my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
+# override('prepare', sub {
+#     my $self = shift();
+#     my $clicker = shift();
+#     my $dimension = shift();
+# 
+#     $self->width($dimension->width());
+#     $self->height($dimension->height());
+# 
+#     return 1;
+# });
 
-    $self->width($dimension->width());
-    $self->height($dimension->height());
+override('pack', sub {
+    my ($self) = @_;
 
-    return 1;
-}
+    my $twentypofheight = $self->height * .20;
 
-sub draw {
-    my $self = shift();
-    my $clicker = shift();
+    $self->move_to(1, $twentypofheight);
 
-    my $cr = $clicker->context();
-
-    if($self->background_color()) {
-        $cr->set_source_rgba($self->background_color->rgba());
-        $cr->fill();
-    }
-
-    my $twentypofheight = $self->height() * .20;
-
-    $cr->move_to(1, $twentypofheight);
-    $cr->rel_curve_to(
-        0, 0, $self->width() / 2, -$self->height() * .30,
-        $self->width(), 0
+    $self->rel_curve_to(
+        0, 0,
+        $self->width / 2, $self->height * .30,
+        $self->width, 0
     );
-    $cr->line_to($self->width(), 0);
-    $cr->line_to(0, 0);
-    $cr->line_to(0, $twentypofheight);
 
-    $cr->set_source_rgba($self->glare_color->rgba());
-    $cr->fill();
-}
+    $self->line_to($self->width, 0);
+    $self->line_to(0, 0);
+    $self->line_to(0, $twentypofheight);
+
+    my $fillop = Graphics::Primitive::Operation::Fill->new(
+        paint => Graphics::Primitive::Paint::Solid->new(
+            color => $self->glare_color
+        )
+    );
+    $self->do($fillop);
+});
+
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
 
 1;
 __END__
 
 =head1 NAME
 
-Chart::Clicker::Decoration::Grid
+Chart::Clicker::Decoration::Glass
 
 =head1 DESCRIPTION
 
-Generates a collection of Markers for use as a background.
+A glass-like decoration.
 
 =head1 SYNOPSIS
 
@@ -74,39 +78,31 @@ Generates a collection of Markers for use as a background.
 
 =over 4
 
-=item new
+=item I<new>
 
-Creates a new Chart::Clicker::Decoration::Grid object.
-
-=item prepare
-
-Prepare this Grid for drawing
+Creates a new Chart::Clicker::Decoration::Glass object.
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
-=item color
+=item I<background_color>
 
-Set/Get the color for this Grid.
+Set/Get the background color for this glass.
 
-=item domain_ticks
-
-Set/Get the domain ticks for this Grid.
-
-=item range_ticks
-
-Set/Get the range ticks for this Grid.
-
-=item stroke
-
-Set/Get the Stroke for this Grid.
-
-=item draw
+=item I<draw>
 
 Draw this Grid.
+
+=item I<glare_color>
+
+Set/Get the glare color for this glass.
+
+=item I<prepare>
+
+Prepare this Glass for drawing
 
 =cut
 

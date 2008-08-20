@@ -2,106 +2,97 @@ package Chart::Clicker::Decoration::Plot;
 use Moose;
 use MooseX::AttributeHelpers;
 
-extends 'Chart::Clicker::Drawing::Component';
+use Layout::Manager::Axis;
+use Layout::Manager::Single;
 
-has 'renderers' => (
-    metaclass => 'Collection::Array',
+use Chart::Clicker::Decoration::Grid;
+
+# TODO READD THIS
+#use Chart::Clicker::Decoration::MarkerOverlay;
+
+# TODO MOve this class?  It's not decoration anymore.
+extends 'Chart::Clicker::Container';
+
+has '+background_color' => ( default => sub { Graphics::Color::RGB->new( red => 1 ) });
+has 'clicker' => (
     is => 'rw',
-    isa => 'ArrayRef',
-    default => sub { [ ] },
-    provides => {
-        'push' => 'add_to_renderers',
-        'get' => 'get_renderer'
+    isa => 'Chart::Clicker',
+);
+has 'grid' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Decoration::Grid',
+    default => sub {
+        Chart::Clicker::Decoration::Grid->new( name => 'grid' )
     }
 );
-
+has '+layout_manager' => (
+    default => sub { Layout::Manager::Axis->new }
+);
 has 'markers' => (
     is => 'rw',
     isa => 'Bool',
     default => 1
 );
-
-has 'dataset_renderers' => (
-    metaclass => 'Collection::Hash',
+has 'render_area' => (
     is => 'rw',
-    isa => 'HashRef',
-    default => sub { {} },
-    provides => {
-        'set' => 'set_dataset_renderer',
-        'get' => 'get_dataset_renderer'
+    isa => 'Chart::Clicker::Container',
+    default => sub {
+        Chart::Clicker::Container->new(
+            name => 'render_area',
+            layout_manager => Layout::Manager::Single->new
+        )
     }
 );
 
-use Chart::Clicker::Context;
-use Chart::Clicker::Decoration::MarkerOverlay;
-use Chart::Clicker::Drawing::Border;
+override('prepare', sub {
+    my ($self) = @_;
 
-sub prepare {
-    my $self = shift();
-    my $clicker = shift();
-    my $dimension = shift();
+    # return if $self->prepared;
+    # $self->clear_components;
 
-    $self->width($dimension->width());
-    $self->height($dimension->height());
+    $self->add_component($self->render_area, 'c');
 
-    my $idim = $self->inside_dimensions();
-
-    my %dscount;
-    my %rend_ds;
-    my $count = 0;
-    foreach my $dataset (@{ $clicker->datasets() }) {
-        my $ridx = $self->get_dataset_renderer($count) || 0;
-        $dscount{$ridx} += scalar(@{ $dataset->series() });
-        push(@{ $rend_ds{$ridx} }, $dataset);
-        $count++;
+    # TODO This is also happening in Clicker.pm
+    foreach my $c (@{ $self->components }) {
+        $c->clicker($self->clicker);
     }
 
-    $count = 0;
-    foreach my $rend (@{ $self->renderers() }) {
-        $rend->dataset_count($dscount{$count} || 0);
-        $rend->prepare($clicker, $idim, $rend_ds{$count});
-        $count++;
+    # TODO This is kinda messy...
+    foreach my $c (@{ $self->render_area->components }) {
+        $c->clicker($self->clicker);
     }
 
-    return 1;
-}
+    super;
+});
 
-sub draw {
-    my $self = shift();
-    my $clicker = shift();
+# override('pack', sub {
+#     my ($self) = @_;
+# 
+#     if($self->grid->visible) {
+#         $self->grid->clicker($self->clicker);
+#         $self->grid->width($self->width);
+#         $self->grid->height($self->height);
+#         $self->render_area->add_component($self->grid, 'c');
+#     }
+# 
+#     if($self->markers) {
+#         $self->render_area->add_component(
+#             Chart::Clicker::Decoration::MarkerOverlay->new(
+#                 width => $self->width,
+#                 height => $self->height,
+#                 clicker => $self->clicker
+#             )
+#         );
+#     }
+#     $self->render_area->clicker;
+#     $self->render_area->width($self->width);
+#     $self->render_area->height($self->height);
+#     $self->add_component($self->render_area, 'c');
+# });
 
-    my $cr = $clicker->context();
+__PACKAGE__->meta->make_immutable;
 
-    my $count = 0;
-    foreach my $dataset (@{ $clicker->datasets() }) {
-        my $domain = $clicker->get_domain_axis(
-            $clicker->get_dataset_domain_axis($count) || 0
-        );
-        my $range = $clicker->get_range_axis(
-            $clicker->get_dataset_range_axis($count) || 0
-        );
-        my $ridx = $self->get_dataset_renderer($count);
-        my $rend = $self->get_renderer($ridx || 0);
-
-        foreach my $series (@{ $dataset->series() }) {
-            $cr->save();
-            $rend->draw($clicker, $cr, $series, $domain, $range);
-            $cr->restore();
-        }
-        $count++;
-    }
-
-    my $id = $self->inside_dimensions();
-    if($self->markers()) {
-        if(scalar(@{ $clicker->markers() })) {
-            my $mo = Chart::Clicker::Decoration::MarkerOverlay->new();
-            $mo->prepare($clicker, $id);
-            $cr->save;
-            $mo->draw($clicker);
-            $cr->restore();
-        }
-    }
-}
+no Moose;
 
 1;
 __END__
@@ -123,57 +114,47 @@ handles rendering the markers that come from the Clicker object.
 
 =over 4
 
-=item new
+=item I<new>
 
 Creates a new Plot object.
 
-=cut
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
-=item border
+=item I<background_color>
+
+Set/Get this Plot's background color.
+
+=item I<border>
 
 Set/Get this Plot's border.
 
-=item insets
+=item I<clicker>
 
-Set/Get this Plot's insets.
+Set/Get this Plot's clicker instance.
 
-=item markers
+=item I<draw>
+
+Draw this Plot
+
+=item I<grid>
+
+Set/Get the Grid component used on this plot.
+
+=item I<layout>
+
+Set/Get this Plot's layout.  See L<Layout::Manager>.
+
+=item I<markers>
 
 Set/Get the flag that determines if markers are drawn on this plot.
 
-=item renderers
-
-Set/Get this Plot's renderers. Uses an arrayref.
-
-=item set_renderer_for_dataset
-
-Sets the Renderer to be used for a particular DataSet.  Uses indices:
-
-  my @renderers = ($line, $bar);
-  $plot->renderers(\@renderers);
-  $plot->set_renderer_for_dataset(0, 0); # dataset idx, renderer idx
-  $plot->set_renderer_for_dataset(1, 1);
-
-If no renderer is set for a dataset the zeroth one is used.  See
-L<get_renderer_for_dataset>.
-
-=item get_renderer_for_dataset
-
-Get the index of the renderer that will be used for the DataSet at the
-specified index.
-
-=item prepare
+=item I<prepare>
 
 Prepare this Plot by determining how much space it needs.
-
-=item draw
-
-Draw this Plot
 
 =back
 

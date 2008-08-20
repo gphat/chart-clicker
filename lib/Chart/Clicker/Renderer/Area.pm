@@ -1,11 +1,20 @@
 package Chart::Clicker::Renderer::Area;
 use Moose;
-use Cairo;
 
 extends 'Chart::Clicker::Renderer';
 
-use Chart::Clicker::Drawing::Stroke;
+use Graphics::Primitive::Brush;
+use Graphics::Primitive::Path;
+use Graphics::Primitive::Operation::Fill;
+use Graphics::Primitive::Operation::Stroke;
+use Graphics::Primitive::Paint::Gradient;
+use Graphics::Primitive::Paint::Solid;
 
+has 'brush' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Brush',
+    default => sub { Graphics::Primitive::Brush->new }
+);
 has 'fade' => (
     is => 'rw',
     isa => 'Bool',
@@ -16,84 +25,97 @@ has 'opacity' => (
     isa => 'Num',
     default => 0
 );
-has 'stroke' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Drawing::Stroke',
-    default => sub { Chart::Clicker::Drawing::Stroke->new() }
-);
 
-sub draw {
-    my $self = shift();
-    my $clicker = shift();
-    my $cr = shift();
-    my $series = shift();
-    my $domain = shift();
-    my $range = shift();
+override('pack', sub {
+    my ($self) = @_;
 
-    my $height = $self->height();
-    my $width = $self->width();
+    my $height = $self->height;
+    my $width = $self->width;
+    my $clicker = $self->clicker;
 
-    $cr->set_line_width($self->stroke->width());
-    $cr->set_line_cap($self->stroke->line_cap());
-    $cr->set_line_join($self->stroke->line_join());
+    my $dses = $clicker->get_datasets_for_context($self->context);
+    foreach my $ds (@{ $dses }) {
+        foreach my $series (@{ $ds->series }) {
 
-    $cr->new_path();
+            # TODO if undef...
+            my $ctx = $clicker->get_context($ds->context);
+            my $domain = $ctx->domain_axis;
+            my $range = $ctx->range_axis;
 
-    my $lastx; # used for completing the path
-    my @vals = @{ $series->values() };
-    my @keys = @{ $series->keys() };
+            my $lastx; # used for completing the path
+            my @vals = @{ $series->values };
+            my @keys = @{ $series->keys };
 
-    my $startx;
+            my $startx;
 
-    for(0..($series->key_count() - 1)) {
+            for(0..($series->key_count - 1)) {
 
-        my $x = $domain->mark($keys[$_]);
+                my $x = $domain->mark($width, $keys[$_]);
 
-        my $y = $height - $range->mark($vals[$_]);
-        if($_ == 0) {
-            $startx = $x;
-            $cr->move_to($x, $y);
-        } else {
-            $cr->line_to($x, $y);
+                my $y = $height - $range->mark($height, $vals[$_]);
+                if($_ == 0) {
+                    $startx = $x;
+                    $self->move_to($x, $y);
+                } else {
+                    $self->line_to($x, $y);
+                }
+                $lastx = $x;
+            }
+            my $color = $self->clicker->color_allocator->next;
+
+            my $op = Graphics::Primitive::Operation::Stroke->new;
+            $op->brush($self->brush->clone);
+            $op->brush->color($color);
+
+            $self->save;
+            $self->do($op);
+
+            $self->restore;
+            $self->line_to($lastx, $height);
+            $self->line_to($startx, $height);
+            $self->close_path;
+
+            my $fillop = Graphics::Primitive::Operation::Fill->new;
+            if($self->opacity) {
+
+                my $clone = $color->clone;
+                $clone->alpha($self->opacity);
+                $fillop->paint(Graphics::Primitive::Paint::Solid->new(
+                    color => $clone
+                ));
+            } elsif($self->fade) {
+
+                my $clone = $color->clone;
+                $clone->alpha($self->opacity);
+
+                my $grad = Graphics::Primitive::Paint::Gradient->new(
+                    line => Geometry::Primitive::Line->new(
+                        start => Geometry::Primitive::Point->new(x => 0, y => 0),
+                        end => Geometry::Primitive::Point->new(x => 1, y => $height),
+                    ),
+                    style => 'linear'
+                );
+                $grad->add_stop(1.0, $color);
+                $grad->add_stop(0, $clone);
+
+                $fillop->paint($grad);
+            } else {
+
+                $fillop->paint(Graphics::Primitive::Paint::Solid->new(
+                    color => $color->clone
+                ));
+            }
+
+            $self->do($fillop);
         }
-        $lastx = $x;
     }
-    my $color = $clicker->color_allocator->next();
-    $cr->set_source_rgba($color->rgba());
-
-    my $path = $cr->copy_path();
-    $cr->stroke();
-
-    $cr->append_path($path);
-    $cr->line_to($lastx, $height);
-    $cr->line_to($startx, $height);
-    $cr->close_path();
-
-    if($self->opacity()) {
-
-        my $clone = $color->clone();
-        $clone->alpha($self->opacity());
-        $cr->set_source_rgba($clone->rgba());
-    } elsif($self->fade()) {
-
-        my $patt = Cairo::LinearGradient->create(0.0, 0.0, 1.0, $height);
-        $patt->add_color_stop_rgba(
-            1.0, $color->red(), $color->green(), $color->blue(),
-            $color->alpha()
-        );
-        $patt->add_color_stop_rgba(
-            0.0, $color->red(), $color->green(), $color->blue(), 0
-        );
-        $cr->set_source($patt);
-    } else {
-
-        $cr->set_source_rgba($color->rgba());
-    }
-
-    $cr->fill();
 
     return 1;
-}
+});
+
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
 
 1;
 __END__
@@ -110,7 +132,7 @@ Chart::Clicker::Renderer::Area renders a dataset as lines.
 
   my $ar = Chart::Clicker::Renderer::Area->new({
       fade => 1,
-      stroke => Chart::Clicker::Drawing::Stroke->new({
+      brush => Graphics::Primitive::Brush->new({
           width => 2
       })
   });
@@ -142,7 +164,7 @@ series' line.
 
 =over 4
 
-=item I<draw>
+=item I<pack>
 
 Draw the data.
 

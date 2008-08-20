@@ -15,6 +15,9 @@ has 'sizes' => (
     }
 );
 
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
 
 1;
 
@@ -59,6 +62,10 @@ Creates a new, empty Series::Size
 =item I<add_to_sizes>
 
 Adds a size to this series.
+
+=item I<get_size>
+
+Get a size by it's index.
 
 =item I<sizes>
 

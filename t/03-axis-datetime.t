@@ -4,7 +4,9 @@ BEGIN {
     use_ok('Chart::Clicker::Axis::DateTime');
 }
 
-my $a = Chart::Clicker::Axis::DateTime->new({ format => '%H:%M:%S' });
+my $a = Chart::Clicker::Axis::DateTime->new(
+    position => 'left',format => '%H:%M:%S', orientation => 'vertical'
+);
 isa_ok($a, 'Chart::Clicker::Axis::DateTime');
 my $foo = $a->format_value(time());
 ok($foo =~ /\d+:\d+:\d/, 'Formatted Properly');

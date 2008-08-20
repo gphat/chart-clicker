@@ -1,14 +1,22 @@
-use inc::Module::Install;
+use inc::Module::Install 0.75;
 
 name        'Chart-Clicker';
 all_from    'lib/Chart/Clicker.pm';
 
-requires    'Cairo'             => 1.00;
-requires    'Moose'             => 0.25;
-requires    'MooseX::AttributeHelpers';
-requires    'DateTime'          => 0.36;
+test_requires 'Pod::Coverage::Moose';
+
+requires    'Moose'             => 0.54;
+requires    'MooseX::AttributeHelpers' => 0.12;
+requires    'DateTime'          => 0.4302;
 requires    'DateTime::Set'     => 0.25;
 requires    'IO::File';
+
+requires    'Geometry::Primitive' => 0.09;
+requires    'Graphics::Color' => 0.08;
+requires    'Graphics::Primitive' => 0.21;
+requires    'Graphics::Primitive::Driver::Cairo' => 0.12;
+requires    'Layout::Manager' => 0.14;
+requires    'Scalar::Util' => 1.19;
 
 auto_install;
 

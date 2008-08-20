@@ -5,6 +5,22 @@ use MooseX::AttributeHelpers;
 
 use Chart::Clicker::Data::Range;
 
+has 'context' => (
+    is => 'rw',
+    isa => 'Str',
+    default => sub { 'default'}
+);
+has 'domain' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Data::Range',
+    default => sub { Chart::Clicker::Data::Range->new }
+);
+has 'max_key_count' => ( is => 'rw', isa => 'Int', default => 0 );
+has 'range' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Data::Range',
+    default => sub { Chart::Clicker::Data::Range->new }
+);
 has 'series' => (
     metaclass => 'Collection::Array',
     is => 'rw',
@@ -16,38 +32,50 @@ has 'series' => (
         'get' => 'get_series'
     }
 );
-has 'domain' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Data::Range',
-    default => sub { Chart::Clicker::Data::Range->new() }
-);
-has 'max_key_count' => ( is => 'rw', isa => 'Int', default => 0 );
-has 'range' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Data::Range',
-    default => sub { Chart::Clicker::Data::Range->new() }
-);
-has 'combined_range' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Data::Range',
-    default => sub { Chart::Clicker::Data::Range->new() }
-);
+
+sub get_series_keys {
+    my ($self, $position) = @_;
+
+    return map({ $_->keys->[$position] } @{ $self->series });
+}
+
+sub get_series_values {
+    my ($self, $position) = @_;
+
+    return map({ $_->values->[$position] } @{ $self->series });
+}
+
+sub largest_value_slice {
+    my ($self) = @_;
+
+    # Prime out big variable with the value of the first slice
+    my $big;
+    foreach ($self->get_series_values(0)) { $big += $_; }
+
+    # Check that value against all the remaining slices
+    my $count = $self->max_key_count;
+    for(my $i = 1; $i < $count; $i++) {
+        my $t;
+        foreach ($self->get_series_values($i)) { $t += $_; }
+        $big = $t if(($t > $big) || !defined($big));
+    }
+    return $big;
+}
 
 sub prepare {
-    my $self = shift();
+    my ($self) = @_;
 
-    unless($self->count() && $self->count() > 0) {
+    unless($self->count && $self->count > 0) {
         die('Dataset has no series.');
     }
 
     my $stotal;
-    foreach my $series (@{ $self->series() }) {
-        $series->prepare();
+    foreach my $series (@{ $self->series }) {
+        $series->prepare;
 
-        $self->range->combine($series->range());
-        $self->combined_range->combine($series->range());
+        $self->range->combine($series->range);
 
-        my @keys = @{ $series->keys() };
+        my @keys = @{ $series->keys };
 
         $self->domain->combine(
             Chart::Clicker::Data::Range->new({
@@ -55,13 +83,17 @@ sub prepare {
             })
         );
 
-        if($series->key_count() > $self->max_key_count()) {
-            $self->max_key_count($series->key_count());
+        if($series->key_count > $self->max_key_count) {
+            $self->max_key_count($series->key_count);
         }
     }
 
     return 1;
 }
+
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
 
 1;
 __END__
@@ -105,9 +137,13 @@ Creates a new, empty DataSet
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
+
+=item I<add_to_series>
+
+Add a series to this dataset.
 
 =item I<count>
 
@@ -117,6 +153,18 @@ Get the number of series in this dataset.
 
 Get the Range for the domain values
 
+=item I<get_series_keys>
+
+Returns the key at the specified position for every series in this DataSet.
+
+=item I<get_series_values>
+
+Returns the value at the specified position for every series in this DataSet.
+
+=item I<largest_value_slice>
+
+Finds the largest cumulative 'slice' in this dataset.
+
 =item I<max_key_count>
 
 Get the number of keys in the longest series.
@@ -124,10 +172,6 @@ Get the number of keys in the longest series.
 =item I<range>
 
 Get the Range for the... range values...
-
-=item I<add_to_series>
-
-Add a series to this dataset.
 
 =item I<series>
 

@@ -3,12 +3,18 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer::Point';
 
-sub draw_point {
-    my ($self, $cr, $x, $y, $series, $count) = @_;
+override('draw_point', sub {
+    my ($self, $x, $y, $series, $count) = @_;
 
-    $self->shape->radius($series->get_size($count));
-    $self->shape->create_path($cr, $x , $y);
-}
+    my $shape = $self->shape->clone;
+    $shape->origin(Geometry::Primitive::Point->new(x => $x, y => $y));
+    $self->shape->grow($series->get_size($count));
+    $self->path->add_primitive($shape);
+});
+
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
 
 1;
 
@@ -21,7 +27,10 @@ Chart::Clicker::Renderer::Bubble
 =head1 DESCRIPTION
 
 Chart::Clicker::Renderer::Bubble is a subclass of the Point renderer where
-the points' radiuses are deteremined by the size value of a Series::Size.
+the points' radiuses are determined by the size value of a Series::Size.
+
+Note: B<This renderer requires you to use a
+Chart::Clicker::Data::Series::Size>.
 
 =head1 SYNOPSIS
 
@@ -36,7 +45,7 @@ the points' radiuses are deteremined by the size value of a Series::Size.
 
 =over 4
 
-=item shape
+=item I<shape>
 
 Specify the shape to be used at each point.  Defaults to 360 degree arc.  The
 radius will be determined by the size value of the series.
@@ -55,7 +64,7 @@ Create a new Bubble renderer
 
 =back
 
-=head2 Class Methods
+=head2 Instance Methods
 
 =over 4
 
