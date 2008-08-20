@@ -28,7 +28,7 @@ use Class::MOP;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '1.99_11';
+our $VERSION = '2.00';
 
 coerce 'Chart::Clicker::Renderer'
     => from 'Str'
@@ -347,19 +347,16 @@ format.
 Clicker leverages the power of Graphics::Primitive to create snazzy graphics
 without being tied to specific backend.
 
-At it's core Clicker is more of a toolkit for creating charts.  It's interface
-is a bit more complex because making pretty charts requires attention and care.
-Some fine defaults are established to make getting started easier, but to really
-unleash the potential of Clicker you must roll up your sleeves and build
-things by hand.
+For examples, see: L<http://www.onemogin.com/clicker/examples>
 
-=head1 WARNING
+=head1 UPGRADING FROM 1.0
 
-Clicker has aspirations to do more and be better.  Good software is not Athena
-and therefore doesn't spring fully formed from the mind.  It is entirely
-possible that new features will be added that may change behavior. You can
-find more information at L<http://www.onemogin.com/clicker>.  Feel free to
-send your criticisms, advice, patches or money to me as a way of helping.
+The differences between 1.0 and 2.0 are long and onerous.  The way you create
+charts has changed (see the SYNOPSIS) but the way you provide data to them
+has not.
+
+I strongly recommend reading the following section if you used advanced
+features.
 
 =head1 CONTEXTS
 

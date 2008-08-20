@@ -21,6 +21,7 @@ Revision history for Perl extension Chart::Clicker.
     - Axis' ticks attribute now yields the correct number of ticks, not -1
     - Horizontal axes' tick labels now align their baselines properly
     - Make axes position independent, as they were intended
+
 1.4.2
     - Packaging fixes.
 1.4.1
