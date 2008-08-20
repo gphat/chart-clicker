@@ -207,10 +207,15 @@ sub mark {
 
     # 'caching' this here speeds things up.  Calling after changing the
     # range would result in a messed up chart anyway...
-    if(!defined($self->{'LOWER'})) {
-        $self->{'LOWER'} = $self->range->lower;
+    if(!defined($self->{LOWER})) {
+        $self->{LOWER} = $self->range->lower;
+        $self->{RSPAN} = $self->range->span - 1;
+        if($self->{RSPAN} < 1) {
+            $self->{RSPAN} = 1;
+        }
     }
-    return ($span / ($self->range->span - 1)) * ($value - $self->{'LOWER'} || 0);
+
+    return ($span / $self->{RSPAN}) * ($value - $self->{LOWER} || 0);
 }
 
 override('pack', sub {
