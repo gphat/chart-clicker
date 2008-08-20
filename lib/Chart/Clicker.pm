@@ -28,7 +28,7 @@ use Class::MOP;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.00';
+our $VERSION = '2.01';
 
 coerce 'Chart::Clicker::Renderer'
     => from 'Str'
@@ -348,6 +348,10 @@ Clicker leverages the power of Graphics::Primitive to create snazzy graphics
 without being tied to specific backend.
 
 For examples, see: L<http://www.onemogin.com/clicker/examples>
+
+=head1 COOKBOOK
+
+Check the cookbook at L<http://www.onemogin.com/clicker/cookbook>
 
 =head1 UPGRADING FROM 1.0
 
