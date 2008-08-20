@@ -116,7 +116,20 @@ Chart::Clicker::Renderer::Pie
 =head1 DESCRIPTION
 
 Chart::Clicker::Renderer::Pie renders a dataset as slices of a pie.  The keys
-of like-named Series are totaled and keys are ignored.
+of like-named Series are totaled and keys are ignored.  So for a dataset like:
+
+  my $series = Chart::Clicker::Data::Series->new(
+      keys    => [ 1, 2, 3 ],
+      values  => [ 1, 2, 3],
+  );
+
+  my $series2 = Chart::Clicker::Data::Series->new(
+      keys    => [ 1, 2, 3],
+      values  => [ 1, 1, 1 ],
+  );
+  
+The keys are discarded and a pie chart will be drawn with $series' slice at
+66% (1 + 2 + 3 = 6) and $series2's at 33% (1 + 1 + 1 = 3).
 
 =head1 SYNOPSIS
 
