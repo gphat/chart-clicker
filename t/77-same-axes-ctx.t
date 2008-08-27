@@ -34,7 +34,7 @@ $ds2->context('sales');
 
 $cc->add_to_datasets($ds, $ds2);
 
-$cc->draw();
+$cc->draw;
 
 my $lrange = $cc->get_context('default')->range_axis;
 my $bdomain = $cc->get_context('default')->domain_axis;
@@ -48,4 +48,4 @@ my $tdomain = $cc->get_context('sales')->domain_axis;
 cmp_ok($rrange->position, 'eq', 'right', 'second range axis position');
 cmp_ok($tdomain->position, 'eq', 'bottom', 'second domain axis position');
 
-ok(defined($cc->data()), 'data');
+ok(defined($cc->data), 'data');

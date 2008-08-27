@@ -165,11 +165,11 @@ override('prepare', sub {
 
         my $angle = 0;
         if($self->is_vertical) {
-            if ($self->is_left) {
-                $angle -= pip2;
-            } else {
-                $angle = pip2;
-            }
+            # if ($self->is_left) {
+            #     $angle -= pip2;
+            # } else {
+            #     $angle = pip2;
+            # }
         }
 
         my $label = Graphics::Primitive::TextBox->new(
@@ -267,7 +267,7 @@ override('pack', sub {
         # Draw the label
         # FIXME Not working, rotated text labels...
         if($self->label) {
-            my $label = $self->find_component('label');
+            my $label = $self->get_component($self->find_component('label'));
 
             if($self->is_left) {
 
@@ -300,7 +300,7 @@ override('pack', sub {
         # Draw the label
         # FIXME Not working, rotated text labels...
         if($self->label) {
-            my $label = $self->find_component('label');
+            my $label = $self->get_component($self->find_component('label'));
 
             my $ext = $self->{'label_extents_cache'};
             if ($self->is_bottom) {
