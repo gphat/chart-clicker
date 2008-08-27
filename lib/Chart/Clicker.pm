@@ -28,7 +28,7 @@ use Class::MOP;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.02';
+our $VERSION = '2.03';
 
 coerce 'Chart::Clicker::Renderer'
     => from 'Str'

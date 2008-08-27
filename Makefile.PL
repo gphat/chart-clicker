@@ -14,7 +14,7 @@ requires    'IO::File';
 requires    'Geometry::Primitive' => 0.09;
 requires    'Graphics::Color' => 0.11;
 requires    'Graphics::Primitive' => 0.25;
-requires    'Graphics::Primitive::Driver::Cairo' => 0.13;
+requires    'Graphics::Primitive::Driver::Cairo' => 0.14;
 requires    'Layout::Manager' => 0.16;
 requires    'Scalar::Util' => 1.19;
 

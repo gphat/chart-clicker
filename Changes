@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.03
+  - Oops again, bump Cairo driver version
+
 2.02
   - Ooops, bump version dependencies properly
 
