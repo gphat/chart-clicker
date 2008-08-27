@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.02
+  - Ooops, bump version dependencies properly
+
 2.01
   - Remove label rotation on vertical axes due to problems with
     Graphics::Primtive
