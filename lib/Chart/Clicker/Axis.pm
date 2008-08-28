@@ -136,7 +136,7 @@ override('prepare', sub {
         my $tlabel = Graphics::Primitive::TextBox->new(
             font => $font,
             text => $val,
-            color => Graphics::Color::RGB->new( green => 0, blue => 0, red => 0),
+            color => Graphics::Color::RGB->new(green => 0, blue => 0, red => 0),
         );
         $tlabel->prepare($driver);
 
@@ -289,7 +289,7 @@ override('pack', sub {
             my $label = $self->get_component($_);
 
             if($self->is_top) {
-                $label->origin->x($x - ($label->width / 1.8));
+                $label->origin->x($ix - ($label->width / 1.8));
                 $label->origin->y($ibb->origin->y + $ibb->height - $label->height);
             } else {
                 $label->origin->x($ix - ($label->width / 1.8));

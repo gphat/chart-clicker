@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.04
+  - Fix bug in top-horizontal axes
+
 2.03
   - Oops again, bump Cairo driver version
 
