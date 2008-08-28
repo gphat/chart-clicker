@@ -64,13 +64,12 @@ override('pack', sub {
             my $color = $self->clicker->color_allocator->next;
 
             my $op = Graphics::Primitive::Operation::Stroke->new;
+            $op->preserve(1);
             $op->brush($self->brush->clone);
             $op->brush->color($color);
 
-            $self->save;
             $self->do($op);
 
-            $self->restore;
             $self->line_to($lastx, $height);
             $self->line_to($startx, $height);
             $self->close_path;
