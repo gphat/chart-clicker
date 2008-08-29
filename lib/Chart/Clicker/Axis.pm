@@ -125,17 +125,19 @@ override('prepare', sub {
     my $bwidth = 0;
 
     # Determine all this once... much faster.
+    my $i = 0;
     foreach my $val (@{ $self->tick_values }) {
+        my $label = $val;
         if(defined($self->tick_labels)) {
-            $val = $self->tick_labels->[$_];
+            $label = $self->tick_labels->[$i];
         } else {
-            $val = $self->format_value($val);
+            $label = $self->format_value($val);
         }
-        my $tbox = $driver->get_text_bounding_box($font, $val);
+        my $tbox = $driver->get_text_bounding_box($font, $label);
 
         my $tlabel = Graphics::Primitive::TextBox->new(
             font => $font,
-            text => $val,
+            text => $label,
             color => Graphics::Color::RGB->new(green => 0, blue => 0, red => 0),
         );
         $tlabel->prepare($driver);
@@ -147,6 +149,7 @@ override('prepare', sub {
         $bheight = $tlabel->height if($tlabel->height > $bheight);
 
         $self->add_component($tlabel);
+        $i++;
     }
 
     my $big = $bheight;
@@ -283,7 +286,6 @@ override('pack', sub {
         # Draw a tick for each value.
         for(0..scalar(@values) - 1) {
             my $val = $values[$_];
-            # Grab the extent from the cache.
             my $ix = $self->mark($width, $val);
 
             my $label = $self->get_component($_);

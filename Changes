@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.05
+  - Axis: Fix busted labels when using labels & values together
+
 2.04
   - Fix bug in top-horizontal axes
 
