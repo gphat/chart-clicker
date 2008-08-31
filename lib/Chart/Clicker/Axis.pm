@@ -59,6 +59,7 @@ has 'range' => (
     default => sub { Chart::Clicker::Data::Range->new }
 );
 has 'show_ticks' => ( is => 'rw', isa => 'Bool', default => 1 );
+has 'staggered' => ( is => 'rw', isa => 'Bool', default => 0 );
 has 'tick_brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
@@ -200,6 +201,9 @@ override('prepare', sub {
     } else {
         $self->minimum_height($self->minimum_height + $big + $label_height);
         $self->minimum_width($self->minimum_width + $big + $self->outside_width);
+        if($self->staggered) {
+            $self->minimum_height($self->minimum_height * 2);
+        }
     }
 
     return 1;
@@ -234,6 +238,11 @@ override('pack', sub {
     my $width = $self->width;
     my $height = $self->height;
     my $ibb = $self->inside_bounding_box;
+    my $iox = $ibb->origin->x;
+    my $ioy = $ibb->origin->y;
+
+    my $iwidth = $ibb->width;
+    my $iheight = $ibb->height;
 
     if($self->is_left) {
         $x += $width;
@@ -259,10 +268,10 @@ override('pack', sub {
             my $label = $self->get_component($_);
 
             if($self->is_left) {
-                $label->origin->x($ibb->origin->x + $ibb->width - $label->width);
+                $label->origin->x($iox + $iwidth - $label->width);
                 $label->origin->y($iy - ($label->height / 2));
             } else {
-                $label->origin->x($ibb->origin->x);
+                $label->origin->x($iox);
                 $label->origin->y($iy - ($label->height / 2));
             }
         }
@@ -274,11 +283,11 @@ override('pack', sub {
 
             if($self->is_left) {
 
-                $label->origin->x($ibb->origin->x);
+                $label->origin->x($iox);
                 $label->origin->y(($height - $label->height) / 2);
             } else {
 
-                $label->origin->x($ibb->origin->x + $ibb->width - $label->width);
+                $label->origin->x($iox + $iwidth - $label->width);
                 $label->origin->y(($height - $label->height) / 2);
             }
         }
@@ -290,12 +299,20 @@ override('pack', sub {
 
             my $label = $self->get_component($_);
 
+            my $bump = 0;
+            if($self->staggered) {
+                if($_ % 2) {
+                    $bump = $iheight / 2;
+                }
+            }
+
             if($self->is_top) {
+
                 $label->origin->x($ix - ($label->width / 1.8));
-                $label->origin->y($ibb->origin->y + $ibb->height - $label->height);
+                $label->origin->y($ioy + $iheight - $label->height - $bump);
             } else {
                 $label->origin->x($ix - ($label->width / 1.8));
-                $label->origin->y($ibb->origin->y);
+                $label->origin->y($ioy + $bump);
             }
         }
 
@@ -359,7 +376,6 @@ Chart::Clicker::Axis represents the plot of the chart.
     font  => Graphics::Primitive::Font->new,
     orientation => 'vertical',
     position => 'left',
-    show_ticks => 1,
     brush = Graphics::Primitive::Brush->new,
     tick_length => 2,
     tick_brush => Graphics::Primitive::Brush->new,
@@ -465,6 +481,13 @@ Add a value to the list of tick values.
 =item I<clear_tick_values>
 
 Clear all tick values.
+
+=item I<stagger>
+
+Set/Get the stagger flag, which causes horizontally labeled axes to 'stagger'
+the labels so that half are at the top of the box and the other half are at
+the bottom.  This makes long, overlapping labels less likely to overlap.  It
+only does something useful with B<horizontal> labels.
 
 =item I<tick_brush>
 

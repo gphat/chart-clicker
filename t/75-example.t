@@ -37,7 +37,11 @@ $mark2->brush->color(Graphics::Color::RGB->new(red => 1, green => 0, blue => 0, 
 $mark2->inside_color(Graphics::Color::RGB->new(red => .5, green => .5, blue => .5, alpha => .5));
 $ctx->add_marker($mark2);
 
-$cc->draw;
-my $data = $cc->data;
-ok(defined($data), 'data');
+$ctx->domain_axis->staggered(1);
+$ctx->domain_axis->tick_values([2, 3, 4, 5, 6, 7, 8, 9]);
+$ctx->domain_axis->tick_labels([qw(LONGLABEL2 LONGLABEL3 LONGLABEL4 LONGLABEL5 LONGLABEL6 LONGLABEL7 LONGLABEL8 LONGLABEL9)]);
 
+$cc->draw;
+# my $data = $cc->data;
+# ok(defined($data), 'data');
+$cc->write('/Users/gphat/test.png');
