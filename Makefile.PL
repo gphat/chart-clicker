@@ -12,8 +12,8 @@ requires    'DateTime::Set'     => 0.25;
 requires    'IO::File';
 
 requires    'Geometry::Primitive' => 0.09;
-requires    'Graphics::Primitive' => 0.26;
-requires    'Graphics::Primitive::Driver::Cairo' => 0.19;
+requires    'Graphics::Primitive' => 0.28;
+requires    'Graphics::Primitive::Driver::Cairo' => 0.23;
 requires    'Layout::Manager' => 0.16;
 requires    'Scalar::Util' => 1.19;
 

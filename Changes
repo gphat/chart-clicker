@@ -1,5 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.07
+  - Bump Graphics::Primitive dep to 0.28 and make appropriate changes to Fill
+    operations.
+
 2.06
   - Axis: Add stagger flag
 
