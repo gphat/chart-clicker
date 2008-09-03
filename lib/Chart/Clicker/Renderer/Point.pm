@@ -47,10 +47,11 @@ override('pack', sub {
                 $self->move_to($x, $y);
                 $self->draw_point($x, $y, $series, $_);
             }
-            my $op = Graphics::Primitive::Operation::Fill->new;
-            $op->paint(Graphics::Primitive::Paint::Solid->new(
-                color => $clicker->color_allocator->next
-            ));
+            my $op = Graphics::Primitive::Operation::Fill->new(
+                paint => Graphics::Primitive::Paint::Solid->new(
+                    color => $clicker->color_allocator->next
+                )
+            );
             $self->do($op);
         }
     }

@@ -83,11 +83,11 @@ override('pack', sub {
             my $color = $clicker->color_allocator->next;
 
             my $fop = Graphics::Primitive::Operation::Fill->new(
-                preserve => 1
+                preserve => 1,
+                paint => Graphics::Primitive::Paint::Solid->new(
+                    color => $color,
+                )
             );
-            $fop->paint(Graphics::Primitive::Paint::Solid->new(
-                color => $color,
-            ));
             $self->do($fop);
 
             my $op = Graphics::Primitive::Operation::Stroke->new;

@@ -74,36 +74,37 @@ override('pack', sub {
             $self->line_to($startx, $height);
             $self->close_path;
 
-            my $fillop = Graphics::Primitive::Operation::Fill->new;
+            my $paint;
             if($self->opacity) {
 
                 my $clone = $color->clone;
                 $clone->alpha($self->opacity);
-                $fillop->paint(Graphics::Primitive::Paint::Solid->new(
+                $paint = Graphics::Primitive::Paint::Solid->new(
                     color => $clone
-                ));
+                );
             } elsif($self->fade) {
 
                 my $clone = $color->clone;
                 $clone->alpha($self->opacity);
 
-                my $grad = Graphics::Primitive::Paint::Gradient->new(
+                $paint = Graphics::Primitive::Paint::Gradient->new(
                     line => Geometry::Primitive::Line->new(
                         start => Geometry::Primitive::Point->new(x => 0, y => 0),
                         end => Geometry::Primitive::Point->new(x => 1, y => $height),
                     ),
                     style => 'linear'
                 );
-                $grad->add_stop(1.0, $color);
-                $grad->add_stop(0, $clone);
-
-                $fillop->paint($grad);
+                $paint->add_stop(1.0, $color);
+                $paint->add_stop(0, $clone);
             } else {
 
-                $fillop->paint(Graphics::Primitive::Paint::Solid->new(
+                $paint = Graphics::Primitive::Paint::Solid->new(
                     color => $color->clone
-                ));
+                );
             }
+            my $fillop = Graphics::Primitive::Operation::Fill->new(
+                paint => $paint
+            );
 
             $self->do($fillop);
         }
