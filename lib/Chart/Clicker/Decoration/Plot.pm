@@ -65,7 +65,7 @@ override('prepare', sub {
     super;
 });
 
-# override('pack', sub {
+# override('finalize', sub {
 #     my ($self) = @_;
 # 
 #     if($self->grid->visible) {

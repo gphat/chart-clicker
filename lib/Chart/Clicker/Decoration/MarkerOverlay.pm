@@ -8,7 +8,7 @@ use Graphics::Primitive::Operation::Stroke;
 use Graphics::Primitive::Operation::Fill;
 use Graphics::Primitive::Paint::Solid;
 
-override('pack', sub {
+override('finalize', sub {
     my ($self) = @_;
 
     my $width = $self->width;

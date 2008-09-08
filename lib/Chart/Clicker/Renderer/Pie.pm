@@ -42,7 +42,7 @@ override('prepare', sub {
 
 });
 
-override('pack', sub {
+override('finalize', sub {
     my $self = shift;
 
     my $clicker = $self->clicker;

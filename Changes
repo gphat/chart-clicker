@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.08
+  - Keep up with Graphics::Primitive API changes
+
 2.07
   - Bump Graphics::Primitive dep to 0.28 and make appropriate changes to Fill
     operations.
@@ -21,7 +24,7 @@ Revision history for Perl extension Chart::Clicker.
 
 2.01
   - Remove label rotation on vertical axes due to problems with
-    Graphics::Primtive
+    Graphics::Primitive
   - Depend on Graphics::Primitive 0.25 and make necessary API changes
 
 2.0.0

@@ -225,7 +225,7 @@ sub mark {
     return ($span / $self->{RSPAN}) * ($value - $self->{LOWER} || 0);
 }
 
-override('pack', sub {
+override('finalize', sub {
     my ($self) = @_;
 
     super;

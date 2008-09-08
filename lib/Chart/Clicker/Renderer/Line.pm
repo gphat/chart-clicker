@@ -21,7 +21,7 @@ has 'shape_brush' => (
 );
 # TODO Readd shapes
 
-sub pack {
+sub finalize {
     my ($self) = @_;
 
     my $width = $self->width;
@@ -112,9 +112,9 @@ Set a Stroke object to be used for the lines.
 
 =over 4
 
-=item I<pack>
+=item I<finalize>
 
-Draw it!
+Draw the actual line chart
 
 =back
 

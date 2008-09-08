@@ -30,7 +30,7 @@ has 'glare_color' => (
 #     return 1;
 # });
 
-override('pack', sub {
+override('finalize', sub {
     my ($self) = @_;
 
     my $twentypofheight = $self->height * .20;

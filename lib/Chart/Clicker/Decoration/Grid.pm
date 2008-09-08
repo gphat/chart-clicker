@@ -38,7 +38,7 @@ has 'show_range' => (
     default => 1
 );
 
-override('pack', sub {
+override('finalize', sub {
     my $self = shift();
 
     return unless ($self->show_domain || $self->show_range);

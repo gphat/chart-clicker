@@ -26,7 +26,7 @@ has 'opacity' => (
     default => 0
 );
 
-override('pack', sub {
+override('finalize', sub {
     my ($self) = @_;
 
     my $height = $self->height;
