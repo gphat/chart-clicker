@@ -28,7 +28,7 @@ use Class::MOP;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.07';
+our $VERSION = '2.09';
 
 coerce 'Chart::Clicker::Renderer'
     => from 'Str'
@@ -152,7 +152,7 @@ sub draw {
     $driver->prepare($self);
 
     $self->layout_manager->do_layout($self);
-    $driver->pack($self);
+    $driver->finalize($self);
     $driver->draw($self);
 }
 

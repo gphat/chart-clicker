@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.09
+  - Remove Moose Coverage dependency
+
 2.08
   - Keep up with Graphics::Primitive API changes
 
