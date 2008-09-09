@@ -9,10 +9,10 @@ requires    'DateTime'          => 0.4302;
 requires    'DateTime::Set'     => 0.25;
 requires    'IO::File';
 
-requires    'Geometry::Primitive' => 0.10;
+requires    'Geometry::Primitive' => 0.11;
 requires    'Graphics::Primitive' => 0.29;
 requires    'Graphics::Primitive::Driver::Cairo' => 0.24;
-requires    'Layout::Manager' => 0.16;
+requires    'Layout::Manager' => 0.18;
 requires    'Scalar::Util' => 1.19;
 
 auto_install;
