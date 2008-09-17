@@ -144,8 +144,8 @@ override('prepare', sub {
 
         $tlabel->prepare($driver);
 
-        $tlabel->width($tlabel->minimum_width);
-        $tlabel->height($tlabel->minimum_height);
+        $tlabel->width($lay->width);
+        $tlabel->height($lay->height);
 
         $bwidth = $tlabel->width if($tlabel->width > $bwidth);
         $bheight = $tlabel->height if($tlabel->height > $bheight);
