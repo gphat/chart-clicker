@@ -134,9 +134,9 @@ override('prepare', sub {
         } else {
             $label = $self->format_value($val);
         }
-        # my $tbox = $driver->get_text_bounding_box($font, $label);
 
         my $tlabel = Graphics::Primitive::TextBox->new(
+            text => $label,
             font => $font,
             color => $self->color,
         );
