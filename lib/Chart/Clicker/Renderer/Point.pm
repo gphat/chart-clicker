@@ -4,6 +4,7 @@ use Moose;
 extends 'Chart::Clicker::Renderer';
 
 use Geometry::Primitive::Circle;
+use Geometry::Primitive::Point;
 use Graphics::Primitive::Operation::Fill;
 use Graphics::Primitive::Paint::Solid;
 
