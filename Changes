@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.11
+  - Fix multiple-prepare bug
+
 2.10
   - Use new Grapics::Primitive APIs
 

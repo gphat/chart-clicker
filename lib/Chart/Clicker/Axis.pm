@@ -197,11 +197,11 @@ override('prepare', sub {
     }
 
     if($self->is_vertical) {
-        $self->minimum_width($self->minimum_width + $big + $label_width);
-        $self->minimum_height($self->minimum_height + $self->outside_height + $big);
+        $self->minimum_width($self->outside_width + $big + $label_width);
+        $self->minimum_height($self->outside_height + $self->outside_height + $big);
     } else {
-        $self->minimum_height($self->minimum_height + $big + $label_height);
-        $self->minimum_width($self->minimum_width + $big + $self->outside_width);
+        $self->minimum_height($self->outside_height + $big + $label_height);
+        $self->minimum_width($self->outside_width + $big + $self->outside_width);
         if($self->staggered) {
             $self->minimum_height($self->minimum_height * 2);
         }

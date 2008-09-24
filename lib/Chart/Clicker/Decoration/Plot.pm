@@ -47,11 +47,6 @@ has 'render_area' => (
 override('prepare', sub {
     my ($self) = @_;
 
-    # return if $self->prepared;
-    # $self->clear_components;
-
-    $self->add_component($self->render_area, 'c');
-
     # TODO This is also happening in Clicker.pm
     foreach my $c (@{ $self->components }) {
         $c->clicker($self->clicker);

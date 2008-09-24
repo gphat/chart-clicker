@@ -51,7 +51,7 @@ has 'widest' => ( is => 'rw', isa => 'Num' );
 override('prepare', sub {
     my ($self, $driver) = @_;
 
-    # return if $self->component_count > 0;
+    return if $self->component_count > 0;
 
     my $ca = $self->clicker->color_allocator;
 
