@@ -45,6 +45,5 @@ $mark2->inside_color(Graphics::Color::RGB->new(red => .5, green => .5, blue => .
 $ctx->add_marker($mark2);
 
 $cc->draw;
-$cc->write('/Users/gphat/test.png');
-# my $data = $cc->data;
-# ok(defined($data), 'data');
+my $data = $cc->data;
+ok(defined($data), 'data');
