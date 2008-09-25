@@ -9,6 +9,10 @@ use Graphics::Color::RGB;
 
 extends 'Chart::Clicker::Axis';
 
+has 'duration' => (
+    is => 'rw',
+    isa => 'DateTime::Duration'
+);
 has 'format' => (
     is => 'rw',
     isa => 'Str'
@@ -20,12 +24,12 @@ has 'time_zone' => (
 );
 
 override 'prepare' => sub {
-     my $self = shift();
+     my ($self, $driver) = @_;
 
     my ($dstart, $dend);
     eval {
-        $dstart = DateTime->from_epoch(epoch => $self->range->lower());
-        $dend = DateTime->from_epoch(epoch => $self->range->upper());
+        $dstart = DateTime->from_epoch(epoch => $self->range->lower);
+        $dend = DateTime->from_epoch(epoch => $self->range->upper);
     };
 
     if(!defined($dstart) || !defined($dend)) {
@@ -35,14 +39,14 @@ override 'prepare' => sub {
 
     my $dur = $dend - $dstart;
 
-    unless(defined($self->format()) && length($self->format())) {
-        if($dur->years()) {
+    unless(defined($self->format) && length($self->format)) {
+        if($dur->years) {
             $self->format('%b %Y');
-        } elsif($dur->months()) {
+        } elsif($dur->months) {
             $self->format('%d');
-        } elsif($dur->weeks()) {
+        } elsif($dur->weeks) {
             $self->format('%d');
-        } elsif($dur->days()) {
+        } elsif($dur->days) {
             $self->format('%m/%d %H:%M');
         } else {
             $self->format('%H:%M');
@@ -56,54 +60,54 @@ override 'prepare' => sub {
         die('No clicker?')
     }
 
-    my @markers = @{ $clicker->markers() };
+    # my @markers = @{ $clicker->markers() };
 
     my $set = DateTime::Span->from_datetimes(
         start => $dstart, end => $dend
     );
 
-    my $linecolor = Graphcis::Color::RGB->new({
+    my $linecolor = Graphics::Color::RGB->new({
         red => 0, green => 0, blue => 0, alpha => .35
     });
     my $fillcolor = Graphics::Color::RGB->new({
         red => 0, green => 0, blue => 0, alpha => .10
     });
 
-    my @dmarkers;
-    my $day = $set->start->truncate(to => 'day');
-
-    my $dayval;
-    while($day < $set->end()) {
-        if($set->contains($day)) {
-            if(defined($dayval)) {
-                push(@dmarkers,
-                    Chart::Clicker::Data::Marker->new({
-                        key         => $dayval,
-                        key2        => $day->epoch(),
-                        color       => $linecolor,
-                        inside_color=> $fillcolor,
-                    })
-                );
-                $dayval = undef;
-            } else {
-                $dayval = $day->epoch();
-            }
-        }
-        $day = $day->add(days => 1);
-    }
-    if($dayval) {
-        push(@dmarkers,
-            Chart::Clicker::Data::Marker->new({
-                key         => $dayval,
-                key2        => $day->epoch(),
-                color       => $linecolor,
-                inside_color=> $fillcolor,
-            })
-        );
-    }
-
-    push(@dmarkers, @markers);
-    $clicker->markers(\@dmarkers);
+    # my @dmarkers;
+    # my $day = $set->start->truncate(to => 'day');
+    # 
+    # my $dayval;
+    # while($day < $set->end()) {
+    #     if($set->contains($day)) {
+    #         if(defined($dayval)) {
+    #             push(@dmarkers,
+    #                 Chart::Clicker::Data::Marker->new({
+    #                     key         => $dayval,
+    #                     key2        => $day->epoch(),
+    #                     color       => $linecolor,
+    #                     inside_color=> $fillcolor,
+    #                 })
+    #             );
+    #             $dayval = undef;
+    #         } else {
+    #             $dayval = $day->epoch();
+    #         }
+    #     }
+    #     $day = $day->add(days => 1);
+    # }
+    # if($dayval) {
+    #     push(@dmarkers,
+    #         Chart::Clicker::Data::Marker->new({
+    #             key         => $dayval,
+    #             key2        => $day->epoch(),
+    #             color       => $linecolor,
+    #             inside_color=> $fillcolor,
+    #         })
+    #     );
+    # }
+    # 
+    # push(@dmarkers, @markers);
+    # $clicker->markers(\@dmarkers);
 
     return 1;
 };
