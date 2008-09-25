@@ -98,7 +98,7 @@ Set/get this context's name
 
 Set/get this context's range axis
 
-=item I<render>
+=item I<renderer>
 
 Set/get this context's renderer
 
