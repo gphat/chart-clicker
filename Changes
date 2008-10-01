@@ -3,6 +3,7 @@ Revision history for Perl extension Chart::Clicker.
 2.12
   - Fix POD bug (thanks Jay Shirley)
   - Axis::DateTime: get this working again, albeit a bit gimped
+  - Move pod tests to t/author
 
 2.11
   - Fix multiple-prepare bug
