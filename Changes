@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.13
+  - Remove some old code (was already commented out)
+
 2.12
   - Fix POD bug (thanks Jay Shirley)
   - Axis::DateTime: get this working again, albeit a bit gimped

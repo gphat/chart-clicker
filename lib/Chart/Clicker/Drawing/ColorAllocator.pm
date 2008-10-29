@@ -37,21 +37,14 @@ before 'next' => sub {
     my $pos = $self->position();
     if(!defined($self->colors->[$pos + 1])) {
 
-        # if($self->position() <= scalar(@defaults)) {
-        #     # $self->colors->[$pos + 1] =
-        #         # Chart::Clicker::Drawing::Color->new({
-        #         #     name => $defaults[$pos + 1]
-        #         # });
-        # } else {
-            $self->add_to_colors(
-                Graphics::Color::RGB->new(
-                    red     => rand(1),
-                    green   => rand(1),
-                    blue    => rand(1),
-                    alpha   => 1
-                )
-            );
-        # }
+        $self->add_to_colors(
+            Graphics::Color::RGB->new(
+                red     => rand(1),
+                green   => rand(1),
+                blue    => rand(1),
+                alpha   => 1
+            )
+        );
     }
 };
 
