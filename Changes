@@ -1,5 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.14
+  - Add examples directory
+  - Don't add padding if axes are hidden.
+
 2.13
   - Remove some old code (was already commented out)
 
