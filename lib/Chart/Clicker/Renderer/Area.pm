@@ -7,7 +7,7 @@ use Graphics::Primitive::Brush;
 use Graphics::Primitive::Path;
 use Graphics::Primitive::Operation::Fill;
 use Graphics::Primitive::Operation::Stroke;
-use Graphics::Primitive::Paint::Gradient;
+use Graphics::Primitive::Paint::Gradient::Linear;
 use Graphics::Primitive::Paint::Solid;
 
 has 'brush' => (
@@ -87,7 +87,7 @@ override('finalize', sub {
                 my $clone = $color->clone;
                 $clone->alpha($self->opacity);
 
-                $paint = Graphics::Primitive::Paint::Gradient->new(
+                $paint = Graphics::Primitive::Paint::Gradient::Linear->new(
                     line => Geometry::Primitive::Line->new(
                         start => Geometry::Primitive::Point->new(x => 0, y => 0),
                         end => Geometry::Primitive::Point->new(x => 1, y => $height),

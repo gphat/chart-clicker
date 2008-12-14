@@ -10,8 +10,8 @@ requires    'DateTime::Set'     => 0.25;
 requires    'IO::File';
 
 requires    'Geometry::Primitive' => 0.13;
-requires    'Graphics::Primitive' => 0.34;
-requires    'Graphics::Primitive::Driver::Cairo' => 0.28;
+requires    'Graphics::Primitive' => 0.35;
+requires    'Graphics::Primitive::Driver::Cairo' => 0.30;
 requires    'Layout::Manager' => 0.20;
 requires    'Scalar::Util' => 1.19;
 

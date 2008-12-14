@@ -28,7 +28,7 @@ use Class::MOP;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.13';
+our $VERSION = '2.15';
 
 coerce 'Chart::Clicker::Renderer'
     => from 'Str'
@@ -391,6 +391,12 @@ context.
   
 New contexts provide a fresh domain and range axis and default to a Line
 renderer. 
+
+B<Caveat>: Clicker expects that the default context (identified by the string
+"default") will always be present.  It is from this context that some of
+Clicker's internals draw their values.  You should use the default context
+unless you need more than one, in which case you should use "default" as the
+base context.
 
 =head1 FORMATS
 

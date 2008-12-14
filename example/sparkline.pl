@@ -33,32 +33,32 @@ my $highds = Chart::Clicker::Data::DataSet->new(series => [ $series2 ]);
 $cc->add_to_datasets($highds);
 
 my $highctx = Chart::Clicker::Context->new(
-	name => 'high',
-	renderer => Chart::Clicker::Renderer::Point->new(
-		shape => Geometry::Primitive::Rectangle->new(
-			width => 3,
-			height => 3
-		)
-	),
-	range_axis => $defctx->range_axis,
-	domain_axis => $defctx->domain_axis
+  name => 'high',
+  renderer => Chart::Clicker::Renderer::Point->new(
+      shape => Geometry::Primitive::Rectangle->new(
+          width => 3,
+          height => 3
+      )
+  ),
+  range_axis => $defctx->range_axis,
+  domain_axis => $defctx->domain_axis
 );
 $cc->add_to_contexts($highctx);
 $highds->context('high');
-
+# 
 my $noteds = Chart::Clicker::Data::DataSet->new(series => [ $series3 ]);
 $cc->add_to_datasets($noteds);
 
 my $notectx = Chart::Clicker::Context->new(
-	name => 'notable',
-	renderer => Chart::Clicker::Renderer::Point->new(
-		shape => Geometry::Primitive::Rectangle->new(
-			width => 3,
-			height => 3
-		)
-	),
-	range_axis => $defctx->range_axis,
-	domain_axis => $defctx->domain_axis
+  name => 'notable',
+  renderer => Chart::Clicker::Renderer::Point->new(
+      shape => Geometry::Primitive::Rectangle->new(
+          width => 3,
+          height => 3
+      )
+  ),
+  range_axis => $defctx->range_axis,
+  domain_axis => $defctx->domain_axis
 );
 $cc->add_to_contexts($notectx);
 $noteds->context('notable');
@@ -66,20 +66,19 @@ $noteds->context('notable');
 my $grey = Graphics::Color::RGB->new(
 	red => .36, green => .36, blue => .36, alpha => 1
 );
-my $green = Graphics::Color::RGB->new(
+my $red = Graphics::Color::RGB->new(
 	red => 1, green => 0, blue => 0
 );
 my $blue = Graphics::Color::RGB->new(
 	red => .2, green => .6, blue => 1
 );
 
-my $ctx = $cc->get_context('default');
 my $mark = Chart::Clicker::Data::Marker->new(value => 2, value2 => 4);
 $mark->brush->color(Graphics::Color::RGB->new(red => 0, green => 0, blue => 0, alpha => .15));
 $mark->inside_color(Graphics::Color::RGB->new(red => 0, green => 0, blue => 0, alpha => .15));
 $defctx->add_marker($mark);
 
-$cc->color_allocator->colors([ $grey, $green, $blue ]);
+$cc->color_allocator->colors([ $grey, $red, $blue ]);
 
 $cc->plot->grid->visible(0);
 $cc->legend->visible(0);

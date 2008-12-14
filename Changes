@@ -1,8 +1,16 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.15
+  - Fix META.yml
+  - Add some POD to describe why NOT having a default context makes Clicker
+    shit on itself.
+  - Fix linear gradient in Area renderer.
+  - 
+
 2.14
   - Add examples directory
   - Don't add padding if axes are hidden.
+  - Fix gradients in Area renderer
 
 2.13
   - Remove some old code (was already commented out)
