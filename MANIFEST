@@ -1,4 +1,5 @@
 Changes
+example/simple.pl
 example/sparkline.pl
 inc/Module/Install.pm
 inc/Module/Install/Base.pm

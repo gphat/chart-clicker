@@ -24,4 +24,4 @@ requires:
   Moose: 0.57
   MooseX::AttributeHelpers: 0.13
   Scalar::Util: 1.19
-version: 2.14
+version: 2.15

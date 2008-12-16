@@ -19,6 +19,10 @@ use MooseX::AttributeHelpers;
 
 type 'StrOrCodeRef' => where { (ref($_) eq "") || ref($_) eq 'CODE' };
 
+has 'tick_label_angle' => (
+    is => 'rw',
+    isa => 'Num'
+);
 has 'baseline' => (
     is  => 'rw',
     isa => 'Num',
@@ -140,6 +144,9 @@ override('prepare', sub {
             font => $font,
             color => $self->color,
         );
+        if($self->tick_label_angle) {
+            $tlabel->angle($self->tick_label_angle);
+        }
         my $lay = $driver->get_textbox_layout($tlabel);
 
         $tlabel->prepare($driver);
@@ -170,11 +177,11 @@ override('prepare', sub {
 
         my $angle = 0;
         if($self->is_vertical) {
-            # if ($self->is_left) {
-            #     $angle -= pip2;
-            # } else {
-            #     $angle = pip2;
-            # }
+            if ($self->is_left) {
+                $angle -= pip2;
+            } else {
+                $angle = pip2;
+            }
         }
 
         my $label = Graphics::Primitive::TextBox->new(

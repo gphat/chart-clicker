@@ -1,11 +1,15 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.16
+  - Add Axis->tick_label_angle for rotating tick label
+  - Add requirement for Math::Trig
+  - Bump some deps
+
 2.15
   - Fix META.yml
   - Add some POD to describe why NOT having a default context makes Clicker
     shit on itself.
   - Fix linear gradient in Area renderer.
-  - 
 
 2.14
   - Add examples directory

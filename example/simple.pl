@@ -40,10 +40,13 @@ $cc->color_allocator->colors([ $grey, $green, $blue ]);
 #$cc->padding(2);
 #$cc->border->width(0);
 
-#$defctx->range_axis->hidden(1);
+$defctx->range_axis->label('FOOO');
 $defctx->range_axis->fudge_amount(.2);
 #$defctx->domain_axis->hidden(1);
+$defctx->domain_axis->label("WEEE");
 $defctx->domain_axis->fudge_amount(.1);
+$defctx->domain_axis->tick_label_angle(0.785398163);
+# $defctx->domain_axis->font->family('Zapfino');
 $defctx->renderer->brush->width(1);
 
 $cc->draw;
