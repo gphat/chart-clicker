@@ -97,7 +97,7 @@ has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
 sub BUILD {
     my ($self) = @_;
 
-    $self->padding(5);
+    $self->padding(3);
 }
 
 override('prepare', sub {

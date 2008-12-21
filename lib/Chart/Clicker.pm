@@ -126,7 +126,9 @@ has 'legend_position' => (
 );
 has '+padding' => (
     default => sub {
-        Graphics::Primitive::Insets->new( top => 5, bottom => 5, right => 5, left => 5)
+        Graphics::Primitive::Insets->new(
+            top => 3, bottom => 3, right => 3, left => 3
+        )
     }
 );
 has 'plot' => (

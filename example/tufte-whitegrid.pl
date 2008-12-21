@@ -7,7 +7,7 @@ use Chart::Clicker::Renderer::Point;
 use Geometry::Primitive::Rectangle;
 use Graphics::Color::RGB;
 
-my $cc = Chart::Clicker->new(width => 500, height => 400);
+my $cc = Chart::Clicker->new(width => 500, height => 200);
 
 my @hours = qw(
     1 2 3 4 5 6 7 8 9 10 11 12
@@ -50,12 +50,16 @@ $cc->plot->grid->range_brush->color(
 
 $cc->legend_position('n');
 $defctx->range_axis->fudge_amount(.015);
+$defctx->range_axis->tick_values([qw(1 2 3 4 5)]);
+$defctx->range_axis->format('%d');
 $defctx->domain_axis->brush->width(0);
+$defctx->domain_axis->tick_values([qw(3 6 9 12 15 18 21)]);
+$defctx->domain_axis->format('%d');
 
 $defctx->domain_axis->fudge_amount(.015);
 $defctx->range_axis->brush->width(0);
 
-$defctx->domain_axis->tick_label_angle(0.785398163);
+# $defctx->domain_axis->tick_label_angle(0.785398163);
 $defctx->renderer->brush->width(3);
 
 $cc->draw;
