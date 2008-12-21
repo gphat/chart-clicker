@@ -16,6 +16,7 @@ Revision history for Perl extension Chart::Clicker.
   - Add grid_over flag to Clicker.pm to allow grid over/under control
   - Rejigger Axis code so that each Axis' brush size affects it's
     border
+  - Adjust paddings a bit.
 
 2.16
   - Add Axis->tick_label_angle for rotating tick label
