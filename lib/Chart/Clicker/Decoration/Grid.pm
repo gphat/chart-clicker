@@ -14,16 +14,28 @@ has '+background_color' => (
         )
     }
 );
-has 'brush' => (
+has 'clicker' => ( is => 'rw', isa => 'Chart::Clicker' );
+has 'domain_brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
-    default => sub { Graphics::Primitive::Brush->new(width => 1) }
-);
-has 'clicker' => ( is => 'rw', isa => 'Chart::Clicker' );
-has '+color' => (
     default => sub {
-        Graphics::Color::RGB->new(
-            red => 0, green => 0, blue => 0, alpha => .30
+        Graphics::Primitive::Brush->new(
+            color => Graphics::Color::RGB->new(
+                red => 0, green => 0, blue => 0, alpha => .25
+            ),
+            width => 1
+        )
+    }
+);
+has 'range_brush' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Brush',
+    default => sub {
+        Graphics::Primitive::Brush->new(
+            color => Graphics::Color::RGB->new(
+                red => 0, green => 0, blue => 0, alpha => .25
+            ),
+            width => 1
         )
     }
 );
@@ -49,14 +61,19 @@ override('finalize', sub {
     my $daxis = $dflt->domain_axis;
     my $raxis = $dflt->range_axis;
 
-    $self->draw_lines($daxis) if $self->show_domain;
+    if($self->show_domain) {
+        $self->draw_lines($daxis);
+        my $dop = Graphics::Primitive::Operation::Stroke->new;
+        $dop->brush($self->domain_brush);
+        $self->do($dop);
+    }
 
-    $self->draw_lines($raxis) if $self->show_range;
-
-    my $op = Graphics::Primitive::Operation::Stroke->new;
-    $op->brush($self->brush);
-    $op->brush->color($self->color);
-    $self->do($op);
+    if($self->show_range) {
+        $self->draw_lines($raxis);
+        my $rop = Graphics::Primitive::Operation::Stroke->new;
+        $rop->brush($self->range_brush);
+        $self->do($rop);
+    }
 });
 
 sub draw_lines {
@@ -125,6 +142,10 @@ Set/Get the border for this Grid.
 
 Set/Get the color for this Grid.
 
+=item I<domain_brush>
+
+Set/Get the brush for inking the domain markers.
+
 =item I<draw_lines>
 
 Called by pack, draws the lines for a given axis.
@@ -133,13 +154,17 @@ Called by pack, draws the lines for a given axis.
 
 Prepare this Grid for drawing
 
+=item I<range_brush>
+
+Set/Get the brush for inking the range markers.
+
 =item I<show_domain>
 
-Flag show or not show the domain lines.
+Flag to show or not show the domain lines.
 
 =item I<show_range>
 
-Flag show or not show the range lines.
+Flag to show or not show the range lines.
 
 =item I<stroke>
 

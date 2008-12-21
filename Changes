@@ -1,5 +1,22 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.17
+  - POD fixes
+  - Split Grid's brush into two separate attributes: range_brush and
+    domain_brush
+  - Set an Axis' padding to 5 at the time it is created, zero it out in prepare
+    if hidden.  This lets us remove some crufty code from Clicker.pm
+  - Set a default color on the Axis' brush
+  - Document Axis' tick_label_angle
+  - Separate Grid's line drawing into two operations so that each brush
+    can affect the output
+  - Remove color from Grid, use each brush to set range/domain color
+    separately
+  - Remove some useless code from Plot
+  - Add grid_over flag to Clicker.pm to allow grid over/under control
+  - Rejigger Axis code so that each Axis' brush size affects it's
+    border
+
 2.16
   - Add Axis->tick_label_angle for rotating tick label
   - Add requirement for Math::Trig

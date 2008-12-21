@@ -1,7 +1,6 @@
 package Chart::Clicker::Decoration::Plot;
 use Moose;
-use MooseX::AttributeHelpers;
-
+ 
 use Layout::Manager::Axis;
 use Layout::Manager::Single;
 
@@ -59,31 +58,6 @@ override('prepare', sub {
 
     super;
 });
-
-# override('finalize', sub {
-#     my ($self) = @_;
-# 
-#     if($self->grid->visible) {
-#         $self->grid->clicker($self->clicker);
-#         $self->grid->width($self->width);
-#         $self->grid->height($self->height);
-#         $self->render_area->add_component($self->grid, 'c');
-#     }
-# 
-#     if($self->markers) {
-#         $self->render_area->add_component(
-#             Chart::Clicker::Decoration::MarkerOverlay->new(
-#                 width => $self->width,
-#                 height => $self->height,
-#                 clicker => $self->clicker
-#             )
-#         );
-#     }
-#     $self->render_area->clicker;
-#     $self->render_area->width($self->width);
-#     $self->render_area->height($self->height);
-#     $self->add_component($self->render_area, 'c');
-# });
 
 __PACKAGE__->meta->make_immutable;
 

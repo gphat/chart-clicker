@@ -28,7 +28,7 @@ use Class::MOP;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.16';
+our $VERSION = '2.17';
 
 coerce 'Chart::Clicker::Renderer'
     => from 'Str'
@@ -98,6 +98,11 @@ has 'format' => (
     is => 'rw',
     isa => 'Str',
     default => sub { 'PNG' }
+);
+has 'grid_over' => (
+    is => 'rw',
+    isa => 'Bool',
+    default => sub { 0 }
 );
 has '+height' => (
     default => 300
@@ -180,7 +185,7 @@ override('prepare', sub {
     # in the axes and such to trust it across multiple prepares.  Putting all
     # of this here made it easier to digest, although this has some codestink
     # to it...
-    if($plot->grid->visible) {
+    if($plot->grid->visible && !$self->grid_over) {
         $plot->render_area->add_component($plot->grid, 'c');
     }
 
@@ -225,19 +230,13 @@ override('prepare', sub {
             $xaxis->orientation('horizontal');
 
             if($dcount % 2) {
-                $xaxis->border->bottom->width(1);
-                $xaxis->border->bottom->color($xaxis->color);
                 $xaxis->position('top');
+                $xaxis->border->bottom->width($xaxis->brush->width);
             } else {
-                $xaxis->border->top->width(1);
-                $xaxis->border->top->color($xaxis->color);
                 $xaxis->position('bottom');
+                $xaxis->border->top->width($xaxis->brush->width);
             }
-
-			unless($xaxis->hidden) {
-	            $xaxis->padding->bottom(5);
-	        	$xaxis->padding->top(5);
-			}
+            $xaxis->border->color($xaxis->color);
 
             $plot->add_component($xaxis, $xaxis->is_top ? 'n' : 's');
             $xaxes{refaddr($xaxis)} = 1;
@@ -253,18 +252,12 @@ override('prepare', sub {
 
             if($rcount % 2) {
                 $yaxis->position('right');
-                $yaxis->border->left->width(1);
-                $yaxis->border->left->color($xaxis->color);
+                $yaxis->border->left->width($yaxis->brush->width);
             } else {
                 $yaxis->position('left');
-                $yaxis->border->right->width(1);
-                $yaxis->border->right->color($xaxis->color);
+                $yaxis->border->right->width($yaxis->brush->width);
             }
-
-			unless($yaxis->hidden) {
-	            $yaxis->padding->left(5);
-	            $yaxis->padding->right(5);
-			}
+            $yaxis->border->color($yaxis->color);
 
             $plot->add_component($yaxis, $yaxis->is_left ? 'w' : 'e');
             $rcount++;
@@ -284,6 +277,11 @@ override('prepare', sub {
         }
 
         $count++;
+    }
+
+    if($plot->grid->visible && $self->grid_over) {
+        $plot->grid->background_color->alpha(0);
+        $plot->render_area->add_component($plot->grid, 'c');
     }
 
     foreach my $c (@{ $self->components }) {
@@ -461,6 +459,12 @@ Png, Pdf, Ps or Svg.
 
 Returns an arrayref containing all datasets for the given context.  Used by
 renderers to get a list of datasets to chart.
+
+=item I<grid_over>
+
+Flag controlling if the grid is rendered B<over> the data.  Defaults to 0.
+You probably want to set the grid's background color to an alpha of 0 if you
+enable this flag.
 
 =item I<inside_width>
 

@@ -31,7 +31,14 @@ has 'baseline' => (
 has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
-    default => sub { Graphics::Primitive::Brush->new }
+    default => sub {
+        Graphics::Primitive::Brush->new(
+            color => Graphics::Color::RGB->new(
+                red => 1, green => 0, blue => 1, alpha => 1
+            ),
+            width => 1
+        )
+    }
 );
 has '+color' => (
     default => sub {
@@ -87,12 +94,26 @@ has 'tick_values' => (
 );
 has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
 
+sub BUILD {
+    my ($self) = @_;
+
+    $self->padding(5);
+}
+
 override('prepare', sub {
     my ($self, $driver) = @_;
 
-    # return if $self->prepared;
-
     $self->clear_components;
+
+    # The BUILD method above establishes a 5px padding at instantiation time.
+    # That saves us setting it elsewhere, but if 'hidden' feature is used,
+    # then we have to unset the padding.  hidden (as explained below) is
+    # basically a hack as far as G:P is concerned to render an empty Axis.
+    # We want it to render because we need it prepared for other elements
+    # of the chart to work.
+    if($self->hidden) {
+        $self->padding(0);
+    }
 
     super;
 
@@ -473,6 +494,10 @@ Set/Get the Range for this axis.
 
 Set/Get the show ticks flag.  If this is value then the small tick marks at
 each mark on the axis will not be drawn.
+
+=item I<tick_label_angle>
+
+Set the angle (in radians) to rotate the tick's labels.
 
 =item I<tick_length>
 
