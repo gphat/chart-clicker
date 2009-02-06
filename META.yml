@@ -18,11 +18,11 @@ requires:
   DateTime::Set: 0.25
   Geometry::Primitive: 0.13
   Graphics::Primitive: 0.37
-  Graphics::Primitive::Driver::Cairo: 0.32
+  Graphics::Primitive::Driver::Cairo: 0.33
   IO::File: 0
   Layout::Manager: 0.2
   Math::Trig: 1.18
   Moose: 0.57
   MooseX::AttributeHelpers: 0.13
   Scalar::Util: 1.19
-version: 2.16
+version: 2.18

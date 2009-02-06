@@ -38,7 +38,6 @@ lib/Chart/Clicker/Renderer/Measurement.pm
 lib/Chart/Clicker/Renderer/Pie.pm
 lib/Chart/Clicker/Renderer/Point.pm
 lib/Chart/Clicker/Renderer/StackedBar.pm
-lib/Chart/Clicker/Shape.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
