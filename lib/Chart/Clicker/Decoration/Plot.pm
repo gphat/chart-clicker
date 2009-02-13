@@ -1,6 +1,6 @@
 package Chart::Clicker::Decoration::Plot;
 use Moose;
- 
+
 use Layout::Manager::Axis;
 use Layout::Manager::Single;
 

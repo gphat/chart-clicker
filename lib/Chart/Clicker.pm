@@ -124,6 +124,17 @@ has 'legend_position' => (
     isa => 'Str',
     default => sub { 's' }
 );
+has 'over_decorations' => (
+    metaclass => 'Collection::Array',
+    is => 'rw',
+    isa => 'ArrayRef',
+    default => sub { [] },
+    provides => {
+        'count'=> 'over_decoration_count',
+        'push' => 'add_to_over_decorations',
+        'get' => 'get_over_decoration'
+    }
+);
 has '+padding' => (
     default => sub {
         Graphics::Primitive::Insets->new(
@@ -291,6 +302,10 @@ override('prepare', sub {
     }
 
     $plot->add_component($plot->render_area, 'c');
+
+    foreach my $oc (@{ $self->over_decorations }) {
+        $plot->render_area->add_component($oc, 'c');
+    }
 
     super;
 });

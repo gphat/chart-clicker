@@ -73,7 +73,6 @@ sub finalize {
             $op2->brush($self->brush->clone);
             $op2->brush->color($color);
             $self->do($op2);
-
         }
     }
 

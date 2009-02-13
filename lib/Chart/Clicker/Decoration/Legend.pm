@@ -39,12 +39,6 @@ has 'item_padding' => (
 has '+layout_manager' => (
     default => sub { Layout::Manager::Compass->new }
 );
-# has '+margins' => ( default => sub {
-#     Graphics::Primitive::Insets->new( bottom => 0 )
-# });
-# has '+padding' => ( default => sub {
-#     Graphics::Primitive::Insets->new( top => 0, left => 0, right => 5, bottom => 5)
-# });
 has 'tallest' => ( is => 'rw', isa => 'Num' );
 has 'widest' => ( is => 'rw', isa => 'Num' );
 
