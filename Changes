@@ -1,15 +1,13 @@
 Revision history for Perl extension Chart::Clicker.
 
-2.19
-  - Add OverAxis Decoration
-  - Add Clicker->over_decorations for adding decorations "over" the renderers
-  - POD overhaul
-  - Remove some long-commented-out code.
-
 2.18
   - Fix Line's shape attribute, which didn't do a damn thing
   - Draw Line's shapes in a separate loop so that the path works right
   - Remove Chart::Clicker::Shape
+  - Add OverAxis Decoration
+  - Add Clicker->over_decorations for adding decorations "over" the renderers
+  - POD overhaul
+  - Remove some long-commented-out code.
 
 2.17
   - POD fixes
