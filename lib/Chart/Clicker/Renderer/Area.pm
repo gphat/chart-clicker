@@ -137,38 +137,20 @@ Chart::Clicker::Renderer::Area renders a dataset as lines.
       })
   });
 
-=head1 ATTRIBUTES
-
-=over 4
-
-=item I<fade>
-
-If true, the color of the fill will be faded from opaque at the top to
-transparent at the bottom.
-
-=item I<opacity>
-
-If true this value will be used when setting the opacity of the fill.  This
-setting may not be used with the 'fade' option.
-
-=item I<stroke>
-
-Allows a Stroke object to be passed that will define the Stroke used on the
-series' line.
-
-=back
-
 =head1 METHODS
 
-=head2 Misc. Methods
+=head2 brush
 
-=over 4
+Set/Get the brush that informs the line surrounding the area renders
+individual segments.
 
-=item I<pack>
+=head2 fade
 
-Draw the data.
+Set/Get the fade flag, which turns on or off a gradient in the area renderer.
 
-=back
+=head2 opacity
+
+Set the alpha value for the renderer, which makes things more or less opaque.
 
 =head1 AUTHOR
 

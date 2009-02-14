@@ -141,27 +141,19 @@ The keys are discarded and a pie chart will be drawn with $series' slice at
     })
   });
 
-=head1 OPTIONS
-
-=over 4
-
-=item I<brush>
-
-Set a brush object to be used for the lines.
-
-=back
-
 =head1 METHODS
 
-=head2 Instance Methods
+=head2 border_color
 
-=over 4
+Set/Get the Color to use for the border.
 
-=item I<render>
+=head2 brush
+
+Set/Get a Brush to be used for the pie's border.
+
+=head2 render
 
 Render the series.
-
-=back
 
 =head1 AUTHOR
 

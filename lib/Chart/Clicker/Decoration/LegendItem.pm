@@ -46,29 +46,17 @@ Chart::Clicker::Decoration::LegendItem represents a single item in a legend.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new LegendItem object.
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<font>
+=head2 font
 
 Set/Get this legend item's font.
 
-=item I<label>
+=head2 label
 
 Set/Get this legend item's label.
-
-=back
 
 =head1 AUTHOR
 

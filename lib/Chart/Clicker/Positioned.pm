@@ -58,30 +58,25 @@ reversed.
 
 =head1 METHODS
 
-=over 
-
-=item I<is_bottom>
+=head2 is_bottom
 
 Returns true if the component is positioned bottom.
 
-=item I<is_left>
+=head2 is_left
 
 Returns true if the component is positioned left.
 
-=item I<is_right>
+=head2 is_right
 
 Returns true if the component is positioned right.
 
-=item I<is_top>
+=head2 is_top
 
 Returns true if the component is positioned top.
 
-
-=item I<position>
+=head2 position
 
 The 'side' on which this component is positioned.
-
-=back
 
 =head1 AUTHOR
 

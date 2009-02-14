@@ -19,17 +19,6 @@ has 'glare_color' => (
     coerce => 1
 );
 
-# override('prepare', sub {
-#     my $self = shift();
-#     my $clicker = shift();
-#     my $dimension = shift();
-# 
-#     $self->width($dimension->width());
-#     $self->height($dimension->height());
-# 
-#     return 1;
-# });
-
 override('finalize', sub {
     my ($self) = @_;
 
@@ -74,39 +63,25 @@ A glass-like decoration.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new Chart::Clicker::Decoration::Glass object.
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<background_color>
+=head2 background_color
 
 Set/Get the background color for this glass.
 
-=item I<draw>
+=head2 draw
 
-Draw this Grid.
+Draw this Glass.
 
-=item I<glare_color>
+=head2 glare_color
 
 Set/Get the glare color for this glass.
 
-=item I<prepare>
+=head2 prepare
 
 Prepare this Glass for drawing
-
-=cut
-
-=back
 
 =head1 AUTHOR
 

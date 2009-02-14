@@ -97,39 +97,29 @@ Chart::Clicker::Renderer::Point renders a dataset as points.
 
 =over 4
 
-=item I<shape>
 
-Specify the shape to be used at each point.  Defaults to 360 degree arc with
-a radius of 3.
 
 =back
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Create a new Point renderer
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<render>
-
-Render the series.
-
-=item I<draw_point>
+=head2 draw_point
 
 Called for each point.  Implemented as a separate method so that subclasses
 such as Bubble may override the drawing.
 
-=back
+=head2 render
+
+Render the series.
+
+=head2 shape
+
+Specify the shape to be used at each point.  Defaults to 360 degree arc with
+a radius of 3.
 
 =head1 AUTHOR
 

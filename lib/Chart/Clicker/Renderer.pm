@@ -34,35 +34,19 @@ Chart::Clicker::Renderer represents the plot of the chart.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new Chart::Clicker::Renderer.
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<additive>
+=head2 additive
 
 Read-only value that informs Clicker that this renderer uses the combined ranges
 of all the series it charts in total.  Used for 'stacked' renderers like
 StackedBar.
 
-=item I<prepare>
+=head2 prepare
 
 Prepare the component.
-
-=item I<draw>
-
-Draw the renderer.
-
-=back
 
 =head1 AUTHOR
 

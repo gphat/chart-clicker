@@ -9,11 +9,6 @@ use Graphics::Primitive::Operation::Fill;
 use Graphics::Primitive::Operation::Stroke;
 use Graphics::Primitive::Paint::Solid;
 
-has 'opacity' => (
-    is => 'rw',
-    isa => 'Num',
-    default => 0
-);
 has 'bar_padding' => (
     is => 'rw',
     isa => 'Int',
@@ -23,6 +18,11 @@ has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
     default => sub { Graphics::Primitive::Brush->new }
+);
+has 'opacity' => (
+    is => 'rw',
+    isa => 'Num',
+    default => 0
 );
 
 override('prepare', sub {
@@ -163,40 +163,20 @@ Chart::Clicker::Renderer::Bar renders a dataset as bars.
 
   my $br = Chart::Clicker::Renderer::Bar->new();
 
-=head1 ATTRIBUTES
+=head1 METHODS
 
-=over 4
-
-=item I<opacity>
-
-If true this value will be used when setting the opacity of the bar's fill.
-
-=item I<bar_padding>
+=head2 bar_padding
 
 How much padding to put around a bar.  A padding of 4 will result in 2 pixels
 on each side.
 
-=item I<stroke>
+=head2 brush
 
-A stroke to use on each bar.
+Set/Get the Brush to use around each bar.
 
-=back
+=head2 opacity
 
-=head1 METHODS
-
-=head2 Misc. Methods
-
-=over 4
-
-=item I<prepare>
-
-Prepare the renderer
-
-=item I<pack>
-
-Draw the data!
-
-=back
+Set/Get the alpha value to make each bar more or less opaque.
 
 =head1 AUTHOR
 

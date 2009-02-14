@@ -110,58 +110,46 @@ Chart::Clicker::Decoration::Legend draws a legend on a Chart.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new Legend object.
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<border>
+=head2 border
 
 Set/Get this Legend's border.
 
-=item I<draw>
+=head2 draw
 
 Draw this Legend
 
-=item I<font>
+=head2 font
 
 Set/Get the font used for this legend's items.
 
-=item I<insets>
+=head2 insets
 
 Set/Get this Legend's insets.
 
-=item I<item_padding>
+=head2 item_padding
 
 Set/Get the padding for this legend's items.
 
-=item I<legend_items>
+=head2 legend_items
 
 Set/Get this legend's items.
 
-=item I<prepare>
+=head2 prepare
 
 Prepare this Legend by creating the LegendItems based on the datasets
 provided and testing the lengths of the series names.
 
-=item I<tallest>
+=head2 tallest
 
 Set/Get the height of the tallest label.
 
-=item I<widest>
+=head2 widest
 
 Set/Get the width of the widest label.
-
-=back
 
 =head1 AUTHOR
 

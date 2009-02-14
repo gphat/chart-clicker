@@ -111,15 +111,9 @@ A Component that handles the rendering of Markers.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new MarkerOverlay object.
-
-=back
 
 =head1 AUTHOR
 

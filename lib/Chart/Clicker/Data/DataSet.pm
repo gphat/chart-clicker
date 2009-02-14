@@ -106,8 +106,8 @@ Chart::Clicker::Data::DataSet
 
 Chart::Clicker::Data::DataSet is a set of Series that are grouped for some
 logical reason or another.  DatasSets can be associated with Renderers in the
-Chart.   Unless you are doing something fancy like that you have no reason
-to use more than one in your chart.
+Chart.  Unless you are doing something fancy like that you have no reason to
+use more than one in your chart.
 
 =head1 SYNOPSIS
 
@@ -127,61 +127,49 @@ to use more than one in your chart.
 
 =head1 METHODS
 
-=head2 Constructors
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new, empty DataSet
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<add_to_series>
+=head2 add_to_series
 
 Add a series to this dataset.
 
-=item I<count>
+=head2 count
 
 Get the number of series in this dataset.
 
-=item I<domain>
+=head2 domain
 
 Get the Range for the domain values
 
-=item I<get_series_keys>
+=head2 get_series_keys
 
 Returns the key at the specified position for every series in this DataSet.
 
-=item I<get_series_values>
+=head2 get_series_values
 
 Returns the value at the specified position for every series in this DataSet.
 
-=item I<largest_value_slice>
+=head2 largest_value_slice
 
 Finds the largest cumulative 'slice' in this dataset.
 
-=item I<max_key_count>
+=head2 max_key_count
 
 Get the number of keys in the longest series.
 
-=item I<range>
+=head2 range
 
 Get the Range for the... range values...
 
-=item I<series>
+=head2 series
 
 Set/Get the series for this DataSet
 
-=item I<prepare>
+=head2 prepare
 
 Prepare this DataSet.
-
-=back
 
 =head1 AUTHOR
 

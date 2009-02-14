@@ -413,40 +413,30 @@ Chart::Clicker::Axis represents the plot of the chart.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new Chart::Clicker::Axis.  If no arguments are given then sane
 defaults are chosen.
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<baseline>
+=head2 baseline
 
 Set the 'baseline' value of this axis.  This is used by some renderers to
 change the way a value is marked.  The Bar render, for instance, considers
 values below the base to be 'negative'.
 
-=item I<brush>
+=head2 brush
 
 Set/Get the brush for this axis.
 
-=item I<color>
+=head2 color
 
 Set/Get the color of the axis.
 
-=item I<font>
+=head2 font
 
 Set/Get the font used for the axis' labels.
 
-=item I<format>
+=head2 format
 
 Set/Get the format to use for the axis values.
 
@@ -460,7 +450,7 @@ passed to it as an argument.
   my $nf = Number::Format->new;
   $default->domain_axis->format(sub { return $nf->format_number(shift); });
 
-=item I<fudge_amount>
+=head2 fudge_amount
 
 Set/Get the amount to 'fudge' the span of this axis.  You should supply a
 percentage (in decimal form) and the axis will grow at both ends by the
@@ -470,104 +460,106 @@ below the dataset.
 As an example, a fugdge_amount of .10 on an axis with a span of 10 to 50
 would add 5 to the top and bottom of the axis.
 
-=item I<height>
+=head2 height
 
 Set/Get the height of the axis.
 
-=item I<label>
+=head2 label
 
 Set/Get the label of the axis.
 
-=item I<orientation>
+=head2 orientation
 
 Set/Get the orientation of this axis.  See L<Chart::Clicker::Drawing>.
 
-=item I<position>
+=head2 position
 
 Set/Get the position of the axis on the chart.
 
-=item I<range>
+=head2 range
 
 Set/Get the Range for this axis.
 
-=item I<show_ticks>
+=head2 show_ticks
 
 Set/Get the show ticks flag.  If this is value then the small tick marks at
 each mark on the axis will not be drawn.
 
-=item I<tick_label_angle>
+=head2 tick_label_angle
 
 Set the angle (in radians) to rotate the tick's labels.
 
-=item I<tick_length>
+=head2 tick_length
 
 Set/Get the tick length.
 
-=item I<tick_values>
+=head2 tick_values
 
 Set/Get the arrayref of values show as ticks on this Axis.
 
-=item I<add_to_tick_values>
+=head2 add_to_tick_values
 
 Add a value to the list of tick values.
 
-=item I<clear_tick_values>
+=head2 clear_tick_values
 
 Clear all tick values.
 
-=item I<stagger>
+=head2 stagger
 
 Set/Get the stagger flag, which causes horizontally labeled axes to 'stagger'
 the labels so that half are at the top of the box and the other half are at
 the bottom.  This makes long, overlapping labels less likely to overlap.  It
 only does something useful with B<horizontal> labels.
 
-=item I<tick_brush>
+=head2 tick_brush
 
 Set/Get the stroke for the tick markers.
 
-=item I<tick_value_count>
+=head2 tick_value_count
 
 Get a count of tick values.
 
-=item I<tick_labels>
+=head2 tick_labels
 
 Set/Get the arrayref of labels to show for ticks on this Axis.  This arrayref
 is consulted for every tick, in order.  So placing a string at the zeroeth
 index will result in it being displayed on the zeroeth tick, etc, etc.
 
-=item I<ticks>
+=head2 ticks
 
 Set/Get the number of 'ticks' to show.  Setting this will divide the
 range on this axis by the specified value to establish tick values.  This
 will have no effect if you specify tick_values.
 
-=item I<mark>
+=head2 mark
 
 Given a span and a value, returns it's pixel position on this Axis.
 
-=item I<format_value>
+=head2 format_value
 
 Given a value, returns it formatted using this Axis' formatter.
 
-=item I<prepare>
+=head2 prepare
 
 Prepare this Axis by determining the size required.  If the orientation is
 CC_HORIZONTAL this method sets the height.  Otherwise sets the width.
 
-=item I<draw>
+=head2 draw
 
 Draw this axis.
 
-=item I<hidden>
+=head2 hidden
 
 Set/Get this axis' hidden flag.
 
-=item I<width>
+=head2 width
 
 Set/Get this axis' width.
 
-=back
+=head2 BUILD
+
+Documening for POD::Coverage tests, Moose stuff.
 
 =head1 AUTHOR
 

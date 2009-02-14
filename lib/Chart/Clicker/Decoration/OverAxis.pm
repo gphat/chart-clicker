@@ -13,14 +13,28 @@ has 'axis_height' => (
     isa => 'Num',
     default => sub { 20 }
 );
-has 'background_color' => (
-    is => 'rw',
-    isa => 'Graphics::Color::RGB',
+has '+background_color' => (
+    # is => 'rw',
+    # isa => 'Graphics::Color::RGB',
     default => sub {
         Graphics::Color::RGB->new(
             red => .18, green => .17, blue => .17, alpha => 1
         )
     }
+);
+has 'border_color' => (
+    is => 'rw',
+    isa => 'Graphics::Color::RGB',
+    default => sub {
+        Graphics::Color::RGB->new(
+            red => 1, green => 1, blue => 1, alpha => 1
+        )
+    }
+);
+has 'border_width' => (
+    is => 'rw',
+    isa => 'Num',
+    default => sub { 2 }
 );
 has 'context' => (
     is => 'rw',
@@ -30,7 +44,7 @@ has 'context' => (
 has '+layout_manager' => (
     default => sub { Layout::Manager::Compass->new }
 );
-has 'line_color' => (
+has 'text_color' => (
     is => 'rw',
     isa => 'Graphics::Color::RGB',
     default => sub {
@@ -43,7 +57,7 @@ has 'line_color' => (
 override('prepare', sub {
     my ($self) = @_;
 
-    $self->height(20);
+    $self->height($self->axis_height);
 
     my $ctx = $self->clicker->get_context($self->context);
     my $domain = $ctx->domain_axis;
@@ -56,7 +70,7 @@ override('prepare', sub {
 
         my $tb = Graphics::Primitive::TextBox->new(
             text => $tick,
-            color => Graphics::Color::RGB->new,
+            color => $self->text_color,
             horizontal_alignment => 'center',
             vertical_alignment => 'center',
         );
@@ -73,16 +87,15 @@ override('finalize', sub {
     my $domain = $ctx->domain_axis;
     my $range = $ctx->range_axis;
 
-
     my $y = $range->mark($self->height, $range->baseline);
 
     my $axis_y = $y - ($self->axis_height / 2);
 
     $self->origin->x(0);
     $self->origin->y($axis_y);
-    $self->border->top->width(2);
-    $self->border->bottom->width(2);
-    $self->border->color(Graphics::Color::RGB->new);
+    $self->border->top->width($self->border_width);
+    $self->border->bottom->width($self->border_width);
+    $self->border->color($self->border_color);
     $self->height($self->axis_height);
 
     my $ticks = $domain->tick_values;
@@ -111,45 +124,44 @@ Chart::Clicker::Decoration::OverAxis
 
 =head1 DESCRIPTION
 
-An axis that is meant to be drawn "over" a chart, 
+An axis that is meant to be drawn "over" a chart.  You can find an example
+of an OverAxis at L<http://www.onemogin.com/clicker/images/overaxis.png>.
 
 =head1 SYNOPSIS
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new Chart::Clicker::Decoration::OverAxis object.
 
-=back
+=head2 axis_height
 
-=head2 Instance Methods
+Set/Get the height of the OverAxis that will be drawn.
 
-=over 4
-
-=item I<background_color>
+=head2 background_color
 
 Set/Get the background color for this OverAxis.
 
-=item I<draw>
+=head2 border_color
 
-Draw this Grid.
+Set/Get the border color for this OverAxis.
 
-=item I<glare_color>
+=head2 border_width
 
-Set/Get the glare color for this OverAxis.
+Set/Get the width of the border for this OverAxis
 
-=item I<prepare>
+=head2 context
+
+Set/Get the context that this OverAxis should use.
+
+=head2 text_color
+
+Set/Get the color of the text labels dawn for the ticks.
+
+=head2 prepare
 
 Prepare this OverAxis for drawing
-
-=cut
-
-=back
 
 =head1 AUTHOR
 

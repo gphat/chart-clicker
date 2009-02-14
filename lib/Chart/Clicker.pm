@@ -419,101 +419,89 @@ Clicker supports PNG, SVG, PDF and PostScript output.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new Chart::Clicker object. If no format, width and height are
 specified then defaults of Png, 500 and 300 are chosen, respectively.
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<add_to_contexts>
+=head2 add_to_contexts
 
 Add the specified context to the chart.
 
-=item I<add_to_datasets>
+=head2 add_to_datasets
 
 Add the specified dataset (or arrayref of datasets) to the chart.
 
-=item I<add_to_markers>
+=head2 add_to_markers
 
 Add the specified marker to the chart.
 
-=item I<color_allocator>
+=head2 color_allocator
 
 Set/Get the color_allocator for this chart.
 
-=item I<context>
+=head2 context
 
 Set/Get the context for this chart.
 
-=item I<data>
+=head2 data
 
 Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
 client.
 
-=item I<datasets>
+=head2 datasets
 
 Get/Set the datasets for this chart.
 
-=item I<draw>
+=head2 draw
 
 Draw this chart.
 
-=item I<format>
+=head2 format
 
 Get the format for this Chart.  Required in the constructor.  Must be on of
 Png, Pdf, Ps or Svg.
 
-=item I<get_datasets_for_context>
+=head2 get_datasets_for_context
 
 Returns an arrayref containing all datasets for the given context.  Used by
 renderers to get a list of datasets to chart.
 
-=item I<grid_over>
+=head2 grid_over
 
 Flag controlling if the grid is rendered B<over> the data.  Defaults to 0.
 You probably want to set the grid's background color to an alpha of 0 if you
 enable this flag.
 
-=item I<inside_width>
+=head2 inside_width
 
 Get the width available in this container after taking away space for
 insets and borders.
 
-=item I<inside_height>
+=head2 inside_height
 
 Get the height available in this container after taking away space for
 insets and borders.
 
-=item I<legend>
+=head2 legend
 
 Set/Get the legend that will be used with this chart.
 
-=item I<legend_position>
+=head2 legend_position
 
 The position this legend will be added.  Should be one of north, south, east,
 west or center as required by L<Layout::Manager::Compass>.
 
-=item I<write>
+=head2 write
 
 Write the chart output to the specified location. Output is written in the
 format provided to the constructor (which defaults to Png).
 
   $c->write('/path/to/the.png');
 
-=item I<BUILD>
+=head2 BUILD
 
 Documenting so tests pass.  Moose stuff.
-
-=back
 
 =head1 AUTHOR
 

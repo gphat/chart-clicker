@@ -31,7 +31,6 @@ override('prepare', sub {
     super;
 
     my $dses = $self->clicker->get_datasets_for_context($self->context);
-    # my $raxis = $self->clicker->get_context($self->context)->range_axis;
 
     foreach my $ds (@{ $dses }) {
         if(!defined($self->{KEYCOUNT})) {
@@ -145,40 +144,24 @@ Chart::Clicker::Renderer::StackedBar renders a dataset as stacked bars.
 
   my $br = Chart::Clicker::Renderer::Bar->new({});
 
-=head1 ATTRIBUTES
+=head1 METHODS
 
-=over 4
-
-=item I<bar_padding>
+=head2 bar_padding
 
 How much padding to put around a bar.  A padding of 4 will result in 2 pixels
 on each side.
 
-=item I<opacity>
-
-If true this value will be used when setting the opacity of the bar's fill.
-
-=item I<stroke>
+=head2 brush
 
 A stroke to use on each bar.
 
-=back
+=head2 opacity
 
-=head1 METHODS
+If true this value will be used when setting the opacity of the bar's fill.
 
-=head2 Instance Methods
-
-=over 4
-
-=item I<prepare>
+=head2 prepare
 
 Prepare the renderer
-
-=item I<draw>
-
-Draw the data!
-
-=back
 
 =head1 AUTHOR
 

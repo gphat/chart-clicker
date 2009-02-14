@@ -67,45 +67,33 @@ Used to highlight a particular key, value or range of either.
 
 =head1 METHODS
 
-=head2 Constructor
+=head2 new
 
-=over 4
-
-=item I<new>
-
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<brush>
+=head2 brush
 
 Set/Get the brush for this Marker.
 
-=item I<color>
+=head2 color
 
 Set/Get the color for this marker.
 
-=item I<key>
+=head2 key
 
 Set/Get the key for this marker.  This represents a point on the domain.
 
-=item I<key2>
+=head2 key2
 
 Set/Get the key2 for this marker.  This represents a second point on the domain
 and is used to specify a range.
 
-=item I<value>
+=head2 value
 
 Set/Get the value for this marker.  This represents a point on the range.
 
-=item I<value2>
+=head2 value2
 
 Set/Get the value2 for this marker.  This represents a second point on the
 range and is used to specify a range.
-
-=back
 
 =head1 AUTHOR
 

@@ -89,52 +89,40 @@ corresponds to the series that will be colored.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Create a new ColorAllocator.  You can optionally pass an arrayref of colors
 to 'seed' the allocator.
 
-=back
-
-=head2 Methods
-
-=over 4
-
-=item I<add_to_colors>
+=head2 add_to_colors
 
 Add a color to this allocator.
 
-=item I<clear_colors>
+=head2 clear_colors
 
 Clear this allocator's colors
 
-=item I<color_count>
+=head2 color_count
 
 Get the number of colors in this allocator.
 
-=item <get_color>
+=head2 get_color
 
 Gets the color at the specified index.  Returns undef if that position has no
 color.
 
-=item I<position>
+=head2 position
 
 Gets the current position.
 
-=item I<next>
+=head2 next
 
 Returns the next color.  Each call to next increments the position, so
 subsequent calls will return different colors.
 
-=item I<reset>
+=head2 reset
 
 Resets this allocator back to the beginning.
-
-=back
 
 =head1 AUTHOR
 

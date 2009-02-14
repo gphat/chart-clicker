@@ -150,35 +150,23 @@ unix format.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new DateTime Axis.
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<format>
+=head2 format
 
 Set/Get the formatting string used to format the DateTime.  See DateTime's
 strftime.
 
-=item I<format_value>
+=head2 format_value
 
 Formats the value using L<DateTime>'s strftime.
 
-=item I<time_zone>
+=head2 time_zone
 
 Set/Get the time zone to use when creating DateTime objects!  Accepts an
 object or a string ('America/Chicago').
-
-=back
 
 =head1 AUTHOR
 

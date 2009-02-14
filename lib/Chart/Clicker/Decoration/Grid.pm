@@ -116,63 +116,49 @@ Generates a collection of Markers for use as a background.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new Chart::Clicker::Decoration::Grid object.
 
-=back
-
-=head2 Methods
-
-=over 4
-
-=item I<background_color>
+=head2 background_color
 
 Set/Get the background_color for this Grid.
 
-=item I<border>
+=head2 border
 
 Set/Get the border for this Grid.
 
-=item I<color>
+=head2 color
 
 Set/Get the color for this Grid.
 
-=item I<domain_brush>
+=head2 domain_brush
 
 Set/Get the brush for inking the domain markers.
 
-=item I<draw_lines>
+=head2 draw_lines
 
 Called by pack, draws the lines for a given axis.
 
-=item I<pack>
+=head2 pack
 
 Prepare this Grid for drawing
 
-=item I<range_brush>
+=head2 range_brush
 
 Set/Get the brush for inking the range markers.
 
-=item I<show_domain>
+=head2 show_domain
 
 Flag to show or not show the domain lines.
 
-=item I<show_range>
+=head2 show_range
 
 Flag to show or not show the range lines.
 
-=item I<stroke>
+=head2 stroke
 
 Set/Get the Stroke for this Grid.
-
-=cut
-
-=back
 
 =head1 AUTHOR
 

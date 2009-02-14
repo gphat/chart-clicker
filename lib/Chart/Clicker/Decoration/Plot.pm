@@ -79,53 +79,41 @@ handles rendering the markers that come from the Clicker object.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new Plot object.
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<background_color>
+=head2 background_color
 
 Set/Get this Plot's background color.
 
-=item I<border>
+=head2 border
 
 Set/Get this Plot's border.
 
-=item I<clicker>
+=head2 clicker
 
 Set/Get this Plot's clicker instance.
 
-=item I<draw>
+=head2 draw
 
 Draw this Plot
 
-=item I<grid>
+=head2 grid
 
 Set/Get the Grid component used on this plot.
 
-=item I<layout>
+=head2 layout
 
 Set/Get this Plot's layout.  See L<Layout::Manager>.
 
-=item I<markers>
+=head2 markers
 
 Set/Get the flag that determines if markers are drawn on this plot.
 
-=item I<prepare>
+=head2 prepare
 
 Prepare this Plot by determining how much space it needs.
-
-=back
 
 =head1 AUTHOR
 

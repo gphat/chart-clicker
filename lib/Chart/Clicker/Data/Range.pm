@@ -122,65 +122,53 @@ Chart::Clicker::Data::Range implements a range of values.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new, empty Series
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<add>
+=head2 add
 
 Adds the specified range to this one.  The lower is reduced to that of the
 provided one if it is lower, and the upper is ADDED to this range's upper.
 
-=item I<combine>
+=head2 combine
 
 Combine this range with the specified so that this range encompasses the
 values specified.  For example, adding a range with an upper-lower of 1-10
 with one of 5-20 will result in a combined range of 1-20.
 
-=item I<divvy>
+=head2 divvy
 
   my $values = $range->divvy(5);
 
 Returns an arrayref of $N - 1 values equally spaced in the range so that
 it may be divided into $N pieces.
 
-=item I<lower>
+=head2 lower
 
 Set/Get the lower bound for this Range
 
-=item I<max>
+=head2 max
 
 Set/Get the maximum value allowed for this Range.  This value should only be
 set if you want to EXPLICITLY set the upper value.
 
-=item I<min>
+=head2 min
 
 Set/Get the minimum value allowed for this Range.  This value should only be
 set if you want to EXPLICITLY set the lower value.
 
-=item I<span>
+=head2 span
 
 Returns the span of this range, or UPPER - LOWER.
 
-=item I<upper>
+=head2 upper
 
 Set/Get the upper bound for this Range
 
-=back
-
 =head1 AUTHOR
 
-Cory 'G' Watson <jheephat@cpan.org>
+Cory 'G' Watson <gphat@cpan.org>
 
 =head1 LICENSE
 

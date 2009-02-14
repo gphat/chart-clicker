@@ -72,37 +72,25 @@ in L<Chart::Clicker>.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new Context object.
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<domain_axis>
+=head2 domain_axis
 
 Set/get this context's domain axis
 
-=item I<name>
+=head2 name
 
 Set/get this context's name
 
-=item I<range_axis>
+=head2 range_axis
 
 Set/get this context's range axis
 
-=item I<renderer>
+=head2 renderer
 
 Set/get this context's renderer
-
-=back
 
 =head1 AUTHOR
 

@@ -29,25 +29,13 @@ Chart::Clicker::Component is a subclass of L<Graphics::Primitive::Component>.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new Chart::Clicker::Component
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<clicker>
+=head2 clicker
 
 Set/Get this component's clicker object.
-
-=back
 
 =head1 AUTHOR
 

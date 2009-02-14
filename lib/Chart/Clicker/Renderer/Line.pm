@@ -110,36 +110,28 @@ Chart::Clicker::Renderer::Line renders a dataset as lines.
     })
   });
 
-=head1 ATTRIBUTES
+=head1 METHODS
 
-=over 4
-
-=item I<shape>
+=head2 shape
 
 Set a shape object to draw at each of the data points.
 
-=item I<shape_stroke>
+=head2 shape_brush
 
-Define the stroke to be used on the shapes at each point.  If no shape_stroke
-is provided, then the shapes will be billed.
+Set/Get the Brush to be used on the shapes at each point.  If no shape_brush
+is provided, then the shapes will be filled.
 
-=item I<stroke>
+=head2 brush
 
-Set a Stroke object to be used for the lines.
+Set/Get a Brush to be used for the lines.
 
-=back
+=head2 draw_point
 
-=head1 METHODS
+Called for each point encountered on the line.
 
-=head2 Misc Methods
-
-=over 4
-
-=item I<finalize>
+=head2 finalize
 
 Draw the actual line chart
-
-=back
 
 =head1 AUTHOR
 

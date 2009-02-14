@@ -41,43 +41,18 @@ Chart::Clicker::Data::Series::Size>.
     })
   });
 
-=head1 ATTRIBUTES
-
-=over 4
-
-=item I<shape>
-
-Specify the shape to be used at each point.  Defaults to 360 degree arc.  The
-radius will be determined by the size value of the series.
-
-=back
-
 =head1 METHODS
 
 =head2 Constructor
 
-=over 4
-
-=item I<new>
+=head2 new
 
 Create a new Bubble renderer
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<render>
-
-Render the series.
-
-=item I<draw_point>
+=head2 draw_point
 
 Called for each point.  Implemented as a separate method so that subclasses
 such as Bubble may override the drawing.
-
-=back
 
 =head1 AUTHOR
 

@@ -111,62 +111,50 @@ Chart::Clicker::Data::Series represents a series of values to be charted.
 
 =head1 METHODS
 
-=head2 Constructor
-
-=over 4
-
-=item I<new>
+=head2 new
 
 Creates a new, empty Series
 
-=back
-
-=head2 Instance Methods
-
-=over 4
-
-=item I<add_to_keys>
+=head2 add_to_keys
 
 Adds a key to this series.
 
-=item I<add_to_values>
+=head2 add_to_values
 
 Add a value to this series.
 
-=item I<keys>
+=head2 keys
 
 Set/Get the keys for this series.
 
-=item I<key_count>
+=head2 key_count
 
 Get the count of keys in this series.
 
-=item I<name>
+=head2 name
 
 Set/Get the name for this Series
 
-=item I<prepare>
+=head2 prepare
 
 Prepare this series.  Performs various checks and calculates
 various things.
 
-=item I<range>
+=head2 range
 
 Returns the range for this series.
 
-=item I<value_count>
+=head2 value_count
 
 Get the count of values in this series.
 
-=item I<values>
+=head2 values
 
 Set/Get the values for this series.
 
-=back
-
 =head1 AUTHOR
 
-Cory 'G' Watson <jheephat@cpan.org>
+Cory 'G' Watson <gphat@cpan.org>
 
 =head1 LICENSE
 
