@@ -17,7 +17,7 @@ requires:
   DateTime: 0.4302
   DateTime::Set: 0.25
   Geometry::Primitive: 0.13
-  Graphics::Primitive: 0.37
+  Graphics::Primitive: 0.38
   Graphics::Primitive::Driver::Cairo: 0.33
   IO::File: 0
   Layout::Manager: 0.2

@@ -3,7 +3,7 @@ Revision history for Perl extension Chart::Clicker.
 2.19
   - Add OverAxis Decoration
   - Add Clicker->over_decorations for adding decorations "over" the renderers
-  - POD fixes
+  - POD overhaul
   - Remove some long-commented-out code.
 
 2.18
