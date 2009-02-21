@@ -154,6 +154,16 @@ has '+width' => (
     default => 500
 );
 
+sub BUILD {
+    my ($self) = @_;
+
+    $self->add_component($self->plot, 'c');
+
+    if($self->legend->visible) {
+        $self->add_component($self->legend, $self->legend_position);
+    }
+}
+
 sub add_to_contexts {
     my ($self, $ctx) = @_;
 
@@ -174,14 +184,17 @@ sub draw {
     $driver->draw($self);
 }
 
-sub BUILD {
-    my ($self) = @_;
+sub get_datasets_for_context {
+    my ($self, $name) = @_;
 
-    $self->add_component($self->plot, 'c');
-
-    if($self->legend->visible) {
-        $self->add_component($self->legend, $self->legend_position);
+    my @dses;
+    foreach my $ds (@{ $self->datasets }) {
+        if($ds->context eq $name) {
+            push(@dses, $ds);
+        }
     }
+
+    return \@dses;
 }
 
 override('prepare', sub {
@@ -309,19 +322,6 @@ override('prepare', sub {
 
     super;
 });
-
-sub get_datasets_for_context {
-    my ($self, $name) = @_;
-
-    my @dses;
-    foreach my $ds (@{ $self->datasets }) {
-        if($ds->context eq $name) {
-            push(@dses, $ds);
-        }
-    }
-
-    return \@dses;
-}
 
 __PACKAGE__->meta->make_immutable;
 

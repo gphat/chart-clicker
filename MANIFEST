@@ -1,6 +1,9 @@
 Changes
+example/line-and-shape.pl
+example/overaxis-bar.pl
 example/simple.pl
 example/sparkline.pl
+example/tufte-whitegrid.pl
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
@@ -26,6 +29,7 @@ lib/Chart/Clicker/Decoration/Grid.pm
 lib/Chart/Clicker/Decoration/Legend.pm
 lib/Chart/Clicker/Decoration/LegendItem.pm
 lib/Chart/Clicker/Decoration/MarkerOverlay.pm
+lib/Chart/Clicker/Decoration/OverAxis.pm
 lib/Chart/Clicker/Decoration/Plot.pm
 lib/Chart/Clicker/Drawing/ColorAllocator.pm
 lib/Chart/Clicker/Positioned.pm

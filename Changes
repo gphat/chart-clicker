@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.19
+  - Move some subs around in Clicker.pm, to no effect.
+
 2.18
   - Fix Line's shape attribute, which didn't do a damn thing
   - Draw Line's shapes in a separate loop so that the path works right
