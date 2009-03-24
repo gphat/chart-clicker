@@ -99,7 +99,7 @@ override('finalize', sub {
     $self->height($self->axis_height);
 
     my $ticks = $domain->tick_values;
-    for(my $i = 0; $i < scalar(@{ $ticks }); $i++) {
+    for my $i (0 .. $#{ $ticks }) {
         my $tick = $ticks->[$i];
 
         my $comp = $self->get_component($i);

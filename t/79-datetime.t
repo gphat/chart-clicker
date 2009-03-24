@@ -20,7 +20,7 @@ my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
 
 my $vcount = scalar(@values);
 my $series = Chart::Clicker::Data::Series->new;
-for(my $i = 0; $i <= $vcount; $i++) {
+for my $i (0 .. $vcount) {
     $series->add_to_keys($now - ($hour * ($vcount - $i)));
     $series->add_to_values($values[$i - 1]);
 }

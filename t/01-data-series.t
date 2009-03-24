@@ -23,7 +23,7 @@ eval {
 };
 ok(defined($@), 'Fail when keycount != valuecount');
 
-my @keys = ('Uno', 'Dos', 'Tres');
+my @keys = (1, 2, 3);
 $series->keys(\@keys);
 my $skeys = $series->keys();
 ok(defined($skeys), 'Keys set');

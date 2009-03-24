@@ -86,7 +86,7 @@ override('finalize', sub {
         my $accum = 0;
 
         my $val = 0;
-        for(my $j = 0; $j < scalar(@values); $j++) {
+        for my $j (0 .. $#values) {
             $val += $values[$j];
             my $y = $range->mark($height, $val);
 

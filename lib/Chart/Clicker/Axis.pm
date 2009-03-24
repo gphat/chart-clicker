@@ -113,6 +113,8 @@ override('prepare', sub {
     # of the chart to work.
     if($self->hidden) {
         $self->padding(0);
+        # Hide the border too, jic
+        $self->border->width(0);
     }
 
     super;

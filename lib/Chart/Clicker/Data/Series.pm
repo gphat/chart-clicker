@@ -4,12 +4,10 @@ use MooseX::AttributeHelpers;
 
 use Chart::Clicker::Data::Range;
 
-# has 'errors' => ( is => 'rw', isa => 'Num' );
-# has 'error_count' => ( is => 'rw', isa => 'Int' );
 has 'keys' => (
     metaclass => 'Collection::Array',
     is => 'rw',
-    isa => 'ArrayRef',
+    isa => 'ArrayRef[Num]',
     default => sub { [] },
     provides => {
         'push' => 'add_to_keys',
@@ -25,7 +23,7 @@ has 'range' => (
 has 'values' => (
     metaclass => 'Collection::Array',
     is => 'rw',
-    isa => 'ArrayRef',
+    isa => 'ArrayRef[Num]',
     default => sub { [] },
     provides => {
         'push' => 'add_to_values',
@@ -45,15 +43,6 @@ sub prepare {
     if($self->key_count != $self->value_count) {
         die('Series key/value counts dont match.');
     }
-
-    # if($self->errors) {
-    #     my @errors = @{ $self->errors };
-    #     $self->error_count(scalar(@errors));
-    # 
-    #     if($self->error_count != $self->value_count) {
-    #         die('Series error/value counts don\'t match');
-    #     }
-    # }
 
     my ($long, $max, $min);
     $long = 0;
