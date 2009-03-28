@@ -48,11 +48,19 @@ override('finalize', sub {
 
             my $startx;
 
+            my $biggest;
             for(0..($series->key_count - 1)) {
 
                 my $x = $domain->mark($width, $keys[$_]);
 
                 my $y = $height - $range->mark($height, $vals[$_]);
+
+                if(defined($biggest)) {
+                    $biggest = $y if $y > $biggest;
+                } else {
+                    $biggest = $y;
+                }
+
                 if($_ == 0) {
                     $startx = $x;
                     $self->move_to($x, $y);
@@ -90,7 +98,7 @@ override('finalize', sub {
                 $paint = Graphics::Primitive::Paint::Gradient::Linear->new(
                     line => Geometry::Primitive::Line->new(
                         start => Geometry::Primitive::Point->new(x => 0, y => 0),
-                        end => Geometry::Primitive::Point->new(x => 1, y => $height),
+                        end => Geometry::Primitive::Point->new(x => 1, y => $biggest),
                     ),
                     style => 'linear'
                 );

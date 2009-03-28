@@ -1,5 +1,16 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.20
+  - Remove ghostly " - 5" that was fucking up additive ranges
+  - Clamp Area "fade" gradients to the top of their areas, not the top of the
+    plot
+  - Add tick_label_color to Axis
+  - Add label_color to Axis
+  - Use real gray rather than translucent gray for grid to get rid of
+    composited "joint" spots at line intersections
+  - Add StackedArea renderer
+  
+
 2.19
   - Move some subs around in Clicker.pm, to no effect.
   - Take out some C-style loops because they apparently offend a loud majority
