@@ -45,8 +45,7 @@ has '+color' => (
         Graphics::Color::RGB->new({
             red => 0, green => 0, blue => 0, alpha => 1
         })
-    },
-    coerce => 1
+    }
 );
 has 'font' => (
     is => 'rw',
@@ -57,6 +56,15 @@ has 'format' => ( is => 'rw', isa => 'StrOrCodeRef' );
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
 has 'hidden' => ( is => 'rw', isa => 'Bool', default => 0 );
 has 'label' => ( is => 'rw', isa => 'Str' );
+has 'label_color' => (
+    is => 'rw',
+    isa => 'Graphics::Color',
+    default => sub {
+        Graphics::Color::RGB->new({
+            red => 0, green => 0, blue => 0, alpha => 1
+        })
+    }
+);
 has '+layout_manager' => ( default => sub { Layout::Manager::Absolute->new });
 has '+orientation' => (
     required => 1
@@ -75,6 +83,15 @@ has 'tick_brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
     default => sub { Graphics::Primitive::Brush->new }
+);
+has 'tick_label_color' => (
+    is => 'rw',
+    isa => 'Graphics::Color',
+    default => sub {
+        Graphics::Color::RGB->new({
+            red => 0, green => 0, blue => 0, alpha => 1
+        })
+    }
 );
 has 'tick_labels' => (
     is => 'rw',
@@ -165,7 +182,7 @@ override('prepare', sub {
         my $tlabel = Graphics::Primitive::TextBox->new(
             text => $label,
             font => $font,
-            color => $self->color,
+            color => $self->tick_label_color,
         );
         if($self->tick_label_angle) {
             $tlabel->angle($self->tick_label_angle);
@@ -208,11 +225,11 @@ override('prepare', sub {
         }
 
         my $label = Graphics::Primitive::TextBox->new(
+            angle => $angle,
+            color => $self->label_color,
             name => 'label',
             font => $self->font,
             text => $self->label,
-            angle => $angle,
-            color => Graphics::Color::RGB->new( green => 0, blue => 0, red => 0),
         );
         $label->font->size($label->font->size);
 
@@ -432,7 +449,7 @@ Set/Get the brush for this axis.
 
 =head2 color
 
-Set/Get the color of the axis.
+Set/Get the color of the axis' border.
 
 =head2 font
 
@@ -470,6 +487,10 @@ Set/Get the height of the axis.
 
 Set/Get the label of the axis.
 
+=head2 label_color
+
+Set the color of the Axis' labels.
+
 =head2 orientation
 
 Set/Get the orientation of this axis.  See L<Chart::Clicker::Drawing>.
@@ -490,6 +511,10 @@ each mark on the axis will not be drawn.
 =head2 tick_label_angle
 
 Set the angle (in radians) to rotate the tick's labels.
+
+=head2 tick_label_color
+
+Set the color of the tick labels.
 
 =head2 tick_length
 
