@@ -21,7 +21,7 @@ has 'domain_brush' => (
     default => sub {
         Graphics::Primitive::Brush->new(
             color => Graphics::Color::RGB->new(
-                red => 0, green => 0, blue => 0, alpha => .25
+                red => .75, green => .75, blue => .75, alpha => 1
             ),
             width => 1
         )
@@ -33,7 +33,7 @@ has 'range_brush' => (
     default => sub {
         Graphics::Primitive::Brush->new(
             color => Graphics::Color::RGB->new(
-                red => 0, green => 0, blue => 0, alpha => .25
+                red => .75, green => .75, blue => .75, alpha => 1
             ),
             width => 1
         )
