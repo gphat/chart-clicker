@@ -292,7 +292,7 @@ override('prepare', sub {
 
         my $rend = $ctx->renderer;
         if($rend->additive) {
-            $yaxis->range->upper($ds->largest_value_slice - 5);
+            $yaxis->range->upper($ds->largest_value_slice);
         } else {
             $yaxis->range->combine($ds->range);
         }
