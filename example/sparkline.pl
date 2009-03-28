@@ -1,3 +1,6 @@
+#!/usr/bin/perl
+use strict;
+
 use Chart::Clicker;
 use Chart::Clicker::Context;
 use Chart::Clicker::Data::DataSet;

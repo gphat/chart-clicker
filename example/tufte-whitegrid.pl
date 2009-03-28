@@ -1,3 +1,6 @@
+#!/usr/bin/perl
+use strict;
+
 use Chart::Clicker;
 use Chart::Clicker::Context;
 use Chart::Clicker::Data::DataSet;
@@ -33,7 +36,7 @@ my $grey = Graphics::Color::RGB->new(
     red => .36, green => .36, blue => .36, alpha => 1
 );
 
-$cc->color_allocator->colors([ $grey, $green, $blue ]);
+$cc->color_allocator->colors([ $grey ]);
 
 $cc->grid_over(1);
 $cc->plot->grid->range_brush->width(5);

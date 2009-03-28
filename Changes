@@ -9,6 +9,7 @@ Revision history for Perl extension Chart::Clicker.
   - Use real gray rather than translucent gray for grid to get rid of
     composited "joint" spots at line intersections
   - Add StackedArea renderer
+  - Fix some errors in examples
   
 
 2.19
