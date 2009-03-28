@@ -53,7 +53,7 @@ sub largest_value_slice {
     foreach ($self->get_series_values(0)) { $big += $_; }
 
     # Check that value against all the remaining slices
-    for my $i (0 .. $self->max_key_count) {
+    for my $i (0 .. $self->max_key_count - 1) {
         my $t;
         foreach ($self->get_series_values($i)) { $t += $_; }
         $big = $t if(($t > $big) || !defined($big));
