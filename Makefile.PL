@@ -10,10 +10,12 @@ requires    'DateTime::Set'     => 0.25;
 requires    'IO::File';
 
 requires    'Geometry::Primitive' => 0.13;
+requires    'Graphics::Color' => 0.19;
 requires    'Graphics::Primitive' => 0.38;
 requires    'Graphics::Primitive::Driver::Cairo' => 0.33;
 requires    'Layout::Manager' => 0.20;
 requires    'Math::Trig' => 1.18;
 requires    'Scalar::Util' => 1.19;
+requires    'Color::Scheme' => 1.02;
 
 WriteAll;
