@@ -1,4 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
+
+2.22
+  - Line renderer will now stack if additive attribute is true.
+
 2.21
   - More clever color allocator that attempts to space out colors at even hue
     spacings for predictable color schemes that are more pleasing and contrast
