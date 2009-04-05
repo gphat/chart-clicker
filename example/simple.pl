@@ -44,18 +44,6 @@ $cc->add_to_datasets($ds);
 
 my $defctx = $cc->get_context('default');
 
-my $grey = Graphics::Color::RGB->new(
-    red => .36, green => .36, blue => .36, alpha => 1
-);
-my $green = Graphics::Color::RGB->new(
-    red => 0, green => .36, blue => 0, alpha => 1
-);
-my $blue = Graphics::Color::RGB->new(
-    red => 0, green => 0, blue => .76, alpha => 1
-);
-
-$cc->color_allocator->colors([ $grey, $green, $blue ]);
-
 $defctx->range_axis->label('Lorem');
 $defctx->domain_axis->label('Ipsum');
 $defctx->domain_axis->tick_label_angle(0.785398163);

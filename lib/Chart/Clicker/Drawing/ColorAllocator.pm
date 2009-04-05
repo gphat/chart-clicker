@@ -144,7 +144,6 @@ corresponds to the series that will be colored.
 
     my $red = $ca->get(0);
 
-
     #or let Chart::Clicker autmatically pick complementing colors for you
     my $ca = Chart::Clicker::Drawing::ColorAllocator->new({
         seed_hue => 0, #red

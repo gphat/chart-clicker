@@ -28,7 +28,7 @@ use Class::MOP;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.20';
+our $VERSION = '2.21';
 
 coerce 'Chart::Clicker::Renderer'
     => from 'Str'
@@ -509,6 +509,9 @@ Cory 'G' Watson <gphat@cpan.org>
 
 =head1 CONTRIBUTORS
 
+Many thanks to the individuals who have contributed various bits:
+
+Guillermo Roditi
 Torsten Schoenfeld
 Ash Berlin
 
