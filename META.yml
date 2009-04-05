@@ -14,9 +14,11 @@ no_index:
     - inc
     - t
 requires:
+  Color::Scheme: 1.02
   DateTime: 0.4302
   DateTime::Set: 0.25
   Geometry::Primitive: 0.13
+  Graphics::Color: 0.19
   Graphics::Primitive: 0.38
   Graphics::Primitive::Driver::Cairo: 0.33
   IO::File: 0
@@ -25,4 +27,4 @@ requires:
   Moose: 0.57
   MooseX::AttributeHelpers: 0.13
   Scalar::Util: 1.19
-version: 2.20
+version: 2.21

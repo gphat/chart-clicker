@@ -41,6 +41,7 @@ lib/Chart/Clicker/Renderer/Line.pm
 lib/Chart/Clicker/Renderer/Measurement.pm
 lib/Chart/Clicker/Renderer/Pie.pm
 lib/Chart/Clicker/Renderer/Point.pm
+lib/Chart/Clicker/Renderer/StackedArea.pm
 lib/Chart/Clicker/Renderer/StackedBar.pm
 LICENSE
 Makefile.PL
@@ -62,6 +63,7 @@ t/04-renderer-bubble.t
 t/04-renderer-line.t
 t/04-renderer-pie.t
 t/04-renderer-point.t
+t/05-decoration-color_allocator.t
 t/05-decoration-glass.t
 t/05-decoration-grid.t
 t/05-decoration-legend.t
