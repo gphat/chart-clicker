@@ -3,7 +3,7 @@ use Moose;
 
 extends 'Graphics::Primitive::Canvas';
 
-has 'additive' => ( is => 'ro', isa => 'Bool', default => 0 );
+has 'additive' => ( is => 'rw', isa => 'Bool', default => 0 );
 has 'clicker' => ( is => 'rw', isa => 'Chart::Clicker' );
 has 'context' => ( is => 'rw', isa => 'Str' );
 
@@ -42,7 +42,9 @@ Creates a new Chart::Clicker::Renderer.
 
 Read-only value that informs Clicker that this renderer uses the combined ranges
 of all the series it charts in total.  Used for 'stacked' renderers like
-StackedBar.
+StackedBar, StackedArea and Line (which will stack if told to).  Note: If you
+set a renderer to additive that B<isn't> additive, this will produce wonky
+results.
 
 =head2 prepare
 

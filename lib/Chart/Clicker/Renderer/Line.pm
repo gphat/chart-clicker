@@ -31,6 +31,7 @@ sub finalize {
     my $clicker = $self->clicker;
 
     my $dses = $clicker->get_datasets_for_context($self->context);
+    my %accum;
     foreach my $ds (@{ $dses }) {
         foreach my $series (@{ $ds->series }) {
 
@@ -47,8 +48,23 @@ sub finalize {
             my $kcount = $series->key_count - 1;
 
             for(0..$kcount) {
-                my $x = $domain->mark($width, $keys[$_]);
-                my $y = $height - $range->mark($height, $vals[$_]);
+
+                my $key = $keys[$_];
+
+                my $x = $domain->mark($width, $key);
+                my $ymark = $range->mark($height, $vals[$_]);
+
+                if($self->additive) {
+                    if(exists($accum{$key})) {
+                        $accum{$key} += $ymark;
+                        $ymark = $accum{$key};
+                    } else {
+                        $accum{$key} = $ymark;
+                    }
+                }
+
+                my $y = $height - $ymark;
+
                 if($_ == 0) {
                     $self->move_to($x, $y);
                 } else {
@@ -112,14 +128,10 @@ Chart::Clicker::Renderer::Line renders a dataset as lines.
 
 =head1 METHODS
 
-=head2 shape
+=head2 additive
 
-Set a shape object to draw at each of the data points.
-
-=head2 shape_brush
-
-Set/Get the Brush to be used on the shapes at each point.  If no shape_brush
-is provided, then the shapes will be filled.
+If true, the lines are drawn "stacked", each key accumulates based on those
+drawn below it.
 
 =head2 brush
 
@@ -132,6 +144,15 @@ Called for each point encountered on the line.
 =head2 finalize
 
 Draw the actual line chart
+
+=head2 shape
+
+Set a shape object to draw at each of the data points.
+
+=head2 shape_brush
+
+Set/Get the Brush to be used on the shapes at each point.  If no shape_brush
+is provided, then the shapes will be filled.
 
 =head1 AUTHOR
 
