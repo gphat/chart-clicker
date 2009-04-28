@@ -76,19 +76,33 @@ sub finalize {
             $op->brush->color($color);
             $self->do($op);
 
-            for(0..$kcount) {
-                my $x = $domain->mark($width, $keys[$_]);
-                my $y = $height - $range->mark($height, $vals[$_]);
+            if(defined($self->shape)) {
+                for(0..$kcount) {
+                    my $x = $domain->mark($width, $keys[$_]);
+                    my $y = $height - $range->mark($height, $vals[$_]);
 
-                $self->move_to($x, $y);
-                if(defined($self->shape)) {
+                    $self->move_to($x, $y);
                     $self->draw_point($x, $y, $series, $vals[$_]);
                 }
+
+                # Fill the shape
+                my $op2 = Graphics::Primitive::Operation::Fill->new(
+                    paint => Graphics::Primitive::Paint::Solid->new(
+                        color => $color
+                    )
+                );
+                if(defined($self->shape_brush)) {
+                    $op2->preserve(1);
+                }
+                $self->do($op2);
+
+                # Optionally stroke the shape
+                if(defined($self->shape_brush)) {
+                    my $op3 = Graphics::Primitive::Operation::Stroke->new;
+                    $op3->brush($self->shape_brush->clone);
+                    $self->do($op3);
+                }
             }
-            my $op2 = Graphics::Primitive::Operation::Stroke->new;
-            $op2->brush($self->brush->clone);
-            $op2->brush->color($color);
-            $self->do($op2);
         }
     }
 
@@ -152,7 +166,7 @@ Set a shape object to draw at each of the data points.
 =head2 shape_brush
 
 Set/Get the Brush to be used on the shapes at each point.  If no shape_brush
-is provided, then the shapes will be filled.
+is provided, then the shapes will be filled.  
 
 =head1 AUTHOR
 

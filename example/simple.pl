@@ -9,7 +9,7 @@ use Chart::Clicker::Data::Series;
 use Geometry::Primitive::Rectangle;
 use Graphics::Color::RGB;
 
-my $cc = Chart::Clicker->new(width => 500, height => 400);
+my $cc = Chart::Clicker->new(width => 500, height => 400, format => 'pdf');
 
 my @hours = qw(
     1 2 3 4 5 6 7 8 9 10 11 12
@@ -38,6 +38,8 @@ my $series3 = Chart::Clicker::Data::Series->new(
 );
 
 
+$cc->border->width(0);
+$cc->background_color(    Graphics::Color::RGB->new(red => .95, green => .94, blue => .92));
 my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series1, $series2, $series3 ]);
 
 $cc->add_to_datasets($ds);
@@ -50,4 +52,4 @@ $defctx->domain_axis->tick_label_angle(0.785398163);
 $defctx->renderer->brush->width(1);
 
 $cc->draw;
-$cc->write('foo.png');
+$cc->write('foo.pdf');

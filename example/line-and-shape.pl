@@ -11,7 +11,7 @@ use Geometry::Primitive::Circle;
 use Geometry::Primitive::Rectangle;
 use Graphics::Color::RGB;
 
-my $cc = Chart::Clicker->new(width => 500, height => 400);
+my $cc = Chart::Clicker->new(width => 500, height => 400, format => 'png');
 
 my @hours = qw(
     1 2 3 4 5 6 7 8 9 10 11 12
@@ -37,12 +37,10 @@ my $grey = Graphics::Color::RGB->new(
     red => .36, green => .36, blue => .36, alpha => 1
 );
 
+$cc->background_color(
+    Graphics::Color::RGB->new(red => .95, green => .94, blue => .92)
+);
 $cc->color_allocator->colors([ $grey ]);
-
-#$cc->plot->grid->visible(0);
-#$cc->legend->visible(0);
-#$cc->padding(2);
-#$cc->border->width(0);
 
 $defctx->range_axis->label('FOOO');
 $defctx->range_axis->fudge_amount(.2);
@@ -50,14 +48,19 @@ $defctx->range_axis->fudge_amount(.2);
 $defctx->domain_axis->label("WEEE");
 $defctx->domain_axis->fudge_amount(.1);
 $defctx->domain_axis->tick_label_angle(0.785398163);
-# $defctx->domain_axis->font->family('Zapfino');
 $defctx->renderer(Chart::Clicker::Renderer::Line->new);
 $defctx->renderer->shape(
     Geometry::Primitive::Circle->new({
        radius => 5,
     })
 );
-$defctx->renderer->brush->width(1);
+$defctx->renderer->shape_brush(
+    Graphics::Primitive::Brush->new(
+        width => 2,
+        color => Graphics::Color::RGB->new(red => .9, green => .9, blue => .9, alpha => 1)
+    )
+);
+$defctx->renderer->brush->width(2);
 
 $cc->draw;
 $cc->write('foo.png');

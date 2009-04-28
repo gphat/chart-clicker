@@ -1,5 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.23
+  - Don't uselessly add a Fill op to a Line renderer w/no shape
+  - Properly handle the shape_brush attribute in the Line renderer
+
 2.22
   - Line renderer will now stack if additive attribute is true.
 

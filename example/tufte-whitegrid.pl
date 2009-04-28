@@ -10,7 +10,7 @@ use Chart::Clicker::Renderer::Point;
 use Geometry::Primitive::Rectangle;
 use Graphics::Color::RGB;
 
-my $cc = Chart::Clicker->new(width => 500, height => 200);
+my $cc = Chart::Clicker->new(width => 500, height => 200, format => 'pnngdf');
 
 my @hours = qw(
     1 2 3 4 5 6 7 8 9 10 11 12
@@ -47,8 +47,12 @@ $cc->plot->grid->domain_brush->color(
 
 $cc->legend->visible(0);
 
+$cc->border->width(0);
+$cc->background_color(
+    Graphics::Color::RGB->new(red => .95, green => .94, blue => .92)
+);
 $cc->plot->grid->range_brush->color(
-    Graphics::Color::RGB->new(red => 1, green => 1, blue => 1)
+    Graphics::Color::RGB->new(red => .95, green => .94, blue => .92)
 );
 
 $cc->legend_position('n');

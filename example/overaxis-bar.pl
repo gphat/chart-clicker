@@ -11,7 +11,7 @@ use Chart::Clicker::Renderer::Bar;
 use Geometry::Primitive::Rectangle;
 use Graphics::Color::RGB;
 
-my $cc = Chart::Clicker->new(width => 300, height => 150);
+my $cc = Chart::Clicker->new(width => 300, height => 150, format => 'png');
 
 my @years = qw(
     1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009
@@ -51,6 +51,9 @@ my $red = Graphics::Color::RGB->new(
 $cc->color_allocator->colors([ $grey, $red ]);
 $cc->border->width(0);
 
+$cc->background_color(
+    Graphics::Color::RGB->new(red => .95, green => .94, blue => .92)
+);
 $cc->plot->grid->visible(0);
 $cc->legend->visible(0);
 
@@ -63,7 +66,14 @@ $defctx->domain_axis->fudge_amount(.1);
 $defctx->renderer->brush->width(1);
 $defctx->domain_axis->tick_values([qw(2000 2002 2004 2006 2008)]);
 
-$cc->add_to_over_decorations(Chart::Clicker::Decoration::OverAxis->new(context => 'default'));
+$cc->add_to_over_decorations(
+    Chart::Clicker::Decoration::OverAxis->new(
+        context => 'default',
+        border_color => Graphics::Color::RGB->new(
+            red => .95, green => .94, blue => .92
+        )
+    )
+);
 
 $cc->draw;
 $cc->write('foo.png');

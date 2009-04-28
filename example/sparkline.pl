@@ -10,7 +10,7 @@ use Chart::Clicker::Renderer::Point;
 use Geometry::Primitive::Rectangle;
 use Graphics::Color::RGB;
 
-my $cc = Chart::Clicker->new(width => 75, height => 18);
+my $cc = Chart::Clicker->new(width => 75, height => 18, format => 'png');
 
 my $series = Chart::Clicker::Data::Series->new(
   keys    => [   1,   2,   3,   4,   5,    6,   7,   8,   9,  10, 11, 12, 13,  14,  15,  16,  17,  18,  19,   20,  21,  22,  23,  24],
@@ -77,8 +77,12 @@ my $blue = Graphics::Color::RGB->new(
 );
 
 my $mark = Chart::Clicker::Data::Marker->new(value => 2, value2 => 4);
-$mark->brush->color(Graphics::Color::RGB->new(red => 0, green => 0, blue => 0, alpha => .15));
-$mark->inside_color(Graphics::Color::RGB->new(red => 0, green => 0, blue => 0, alpha => .15));
+$mark->brush->color(
+    Graphics::Color::RGB->new(red => 0, green => 0, blue => 0, alpha => .15)
+);
+$mark->inside_color(
+    Graphics::Color::RGB->new(red => 0, green => 0, blue => 0, alpha => .15)
+);
 $defctx->add_marker($mark);
 
 $cc->color_allocator->colors([ $grey, $red, $blue ]);
