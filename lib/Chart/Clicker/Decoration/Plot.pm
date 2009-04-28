@@ -12,7 +12,6 @@ use Chart::Clicker::Decoration::Grid;
 # TODO MOve this class?  It's not decoration anymore.
 extends 'Chart::Clicker::Container';
 
-has '+background_color' => ( default => sub { Graphics::Color::RGB->new( red => 1 ) });
 has 'clicker' => (
     is => 'rw',
     isa => 'Chart::Clicker',

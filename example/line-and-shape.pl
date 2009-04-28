@@ -11,7 +11,7 @@ use Geometry::Primitive::Circle;
 use Geometry::Primitive::Rectangle;
 use Graphics::Color::RGB;
 
-my $cc = Chart::Clicker->new(width => 500, height => 400, format => 'png');
+my $cc = Chart::Clicker->new(width => 500, height => 250, format => 'png');
 
 my @hours = qw(
     1 2 3 4 5 6 7 8 9 10 11 12
@@ -38,14 +38,14 @@ my $grey = Graphics::Color::RGB->new(
 );
 
 $cc->background_color(
-    Graphics::Color::RGB->new(red => .95, green => .94, blue => .92)
+    # Graphics::Color::RGB->new(red => .95, green => .94, blue => .92)
 );
 $cc->color_allocator->colors([ $grey ]);
 
-$defctx->range_axis->label('FOOO');
+# $defctx->range_axis->label('FOOO');
 $defctx->range_axis->fudge_amount(.2);
 #$defctx->domain_axis->hidden(1);
-$defctx->domain_axis->label("WEEE");
+# $defctx->domain_axis->label("WEEE");
 $defctx->domain_axis->fudge_amount(.1);
 $defctx->domain_axis->tick_label_angle(0.785398163);
 $defctx->renderer(Chart::Clicker::Renderer::Line->new);
