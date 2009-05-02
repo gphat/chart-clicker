@@ -15,16 +15,16 @@ no_index:
     - t
 requires:
   Color::Scheme: 1.02
-  DateTime: 0.4302
-  DateTime::Set: 0.25
+  DateTime: 0.47
+  DateTime::Set: 0.27
   Geometry::Primitive: 0.13
-  Graphics::Color: 0.19
-  Graphics::Primitive: 0.38
-  Graphics::Primitive::Driver::Cairo: 0.33
+  Graphics::Color: 0.2
+  Graphics::Primitive: 0.41
+  Graphics::Primitive::Driver::Cairo: 0.37
   IO::File: 0
   Layout::Manager: 0.2
-  Math::Trig: 1.18
-  Moose: 0.57
-  MooseX::AttributeHelpers: 0.13
+  Math::Complex: 1.56
+  Moose: 0.76
+  MooseX::AttributeHelpers: 0.17
   Scalar::Util: 1.19
-version: 2.23
+version: 2.24
