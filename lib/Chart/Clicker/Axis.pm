@@ -47,11 +47,6 @@ has '+color' => (
         })
     }
 );
-has 'font' => (
-    is => 'rw',
-    isa => 'Graphics::Primitive::Font',
-    default => sub { Graphics::Primitive::Font->new }
-);
 has 'format' => ( is => 'rw', isa => 'StrOrCodeRef' );
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
 has 'hidden' => ( is => 'rw', isa => 'Bool', default => 0 );
@@ -64,6 +59,11 @@ has 'label_color' => (
             red => 0, green => 0, blue => 0, alpha => 1
         })
     }
+);
+has 'label_font' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Font',
+    default => sub { Graphics::Primitive::Font->new }
 );
 has '+layout_manager' => ( default => sub { Layout::Manager::Absolute->new });
 has '+orientation' => (
@@ -83,6 +83,11 @@ has 'tick_brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
     default => sub { Graphics::Primitive::Brush->new }
+);
+has 'tick_font' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Font',
+    default => sub { Graphics::Primitive::Font->new }
 );
 has 'tick_label_color' => (
     is => 'rw',
@@ -164,7 +169,7 @@ override('prepare', sub {
     # Layout::Manager to to set it for us, this is how we 'hide'
     return if $self->hidden;
 
-    my $font = $self->font;
+    my $tfont = $self->tick_font;
 
     my $bheight = 0;
     my $bwidth = 0;
@@ -181,7 +186,7 @@ override('prepare', sub {
 
         my $tlabel = Graphics::Primitive::TextBox->new(
             text => $label,
-            font => $font,
+            font => $tfont,
             color => $self->tick_label_color,
         );
         if($self->tick_label_angle) {
@@ -215,23 +220,23 @@ override('prepare', sub {
 
     if ($self->label) {
 
-        my $angle = 0;
+        my $label = Graphics::Primitive::TextBox->new(
+            # angle => $angle,
+            color => $self->label_color,
+            name => 'label',
+            font => $self->label_font,
+            text => $self->label,
+            width => $self->height
+        );
+
         if($self->is_vertical) {
             if ($self->is_left) {
-                $angle -= pip2;
+                $label->angle(-&pip2);
             } else {
-                $angle = pip2;
+                $label->angle(&pip2)
             }
         }
 
-        my $label = Graphics::Primitive::TextBox->new(
-            angle => $angle,
-            color => $self->label_color,
-            name => 'label',
-            font => $self->font,
-            text => $self->label,
-        );
-        $label->font->size($label->font->size);
 
         $label->prepare($driver);
 
@@ -451,10 +456,6 @@ Set/Get the brush for this axis.
 
 Set/Get the color of the axis' border.
 
-=head2 font
-
-Set/Get the font used for the axis' labels.
-
 =head2 format
 
 Set/Get the format to use for the axis values.
@@ -491,6 +492,11 @@ Set/Get the label of the axis.
 
 Set the color of the Axis' labels.
 
+=head2 label_font
+
+Set/Get the font used for the axis' label.
+
+
 =head2 orientation
 
 Set/Get the orientation of this axis.  See L<Chart::Clicker::Drawing>.
@@ -507,6 +513,10 @@ Set/Get the Range for this axis.
 
 Set/Get the show ticks flag.  If this is value then the small tick marks at
 each mark on the axis will not be drawn.
+
+=head2 tick_font
+
+Set/Get the font used for the axis' ticks.
 
 =head2 tick_label_angle
 

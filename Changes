@@ -1,5 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.24
+  - Add label_font and tick_font attributes to Axis for changing each
+    individually.
+
 2.23
   - Don't uselessly add a Fill op to a Line renderer w/no shape
   - Properly handle the shape_brush attribute in the Line renderer
