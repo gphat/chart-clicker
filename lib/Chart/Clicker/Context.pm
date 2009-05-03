@@ -51,6 +51,13 @@ has 'renderer' => (
     coerce => 1
 );
 
+sub share_axis_with {
+    my ($self, $other_context) = @_;
+
+    $self->range_axis($other_context->range_axis);
+    $self->domain_axis($other_context->domain_axis);
+}
+
 __PACKAGE__->meta->make_immutable;
 
 no Moose;
@@ -91,6 +98,14 @@ Set/get this context's range axis
 =head2 renderer
 
 Set/get this context's renderer
+
+=head2 share_axis_with ($other_context)
+
+Sets this context's axes to those of the supplied context.  This is a
+convenience method for quickly sharing axes.  It's simple doing:
+
+  $self->range_axis($other_context->range_axis);
+  $self->domain_axis($other_context->domain_axis);
 
 =head1 AUTHOR
 

@@ -33,20 +33,42 @@ my $series2 = Chart::Clicker::Data::Series->new(
     values  => \@bw2,
 );
 
+# We'll create a dataset with our first two series in it...
+my $ds = Chart::Clicker::Data::DataSet->new(
+    series => [ $series1, $series2 ]
+);
+
+# We'll put the third into it's own dataset so we can put it in a new context
 my $series3 = Chart::Clicker::Data::Series->new(
     keys    => \@hours,
     values  => \@bw3,
 );
+my $ds1 = Chart::Clicker::Data::DataSet->new(
+    series => [ $series3 ]
+);
 
+# Create a new context
+my $other_context = Chart::Clicker::Context->new(
+    name => 'other'
+);
+# Set it's labels...
+$other_context->range_axis->label('Solor');
+$other_context->domain_axis->label('Amet');
 
+# Instruct the ds1 dataset to use the 'other' context.  DataSets default to
+# the 'default' context.
+$ds1->context('other');
+$cc->add_to_contexts($other_context);
+
+# Pretty stuff
 $cc->border->width(0);
-$cc->background_color(    Graphics::Color::RGB->new(red => .95, green => .94, blue => .92));
-my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series1, $series2, $series3 ]);
 
+# Add the datasets to the chart
 $cc->add_to_datasets($ds);
+$cc->add_to_datasets($ds1);
 
+# Set some labels on the default context
 my $defctx = $cc->get_context('default');
-
 $defctx->range_axis->label('Lorem');
 $defctx->domain_axis->label('Ipsum');
 $defctx->domain_axis->tick_label_angle(0.785398163);
