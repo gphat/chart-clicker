@@ -3,6 +3,7 @@ Revision history for Perl extension Chart::Clicker.
 2.25
   - Add some new examples: Multiple-Axes, Multiple-Renderers and Shared-Axes
   - Add Context->share_axes_with method for convenience
+  - Add font attribute to OverAxis decoration
 
 2.24
   - Add label_font and tick_font attributes to Axis for changing each

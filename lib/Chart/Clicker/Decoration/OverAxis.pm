@@ -41,6 +41,11 @@ has 'context' => (
     isa => 'Str',
     required => 1
 );
+has 'font' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Font',
+    default => sub { Graphics::Primitive::Font->new }
+);
 has '+layout_manager' => (
     default => sub { Layout::Manager::Compass->new }
 );
@@ -73,6 +78,7 @@ override('prepare', sub {
             color => $self->text_color,
             horizontal_alignment => 'center',
             vertical_alignment => 'center',
+            font => $self->font
         );
 
         $self->add_component($tb, 'w');
