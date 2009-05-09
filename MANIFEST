@@ -4,6 +4,7 @@ example/line-and-shape.pl
 example/multiple-axes.pl
 example/multiple-renderers.pl
 example/overaxis-bar.pl
+example/pie.pl
 example/share-axes.pl
 example/simple.pl
 example/sparkline.pl
