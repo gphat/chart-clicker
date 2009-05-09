@@ -78,8 +78,19 @@ sub finalize {
 
             if(defined($self->shape)) {
                 for(0..$kcount) {
-                    my $x = $domain->mark($width, $keys[$_]);
-                    my $y = $height - $range->mark($height, $vals[$_]);
+                    my $key = $keys[$_];
+                    my $x = $domain->mark($width, $key);
+                    my $ymark = $range->mark($height, $vals[$_]);
+
+                    if($self->additive) {
+                        if(exists($accum{$key})) {
+                            $ymark = $accum{$key};
+                        } else {
+                            $accum{$key} = $ymark;
+                        }
+                    }
+
+                    my $y = $height - $ymark;
 
                     $self->move_to($x, $y);
                     $self->draw_point($x, $y, $series, $vals[$_]);

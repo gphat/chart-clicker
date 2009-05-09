@@ -1,9 +1,14 @@
 Changes
+example/candlestick.pl
 example/line-and-shape.pl
+example/multiple-axes.pl
+example/multiple-renderers.pl
 example/overaxis-bar.pl
+example/share-axes.pl
 example/simple.pl
 example/sparkline.pl
 example/tufte-whitegrid.pl
+example/very-simple.pl
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
@@ -22,6 +27,7 @@ lib/Chart/Clicker/Data/DataSet.pm
 lib/Chart/Clicker/Data/Marker.pm
 lib/Chart/Clicker/Data/Range.pm
 lib/Chart/Clicker/Data/Series.pm
+lib/Chart/Clicker/Data/Series/HighLow.pm
 lib/Chart/Clicker/Data/Series/Size.pm
 lib/Chart/Clicker/Decoration.pm
 lib/Chart/Clicker/Decoration/Glass.pm
@@ -37,6 +43,7 @@ lib/Chart/Clicker/Renderer.pm
 lib/Chart/Clicker/Renderer/Area.pm
 lib/Chart/Clicker/Renderer/Bar.pm
 lib/Chart/Clicker/Renderer/Bubble.pm
+lib/Chart/Clicker/Renderer/CandleStick.pm
 lib/Chart/Clicker/Renderer/Line.pm
 lib/Chart/Clicker/Renderer/Measurement.pm
 lib/Chart/Clicker/Renderer/Pie.pm
@@ -53,6 +60,7 @@ t/00-drawing-colorallocator.t
 t/01-data-dataset.t
 t/01-data-marker.t
 t/01-data-range.t
+t/01-data-series-highlow.t
 t/01-data-series.t
 t/03-axis-datetime.t
 t/03-axis.t
@@ -60,6 +68,7 @@ t/03-renderer-base.t
 t/04-renderer-area.t
 t/04-renderer-bar.t
 t/04-renderer-bubble.t
+t/04-renderer-candlestick.t
 t/04-renderer-line.t
 t/04-renderer-pie.t
 t/04-renderer-point.t
@@ -79,5 +88,5 @@ t/76-simple-ctx.t
 t/77-same-axes-ctx.t
 t/78-invisible.t
 t/79-datetime.t
-t/author/pod-coverage.t
-t/author/pod.t
+t/xt/pod-coverage.t
+t/xt/pod.t

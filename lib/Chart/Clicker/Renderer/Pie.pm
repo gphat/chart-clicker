@@ -13,7 +13,6 @@ has 'border_color' => (
     is => 'rw',
     isa => 'Graphics::Color::RGB',
     default => sub { Graphics::Color::RGB->new },
-    coerce => 1
 );
 has 'brush' => (
     is => 'rw',
