@@ -2,6 +2,7 @@ Revision history for Perl extension Chart::Clicker.
 
 2.27
   - Fix shape positions when line renderer is additive
+  - Add pie example
 
 2.26
   - Use min/max functions from List::Util rather than rolling my own
