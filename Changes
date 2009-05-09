@@ -1,5 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.26
+  - Use min/max functions from List::Util rather than rolling my own
+  - Refactor Series internals to more easily facilitate subclasses
+
 2.25
   - Add some new examples: Multiple-Axes, Multiple-Renderers and Shared-Axes
   - Add Context->share_axes_with method for convenience

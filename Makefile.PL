@@ -18,5 +18,4 @@ requires    'Graphics::Primitive' => 0.41;
 requires    'Graphics::Primitive::Driver::Cairo' => 0.37;
 requires    'Layout::Manager' => 0.20;
 
-
 WriteAll;

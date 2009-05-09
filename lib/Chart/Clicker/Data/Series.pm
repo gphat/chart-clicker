@@ -2,6 +2,7 @@ package Chart::Clicker::Data::Series;
 use Moose;
 use MooseX::AttributeHelpers;
 
+use List::Util qw(max min);
 use Chart::Clicker::Data::Range;
 
 has 'keys' => (
@@ -18,7 +19,8 @@ has 'name' => ( is => 'rw', isa => 'Str' );
 has 'range' => (
     is => 'rw',
     isa => 'Chart::Clicker::Data::Range',
-    default => sub { Chart::Clicker::Data::Range->new }
+    lazy => 1,
+    default => sub { my $self = shift; $self->find_range }
 );
 has 'values' => (
     metaclass => 'Collection::Array',
@@ -31,42 +33,23 @@ has 'values' => (
     }
 );
 
-sub prepare {
-    my $self = shift();
+sub find_range {
+    my ($self) = @_;
 
     my $values = $self->values;
     my $keys = $self->keys;
 
-    $self->key_count(scalar(@{ $keys }));
-    $self->value_count(scalar(@{ $values }));
+    return Chart::Clicker::Data::Range->new(
+        lower => min(@{ $self->values }), upper => max(@{ $self->values})
+    );
+}
+
+sub prepare {
+    my ($self) = @_;
 
     if($self->key_count != $self->value_count) {
         die('Series key/value counts dont match.');
     }
-
-    my ($long, $max, $min);
-    $long = 0;
-    $max = $values->[0];
-    $min = $values->[0];
-    my $count = 0;
-    foreach my $key (@{ $self->keys }) {
-
-        my $val = $values->[$count];
-
-        # Max
-        if($val > $max) {
-            $max = $val;
-        }
-
-        # Min
-        if($val < $min) {
-            $min = $val;
-        }
-        $count++;
-    }
-    $self->range(
-        Chart::Clicker::Data::Range->new( lower => $min, upper => $max )
-    );
 
     return 1;
 }
@@ -111,6 +94,11 @@ Adds a key to this series.
 =head2 add_to_values
 
 Add a value to this series.
+
+=head2 find_range
+
+Used internally to determine the range for this series.  Exposed so that
+subclasses can implement their own method.
 
 =head2 keys
 

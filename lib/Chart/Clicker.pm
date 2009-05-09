@@ -5,8 +5,6 @@ use MooseX::AttributeHelpers;
 
 extends 'Chart::Clicker::Container';
 
-use Carp;
-
 use Layout::Manager::Compass;
 
 use Graphics::Color::RGB;
@@ -28,7 +26,7 @@ use Class::MOP;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.25';
+our $VERSION = '2.26';
 
 coerce 'Chart::Clicker::Renderer'
     => from 'Str'

@@ -2,15 +2,20 @@
 abstract: 'Powerful, extensible charting.'
 author:
   - 'Cory ''G' Watson <gphat@cpan.org>'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.75'
+generated_by: 'Module::Install version 0.86'
 license: perl
 meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.3.html
-  version: 1.3
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
 name: Chart-Clicker
 no_index:
   directory:
+    - example
     - inc
     - t
 requires:
@@ -27,4 +32,6 @@ requires:
   Moose: 0.76
   MooseX::AttributeHelpers: 0.17
   Scalar::Util: 1.19
-version: 2.24
+resources:
+  license: http://dev.perl.org/licenses/
+version: 2.25
