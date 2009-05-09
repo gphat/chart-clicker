@@ -497,10 +497,6 @@ format provided to the constructor (which defaults to Png).
 
   $c->write('/path/to/the.png');
 
-=head2 BUILD
-
-Documenting so tests pass.  Moose stuff.
-
 =head1 AUTHOR
 
 Cory 'G' Watson <gphat@cpan.org>

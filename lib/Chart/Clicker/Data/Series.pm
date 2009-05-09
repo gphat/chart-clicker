@@ -37,7 +37,6 @@ sub find_range {
     my ($self) = @_;
 
     my $values = $self->values;
-    my $keys = $self->keys;
 
     return Chart::Clicker::Data::Range->new(
         lower => min(@{ $self->values }), upper => max(@{ $self->values})

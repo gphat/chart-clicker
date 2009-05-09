@@ -162,14 +162,6 @@ colors are well ditinguishable from one another and have appropriate contrast.
 
 =head1 ATTRIBUTES
 
-=head2 seed_hue
-
-The interger value of the first hue used when computing the tetrade color
-scheme. Setting this will affect the hue of the first color allocated.
-Subsequent colors will be allocated based on their distance from this color
-to maintain sifficient contrast between colors. If not specified the seed_hue
-will default to 270, blue.
-
 =head2 color_scheme
 
 A lazy-building L<Color::Scheme> object used to generate the color scheme of
@@ -180,6 +172,14 @@ the chart;
 An array reference of evenly spaced seed hues for color allocation. By default
 it will use the seed hue plus 0, 45, 75, 15, 60 and 30 which is enough to cover
 all web-safe colors when using a tetrade color scheme.
+
+=head2 seed_hue
+
+The interger value of the first hue used when computing the tetrade color
+scheme. Setting this will affect the hue of the first color allocated.
+Subsequent colors will be allocated based on their distance from this color
+to maintain sifficient contrast between colors. If not specified the seed_hue
+will default to 270, blue.
 
 =head2 shade_order
 
