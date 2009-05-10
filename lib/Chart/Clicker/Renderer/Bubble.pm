@@ -8,7 +8,7 @@ override('draw_point', sub {
 
     my $shape = $self->shape->clone;
     $shape->origin(Geometry::Primitive::Point->new(x => $x, y => $y));
-    $self->shape->grow($series->get_size($count));
+    $self->shape->scale($series->get_size($count));
     $self->path->add_primitive($shape);
 });
 
@@ -56,7 +56,7 @@ such as Bubble may override the drawing.
 
 =head1 AUTHOR
 
-Cory 'G' Watson <gphat@cpan.org>
+Cory G Watson <gphat@cpan.org>
 
 =head1 SEE ALSO
 

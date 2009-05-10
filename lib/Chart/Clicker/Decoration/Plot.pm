@@ -116,7 +116,7 @@ Prepare this Plot by determining how much space it needs.
 
 =head1 AUTHOR
 
-Cory 'G' Watson <gphat@cpan.org>
+Cory G Watson <gphat@cpan.org>
 
 =head1 SEE ALSO
 

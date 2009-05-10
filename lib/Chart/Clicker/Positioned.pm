@@ -80,7 +80,7 @@ The 'side' on which this component is positioned.
 
 =head1 AUTHOR
 
-Cory 'G' Watson <gphat@cpan.org>
+Cory G Watson <gphat@cpan.org>
 
 =head1 SEE ALSO
 

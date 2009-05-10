@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.28
+  - Fix problems in dist due to quoting
+
 2.27
   - Fix shape positions when line renderer is additive
   - Add pie example

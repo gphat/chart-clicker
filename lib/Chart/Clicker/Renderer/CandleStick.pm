@@ -145,7 +145,7 @@ Set/Get the Brush to use around each bar and on each line.
 
 =head1 AUTHOR
 
-Cory 'G' Watson <gphat@cpan.org>
+Cory G Watson <gphat@cpan.org>
 
 =head1 SEE ALSO
 

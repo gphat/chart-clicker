@@ -39,7 +39,7 @@ Set/Get this component's clicker object.
 
 =head1 AUTHOR
 
-Cory 'G' Watson <gphat@cpan.org>
+Cory G Watson <gphat@cpan.org>
 
 =head1 SEE ALSO
 

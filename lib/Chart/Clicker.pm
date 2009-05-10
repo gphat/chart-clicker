@@ -26,7 +26,7 @@ use Class::MOP;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.27';
+our $VERSION = '2.28';
 
 coerce 'Chart::Clicker::Renderer'
     => from 'Str'
@@ -499,7 +499,7 @@ format provided to the constructor (which defaults to Png).
 
 =head1 AUTHOR
 
-Cory 'G' Watson <gphat@cpan.org>
+Cory G Watson <gphat@cpan.org>
 
 =head1 CONTRIBUTORS
 
