@@ -518,9 +518,10 @@ Cory G Watson <gphat@cpan.org>
 
 Many thanks to the individuals who have contributed various bits:
 
+Ash Berlin
+Brian Cassidy
 Guillermo Roditi
 Torsten Schoenfeld
-Ash Berlin
 
 =head1 SEE ALSO
 
