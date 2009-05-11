@@ -122,6 +122,14 @@ has 'legend_position' => (
     isa => 'Str',
     default => sub { 's' }
 );
+has 'marker_overlay' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Decoration::MarkerOverlay',
+    lazy => 1,
+    default => sub {
+        Chart::Clicker::Decoration::MarkerOverlay->new
+    }
+);
 has 'over_decorations' => (
     metaclass => 'Collection::Array',
     is => 'rw',
@@ -215,7 +223,7 @@ override('prepare', sub {
 
     if($plot->markers) {
         $plot->render_area->add_component(
-            Chart::Clicker::Decoration::MarkerOverlay->new
+            $self->marker_overlay
         );
     }
 
@@ -489,6 +497,11 @@ Set/Get the legend that will be used with this chart.
 
 The position this legend will be added.  Should be one of north, south, east,
 west or center as required by L<Layout::Manager::Compass>.
+
+=head2 marker_overlay
+
+Set/Get the marker overlay object that will be used if this chart
+has markers.  This is lazily constructed to save time.
 
 =head2 write
 

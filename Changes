@@ -1,5 +1,12 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.30
+  - Fix misnamed class in POD for Marker (Thanks bricas!)
+  - Fix error in example/simple.pl
+  - Fix completely busted Marker implementation (fix colors & range positioning)
+  - Add lazily constructed marker_overlay attribute to Clicker
+  - Document Marker properly
+
 2.29
   - Fix broken bar_padding computation in Bar renderer
   - Skip some math when no ticks are visible in an Axis

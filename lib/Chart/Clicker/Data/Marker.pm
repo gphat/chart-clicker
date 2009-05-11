@@ -43,7 +43,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Decoration::Marker
+Chart::Clicker::Data::Marker
 
 =head1 DESCRIPTION
 
@@ -51,11 +51,13 @@ Used to highlight a particular key, value or range of either.
 
 =head1 SYNOPSIS
 
- use Chart::Clicker::Decoration::Marker;
+ use Chart::Clicker::Data::Marker;
  use Graphics::Color::RGB;
  use Graphics::Primitive::Brush;
 
- my $mark = Chart::Clicker::Decoration::Marker->new(
+ my $cc = Chart::Clicker->new(...);
+
+ my $mark = Chart::Clicker::Data::Marker->new(
     color   => Graphics::Color::RGB->new,
     brush  => Graphics::Primitive::Brush->new,
     key     => 12,
@@ -64,6 +66,11 @@ Used to highlight a particular key, value or range of either.
     key2    => 13,
     value   => 146
  );
+
+ my $ctx = $cc->get_context('default');
+ $ctx->add_marker($mark);
+ 
+ $cc->draw;
 
 =head1 METHODS
 

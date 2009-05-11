@@ -54,16 +54,17 @@ override('finalize', sub {
 
                 my $op = Graphics::Primitive::Operation::Stroke->new;
                 $op->brush($marker->brush);
+                $op->brush->color($marker->color);
 
                 $self->do($op);
             } elsif(defined($value)) {
                 my $range = $ctx->range_axis;
                 # 
-                my $y = $range->mark($height, $value);
+                my $y = $height - $range->mark($height, $value);
                 my $y2;
 
                 if($value2) {
-                    $y2 = $range->mark($self->height, $value2);
+                    $y2 = $height - $range->mark($self->height, $value2);
                     $self->move_to(0, $y);
                     $self->rectangle($width, ($y2 - $y));
                     my $fillop = Graphics::Primitive::Operation::Fill->new(
@@ -85,6 +86,7 @@ override('finalize', sub {
 
                 my $op = Graphics::Primitive::Operation::Stroke->new;
                 $op->brush($marker->brush);
+                $op->brush->color($marker->color);
 
                 $self->do($op);
             }
