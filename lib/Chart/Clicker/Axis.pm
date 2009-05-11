@@ -161,7 +161,7 @@ override('prepare', sub {
         $self->range->upper($upper + ($span * $self->fudge_amount));
     }
 
-    if(!scalar(@{ $self->tick_values })) {
+    if($self->show_ticks && !scalar(@{ $self->tick_values })) {
         $self->tick_values($self->range->divvy($self->ticks + 1));
     }
 

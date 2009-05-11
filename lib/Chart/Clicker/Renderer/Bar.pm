@@ -55,7 +55,7 @@ override('finalize', sub {
 
     my $padding = $self->bar_padding + $self->brush->width;
 
-    my $bwidth = int(($width / $self->{KEYCOUNT})) - $self->brush->width;
+    my $bwidth = int(($width / $self->{KEYCOUNT})) - $self->brush->width - $padding;
     my $hbwidth = int($bwidth / 2);
 
     my $offset = 1;

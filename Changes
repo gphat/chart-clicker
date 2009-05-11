@@ -1,5 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.29
+  - Fix broken bar_padding computation in Bar renderer
+  - Skip some math when no ticks are visible in an Axis
+
 2.28
   - Fix problems in dist due to quoting
 
