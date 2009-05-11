@@ -522,6 +522,7 @@ Ash Berlin
 Brian Cassidy
 Guillermo Roditi
 Torsten Schoenfeld
+Yuval Kogman
 
 =head1 SEE ALSO
 
