@@ -55,9 +55,6 @@ override('finalize', sub {
 
     my $padding = $self->bar_padding + $self->brush->width;
 
-    my $bwidth = int(($width / $self->{KEYCOUNT})) - $self->brush->width - $padding;
-    my $hbwidth = int($bwidth / 2);
-
     my $offset = 1;
     foreach my $ds (@{ $dses }) {
         foreach my $series (@{ $ds->series }) {
@@ -66,9 +63,13 @@ override('finalize', sub {
             my $domain = $ctx->domain_axis;
             my $range = $ctx->range_axis;
 
+            my $owidth = $width - ($width * $domain->fudge_amount);
+            my $bwidth = int(($owidth / $self->{KEYCOUNT})) - $self->brush->width - $padding;
+            my $hbwidth = int($bwidth / 2);
+
             # Fudge amounts change mess up the calculation of bar widths, so
             # we compensate for them here.
-            my $cbwidth = ($bwidth - ($bwidth * $domain->fudge_amount)) / $self->{SCOUNT};
+            my $cbwidth = $bwidth / $self->{SCOUNT};
             my $chbwidth = int($cbwidth / 2);
 
             my $color = $clicker->color_allocator->next;
@@ -94,7 +95,6 @@ override('finalize', sub {
                     if($self->{SCOUNT} == 1) {
                         $self->move_to($x + $chbwidth, $basey);
                         $self->rectangle(
-                        #     $x + $chbwidth , $basey,
                             -int($cbwidth), -int($y - ($height - $basey))
                         );
                     } else {

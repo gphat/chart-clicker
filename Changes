@@ -1,5 +1,10 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.31
+  - Fix slight miscalculation in X position of "negative" bar renderer
+    bars.
+  - Simplify bar width calculation when using fudged axis ranges.
+
 2.30
   - Fix misnamed class in POD for Marker (Thanks bricas!)
   - Fix error in example/simple.pl
