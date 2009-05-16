@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.32
+  - Dependency bumps
+
 2.31
   - Fix slight miscalculation in X position of "negative" bar renderer
     bars.

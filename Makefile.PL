@@ -14,8 +14,8 @@ requires    'Scalar::Util'      => 1.19;
 
 requires    'Geometry::Primitive' => 0.13;
 requires    'Graphics::Color' => 0.20;
-requires    'Graphics::Primitive' => 0.41;
-requires    'Graphics::Primitive::Driver::Cairo' => 0.37;
-requires    'Layout::Manager' => 0.20;
+requires    'Graphics::Primitive' => 0.42;
+requires    'Graphics::Primitive::Driver::Cairo' => 0.38;
+requires    'Layout::Manager' => 0.24;
 
 WriteAll;
