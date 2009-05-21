@@ -19,30 +19,14 @@ use Chart::Clicker::Context;
 use Chart::Clicker::Decoration::Legend;
 use Chart::Clicker::Decoration::MarkerOverlay;
 use Chart::Clicker::Decoration::Plot;
-use Chart::Clicker::Renderer;
 use Chart::Clicker::Drawing::ColorAllocator;
 
-use Class::MOP;
+use Color::Palette;
 
 use Scalar::Util qw(refaddr);
 
 our $VERSION = '2.32';
 
-coerce 'Chart::Clicker::Renderer'
-    => from 'Str'
-    => via {
-        my $class = 'Chart::Clicker::Renderer::'.$_;
-        Class::MOP::load_class($class);
-        return $class->new
-    };
-
-has '+background_color' => (
-    default => sub {
-        Graphics::Color::RGB->new(
-            { red => 1, green => 1, blue => 1, alpha => 1 }
-        )
-    }
-);
 has '+border' => (
     default => sub {
         my $b = Graphics::Primitive::Border->new;
@@ -148,6 +132,18 @@ has '+padding' => (
         )
     }
 );
+has 'palette' => (
+    is => 'rw',
+    isa => 'Color::Palette',
+    default => sub { Color::Palette->new(
+        colors => {
+            background => Graphics::Color::RGB->new({
+                red => 1, green => 1, blue => 1, alpha => 1
+            })
+        }
+    ) },
+    lazy => 1
+);
 has 'plot' => (
     is => 'rw',
     isa => 'Chart::Clicker::Decoration::Plot',
@@ -179,8 +175,18 @@ sub add_to_contexts {
     $self->set_context($ctx->name, $ctx);
 }
 
+sub apply_palette {
+    my ($self) = @_;
+
+    my $pal = $self->palette;
+
+    $self->background_color($pal->color('background'));
+}
+
 sub draw {
     my ($self) = @_;
+
+    $self->apply_palette;
 
     my $driver = $self->driver;
     $driver->prepare($self);
