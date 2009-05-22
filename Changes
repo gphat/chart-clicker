@@ -5,6 +5,7 @@ Revision history for Perl extension Chart::Clicker.
   - Trim out some unnecessary includes and code
   - Fix busted bubble renderer scaling
   - Allow multiple series with CandleStick
+  - Removed UPGRADING POD, it's long past time to have done that
 
 2.31
   - Fix slight miscalculation in X position of "negative" bar renderer

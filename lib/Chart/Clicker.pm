@@ -367,15 +367,6 @@ For examples, see: L<http://www.onemogin.com/clicker/examples>
 
 Check the cookbook at L<http://www.onemogin.com/clicker/cookbook>
 
-=head1 UPGRADING FROM 1.0
-
-The differences between 1.0 and 2.0 are long and onerous.  The way you create
-charts has changed (see the SYNOPSIS) but the way you provide data to them
-has not.
-
-I strongly recommend reading the following section if you used advanced
-features.
-
 =head1 CONTEXTS
 
 The normal use case for a chart is a couple of datasets on the same axes.
