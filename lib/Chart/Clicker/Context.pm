@@ -48,7 +48,6 @@ has 'renderer' => (
     is => 'rw',
     isa => 'Chart::Clicker::Renderer',
     default => sub { Chart::Clicker::Renderer::Line->new },
-    coerce => 1
 );
 
 sub share_axis_with {
