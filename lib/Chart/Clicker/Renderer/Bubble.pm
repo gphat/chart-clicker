@@ -6,9 +6,8 @@ extends 'Chart::Clicker::Renderer::Point';
 override('draw_point', sub {
     my ($self, $x, $y, $series, $count) = @_;
 
-    my $shape = $self->shape->clone;
+    my $shape = $self->shape->scale($series->get_size($count));
     $shape->origin(Geometry::Primitive::Point->new(x => $x, y => $y));
-    $self->shape->scale($series->get_size($count));
     $self->path->add_primitive($shape);
 });
 
