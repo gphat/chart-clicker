@@ -21,6 +21,25 @@ has 'brush' => (
     default => sub { Graphics::Primitive::Brush->new(width => 2) }
 );
 
+override('prepare', sub {
+    my $self = shift();
+
+    super;
+
+    my $datasets = $self->clicker->get_datasets_for_context($self->context);
+
+    $self->{SCOUNT} = 1;
+    $self->{KEYCOUNT} = 0;
+    foreach my $ds (@{ $datasets }) {
+        $self->{SCOUNT} += $ds->count;
+        if($ds->max_key_count > $self->{KEYCOUNT}) {
+            $self->{KEYCOUNT} = $ds->max_key_count;
+        }
+    }
+
+    return 1;
+});
+
 override('finalize', sub {
     my ($self) = @_;
 
@@ -33,9 +52,10 @@ override('finalize', sub {
 
     my $padding = $self->bar_padding + $self->brush->width;
 
-    my $bwidth = int(($width / $dses->[0]->max_key_count)) - $self->brush->width - $self->bar_padding;
+    my $bwidth = int(($width / $dses->[0]->max_key_count)) - $self->bar_padding;
     my $hbwidth = int($bwidth / 2);
 
+    my $scounter = $self->{SCOUNT};
     foreach my $ds (@{ $dses }) {
         foreach my $series (@{ $ds->series }) {
 
@@ -46,8 +66,10 @@ override('finalize', sub {
             my $domain = $ctx->domain_axis;
             my $range = $ctx->range_axis;
 
-            my $cbwidth = $bwidth - ($bwidth * $domain->fudge_amount);
+            my $ocbwidth = $bwidth - ($bwidth * $domain->fudge_amount);
+            my $cbwidth = $ocbwidth / $self->{SCOUNT};
             my $hcbwidth = $cbwidth / 2;
+            my $offset = $bwidth - ($bwidth / $self->{SCOUNT});
 
             my $min = $range->range->lower;
 
@@ -61,6 +83,9 @@ override('finalize', sub {
             my @keys = @{ $series->keys };
             for(0..($series->key_count - 1)) {
                 my $x = $domain->mark($width, $keys[$_]);
+
+                $x -= $cbwidth * $scounter;
+                $x += $offset;
 
                 my $openy = $height - $range->mark($height, $opens[$_]);
                 my $closey = $height - $range->mark($height, $vals[$_]);
@@ -83,9 +108,9 @@ override('finalize', sub {
                         )
                     );
                 } else {
-                    # We fill the bar if it closed lower
+                    # We stroke the bar if it closed lower
                     $op = Graphics::Primitive::Operation::Stroke->new(
-                        brush => $self->brush
+                        brush => $self->brush->clone
                     );
                     $op->brush->color($color);
                     $op->brush->width(2);
@@ -99,13 +124,15 @@ override('finalize', sub {
                 $self->line_to($x, $lowy);
 
                 my $lineop = Graphics::Primitive::Operation::Stroke->new(
-                    brush => $self->brush
+                    brush => $self->brush->clone
                 );
                 $lineop->brush->color($color);
 
                 $self->do($lineop);
 
             }
+
+            $scounter--;
         }
     }
 
