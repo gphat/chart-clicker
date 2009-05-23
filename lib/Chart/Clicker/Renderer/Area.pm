@@ -134,7 +134,8 @@ Chart::Clicker::Renderer::Area
 
 =head1 DESCRIPTION
 
-Chart::Clicker::Renderer::Area renders a dataset as lines.
+Chart::Clicker::Renderer::Area renders a dataset as line-like polygons with
+their interior areas filled.
 
 =head1 SYNOPSIS
 

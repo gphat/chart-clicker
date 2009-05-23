@@ -6,6 +6,9 @@ Revision history for Perl extension Chart::Clicker.
   - Fix busted bubble renderer scaling
   - Allow multiple series with CandleStick
   - Removed UPGRADING POD, it's long past time to have done that
+  - Fix Area & StackedArea's POD
+  - Make StackedArea a subclass of Area
+  - Fix contributor POD being all on one line
 
 2.31
   - Fix slight miscalculation in X position of "negative" bar renderer

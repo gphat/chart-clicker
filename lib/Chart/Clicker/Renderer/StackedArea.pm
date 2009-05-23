@@ -1,7 +1,7 @@
 package Chart::Clicker::Renderer::StackedArea;
 use Moose;
 
-extends 'Chart::Clicker::Renderer';
+extends 'Chart::Clicker::Renderer::Area';
 
 use Graphics::Primitive::Brush;
 use Graphics::Primitive::Path;
@@ -11,21 +11,6 @@ use Graphics::Primitive::Paint::Gradient::Linear;
 use Graphics::Primitive::Paint::Solid;
 
 has '+additive' => ( default => sub { 1 } );
-has 'brush' => (
-    is => 'rw',
-    isa => 'Graphics::Primitive::Brush',
-    default => sub { Graphics::Primitive::Brush->new }
-);
-has 'fade' => (
-    is => 'rw',
-    isa => 'Bool',
-    default => 0
-);
-has 'opacity' => (
-    is => 'rw',
-    isa => 'Num',
-    default => 0
-);
 
 override('finalize', sub {
     my ($self) = @_;
@@ -148,15 +133,16 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::Area
+Chart::Clicker::Renderer::StackedArea
 
 =head1 DESCRIPTION
 
-Chart::Clicker::Renderer::Area renders a dataset as lines.
+Chart::Clicker::Renderer::StackedArea renders a dataset as line-like
+polygons stacked atop one another.
 
 =head1 SYNOPSIS
 
-  my $ar = Chart::Clicker::Renderer::Area->new({
+  my $ar = Chart::Clicker::Renderer::StackedArea->new({
       fade => 1,
       brush => Graphics::Primitive::Brush->new({
           width => 2
