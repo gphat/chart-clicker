@@ -50,7 +50,7 @@ has 'renderer' => (
     default => sub { Chart::Clicker::Renderer::Line->new },
 );
 
-sub share_axis_with {
+sub share_axes_with {
     my ($self, $other_context) = @_;
 
     $self->range_axis($other_context->range_axis);
@@ -98,7 +98,7 @@ Set/get this context's range axis
 
 Set/get this context's renderer
 
-=head2 share_axis_with ($other_context)
+=head2 share_axes_with ($other_context)
 
 Sets this context's axes to those of the supplied context.  This is a
 convenience method for quickly sharing axes.  It's simple doing:
