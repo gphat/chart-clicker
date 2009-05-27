@@ -1,4 +1,4 @@
-use Test::More tests => 23;
+use Test::More tests => 24;
 
 BEGIN { use_ok('Chart::Clicker::Data::Series'); }
 
@@ -49,3 +49,11 @@ ok($fooseries->keys->[0] == 1, 'Verify first key');
 ok($fooseries->values->[0] == 5, 'Verify first value');
 ok($fooseries->key_count == 4, 'Verify key count');
 cmp_ok($fooseries->range->span, '==', 10, 'Range');
+
+
+my $broken_series = Chart::Clicker::Data::Series->new;
+$broken_series->prepare;
+eval {
+    my $range = $broken_series->range;
+};
+ok(defined($@), 'caught busted range calculation');

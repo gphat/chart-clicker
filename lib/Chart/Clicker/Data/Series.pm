@@ -38,8 +38,11 @@ sub find_range {
 
     my $values = $self->values;
 
+    confess('A series must have values before it can be charted')
+        unless scalar(@{ $values });
+
     return Chart::Clicker::Data::Range->new(
-        lower => min(@{ $self->values }), upper => max(@{ $self->values})
+        lower => min(@{ $values }), upper => max(@{ $values})
     );
 }
 

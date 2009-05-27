@@ -2,6 +2,7 @@ Revision history for Perl extension Chart::Clicker.
 
 2.33
   - Rename share_axis_width to share_axes_with
+  - Throw a useful error when there is no data, thanks Dave Hayes
 
 2.32
   - Dependency bumps
