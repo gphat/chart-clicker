@@ -17,6 +17,10 @@ has 'shape' => (
         });
     }
 );
+has 'shape_brush' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::Brush',
+);
 
 override('finalize', sub {
     my ($self) = @_;
@@ -53,7 +57,16 @@ override('finalize', sub {
                     color => $clicker->color_allocator->next
                 )
             );
+            if(defined($self->shape_brush)) {
+                $op->preserve(1);
+            }
             $self->do($op);
+
+            if(defined($self->shape_brush)) {
+                my $op3 = Graphics::Primitive::Operation::Stroke->new;
+                $op3->brush($self->shape_brush->clone);
+                $self->do($op3);
+            }
         }
     }
 
@@ -120,6 +133,10 @@ Render the series.
 
 Specify the shape to be used at each point.  Defaults to 360 degree arc with
 a radius of 3.
+
+=head2 shape_brush
+
+Optionally provide a brush with with to stroke each point.
 
 =head1 AUTHOR
 

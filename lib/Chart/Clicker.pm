@@ -22,7 +22,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.33';
+our $VERSION = '2.34';
 
 has '+background_color' => (
     default => sub {
@@ -340,12 +340,7 @@ Chart::Clicker - Powerful, extensible charting.
     values  => [ 42, 25, 86, 23, 2, 19, 103, 12, 54, 9 ],
   );
 
-  my $series2 = Chart::Clicker::Data::Series->new(
-    keys    => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
-    values  => [ 67, 15, 6, 90, 11, 45, 83, 11, 9, 101 ],
-  );
-
-  my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series, $series2 ]);
+  my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
  
   $cc->add_to_datasets($ds);
 
@@ -359,9 +354,12 @@ really pretty output.  Charts can be saved in png, svg, pdf and postscript
 format.
 
 Clicker leverages the power of Graphics::Primitive to create snazzy graphics
-without being tied to specific backend.
+without being tied to specific backend.  You may want to begin with
+L<Chart::Clicker::Tutorial>.
 
-For examples, see: L<http://www.onemogin.com/clicker/examples>
+For examples of output, see: L<http://www.onemogin.com/clicker/examples>
+
+For code examples see the examples directory of this distribution.
 
 =head1 COOKBOOK
 
@@ -505,9 +503,11 @@ Torsten Schoenfeld
 
 Yuval Kogman
 
-=head1 SEE ALSO
+=head1 SOURCE
 
-perl(1)
+Chart::Clicker is on github:
+
+  http://github.com/gphat/chart-clicker/tree/master
 
 =head1 LICENSE
 

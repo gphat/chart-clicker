@@ -1,5 +1,11 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.34
+  - Clean up some unnecessary POD
+  - Add shape_brush to Point renderer
+  - Add first cut of tutorial
+
+
 2.33
   - Rename share_axis_width to share_axes_with
   - Throw a useful error when there is no data, thanks Dave Hayes
