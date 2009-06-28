@@ -15,7 +15,11 @@ has 'keys' => (
         'count' => 'key_count'
     }
 );
-has 'name' => ( is => 'rw', isa => 'Str' );
+has 'name' => (
+    is => 'rw',
+    isa => 'Str',
+    predicate => 'has_name'
+);
 has 'range' => (
     is => 'rw',
     isa => 'Chart::Clicker::Data::Range',

@@ -1,10 +1,21 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.35
+  - Legend
+    - Depend on Layout::Manager 0.29 and adjust Legend to use 
+    - Remove lots of random crap from Legend that wasn't being used
+  - Ditch Clicker's BUILD method for prepare-time work wrt plot & legend
+    addition
+  - Add has_name predicate to Series and use it in Legend
+  - Bar
+    - Fix overlap in borders
+    - Fix stroking of translucent bars
+    - Only stroke bars if their opacity is < 1 and the brush width > 0
+
 2.34
   - Clean up some unnecessary POD
   - Add shape_brush to Point renderer
   - Add first cut of tutorial
-
 
 2.33
   - Rename share_axis_width to share_axes_with

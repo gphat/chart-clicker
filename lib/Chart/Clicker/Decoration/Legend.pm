@@ -12,6 +12,8 @@ use Graphics::Primitive::Font;
 use Graphics::Primitive::Insets;
 use Graphics::Primitive::TextBox;
 
+use Layout::Manager::Flow;
+
 has '+border' => (
     default => sub {
         my $b = Graphics::Primitive::Border->new;
@@ -37,10 +39,9 @@ has 'item_padding' => (
     }
 );
 has '+layout_manager' => (
-    default => sub { Layout::Manager::Compass->new }
+    default => sub { Layout::Manager::Flow->new(anchor => 'west', wrap => 1) },
+    lazy => 1
 );
-has 'tallest' => ( is => 'rw', isa => 'Num' );
-has 'widest' => ( is => 'rw', isa => 'Num' );
 
 override('prepare', sub {
     my ($self, $driver) = @_;
@@ -53,34 +54,27 @@ override('prepare', sub {
 
     my $ii = $self->item_padding;
 
+    if($self->is_vertical) {
+        # This assumes you aren't changing the layout manager...
+        $self->layout_manager->anchor('north');
+    }
+
     my $count = 0;
-    my $long = 0;
-    my $tall = 0;
-    my @items;
     foreach my $ds (@{ $self->clicker->datasets }) {
         foreach my $s (@{ $ds->series }) {
 
-            my $label = $s->name;
-            unless(defined($label)) {
+            unless($s->has_name) {
                 $s->name("Series $count");
-                $label = "Series $count";
             }
 
             my $tb = Graphics::Primitive::TextBox->new(
                 color => $ca->next,
-                font => $self->font,
-                padding => $self->item_padding,
-                text => $label
+                font => $font,
+                padding => $ii,
+                text => $s->name
             );
 
-            # Add this to the container in the right direction based on
-            # our orientation
-            my $dir = 'w';
-            if($self->is_vertical) {
-                $dir = 'n';
-            }
-
-            $self->add_component($tb, $dir);
+            $self->add_component($tb);
 
             $count++;
         }
@@ -134,22 +128,10 @@ Set/Get this Legend's insets.
 
 Set/Get the padding for this legend's items.
 
-=head2 legend_items
-
-Set/Get this legend's items.
-
 =head2 prepare
 
 Prepare this Legend by creating the LegendItems based on the datasets
 provided and testing the lengths of the series names.
-
-=head2 tallest
-
-Set/Get the height of the tallest label.
-
-=head2 widest
-
-Set/Get the width of the widest label.
 
 =head1 AUTHOR
 

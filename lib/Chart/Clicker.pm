@@ -22,7 +22,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.34';
+our $VERSION = '2.35';
 
 has '+background_color' => (
     default => sub {
@@ -146,16 +146,6 @@ has '+width' => (
     default => 500
 );
 
-sub BUILD {
-    my ($self) = @_;
-
-    $self->add_component($self->plot, 'c');
-
-    if($self->legend->visible) {
-        $self->add_component($self->legend, $self->legend_position);
-    }
-}
-
 sub add_to_contexts {
     my ($self, $ctx) = @_;
 
@@ -167,7 +157,6 @@ sub add_to_contexts {
 
 sub draw {
     my ($self) = @_;
-
     my $driver = $self->driver;
     $driver->prepare($self);
 
@@ -193,6 +182,18 @@ override('prepare', sub {
     my ($self, $driver) = @_;
 
     return if $self->prepared;
+
+    unless(scalar(@{ $self->components })) {
+        $self->add_component($self->plot, 'c');
+
+        my $lp = lc($self->legend_position);
+        if($self->legend->visible) {
+            if(($lp =~ /^e/) || ($lp =~ /^w/)) {
+                $self->legend->orientation('vertical');
+            }
+            $self->add_component($self->legend, $self->legend_position);
+        }
+    }
 
     my $plot = $self->plot;
 

@@ -17,6 +17,6 @@ requires    'Geometry::Primitive' => 0.13;
 requires    'Graphics::Color' => 0.20;
 requires    'Graphics::Primitive' => 0.42;
 requires    'Graphics::Primitive::Driver::Cairo' => 0.39;
-requires    'Layout::Manager' => 0.24;
+requires    'Layout::Manager' => 0.29;
 
 WriteAll;

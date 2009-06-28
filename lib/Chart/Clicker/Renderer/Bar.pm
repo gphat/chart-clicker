@@ -44,7 +44,7 @@ override('prepare', sub {
 });
 
 override('finalize', sub {
-    my $self = shift();
+    my ($self) = @_;
 
     my $clicker = $self->clicker;
 
@@ -53,7 +53,7 @@ override('finalize', sub {
 
     my $dses = $clicker->get_datasets_for_context($self->context);
 
-    my $padding = $self->bar_padding + $self->brush->width;
+    my $padding = $self->bar_padding + $self->brush->width * 2;
 
     my $offset = 1;
     foreach my $ds (@{ $dses }) {
@@ -64,7 +64,7 @@ override('finalize', sub {
             my $range = $ctx->range_axis;
 
             my $owidth = $width - ($width * $domain->fudge_amount);
-            my $bwidth = int(($owidth / $self->{KEYCOUNT})) - $self->brush->width - $padding;
+            my $bwidth = int(($owidth / $self->{KEYCOUNT})) - $padding;
             my $hbwidth = int($bwidth / 2);
 
             # Fudge amounts change mess up the calculation of bar widths, so
@@ -102,7 +102,7 @@ override('finalize', sub {
                             $x - $hbwidth + ($offset * $cbwidth), $basey
                         );
                         $self->rectangle(
-                            -int($cbwidth), -int($y - ($height - $basey))
+                            -int($cbwidth) + $self->brush->width, -int($y - ($height - $basey))
                         );
                     }
                 } else {
@@ -119,21 +119,26 @@ override('finalize', sub {
                 paint => Graphics::Primitive::Paint::Solid->new
             );
 
-            if($self->opacity) {
+            my $brwidth = $self->brush->width;
+
+            if($self->opacity < 1) {
                 my $fillcolor = $color->clone;
                 $fillcolor->alpha($self->opacity);
                 $fillop->paint->color($fillcolor);
                 # Since we're going to stroke this, we want to preserve it.
-                $fillop->preserve(1);
+                $fillop->preserve(1) if $brwidth;
             } else {
                 $fillop->paint->color($color);
             }
 
             $self->do($fillop);
 
-            if($self->opacity) {
+            if(($self->opacity < 1) && ($brwidth > 0)) {
                 my $strokeop = Graphics::Primitive::Operation::Stroke->new;
-                $strokeop->brush->color($color);
+                $strokeop->brush($self->brush->clone);
+                unless(defined($self->brush->color)) {
+                    $strokeop->brush->color($color);
+                }
                 $self->do($strokeop);
             }
 
