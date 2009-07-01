@@ -38,7 +38,7 @@ cmp_ok($series->key_count, '==', @keys, 'Key Count');
 cmp_ok($series->value_count, '==', @values, 'Value Count');
 cmp_ok($series->range->lower, '==', $values[0], 'Minimum Value');
 cmp_ok($series->range->upper, '==', $values[2], 'Maximum Value');
-cmp_ok($series->range->span, '==', 10, 'Span');
+cmp_ok($series->range->span, '==', 9, 'Span');
 
 my $fooseries = Chart::Clicker::Data::Series->new({
     keys => [ 1, 2, 3, 4 ],
@@ -48,7 +48,7 @@ $fooseries->prepare;
 ok($fooseries->keys->[0] == 1, 'Verify first key');
 ok($fooseries->values->[0] == 5, 'Verify first value');
 ok($fooseries->key_count == 4, 'Verify key count');
-cmp_ok($fooseries->range->span, '==', 10, 'Range');
+cmp_ok($fooseries->range->span, '==', 9, 'Range');
 
 
 my $broken_series = Chart::Clicker::Data::Series->new;
