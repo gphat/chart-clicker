@@ -22,7 +22,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.35';
+our $VERSION = '2.36';
 
 has '+background_color' => (
     default => sub {
