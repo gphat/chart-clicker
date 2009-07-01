@@ -269,10 +269,7 @@ sub mark {
     # range would result in a messed up chart anyway...
     if(!defined($self->{LOWER})) {
         $self->{LOWER} = $self->range->lower;
-        $self->{RSPAN} = $self->range->span - 1;
-        if($self->{RSPAN} < 1) {
-            $self->{RSPAN} = 1;
-        }
+        $self->{RSPAN} = $self->range->span;
     }
 
     return ($span / $self->{RSPAN}) * ($value - $self->{LOWER} || 0);
@@ -315,7 +312,7 @@ override('finalize', sub {
 
     if($self->is_vertical) {
 
-        for(0..scalar(@values) - 1) {
+        for(0..$#values) {
             my $val = $values[$_];
             my $iy = $height - $self->mark($height, $val);
             my $label = $self->get_component($_);
@@ -346,7 +343,7 @@ override('finalize', sub {
         }
     } else {
         # Draw a tick for each value.
-        for(0..scalar(@values) - 1) {
+        for(0..$#values) {
             my $val = $values[$_];
             my $ix = $self->mark($width, $val);
 

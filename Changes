@@ -1,5 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.36
+  - Fix some weird 'padding' in ranges and in Axis marking, fixes datasets
+    with ranges less than 1.
+
 2.35
   - Legend
     - Depend on Layout::Manager 0.29 and adjust Legend to use 

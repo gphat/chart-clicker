@@ -80,7 +80,7 @@ sub divvy {
         return [];
     }
 
-    my $per = ($self->span - 1) / $n;
+    my $per = $self->span / $n;
 
     my @vals;
     for(1..($n - 1)) {
@@ -93,7 +93,7 @@ sub divvy {
 sub span {
     my $self = shift;
 
-    return ($self->upper - $self->lower) + 1;
+    return $self->upper - $self->lower;
 }
 
 __PACKAGE__->meta->make_immutable;
