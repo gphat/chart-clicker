@@ -20,9 +20,10 @@ use Chart::Clicker::Decoration::MarkerOverlay;
 use Chart::Clicker::Decoration::Plot;
 use Chart::Clicker::Drawing::ColorAllocator;
 
+use Carp qw(croak);
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.36';
+our $VERSION = '2.37';
 
 has '+background_color' => (
     default => sub {

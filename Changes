@@ -1,5 +1,10 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.37
+  - Properly import croak so failures are reported without generating an
+    exception (thanks omega!)
+  - 
+
 2.36
   - Fix some weird 'padding' in ranges and in Axis marking, fixes datasets
     with ranges less than 1.
