@@ -75,5 +75,4 @@ $cc->add_to_over_decorations(
     )
 );
 
-$cc->draw;
-$cc->write('foo.png');
+$cc->write_output('foo.png');

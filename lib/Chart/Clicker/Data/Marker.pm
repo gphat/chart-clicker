@@ -70,7 +70,7 @@ Used to highlight a particular key, value or range of either.
  my $ctx = $cc->get_context('default');
  $ctx->add_marker($mark);
  
- $cc->draw;
+ $cc->write_output('foo.png');
 
 =head1 METHODS
 

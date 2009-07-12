@@ -2,12 +2,8 @@
 use strict;
 
 use Chart::Clicker;
-use Chart::Clicker::Context;
 use Chart::Clicker::Data::DataSet;
-use Chart::Clicker::Data::Marker;
 use Chart::Clicker::Data::Series;
-use Geometry::Primitive::Rectangle;
-use Graphics::Color::RGB;
 
 my $cc = Chart::Clicker->new(width => 500, height => 400);
 
@@ -20,5 +16,4 @@ my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series1 ]);
 
 $cc->add_to_datasets($ds);
 
-$cc->draw;
-$cc->write('foo.png');
+$cc->write_output('foo.png');

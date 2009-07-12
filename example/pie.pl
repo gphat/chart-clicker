@@ -31,5 +31,4 @@ $defctx->domain_axis->hidden(1);
 $defctx->range_axis->hidden(1);
 $cc->plot->grid->visible(0);
 
-$cc->draw;
-$cc->write('foo.png');
+$cc->write_output('foo.png');

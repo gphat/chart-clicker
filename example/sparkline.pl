@@ -98,5 +98,4 @@ $defctx->domain_axis->hidden(1);
 $defctx->domain_axis->fudge_amount(.1);
 $defctx->renderer->brush->width(1);
 
-$cc->draw;
-$cc->write('foo.png')
+$cc->write_output('foo.png')

@@ -53,5 +53,4 @@ $def->range_axis->format('%d');
 $def->domain_axis->tick_values([qw(2 4 6 8 10)]);
 $def->domain_axis->format('%d');
 
-$cc->draw;
-$cc->write('foo.png');
+$cc->write_output('foo.png');

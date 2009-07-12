@@ -74,5 +74,4 @@ $defctx->domain_axis->label('Ipsum');
 $defctx->domain_axis->tick_label_angle(0.785398163);
 $defctx->renderer->brush->width(1);
 
-$cc->draw;
-$cc->write('foo.png');
+$cc->write_output('foo.png');

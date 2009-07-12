@@ -39,9 +39,8 @@ contributions, drop me a line!
 	# add the dataset to the chart
 	$chart->add_to_datasets($dataset);
 
-	# draw and write the chart to a file
-	$chart->draw;
-	$chart->write('chart.png');
+	# write the chart to a file
+	$chart->write_output('chart.png');
 
 =head2 Simple chart from multiple data sources
 
@@ -68,8 +67,7 @@ contributions, drop me a line!
 
 	$chart->add_to_datasets($dataset);
 
-	$chart->draw;
-	$chart->write('chart.png');
+	$chart->write_output('chart.png');
 
 =head2 Simple chart with multiple data sources and custom colors
 
@@ -126,8 +124,7 @@ contributions, drop me a line!
 	# assign the color allocator to the chart
 	$chart->color_allocator($ca);
 
-	$chart->draw;
-	$chart->write('chart.png');
+	$chart->write_output('chart.png');
 
 =head2 Example 4 : Simple chart with a different render type
 
@@ -158,8 +155,7 @@ contributions, drop me a line!
 	# assign the renderer to the default context
 	$chart->get_context('default')->renderer($renderer);
 
-    $chart->draw;
-    $chart->write('chart.png');
+    $chart->write_output('chart.png');
 
 =head1 AUTHOR
 

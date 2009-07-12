@@ -47,5 +47,4 @@ $defctx->add_marker($range_range_marker);
 $defctx->add_marker($range_marker);
 $defctx->add_marker($domain_marker);
 
-$cc->draw;
-$cc->write('foo.png');
+$cc->write_output('foo.png');

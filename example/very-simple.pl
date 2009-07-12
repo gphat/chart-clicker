@@ -16,5 +16,4 @@ my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series1 ]);
 
 $cc->add_to_datasets($ds);
 
-$cc->draw;
-$cc->write('foo.png');
+$cc->write_output('foo.png');

@@ -81,5 +81,4 @@ $defctx->domain_axis->tick_label_angle(0.785398163);
 # we'll change the default to a Bar.  Voila!
 $defctx->renderer(Chart::Clicker::Renderer::Bar->new);
 
-$cc->draw;
-$cc->write('foo.png');
+$cc->write_output('foo.png');

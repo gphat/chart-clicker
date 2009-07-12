@@ -69,5 +69,4 @@ $defctx->range_axis->brush->width(0);
 # $defctx->domain_axis->tick_label_angle(0.785398163);
 $defctx->renderer->brush->width(3);
 
-$cc->draw;
-$cc->write('foo.png');
+$cc->write_output('foo.png');

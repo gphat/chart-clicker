@@ -62,5 +62,4 @@ $defctx->renderer->shape_brush(
 );
 $defctx->renderer->brush->width(2);
 
-$cc->draw;
-$cc->write('foo.png');
+$cc->write_output('foo.png');
