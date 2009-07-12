@@ -317,6 +317,19 @@ override('prepare', sub {
     super;
 });
 
+sub set_renderer {
+    my ($self, $renderer, $context) = @_;
+
+    unless(defined($context)) {
+        $context = 'default';
+    }
+
+    my $ctx = $self->get_context($context);
+    die("Unknown context: '$context'") unless defined($ctx);
+
+    $ctx->renderer($renderer);
+}
+
 __PACKAGE__->meta->make_immutable;
 
 no Moose;
@@ -479,6 +492,11 @@ west or center as required by L<Layout::Manager::Compass>.
 
 Set/Get the marker overlay object that will be used if this chart
 has markers.  This is lazily constructed to save time.
+
+=head2 set_renderer ($renderer_object, [ $context ]);
+
+Sets the renderer on the specified context.  If no context is provided then
+'default' is assumed.
 
 =head2 write
 
