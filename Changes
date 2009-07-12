@@ -2,6 +2,7 @@ Revision history for Perl extension Chart::Clicker.
 
 2.39
   - Adjust data range test
+  - Add Clicker->set_renderer (Thanks castaway!)
 
 2.38
   - Change the manner in which ticks are generated. Uses the lower and upper
