@@ -39,8 +39,7 @@ after 'max' => sub {
 };
 
 sub add {
-    my $self = shift;
-    my $range = shift;
+    my ($self, $range) = @_;
 
     if(defined($self->upper)) {
         $self->upper($self->upper + $range->upper);
@@ -54,8 +53,7 @@ sub add {
 }
 
 sub combine {
-    my $self = shift;
-    my $range = shift;
+    my ($self, $range) = @_;
 
     unless(defined($self->min)) {
         if(!defined($self->lower) || ($range->lower < $self->lower)) {
@@ -73,17 +71,16 @@ sub combine {
 }
 
 sub divvy {
-    my $self = shift;
-    my $n = shift;
+    my ($self, $n) = @_;
 
     if(!$n) {
         return [];
     }
 
-    my $per = $self->span / $n;
+    my $per = $self->span / ($n - 1);
 
     my @vals;
-    for(1..($n - 1)) {
+    for(0..($n - 1)) {
         push(@vals, $self->lower + ($_ * $per));
     }
 
@@ -91,7 +88,7 @@ sub divvy {
 }
 
 sub span {
-    my $self = shift;
+    my ($self) = @_;
 
     return $self->upper - $self->lower;
 }

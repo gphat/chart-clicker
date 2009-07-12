@@ -307,6 +307,7 @@ override('finalize', sub {
     my $tick_length = $self->tick_length;
 
     my $lower = $self->range->lower;
+    my $upper = $self->range->upper;
 
     my @values = @{ $self->tick_values };
 
@@ -319,10 +320,31 @@ override('finalize', sub {
 
             if($self->is_left) {
                 $label->origin->x($iox + $iwidth - $label->width);
-                $label->origin->y($iy - ($label->height / 2));
+                if($val == $lower) {
+                    # The first label (being at the bottom) needs to be
+                    # skooched up a bit to fit.
+                    $label->origin->y($iy - $label->height);
+                } elsif($val == $upper) {
+                    # The last label (being at the top) can be positioned
+                    # exactly at the mark.
+                    $label->origin->y($iy);
+                } else {
+                    $label->origin->y($iy - ($label->height / 2));
+                }
             } else {
+
                 $label->origin->x($iox);
-                $label->origin->y($iy - ($label->height / 2));
+                if($val == $lower) {
+                    # The first label (being at the bottom) needs to be
+                    # skooched up a bit to fit.
+                    $label->origin->y($iy - $label->height);
+                } elsif($val == $upper) {
+                    # The last label (being at the top) can be positioned
+                    # exactly at the mark.
+                    $label->origin->y($iy);
+                } else {
+                    $label->origin->y($iy - ($label->height / 2));
+                }
             }
         }
 
@@ -358,10 +380,22 @@ override('finalize', sub {
 
             if($self->is_top) {
 
-                $label->origin->x($ix - ($label->width / 1.8));
+                if($val == $lower) {
+                    $label->origin->x($ix);
+                } elsif($val == $upper) {
+                    $label->origin->x($ix - $label->width);
+                } else {
+                    $label->origin->x($ix - ($label->width / 1.8));
+                }
                 $label->origin->y($ioy + $iheight - $label->height - $bump);
             } else {
-                $label->origin->x($ix - ($label->width / 1.8));
+                if($val == $lower) {
+                    $label->origin->x($ix);
+                } elsif($val == $upper) {
+                    $label->origin->x($ix - $label->width);
+                } else {
+                    $label->origin->x($ix - ($label->width / 1.8));
+                }
                 $label->origin->y($ioy + $bump);
             }
         }
