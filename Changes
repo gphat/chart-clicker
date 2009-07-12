@@ -1,9 +1,15 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.38
+  - Change the manner in which ticks are generated. Uses the lower and upper
+    of the Axis' range then evenly divides the middle.
+  - Adjust the location of an Axis' tick if that tick is equal to the lower or
+    upper of the Axis' range.  Allows top and bottom ticks to be drawn without
+    overflowing the drawable area.
+
 2.37
   - Properly import croak so failures are reported without generating an
     exception (thanks omega!)
-  - 
 
 2.36
   - Fix some weird 'padding' in ranges and in Axis marking, fixes datasets
