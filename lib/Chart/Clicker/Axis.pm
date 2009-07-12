@@ -401,7 +401,6 @@ override('finalize', sub {
         }
 
         # Draw the label
-        # FIXME Not working, rotated text labels...
         if($self->label) {
             my $label = $self->get_component($self->find_component('label'));
 

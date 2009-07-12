@@ -2,19 +2,19 @@ use Test::More tests => 19;
 
 BEGIN { use_ok('Chart::Clicker::Data::Range'); }
 
-my $range = Chart::Clicker::Data::Range->new({ lower => 1, upper => 10 });
+my $range = Chart::Clicker::Data::Range->new({ lower => 0, upper => 10 });
 ok(defined($range), 'new Chart::Clicker::Data::Range');
 isa_ok($range, 'Chart::Clicker::Data::Range', 'isa Chart::Clicker::Data::Range');
-cmp_ok($range->lower, '==', 1, 'Lower');
+cmp_ok($range->lower, '==', 0, 'Lower');
 cmp_ok($range->upper, '==', 10, 'Upper');
 
 my $divvy = $range->divvy(5);
 cmp_ok(scalar(@{ $divvy }), '==', 5, 'divvy count');
-is_deeply($divvy, [ 1, 3.25, 5.5, 7.75, 10 ], 'divvy results');
-cmp_ok($range->span, '==', 9, 'span');
+is_deeply($divvy, [ 0, 2.5, 5, 7.5, 10 ], 'divvy results');
+cmp_ok($range->span, '==', 10, 'span');
 
 $range->combine(Chart::Clicker::Data::Range->new({ lower => 3, upper => 15 }));
-cmp_ok($range->lower, '==', 1, 'Combine 1: Lower stays');
+cmp_ok($range->lower, '==', 0, 'Combine 1: Lower stays');
 cmp_ok($range->upper, '==', 15, 'Combine 1: Upper moves');
 
 $range->combine(Chart::Clicker::Data::Range->new({ lower => -1, upper => 5 }));

@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.39
+  - Adjust data range test
+
 2.38
   - Change the manner in which ticks are generated. Uses the lower and upper
     of the Axis' range then evenly divides the middle.
