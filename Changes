@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.41
+  - Add title/title_position
+
 2.40
   - Tutorial update
 

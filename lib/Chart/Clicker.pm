@@ -23,7 +23,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 use Carp qw(croak);
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.40';
+our $VERSION = '2.41';
 
 has '+background_color' => (
     default => sub {
@@ -142,7 +142,21 @@ has 'plot' => (
         Chart::Clicker::Decoration::Plot->new
     }
 );
-
+has 'title' => (
+    is => 'rw',
+    isa => 'Graphics::Primitive::TextBox',
+    default => sub {
+        Graphics::Primitive::TextBox->new(
+            color => Graphics::Color::RGB->new( red => 0, green => 0, blue => 0),
+            horizontal_alignment => 'center'
+        )
+    }
+);
+has 'title_position' => (
+    is => 'rw',
+    isa => 'Str',
+    default => sub { 'n' }
+);
 has '+width' => (
     default => 500
 );
@@ -193,6 +207,16 @@ override('prepare', sub {
                 $self->legend->orientation('vertical');
             }
             $self->add_component($self->legend, $self->legend_position);
+        }
+
+        if(defined($self->title->text)) {
+            my $tp = $self->title_position;
+            if(($tp =~ /^e/) || ($tp =~ /^w/)) {
+                unless(defined($self->title->angle)) {
+                    $self->title->angle(-1.5707);
+                }
+            }
+            $self->add_component($self->title, $tp);
         }
     }
 
@@ -305,7 +329,7 @@ override('prepare', sub {
     }
 
     foreach my $c (@{ $self->components }) {
-        $c->clicker($self);
+        $c->clicker($self) if $c->can('clicker');
     }
 
     $plot->add_component($plot->render_area, 'c');
@@ -491,7 +515,7 @@ Set/Get the legend that will be used with this chart.
 
 =head2 legend_position
 
-The position this legend will be added.  Should be one of north, south, east,
+The position the legend will be added.  Should be one of north, south, east,
 west or center as required by L<Layout::Manager::Compass>.
 
 =head2 marker_overlay
@@ -504,9 +528,39 @@ has markers.  This is lazily constructed to save time.
 Sets the renderer on the specified context.  If no context is provided then
 'default' is assumed.
 
+=head2 title
+
+Set/Get the title component for this chart.  This is a
+L<Graphics::Primitive::TextBox>, not a string.  To set the title of a chart
+you should access the TextBox's C<text> method.
+
+  $cc->title->text('A Title!');
+  $cc->title->font->size(20);
+  # etc, etc
+
+If the title has text then it is added to the chart in the position specified
+by C<title_position>.
+
+You should consult the documentation for L<Graphics::Primitive::TextBox> for
+things like padding and text rotation.  If you are adding it to the top and
+want some padding between it and the plot, you can:
+
+  $cc->title->padding->bottom(5);
+
+=head2 title_position
+
+The position the title will be added.  Should be one of north, south, east,
+west or center as required by L<Layout::Manager::Compass>.
+
+Note that if no angle is set for the title then it will be changed to
+-1.5707 if the title position is east or west.
+
 =head2 write
 
-  
+This method is passed through to the underlying driver.  It is only necessary
+that you call this if you manually called C<draw> beforehand.  You likely
+want to use C<write_output>.
+
 =head2 write_output ($path)
 
 Write the chart output to the specified location. Output is written in the
