@@ -6,8 +6,6 @@ with 'Graphics::Primitive::Oriented';
 
 # TODO Move me out of decoration
 
-use Chart::Clicker::Decoration::LegendItem;
-
 use Graphics::Primitive::Font;
 use Graphics::Primitive::Insets;
 use Graphics::Primitive::TextBox;
@@ -130,7 +128,7 @@ Set/Get the padding for this legend's items.
 
 =head2 prepare
 
-Prepare this Legend by creating the LegendItems based on the datasets
+Prepare this Legend by creating the TextBoxes based on the datasets
 provided and testing the lengths of the series names.
 
 =head1 AUTHOR

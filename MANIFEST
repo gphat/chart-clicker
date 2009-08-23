@@ -17,6 +17,7 @@ example/simple.pl
 example/sparkline.pl
 example/stackedarea.pl
 example/stackedbar.pl
+example/tabularlegend.pl
 example/tufte-whitegrid.pl
 example/very-simple.pl
 inc/Module/Install.pm
@@ -43,7 +44,7 @@ lib/Chart/Clicker/Decoration.pm
 lib/Chart/Clicker/Decoration/Glass.pm
 lib/Chart/Clicker/Decoration/Grid.pm
 lib/Chart/Clicker/Decoration/Legend.pm
-lib/Chart/Clicker/Decoration/LegendItem.pm
+lib/Chart/Clicker/Decoration/Legend/Tabular.pm
 lib/Chart/Clicker/Decoration/MarkerOverlay.pm
 lib/Chart/Clicker/Decoration/OverAxis.pm
 lib/Chart/Clicker/Decoration/Plot.pm
@@ -86,7 +87,6 @@ t/05-decoration-color_allocator.t
 t/05-decoration-glass.t
 t/05-decoration-grid.t
 t/05-decoration-legend.t
-t/05-decoration-legenditem.t
 t/05-decoration-markeroverlay.t
 t/05-decoration-plot.t
 t/05-decoration.t
