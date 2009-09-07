@@ -459,7 +459,7 @@ Chart::Clicker::Axis represents the plot of the chart.
     font  => Graphics::Primitive::Font->new,
     orientation => 'vertical',
     position => 'left',
-    brush = Graphics::Primitive::Brush->new,
+    brush => Graphics::Primitive::Brush->new,
     tick_length => 2,
     tick_brush => Graphics::Primitive::Brush->new,
     visible => 1,

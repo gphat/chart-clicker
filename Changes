@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.43
+  - Fix typo in Axis Synopsis (thanks Michael Stapelberg)
+
 2.42
   - Document the ->draw,->data method for getting back a scalar
   - Add date-axis.pl example
