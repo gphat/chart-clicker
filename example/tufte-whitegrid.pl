@@ -10,7 +10,7 @@ use Chart::Clicker::Renderer::Point;
 use Geometry::Primitive::Rectangle;
 use Graphics::Color::RGB;
 
-my $cc = Chart::Clicker->new(width => 500, height => 200, format => 'pnngdf');
+my $cc = Chart::Clicker->new(width => 500, height => 200, format => 'png');
 
 my @hours = qw(
     1 2 3 4 5 6 7 8 9 10 11 12
