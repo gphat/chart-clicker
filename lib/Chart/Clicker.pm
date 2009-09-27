@@ -246,6 +246,9 @@ override('prepare', sub {
     # them again...
     my %xaxes;
     my %yaxes;
+
+    # A "seen" hash to prevent us from adding multiple renderers for the same
+    # context.
     my %rends;
 
     my $dflt_ctx = $self->get_context('default');
@@ -314,10 +317,13 @@ override('prepare', sub {
         } else {
             $yaxis->range->combine($ds->range);
         }
+
+        # Only add this renderer to the chart if we haven't seen it already.
         unless(exists($rends{$ctx->name})) {
             $rend->context($ctx->name);
             $rend->clicker($self);
             $plot->render_area->add_component($rend, 'c');
+            $rends{$ctx->name} = $rend;
         }
 
         $count++;
