@@ -15,6 +15,8 @@ use Graphics::Primitive::Driver::Cairo;
 
 use Chart::Clicker::Context;
 
+use Chart::Clicker::Data::DataSet;
+use Chart::Clicker::Data::Series;
 use Chart::Clicker::Decoration::Legend;
 use Chart::Clicker::Decoration::MarkerOverlay;
 use Chart::Clicker::Decoration::Plot;
@@ -23,7 +25,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 use Carp qw(croak);
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.43';
+our $VERSION = '2.44';
 
 has '+background_color' => (
     default => sub {
@@ -55,6 +57,12 @@ has 'contexts' => (
         count   => 'context_count',
         delete  => 'delete_context'
     }
+);
+has '_data' => (
+    traits => [ 'Hash' ],
+    is => 'rw',
+    isa => 'HashRef[Str]',
+    default => sub { {} }
 );
 has 'datasets' => (
     metaclass => 'Collection::Array',
@@ -193,10 +201,36 @@ sub get_datasets_for_context {
     return \@dses;
 }
 
+sub add_data {
+    my ($self, $name, $data) = @_;
+
+    unless(exists($self->_data->{$name})) {
+        $self->_data->{$name} = [];
+    }
+    push(@{ $self->_data->{$name}}, $data);
+}
+
 override('prepare', sub {
     my ($self, $driver) = @_;
 
     return if $self->prepared;
+
+    if(scalar(keys(%{ $self->_data }))) {
+
+        foreach my $name (keys(%{ $self->_data })) {
+
+            my $ds = Chart::Clicker::Data::DataSet->new;
+            my $vals = $self->_data->{$name};
+            $ds->add_to_series(
+                Chart::Clicker::Data::Series->new(
+                    name    => $name,
+                    keys    => [ 0..scalar(@{ $vals })-1 ],
+                    values  => $vals
+                )
+            );
+            $self->add_to_datasets($ds);
+        }
+    }
 
     unless(scalar(@{ $self->components })) {
         $self->add_component($self->plot, 'c');
@@ -382,21 +416,15 @@ Chart::Clicker - Powerful, extensible charting.
 =head1 SYNOPSIS
 
   use Chart::Clicker;
-  use Chart::Clicker::Data::Series;
-  use Chart::Clicker::Data::DataSet;
 
   my $cc = Chart::Clicker->new;
 
-  my $series = Chart::Clicker::Data::Series->new(
-    keys    => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
-    values  => [ 42, 25, 86, 23, 2, 19, 103, 12, 54, 9 ],
-  );
+  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+  foreach my $v (@values) {
+    $cc->add_data('Sales', $v);
+  }
 
-  my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
- 
-  $cc->add_to_datasets($ds);
-
-  $cc->write_output('foo.png')
+  $cc->write_output('foo.png');
 
 =head1 DESCRIPTION
 
@@ -411,6 +439,39 @@ L<Chart::Clicker::Tutorial>.
 For examples of output, see: L<http://www.onemogin.com/clicker/examples>
 
 For code examples see the examples directory of this distribution.
+
+=head1 ADDING DATA
+
+The synopsis shows the simple way to add data.
+
+  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+  foreach my $v (@values) {
+    $cc->add_data('Sales', $v);
+  }
+
+This is a convenience method provided to make simple cases much simpler. Adding
+multiple Series to a chart is as easy as changing the name argument of
+C<add_data>.  Each unique first argument will result in a separate series.
+
+If you'd like to use the more advanced features of Clicker you'll need to
+shake off this simple method and build Series & DataSets explicitly.
+
+  use Chart::Clicker::Data::Series;
+  use Chart::Clicker::Data::DataSet;
+
+  ...
+
+  my $series = Chart::Clicker::Data::Series->new(
+    keys    => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+    values  => [ 42, 25, 86, 23, 2, 19, 103, 12, 54, 9 ],
+  );
+
+  my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
+ 
+  $cc->add_to_datasets($ds);
+
+This used to be the only way to add data, but repeated requests to make the
+common case easier resulted in the inclusion of C<add_data>.
 
 =head1 COOKBOOK
 
