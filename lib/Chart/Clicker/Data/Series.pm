@@ -54,7 +54,7 @@ sub prepare {
     my ($self) = @_;
 
     if($self->key_count != $self->value_count) {
-        die('Series key/value counts dont match.');
+        die('Series key/value counts dont match: '.$self->key_count.' != '.$self->value_count.'.');
     }
 
     return 1;
