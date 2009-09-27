@@ -1,5 +1,10 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.44
+  - Add add_data method
+  - Fix long-standing bug tripped when adding multiple datasets that use the
+    same renderer.
+
 2.43
   - Fix typo in Axis Synopsis (thanks Michael Stapelberg)
 

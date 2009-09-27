@@ -19,4 +19,7 @@ requires    'Graphics::Primitive' => 0.42;
 requires    'Graphics::Primitive::Driver::Cairo' => 0.39;
 requires    'Layout::Manager' => 0.29;
 
+recommends 'List::Util'         => 0;
+recommends 'Statistics::Basic'  => 0;
+
 WriteAll;
