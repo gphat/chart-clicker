@@ -2,6 +2,7 @@ Revision history for Perl extension Chart::Clicker.
 
 2.42
   - Document the ->draw,->data method for getting back a scalar
+  - Add date-axis.pl example
 
 2.41
   - Add title/title_position
