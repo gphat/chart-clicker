@@ -23,7 +23,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 use Carp qw(croak);
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.41';
+our $VERSION = '2.42';
 
 has '+background_color' => (
     default => sub {
@@ -439,9 +439,19 @@ Clicker's internals draw their values.  You should use the default context
 unless you need more than one, in which case you should use "default" as the
 base context.
 
-=head1 FORMATS
+=head1 FORMATS & OUTPUT
 
 Clicker supports PNG, SVG, PDF and PostScript output.
+
+If you are looking to get a scalar of the output for use with HTTP or
+similar things, you can use:
+
+  # ... make your chart
+  $cc->draw;
+  my $image_data = $cc->data;
+
+If you happen to be using Catalyst then take a look at
+L<Catalyst::View::Graphics::Primitive>.
 
 =head1 METHODS
 
