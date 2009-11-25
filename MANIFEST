@@ -3,6 +3,7 @@ example/area.pl
 example/bar.pl
 example/bubble.pl
 example/candlestick.pl
+example/date-axis.pl
 example/line-and-shape.pl
 example/line.pl
 example/markers.pl
