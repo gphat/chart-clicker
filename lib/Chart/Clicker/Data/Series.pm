@@ -118,6 +118,24 @@ Chart::Clicker::Data::Series represents a series of values to be charted.
     10 => 9
   });
 
+=head1 ATTRIBUTES
+
+=head2 keys
+
+Set/Get the keys for this series.
+
+=head2 name
+
+Set/Get the name for this Series
+
+=head2 range
+
+Returns the range for this series.
+
+=head2 values
+
+Set/Get the values for this series.
+
 =head1 METHODS
 
 =head2 new
@@ -137,34 +155,18 @@ Add a value to this series.
 Used internally to determine the range for this series.  Exposed so that
 subclasses can implement their own method.
 
-=head2 keys
-
-Set/Get the keys for this series.
-
 =head2 key_count
 
 Get the count of keys in this series.
-
-=head2 name
-
-Set/Get the name for this Series
 
 =head2 prepare
 
 Prepare this series.  Performs various checks and calculates
 various things.
 
-=head2 range
-
-Returns the range for this series.
-
 =head2 value_count
 
 Get the count of values in this series.
-
-=head2 values
-
-Set/Get the values for this series.
 
 =head1 AUTHOR
 
