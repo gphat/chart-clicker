@@ -83,7 +83,10 @@ has 'driver' => (
             format => $self->format,
         )
     },
-    handles => [ qw(data write) ],
+    handles => {
+        data => 'data',
+        write => 'write'
+    },
     lazy => 1
 );
 has 'format' => (
