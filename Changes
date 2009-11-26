@@ -5,6 +5,7 @@ Revision history for Perl extension Chart::Clicker.
   - Add date-axis.pl example
   - Improve error message when keys != values
   - Add POD images (Thanks to Gagor Szabo and Bruno Vecchi)
+  - Bump Cairo driver version
 
 2.44
   - Add add_data method
