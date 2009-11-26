@@ -140,6 +140,12 @@ Chart::Clicker::Renderer::StackedBar
 
 Chart::Clicker::Renderer::StackedBar renders a dataset as stacked bars.
 
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/stackedbar/stackedbar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
+
+=end HTML
+
 =head1 SYNOPSIS
 
   my $br = Chart::Clicker::Renderer::Bar->new({});

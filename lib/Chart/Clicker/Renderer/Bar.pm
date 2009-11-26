@@ -171,6 +171,12 @@ Chart::Clicker::Renderer::Bar
 
 Chart::Clicker::Renderer::Bar renders a dataset as bars.
 
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/bar/bar.png" width="500" height="250" alt="Bar Chart" /></p>
+
+=end HTML
+
 =head1 SYNOPSIS
 
   my $br = Chart::Clicker::Renderer::Bar->new();

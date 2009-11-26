@@ -140,6 +140,12 @@ Chart::Clicker::Renderer::StackedArea
 Chart::Clicker::Renderer::StackedArea renders a dataset as line-like
 polygons stacked atop one another.
 
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/stackedarea/stacked-area.png" width="500" height="250" alt="Stacked Area Chart" /></p>
+
+=end HTML
+
 =head1 SYNOPSIS
 
   my $ar = Chart::Clicker::Renderer::StackedArea->new({

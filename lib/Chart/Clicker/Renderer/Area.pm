@@ -137,6 +137,12 @@ Chart::Clicker::Renderer::Area
 Chart::Clicker::Renderer::Area renders a dataset as line-like polygons with
 their interior areas filled.
 
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/area/area.png" width="500" height="250" alt="Area Chart" /></p>
+
+=end HTML
+
 =head1 SYNOPSIS
 
   my $ar = Chart::Clicker::Renderer::Area->new({

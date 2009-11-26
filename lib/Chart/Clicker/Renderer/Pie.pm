@@ -130,6 +130,12 @@ of like-named Series are totaled and keys are ignored.  So for a dataset like:
 The keys are discarded and a pie chart will be drawn with $series' slice at
 66% (1 + 2 + 3 = 6) and $series2's at 33% (1 + 1 + 1 = 3).
 
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/pie/pie.png" width="500" height="250" alt="Pie Chart" /></p>
+
+=end HTML
+
 =head1 SYNOPSIS
 
   my $lr = Chart::Clicker::Renderer::Pie->new;

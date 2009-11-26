@@ -31,6 +31,12 @@ the points' radiuses are determined by the size value of a Series::Size.
 Note: B<This renderer requires you to use a
 Chart::Clicker::Data::Series::Size>.
 
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/bubble/bubble.png" width="500" height="250" alt="Bubble Chart" /></p>
+
+=end HTML
+
 =head1 SYNOPSIS
 
   my $pr = Chart::Clicker::Renderer::Bubble->new({

@@ -155,6 +155,12 @@ Chart::Clicker::Renderer::CandleStick
 Chart::Clicker::Renderer::CandleStick renders a dataset as a candlestick style
 bar chart.
 
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/candlestick/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
+
+=end HTML
+
 =head1 SYNOPSIS
 
   my $br = Chart::Clicker::Renderer::CandleStick->new();

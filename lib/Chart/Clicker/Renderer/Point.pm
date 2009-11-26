@@ -96,6 +96,12 @@ Chart::Clicker::Renderer::Point
 
 Chart::Clicker::Renderer::Point renders a dataset as points.
 
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/point/point.png" width="500" height="250" alt="Point Chart" /></p>
+
+=end HTML
+
 =head1 SYNOPSIS
 
   my $pr = Chart::Clicker::Renderer::Point->new({
@@ -108,11 +114,14 @@ Chart::Clicker::Renderer::Point renders a dataset as points.
 
 =head1 ATTRIBUTES
 
-=over 4
+=head2 shape
 
+Specify the shape to be used at each point.  Defaults to 360 degree arc with
+a radius of 3.
 
+=head2 shape_brush
 
-=back
+Optionally provide a brush with with to stroke each point.
 
 =head1 METHODS
 
@@ -128,15 +137,6 @@ such as Bubble may override the drawing.
 =head2 render
 
 Render the series.
-
-=head2 shape
-
-Specify the shape to be used at each point.  Defaults to 360 degree arc with
-a radius of 3.
-
-=head2 shape_brush
-
-Optionally provide a brush with with to stroke each point.
 
 =head1 AUTHOR
 
