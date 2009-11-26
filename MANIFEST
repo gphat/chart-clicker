@@ -98,5 +98,6 @@ t/76-simple-ctx.t
 t/77-same-axes-ctx.t
 t/78-invisible.t
 t/79-datetime.t
+t/99-add-data.t
 t/xt/pod-coverage.t
 t/xt/pod.t
