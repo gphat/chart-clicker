@@ -454,9 +454,16 @@ Chart::Clicker - Powerful, extensible charting.
   my $cc = Chart::Clicker->new;
 
   my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+  $cc->add_data('Sales', \@values);
+
+  # alternately, you can add data one bit at a time...
   foreach my $v (@values) {
     $cc->add_data('Sales', $v);
   }
+
+  # Or, if you want to specify the keys you can use a hashref
+  my $data = { 12 => 123, 13 => 341, 14 => 1241 };
+  $cc->add_data('Sales', $data);
 
   $cc->write_output('foo.png');
 
@@ -574,7 +581,8 @@ The synopsis shows the simple way to add data.
 
 This is a convenience method provided to make simple cases much simpler. Adding
 multiple Series to a chart is as easy as changing the name argument of
-C<add_data>.  Each unique first argument will result in a separate series.
+C<add_data>.  Each unique first argument will result in a separate series. See
+the docs for C<add_data> to learn more.
 
 If you'd like to use the more advanced features of Clicker you'll need to
 shake off this simple method and build Series & DataSets explicitly.
@@ -706,6 +714,44 @@ Note that if no angle is set for the title then it will be changed to
 
 Creates a new Chart::Clicker object. If no format, width and height are
 specified then defaults of Png, 500 and 300 are chosen, respectively.
+
+=head2 add_data ($name, $data)
+
+Convenience method for adding data to the chart.  Can be called one of three
+ways.
+
+=over 4
+
+=item B<scalar>
+
+Passing a name and a scalar will "add" the scalar data to that series' data.
+
+  $cc->add_data('Sales', 1234);
+  $cc->add_data('Sales', 1235);
+
+This will result in a Series names 'Sales' with two values.
+
+=item B<arrayref>
+
+Passing a name and an arrayref works much the same as the scalar method
+discussed above, but appends the supplied arrayref to the existing one.  It
+may be mixed with the scalar method.
+
+  $cc->add_data('Sales', \@some_sales);
+  $cc->add_data('Sales', \@some_more_sales);
+  # This works still!
+  $cc->add_data('Sales', 1234);
+
+=item B<hashref>
+
+This allows you to pass both keys and add in all at once, but it's an all-or-nothing
+thing.  Subsequent calls with the same name will overwrite previous calls.
+
+  $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
+  # Overwrites last call!
+  $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
+
+=back
 
 =head2 add_to_contexts
 
