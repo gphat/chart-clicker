@@ -143,6 +143,12 @@ Chart::Clicker::Renderer::Line
 
 Chart::Clicker::Renderer::Line renders a dataset as lines.
 
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/line/line.png" width="500" height="250" alt="Line Chart" /></p>
+
+=end HTML
+
 =head1 SYNOPSIS
 
   my $lr = Chart::Clicker::Renderer::Line->new(
@@ -172,12 +178,27 @@ Draw the actual line chart
 
 =head2 shape
 
-Set a shape object to draw at each of the data points.
+Set a shape object to draw at each of the data points.  Adding a shape results
+in:
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/line/line-shapes.png" width="500" height="250" alt="Line + Shape Chart" /></p>
+
+=end HTML
 
 =head2 shape_brush
 
 Set/Get the Brush to be used on the shapes at each point.  If no shape_brush
-is provided, then the shapes will be filled.  
+is provided, then the shapes will be filled.  The brush allows you to draw a
+"halo" around each shape.  This sometimes help to separate the points from the
+lines and make them more distinct.
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/line/line-shapes-brushed.png" width="500" height="250" alt="Line + Shape (Brushed) Chart" /></p>
+
+=end HTML
 
 =head1 AUTHOR
 

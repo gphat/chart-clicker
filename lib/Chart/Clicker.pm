@@ -436,9 +436,26 @@ Clicker leverages the power of Graphics::Primitive to create snazzy graphics
 without being tied to specific backend.  You may want to begin with
 L<Chart::Clicker::Tutorial>.
 
-For examples of output, see: L<http://www.onemogin.com/clicker/examples>
+For code examples see the examples repository on GitHub:
+L<http://github.com/gphat/chart-clicker-examples/>
 
-For code examples see the examples directory of this distribution.
+=head1 FEATURES
+
+=head2 Renderers
+
+Clicker supports the following renderers:
+
+=over 4
+
+=item Line
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/line/line.png" width="500" height="250" alt="Line Chart" /></p>
+
+=end HTML
+
+=item Bar
 
 =head1 ADDING DATA
 

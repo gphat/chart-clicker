@@ -1,5 +1,11 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.45
+  - Document the ->draw,->data method for getting back a scalar
+  - Add date-axis.pl example
+  - Improve error message when keys != values
+  - Add POD images (Thanks to Gagor Szabo and Bruno Vecchi)
+
 2.44
   - Add add_data method
   - Fix long-standing bug tripped when adding multiple datasets that use the
@@ -9,8 +15,6 @@ Revision history for Perl extension Chart::Clicker.
   - Fix typo in Axis Synopsis (thanks Michael Stapelberg)
 
 2.42
-  - Document the ->draw,->data method for getting back a scalar
-  - Add date-axis.pl example
   - Add Legend::Tabular
   - Remove unused LegendItem
 
