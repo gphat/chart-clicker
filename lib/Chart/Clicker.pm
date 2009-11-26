@@ -631,71 +631,20 @@ similar things, you can use:
 If you happen to be using Catalyst then take a look at
 L<Catalyst::View::Graphics::Primitive>.
 
-=head1 METHODS
+=head1 ATTRIBUTES
 
-=head2 new
+=head2 contexts
 
-Creates a new Chart::Clicker object. If no format, width and height are
-specified then defaults of Png, 500 and 300 are chosen, respectively.
-
-=head2 add_to_contexts
-
-Add the specified context to the chart.
-
-=head2 add_to_datasets
-
-Add the specified dataset (or arrayref of datasets) to the chart.
-
-=head2 add_to_markers
-
-Add the specified marker to the chart.
-
-=head2 color_allocator
-
-Set/Get the color_allocator for this chart.
-
-=head2 context
-
-Set/Get the context for this chart.
-
-=head2 data
-
-Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
-client.
+Set/Get the contexts for this chart.
 
 =head2 datasets
 
 Get/Set the datasets for this chart.
 
-=head2 draw
-
-Draw this chart.
-
 =head2 format
 
 Get the format for this Chart.  Required in the constructor.  Must be on of
 Png, Pdf, Ps or Svg.
-
-=head2 get_datasets_for_context
-
-Returns an arrayref containing all datasets for the given context.  Used by
-renderers to get a list of datasets to chart.
-
-=head2 grid_over
-
-Flag controlling if the grid is rendered B<over> the data.  Defaults to 0.
-You probably want to set the grid's background color to an alpha of 0 if you
-enable this flag.
-
-=head2 inside_width
-
-Get the width available in this container after taking away space for
-insets and borders.
-
-=head2 inside_height
-
-Get the height available in this container after taking away space for
-insets and borders.
 
 =head2 legend
 
@@ -706,15 +655,11 @@ Set/Get the legend that will be used with this chart.
 The position the legend will be added.  Should be one of north, south, east,
 west or center as required by L<Layout::Manager::Compass>.
 
-=head2 marker_overlay
+=head2 grid_over
 
-Set/Get the marker overlay object that will be used if this chart
-has markers.  This is lazily constructed to save time.
-
-=head2 set_renderer ($renderer_object, [ $context ]);
-
-Sets the renderer on the specified context.  If no context is provided then
-'default' is assumed.
+Flag controlling if the grid is rendered B<over> the data.  Defaults to 0.
+You probably want to set the grid's background color to an alpha of 0 if you
+enable this flag.
 
 =head2 title
 
@@ -742,6 +687,63 @@ west or center as required by L<Layout::Manager::Compass>.
 
 Note that if no angle is set for the title then it will be changed to
 -1.5707 if the title position is east or west.
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new Chart::Clicker object. If no format, width and height are
+specified then defaults of Png, 500 and 300 are chosen, respectively.
+
+=head2 add_to_contexts
+
+Add the specified context to the chart.
+
+=head2 add_to_datasets
+
+Add the specified dataset (or arrayref of datasets) to the chart.
+
+=head2 add_to_markers
+
+Add the specified marker to the chart.
+
+=head2 color_allocator
+
+Set/Get the color_allocator for this chart.
+
+=head2 data
+
+Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
+client.
+
+=head2 draw
+
+Draw this chart.
+
+=head2 get_datasets_for_context
+
+Returns an arrayref containing all datasets for the given context.  Used by
+renderers to get a list of datasets to chart.
+
+=head2 inside_width
+
+Get the width available in this container after taking away space for
+insets and borders.
+
+=head2 inside_height
+
+Get the height available in this container after taking away space for
+insets and borders.
+
+=head2 marker_overlay
+
+Set/Get the marker overlay object that will be used if this chart
+has markers.  This is lazily constructed to save time.
+
+=head2 set_renderer ($renderer_object, [ $context ]);
+
+Sets the renderer on the specified context.  If no context is provided then
+'default' is assumed.
 
 =head2 write
 
