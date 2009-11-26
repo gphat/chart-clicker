@@ -447,7 +447,7 @@ Clicker supports the following renderers:
 
 =over 4
 
-=item Line
+=item B<Line>
 
 =begin HTML
 
@@ -455,7 +455,79 @@ Clicker supports the following renderers:
 
 =end HTML
 
-=item Bar
+=item B<StackedLine>
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/line/stacked-line.png" width="500" height="250" alt="Stacked Line Chart" /></p>
+
+=end HTML
+
+=item B<Bar>
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/bar/bar.png width="500" height="250" alt="Bar Chart" /></p>
+
+=item B<StackedBar>
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/bar/stacked-bar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
+
+=end HTML
+
+=item B<Area>
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/area/area.png" width="500" height="250" alt="Area Chart" /></p>
+
+=end HTML
+
+=item B<StackedArea>
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/area/stacked-area.png" width="500" height="250" alt="Stacked Area Chart" /></p>
+
+=end HTML
+
+=item B<Bubble>
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/bubble/bubble.png" width="500" height="250" alt="Bubble Chart" /></p>
+
+=end HTML
+
+=item B<CandleStick>
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/candlestick/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
+
+=end HTML
+
+=item B<Point>
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/point/point.png" width="500" height="250" alt="Point Chart" /></p>
+
+=end HTML
+
+=item B<Pie>
+
+=begin HTML
+
+<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/pie/pie.png" width="500" height="250" alt="Pie Chart" /></p>
+
+=end HTML
+
+=back
+
+=end HTML
 
 =head1 ADDING DATA
 
