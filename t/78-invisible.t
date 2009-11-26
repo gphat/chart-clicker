@@ -34,6 +34,6 @@ $cc->draw;
 cmp_ok($cc->plot->origin->x, '==', 4, 'plot origin x');
 cmp_ok($cc->plot->origin->y, '==', 4, 'plot origin y');
 
-my $data = $cc->data();
+my $data = $cc->rendered_data();
 ok(defined($data), 'data');
 

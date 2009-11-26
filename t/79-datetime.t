@@ -45,5 +45,5 @@ $mark2->inside_color(Graphics::Color::RGB->new(red => .5, green => .5, blue => .
 $ctx->add_marker($mark2);
 
 $cc->draw;
-my $data = $cc->data;
+my $data = $cc->rendered_data;
 ok(defined($data), 'data');

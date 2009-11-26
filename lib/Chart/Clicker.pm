@@ -84,7 +84,7 @@ has 'driver' => (
         )
     },
     handles => {
-        data => 'data',
+        'rendered_data' => 'data',
         write => 'write'
     },
     lazy => 1
@@ -178,6 +178,12 @@ sub add_to_contexts {
         croak("Context named '".$ctx->name."' already exists.");
     }
     $self->set_context($ctx->name, $ctx);
+}
+
+sub data {
+    my ($self) = @_;
+    print STDERR "WARNING: Calling 'data' to get image data is deprecated, please use rendered_data\n";
+    $self->rendered_data;
 }
 
 sub draw {

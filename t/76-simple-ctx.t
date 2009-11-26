@@ -46,4 +46,4 @@ my $tdomain = $cc->get_context('sales')->domain_axis;
 cmp_ok($rrange->position, 'eq', 'right', 'second range axis position');
 cmp_ok($tdomain->position, 'eq', 'top', 'second domain axis position');
 
-ok(defined($cc->data), 'data');
+ok(defined($cc->rendered_data), 'data');
