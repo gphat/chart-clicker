@@ -24,7 +24,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 use Carp qw(croak);
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.47';
+our $VERSION = '2.48';
 
 has '+background_color' => (
     default => sub {
@@ -492,7 +492,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/line/line.png" width="500" height="250" alt="Line Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line.png" width="500" height="250" alt="Line Chart" /></p>
 
 =end HTML
 
@@ -500,7 +500,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/line/stacked-line.png" width="500" height="250" alt="Stacked Line Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/stacked-line.png" width="500" height="250" alt="Stacked Line Chart" /></p>
 
 =end HTML
 
@@ -508,13 +508,13 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/bar/bar.png width="500" height="250" alt="Bar Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/bar.png" width="500" height="250" alt="Bar Chart" /></p>
 
 =item B<StackedBar>
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/bar/stacked-bar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/stacked-bar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
 
 =end HTML
 
@@ -522,7 +522,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/area/area.png" width="500" height="250" alt="Area Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/area.png" width="500" height="250" alt="Area Chart" /></p>
 
 =end HTML
 
@@ -530,7 +530,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/area/stacked-area.png" width="500" height="250" alt="Stacked Area Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/stacked-area.png" width="500" height="250" alt="Stacked Area Chart" /></p>
 
 =end HTML
 
@@ -538,7 +538,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/bubble/bubble.png" width="500" height="250" alt="Bubble Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bubble/bubble.png" width="500" height="250" alt="Bubble Chart" /></p>
 
 =end HTML
 
@@ -546,7 +546,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/candlestick/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/candlestick/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
 
 =end HTML
 
@@ -554,7 +554,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/point/point.png" width="500" height="250" alt="Point Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/point/point.png" width="500" height="250" alt="Point Chart" /></p>
 
 =end HTML
 
@@ -562,7 +562,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/pie/pie.png" width="500" height="250" alt="Pie Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/pie/pie.png" width="300" height="250" alt="Pie Chart" /></p>
 
 =end HTML
 

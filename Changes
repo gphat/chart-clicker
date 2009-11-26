@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.48
+  - Fix image URLs
+
 2.47
   - Fix busted add_data changes in 2.46
   - Better add_data POD
