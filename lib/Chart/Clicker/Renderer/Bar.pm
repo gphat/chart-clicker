@@ -106,12 +106,19 @@ override('finalize', sub {
                         );
                     }
                 } else {
-                    $self->move_to(
-                        $x - $hbwidth + ($offset * $cbwidth), $basey
-                    );
-                    $self->rectangle(
-                        -int($cbwidth), int($height - $basey - $y)
-                    );
+                    if($self->{SCOUNT} == 1) {
+                        $self->move_to($x + $chbwidth, $basey);
+                        $self->rectangle(
+                            -int($cbwidth), -int($y - ($height - $basey))
+                        );
+                    } else {
+                        $self->move_to(
+                            $x - $hbwidth + ($offset * $cbwidth), $basey
+                        );
+                        $self->rectangle(
+                            -int($cbwidth) + $self->brush->width, int($height - $basey - $y)
+                        );
+                    }
                 }
             }
 

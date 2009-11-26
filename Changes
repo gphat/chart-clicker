@@ -6,6 +6,10 @@ Revision history for Perl extension Chart::Clicker.
   - Improve error message when keys != values
   - Add POD images (Thanks to Gagor Szabo and Bruno Vecchi)
   - Bump Cairo driver version
+  - Bar Renderer fixes:
+    - When bars ran below baseline, brush width wasn't taken into account
+    - When only one series was present, bars below baseline were offset to the
+      left unecessarily
 
 2.44
   - Add add_data method
