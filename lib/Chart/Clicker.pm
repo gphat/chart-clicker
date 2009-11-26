@@ -212,10 +212,15 @@ sub get_datasets_for_context {
 sub add_data {
     my ($self, $name, $data) = @_;
 
-    unless(exists($self->_data->{$name})) {
-        $self->_data->{$name} = [];
+    if(ref($data) eq 'ARRAY') {
+        $self->_data->{$name} = [] unless defined($self->_data->{$name});
+        push(@{ $self->_data->{$name}}, @{ $data });
+    } elsif(ref($data) eq 'HASH') {
+        $self->_data->{$name} = $data;
+    } else {
+        $self->_data->{$name} = [] unless defined($self->_data->{$name});
+        push(@{ $self->_data->{$name}}, $data);
     }
-    push(@{ $self->_data->{$name}}, $data);
 }
 
 override('prepare', sub {
@@ -242,12 +247,13 @@ override('prepare', sub {
                 );
             } elsif(ref($vals) eq 'HASH') {
                 # This allows the user to add data as a hashref
+                my @keys = sort { $a <=> $b } keys %{ $vals };
 
-                my @keys = sort(keys %{ $vals });
                 my @values = ();
                 foreach my $k (@keys) {
                     push(@values, $vals->{$k})
                 }
+
                 $ds->add_to_series(
                     Chart::Clicker::Data::Series->new(
                         name => $name,

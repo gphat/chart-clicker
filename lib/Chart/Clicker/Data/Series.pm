@@ -40,7 +40,7 @@ sub BUILDARGS {
     my ($class, @args) = @_;
 
     if(@args == 1 && (ref($args[0]) eq 'HASH') && !exists($args[0]->{keys})) {
-        my @keys = sort(keys %{ $args[0] });
+        my @keys = sort { $a <=> $b } keys %{ $args[0] };
         my @values = ();
         foreach my $k (@keys) {
             push(@values, $args[0]->{$k})
