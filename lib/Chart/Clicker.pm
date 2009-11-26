@@ -223,13 +223,33 @@ override('prepare', sub {
 
             my $ds = Chart::Clicker::Data::DataSet->new;
             my $vals = $self->_data->{$name};
-            $ds->add_to_series(
-                Chart::Clicker::Data::Series->new(
-                    name    => $name,
-                    keys    => [ 0..scalar(@{ $vals })-1 ],
-                    values  => $vals
-                )
-            );
+
+            if(ref($vals) eq 'ARRAY') {
+                # This allows the user to add data as an array
+
+                $ds->add_to_series(
+                    Chart::Clicker::Data::Series->new(
+                        name    => $name,
+                        keys    => [ 0..scalar(@{ $vals }) - 1 ],
+                        values  => $vals
+                    )
+                );
+            } elsif(ref($vals) eq 'HASH') {
+                # This allows the user to add data as a hashref
+
+                my @keys = sort(keys %{ $vals });
+                my @values = ();
+                foreach my $k (@keys) {
+                    push(@values, $vals->{$k})
+                }
+                $ds->add_to_series(
+                    Chart::Clicker::Data::Series->new(
+                        name => $name,
+                        keys => \@keys,
+                        values => \@values
+                    )
+                );
+            }
             $self->add_to_datasets($ds);
         }
     }
