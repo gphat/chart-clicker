@@ -2,6 +2,7 @@ Revision history for Perl extension Chart::Clicker.
 
 2.46
   - Use native Moose type traits rather than MX::AttributeHelpers
+  - Allow Series to be instantiated with a HashRef
 
 2.45
   - Document the ->draw,->data method for getting back a scalar

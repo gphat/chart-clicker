@@ -1,4 +1,4 @@
-use Test::More tests => 24;
+use Test::More;
 
 BEGIN { use_ok('Chart::Clicker::Data::Series'); }
 
@@ -45,11 +45,10 @@ my $fooseries = Chart::Clicker::Data::Series->new({
     values => [ 5, 6, 7, 14]
 });
 $fooseries->prepare;
-ok($fooseries->keys->[0] == 1, 'Verify first key');
-ok($fooseries->values->[0] == 5, 'Verify first value');
-ok($fooseries->key_count == 4, 'Verify key count');
+cmp_ok($fooseries->keys->[0], '==', 1, 'Verify first key');
+cmp_ok($fooseries->values->[0], '==', 5, 'Verify first value');
+cmp_ok($fooseries->key_count, '==', 4, 'Verify key count');
 cmp_ok($fooseries->range->span, '==', 9, 'Range');
-
 
 my $broken_series = Chart::Clicker::Data::Series->new;
 $broken_series->prepare;
@@ -57,3 +56,15 @@ eval {
     my $range = $broken_series->range;
 };
 ok(defined($@), 'caught busted range calculation');
+
+my $quickseries = Chart::Clicker::Data::Series->new({
+    1 => 5,
+    2 => 6,
+    3 => 7,
+    4 => 8
+});
+
+is_deeply($quickseries->keys, [ 1, 2, 3, 4 ], 'keys');
+is_deeply($quickseries->values, [ 5, 6, 7, 8 ], 'values');
+
+done_testing;

@@ -36,6 +36,21 @@ has 'values' => (
     }
 );
 
+sub BUILDARGS {
+    my ($class, @args) = @_;
+
+    if(@args == 1 && (ref($args[0]) eq 'HASH') && !exists($args[0]->{keys})) {
+        my @keys = sort(keys%{ $args[0] });
+        my @values = ();
+        foreach my $k (@keys) {
+            push(@values, $args[0]->{$k})
+        }
+        return { keys => \@keys, values => \@values }
+    }
+
+    return $args[0];
+}
+
 sub find_range {
     my ($self) = @_;
 
@@ -84,6 +99,21 @@ Chart::Clicker::Data::Series represents a series of values to be charted.
   my $series = Chart::Clicker::Data::Series->new({
     keys    => \@keys,
     value   => \@values
+  });
+
+  # Alternately, if you prefer
+
+  my $series = Chart::Clicker::Data::Series->new({
+    1  => 42,
+    2  => 25,
+    3  => 85,
+    4  => 23,
+    5  => 2,
+    6  => 19,
+    7  => 102,
+    8  => 12,
+    9  => 54,
+    10 => 9
   });
 
 =head1 METHODS
