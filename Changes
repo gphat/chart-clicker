@@ -1,5 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.47
+  - Fix busted add_data changes in 2.46
+  - Better add_data POD
+
 2.46
   - Use native Moose type traits rather than MX::AttributeHelpers
   - Allow Series to be instantiated with a HashRef
