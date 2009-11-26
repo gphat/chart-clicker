@@ -4,14 +4,14 @@ use Moose;
 extends 'Chart::Clicker::Data::Series';
 
 has 'sizes' => (
-    metaclass => 'Collection::Array',
+    traits => [ 'Array' ],
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
-    provides => {
-        'push' => 'add_to_sizes',
-        'count' => 'size_count',
-        'get' => 'get_size'
+    handles => {
+        'add_to_sizes' => 'push',
+        'size_count' => 'count',
+        'get_size' => 'get'
     }
 );
 

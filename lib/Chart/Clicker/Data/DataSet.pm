@@ -1,8 +1,6 @@
 package Chart::Clicker::Data::DataSet;
 use Moose;
 
-use MooseX::AttributeHelpers;
-
 use Chart::Clicker::Data::Range;
 
 has 'context' => (
@@ -22,14 +20,14 @@ has 'range' => (
     default => sub { Chart::Clicker::Data::Range->new }
 );
 has 'series' => (
-    metaclass => 'Collection::Array',
+    traits => [ 'Array' ],
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
-    provides => {
+    handles => {
         'count' => 'count',
-        'push' => 'add_to_series',
-        'get' => 'get_series'
+        'add_to_series' => 'push',
+        'get_series' => 'get'
     }
 );
 

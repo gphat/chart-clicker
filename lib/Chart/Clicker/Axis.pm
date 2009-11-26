@@ -15,7 +15,6 @@ use Layout::Manager::Absolute;
 use Math::Trig ':pi';
 
 use Moose::Util::TypeConstraints;
-use MooseX::AttributeHelpers;
 
 type 'StrOrCodeRef' => where { (ref($_) eq "") || ref($_) eq 'CODE' };
 
@@ -104,14 +103,14 @@ has 'tick_labels' => (
 );
 has 'tick_length' => ( is => 'rw', isa => 'Num', default => 3 );
 has 'tick_values' => (
-    metaclass => 'Collection::Array',
+    traits => [ 'Array' ],
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
-    provides => {
-        'push' => 'add_to_tick_values',
-        'clear' => 'clear_tick_values',
-        'count' => 'tick_value_count'
+    handles => {
+        'add_to_tick_values' => 'push',
+        'clear_tick_values' => 'clear',
+        'tick_value_count' => 'count'
     }
 );
 has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );

@@ -1,23 +1,21 @@
 package Chart::Clicker::Drawing::ColorAllocator;
 use Moose;
 
-use MooseX::AttributeHelpers;
-
 use Graphics::Color::RGB;
 use Color::Scheme;
 
 my @defaults = (qw());;
 
 has 'colors' => (
-    metaclass => 'Collection::Array',
+    traits => [ 'Array' ],
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
-    provides => {
-        'push' => 'add_to_colors',
-        'clear' => 'clear_colors',
-        'count' => 'color_count',
-        'get'   => 'get_color'
+    handles => {
+        'add_to_colors' => 'push',
+        'clear_colors' => 'clear',
+        'color_count' => 'count',
+        'get_color' => 'get'
     }
 );
 has 'position' => ( is => 'rw', isa => 'Int', default => -1 );

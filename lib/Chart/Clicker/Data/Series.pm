@@ -1,18 +1,17 @@
 package Chart::Clicker::Data::Series;
 use Moose;
-use MooseX::AttributeHelpers;
 
 use List::Util qw(max min);
 use Chart::Clicker::Data::Range;
 
 has 'keys' => (
-    metaclass => 'Collection::Array',
+    traits => [ 'Array' ],
     is => 'rw',
     isa => 'ArrayRef[Num]',
     default => sub { [] },
-    provides => {
-        'push' => 'add_to_keys',
-        'count' => 'key_count'
+    handles => {
+        'add_to_keys' => 'push',
+        'key_count' => 'count'
     }
 );
 has 'name' => (
@@ -27,13 +26,13 @@ has 'range' => (
     default => sub { my $self = shift; $self->find_range }
 );
 has 'values' => (
-    metaclass => 'Collection::Array',
+    traits => [ 'Array' ],
     is => 'rw',
     isa => 'ArrayRef[Num]',
     default => sub { [] },
-    provides => {
-        'push' => 'add_to_values',
-        'count' => 'value_count'
+    handles => {
+        'add_to_values' => 'push',
+        'value_count' => 'count'
     }
 );
 

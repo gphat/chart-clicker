@@ -6,38 +6,38 @@ extends 'Chart::Clicker::Data::Series';
 use List::Util qw(max min);
 
 has 'highs' => (
-    metaclass => 'Collection::Array',
+    traits => [ 'Array' ],
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
-    provides => {
-        'push' => 'add_to_highs',
-        'count' => 'high_count',
-        'get' => 'get_high'
+    handles => {
+        'add_to_highs' => 'push',
+        'high_count' => 'count',
+        'get_high' => 'get'
     }
 );
 
 has 'lows' => (
-    metaclass => 'Collection::Array',
+    traits => [ 'Array' ],
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
-    provides => {
-        'push' => 'add_to_lows',
-        'count' => 'low_count',
-        'get' => 'get_low'
+    handles => {
+        'add_to_lows' => 'push',
+        'low_count' => 'count',
+        'get_low' => 'get'
     }
 );
 
 has 'opens' => (
-    metaclass => 'Collection::Array',
+    traits => [ 'Array' ],
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
-    provides => {
-        'push' => 'add_to_opens',
-        'count' => 'open_count',
-        'get' => 'get_open'
+    handles => {
+        'add_to_opens' => 'push',
+        'open_count' => 'count',
+        'get_open' => 'get'
     }
 );
 

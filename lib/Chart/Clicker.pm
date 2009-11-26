@@ -1,6 +1,5 @@
 package Chart::Clicker;
 use Moose;
-use MooseX::AttributeHelpers;
 
 extends 'Chart::Clicker::Container';
 
@@ -46,16 +45,16 @@ has 'color_allocator' => (
     default => sub { Chart::Clicker::Drawing::ColorAllocator->new }
 );
 has 'contexts' => (
-    metaclass => 'Collection::Hash',
+    traits => [ 'Hash' ],
     is => 'rw',
     isa => 'HashRef[Chart::Clicker::Context]',
     default => sub { { default => Chart::Clicker::Context->new(name => 'default') } },
-    provides => {
-        set    => 'set_context',
-        get     => 'get_context',
-        keys    => 'context_names',
-        count   => 'context_count',
-        delete  => 'delete_context'
+    handles => {
+        'set_context' => 'set',
+        'get_context' => 'get',
+        'context_names' => 'keys',
+        'context_count' => 'count',
+        'delete_context' => 'delete'
     }
 );
 has '_data' => (
@@ -65,14 +64,14 @@ has '_data' => (
     default => sub { {} }
 );
 has 'datasets' => (
-    metaclass => 'Collection::Array',
+    traits => [ 'Array' ],
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
-    provides => {
-        'count'=> 'dataset_count',
-        'push' => 'add_to_datasets',
-        'get' => 'get_dataset'
+    handles => {
+        'dataset_count' => 'count',
+        'add_to_datasets' => 'push',
+        'get_dataset' => 'get'
     }
 );
 has 'driver' => (
@@ -126,14 +125,14 @@ has 'marker_overlay' => (
     }
 );
 has 'over_decorations' => (
-    metaclass => 'Collection::Array',
+    traits => [ 'Array' ],
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
-    provides => {
-        'count'=> 'over_decoration_count',
-        'push' => 'add_to_over_decorations',
-        'get' => 'get_over_decoration'
+    handles => {
+        'over_decoration_count' => 'count',
+        'add_to_over_decorations' => 'push',
+        'get_over_decoration' => 'get'
     }
 );
 has '+padding' => (
