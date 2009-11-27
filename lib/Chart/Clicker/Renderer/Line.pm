@@ -145,7 +145,7 @@ Chart::Clicker::Renderer::Line renders a dataset as lines.
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/line/line.png" width="500" height="250" alt="Line Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line.png" width="500" height="250" alt="Line Chart" /></p>
 
 =end HTML
 
@@ -183,7 +183,7 @@ in:
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/line/line-shapes.png" width="500" height="250" alt="Line + Shape Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line-shapes.png" width="500" height="250" alt="Line + Shape Chart" /></p>
 
 =end HTML
 
@@ -196,7 +196,7 @@ lines and make them more distinct.
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/line/line-shapes-brushed.png" width="500" height="250" alt="Line + Shape (Brushed) Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line-shapes-brushed.png" width="500" height="250" alt="Line + Shape (Brushed) Chart" /></p>
 
 =end HTML
 

@@ -132,7 +132,7 @@ The keys are discarded and a pie chart will be drawn with $series' slice at
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/pie/pie.png" width="500" height="250" alt="Pie Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/pie/pie.png" width="300" height="250" alt="Pie Chart" /></p>
 
 =end HTML
 

@@ -173,7 +173,7 @@ Chart::Clicker::Renderer::Bar renders a dataset as bars.
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/bar/bar.png" width="500" height="250" alt="Bar Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/bar.png" width="500" height="250" alt="Bar Chart" /></p>
 
 =end HTML
 

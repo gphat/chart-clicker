@@ -157,7 +157,7 @@ bar chart.
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/candlestick/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/candlestick/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
 
 =end HTML
 

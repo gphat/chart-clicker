@@ -98,7 +98,7 @@ Chart::Clicker::Renderer::Point renders a dataset as points.
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/point/point.png" width="500" height="250" alt="Point Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/point/point.png" width="500" height="250" alt="Point Chart" /></p>
 
 =end HTML
 
