@@ -568,8 +568,6 @@ Clicker supports the following renderers:
 
 =back
 
-=end HTML
-
 =head1 ADDING DATA
 
 The synopsis shows the simple way to add data.
