@@ -510,6 +510,8 @@ Clicker supports the following renderers:
 
 <p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/bar.png" width="500" height="250" alt="Bar Chart" /></p>
 
+=end HTML
+
 =item B<StackedBar>
 
 =begin HTML
