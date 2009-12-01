@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.51
+  - POD improvement for creating other formats.
+
 2.50
   - POD fix (Thanks Brian Cassidy)
 

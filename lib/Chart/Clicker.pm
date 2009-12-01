@@ -24,7 +24,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 use Carp qw(croak);
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.50';
+our $VERSION = '2.51';
 
 has '+background_color' => (
     default => sub {
@@ -639,7 +639,12 @@ base context.
 
 =head1 FORMATS & OUTPUT
 
-Clicker supports PNG, SVG, PDF and PostScript output.
+Clicker supports PNG, SVG, PDF and PostScript output.  To change your output
+type, specificy it when you create your Clicker object:
+
+  my $cc = Chart::Clicker->new(format => 'pdf', ...);
+  # ...
+  $cc->write_output('chart.pdf');
 
 If you are looking to get a scalar of the output for use with HTTP or
 similar things, you can use:
