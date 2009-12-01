@@ -27,7 +27,7 @@ contributions, drop me a line!
 
     # build the series (static here, will usually be supplied arrayrefs from elsewhere)
     my $series = Chart::Clicker::Data::Series->new(
-        keys	=>	[ 1,2,3,4,5  ],
+        keys	=>	[ 1,2,3,4,5 ],
         values	=>	[ 52,74,52,82,14 ],
     );
 
@@ -134,9 +134,9 @@ contributions, drop me a line!
     # add in the module of the renerer(s) you want to use
     use Chart::Clicker::Renderer::Area;
 
-    my $chart=Chart::Clicker->new;
+    my $chart = Chart::Clicker->new;
 
-    my $series=Chart::Clicker::Data::Series->new(
+    my $series = Chart::Clicker::Data::Series->new(
         keys    => [ 1,2,3,4,5 ],
         values  => [ 52,74,52,82,14 ]
     );
@@ -156,6 +156,18 @@ contributions, drop me a line!
     $chart->set_renderer($renderer);
 
     $chart->write_output('chart.png');
+
+=head2 Example 5 : Width and Height
+
+  my $chart = Chart::Clicker->new(width => 1024, height => 768);
+
+=head2 Example 5 : PDF (or SVG or PS)
+
+  my $chart = Chart::Clicker->new(format => 'pdf');
+
+  # Create the rest of your chart normally
+
+  $chart->write_output('chart.pdf');
 
 =head1 AUTHOR
 
