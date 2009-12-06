@@ -9,10 +9,6 @@ use Graphics::Color::RGB;
 
 extends 'Chart::Clicker::Axis';
 
-has 'duration' => (
-    is => 'rw',
-    isa => 'DateTime::Duration'
-);
 has 'format' => (
     is => 'rw',
     isa => 'Str'
@@ -146,7 +142,19 @@ unix format.
 
 =head1 SYNOPSIS
 
-  my $axis = Chart::Clicker::Axis::DateTime->new();
+  my $axis = Chart::Clicker::Axis::DateTime->new;
+
+=head1 ATTRIBUTES
+
+=head2 time_zone
+
+Set/Get the time zone to use when creating DateTime objects!  Accepts an
+object or a string ('America/Chicago').
+
+=head2 format
+
+Set/Get the formatting string used to format the DateTime.  See DateTime's
+strftime.
 
 =head1 METHODS
 
@@ -154,19 +162,9 @@ unix format.
 
 Creates a new DateTime Axis.
 
-=head2 format
-
-Set/Get the formatting string used to format the DateTime.  See DateTime's
-strftime.
-
 =head2 format_value
 
 Formats the value using L<DateTime>'s strftime.
-
-=head2 time_zone
-
-Set/Get the time zone to use when creating DateTime objects!  Accepts an
-object or a string ('America/Chicago').
 
 =head1 AUTHOR
 
