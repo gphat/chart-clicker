@@ -76,11 +76,12 @@ in L<Chart::Clicker>.
 
 =head1 SYNOPSIS
 
-=head1 METHODS
+  my $context = Chart::Clicker::Context->new(
+    name => 'Foo'
+  );
+  $clicker->add_to_contexts('foo', $context);
 
-=head2 new
-
-Creates a new Context object.
+=head1 ATTRIBUTES
 
 =head2 domain_axis
 
@@ -97,6 +98,12 @@ Set/get this context's range axis
 =head2 renderer
 
 Set/get this context's renderer
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new Context object.
 
 =head2 share_axes_with ($other_context)
 

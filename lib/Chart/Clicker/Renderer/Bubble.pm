@@ -48,8 +48,6 @@ Chart::Clicker::Data::Series::Size>.
 
 =head1 METHODS
 
-=head2 Constructor
-
 =head2 new
 
 Create a new Bubble renderer

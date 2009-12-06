@@ -146,7 +146,7 @@ The keys are discarded and a pie chart will be drawn with $series' slice at
     })
   });
 
-=head1 METHODS
+=head1 ATTRIBUTES
 
 =head2 border_color
 

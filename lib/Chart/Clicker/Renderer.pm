@@ -32,11 +32,7 @@ Chart::Clicker::Renderer represents the plot of the chart.
 
   my $renderer = Chart::Clicker::Renderer::Foo->new();
 
-=head1 METHODS
-
-=head2 new
-
-Creates a new Chart::Clicker::Renderer.
+=head1 ATTRIBUTES
 
 =head2 additive
 
@@ -45,6 +41,16 @@ of all the series it charts in total.  Used for 'stacked' renderers like
 StackedBar, StackedArea and Line (which will stack if told to).  Note: If you
 set a renderer to additive that B<isn't> additive, this will produce wonky
 results.
+
+=head2 context
+
+The context to which this Renderer is attached.
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new Chart::Clicker::Renderer.
 
 =head2 prepare
 

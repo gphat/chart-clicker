@@ -155,7 +155,7 @@ polygons stacked atop one another.
       })
   });
 
-=head1 METHODS
+=head1 ATTRIBUTES
 
 =head2 brush
 

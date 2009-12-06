@@ -61,23 +61,25 @@ A glass-like decoration.
 
 =head1 SYNOPSIS
 
+=head1 ATTRIBUTES
+
+=head2 background_color
+
+Set/Get the background color for this glass.
+
+=head2 glare_color
+
+Set/Get the glare color for this glass.
+
 =head1 METHODS
 
 =head2 new
 
 Creates a new Chart::Clicker::Decoration::Glass object.
 
-=head2 background_color
-
-Set/Get the background color for this glass.
-
 =head2 draw
 
 Draw this Glass.
-
-=head2 glare_color
-
-Set/Get the glare color for this glass.
 
 =head2 prepare
 

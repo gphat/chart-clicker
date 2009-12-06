@@ -152,7 +152,7 @@ their interior areas filled.
       })
   });
 
-=head1 METHODS
+=head1 ATTRIBUTES
 
 =head2 brush
 
@@ -166,6 +166,8 @@ Set/Get the fade flag, which turns on or off a gradient in the area renderer.
 =head2 opacity
 
 Set the alpha value for the renderer, which makes things more or less opaque.
+
+=head1 METHODS
 
 =head1 AUTHOR
 

@@ -76,11 +76,7 @@ handles rendering the markers that come from the Clicker object.
 
 =head1 SYNOPSIS
 
-=head1 METHODS
-
-=head2 new
-
-Creates a new Plot object.
+=head1 ATTRIBUTES
 
 =head2 background_color
 
@@ -94,6 +90,16 @@ Set/Get this Plot's border.
 
 Set/Get this Plot's clicker instance.
 
+=head2 markers
+
+Set/Get the flag that determines if markers are drawn on this plot.
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new Plot object.
+
 =head2 draw
 
 Draw this Plot
@@ -105,10 +111,6 @@ Set/Get the Grid component used on this plot.
 =head2 layout
 
 Set/Get this Plot's layout.  See L<Layout::Manager>.
-
-=head2 markers
-
-Set/Get the flag that determines if markers are drawn on this plot.
 
 =head2 prepare
 

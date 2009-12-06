@@ -135,11 +135,7 @@ of an OverAxis at L<http://www.onemogin.com/clicker/images/overaxis.png>.
 
 =head1 SYNOPSIS
 
-=head1 METHODS
-
-=head2 new
-
-Creates a new Chart::Clicker::Decoration::OverAxis object.
+=head1 ATTRIBUTES
 
 =head2 axis_height
 
@@ -164,6 +160,12 @@ Set/Get the context that this OverAxis should use.
 =head2 text_color
 
 Set/Get the color of the text labels dawn for the ticks.
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new Chart::Clicker::Decoration::OverAxis object.
 
 =head2 prepare
 

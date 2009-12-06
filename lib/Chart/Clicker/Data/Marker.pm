@@ -72,9 +72,7 @@ Used to highlight a particular key, value or range of either.
  
  $cc->write_output('foo.png');
 
-=head1 METHODS
-
-=head2 new
+=head1 ATTRIBUTES
 
 =head2 brush
 
@@ -101,6 +99,12 @@ Set/Get the value for this marker.  This represents a point on the range.
 
 Set/Get the value2 for this marker.  This represents a second point on the
 range and is used to specify a range.
+
+=head1 METHODS
+
+=head2 new
+
+Create a new Marker.
 
 =head1 AUTHOR
 

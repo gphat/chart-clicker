@@ -165,7 +165,7 @@ bar chart.
 
   my $br = Chart::Clicker::Renderer::CandleStick->new();
 
-=head1 METHODS
+=head1 ATTRIBUTES
 
 =head2 bar_padding
 

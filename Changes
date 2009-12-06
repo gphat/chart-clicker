@@ -1,5 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.52
+  - Add contains method to Range
+  - Redo POD to use an ATTRIBUTES section
+
 2.51
   - POD improvement for creating other formats.
 

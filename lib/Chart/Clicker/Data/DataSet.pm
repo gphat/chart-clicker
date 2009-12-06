@@ -122,6 +122,28 @@ use more than one in your chart.
     series => [ $series ]
   });
 
+=head1 ATTRIBUTES
+
+=head2 context
+
+Set/Get the context this DataSet will be charted under.
+
+=head2 domain
+
+Get the Range for the domain values
+
+=head2 max_key_count
+
+Get the number of keys in the longest series.
+
+=head2 range
+
+Get the Range for the... range values...
+
+=head2 series
+
+Set/Get the series for this DataSet
+
 =head1 METHODS
 
 =head2 new
@@ -136,10 +158,6 @@ Add a series to this dataset.
 
 Get the number of series in this dataset.
 
-=head2 domain
-
-Get the Range for the domain values
-
 =head2 get_series_keys
 
 Returns the key at the specified position for every series in this DataSet.
@@ -151,18 +169,6 @@ Returns the value at the specified position for every series in this DataSet.
 =head2 largest_value_slice
 
 Finds the largest cumulative 'slice' in this dataset.
-
-=head2 max_key_count
-
-Get the number of keys in the longest series.
-
-=head2 range
-
-Get the Range for the... range values...
-
-=head2 series
-
-Set/Get the series for this DataSet
 
 =head2 prepare
 

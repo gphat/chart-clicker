@@ -100,6 +100,20 @@ Chart::Clicker::Decoration::Legend draws a legend on a Chart.
 
 =head1 SYNOPSIS
 
+=head1 ATTRIBUTES
+
+=head2 font
+
+Set/Get the font used for this legend's items.
+
+=head2 insets
+
+Set/Get this Legend's insets.
+
+=head2 item_padding
+
+Set/Get the padding for this legend's items.
+
 =head1 METHODS
 
 =head2 new
@@ -113,18 +127,6 @@ Set/Get this Legend's border.
 =head2 draw
 
 Draw this Legend
-
-=head2 font
-
-Set/Get the font used for this legend's items.
-
-=head2 insets
-
-Set/Get this Legend's insets.
-
-=head2 item_padding
-
-Set/Get the padding for this legend's items.
 
 =head2 prepare
 

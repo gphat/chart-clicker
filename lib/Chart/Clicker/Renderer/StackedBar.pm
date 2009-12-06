@@ -150,7 +150,7 @@ Chart::Clicker::Renderer::StackedBar renders a dataset as stacked bars.
 
   my $br = Chart::Clicker::Renderer::Bar->new;
 
-=head1 METHODS
+=head1 ATTRIBUTES
 
 =head2 bar_padding
 

@@ -43,6 +43,12 @@ for the Bubble renderer.
     sizes   => \@sized
   });
 
+=head1 ATTRIBUTES
+
+=head2 sizes
+
+Set/Get the sizes for this series.
+
 =head1 METHODS
 
 =head2 new
@@ -56,10 +62,6 @@ Adds a size to this series.
 =head2 get_size
 
 Get a size by it's index.
-
-=head2 sizes
-
-Set/Get the sizes for this series.
 
 =head2 size_count
 

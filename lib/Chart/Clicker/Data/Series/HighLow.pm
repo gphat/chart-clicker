@@ -91,6 +91,20 @@ CandleStick renderer.  The general idea is:
     opens   => \@opens
   });
 
+=head1 ATTRIBUTES
+
+=head2 highs
+
+Set/Get the highs for this series.
+
+=head2 lows
+
+Set/Get the lows for this series.
+
+=head2 opens
+
+Set/Get the opens for this series.
+
 =head1 METHODS
 
 =head2 new
@@ -120,18 +134,6 @@ Get a low by it's index.
 =head2 get_open
 
 Get an open by it's index.
-
-=head2 highs
-
-Set/Get the highs for this series.
-
-=head2 lows
-
-Set/Get the lows for this series.
-
-=head2 opens
-
-Set/Get the opens for this series.
 
 =head2 high_count
 

@@ -157,7 +157,7 @@ Chart::Clicker::Renderer::Line renders a dataset as lines.
     })
   });
 
-=head1 METHODS
+=head1 ATTRIBUTES
 
 =head2 additive
 
