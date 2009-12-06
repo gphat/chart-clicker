@@ -1,4 +1,4 @@
-use Test::More tests => 19;
+use Test::More;
 
 BEGIN { use_ok('Chart::Clicker::Data::Range'); }
 
@@ -12,6 +12,10 @@ my $divvy = $range->divvy(5);
 cmp_ok(scalar(@{ $divvy }), '==', 5, 'divvy count');
 is_deeply($divvy, [ 0, 2.5, 5, 7.5, 10 ], 'divvy results');
 cmp_ok($range->span, '==', 10, 'span');
+ok($range->contains(0), 'range contains 0');
+ok($range->contains(5), 'range contains 5');
+ok($range->contains(10), 'range contains 10');
+ok(!$range->contains(11), 'range does not contain 11');
 
 $range->combine(Chart::Clicker::Data::Range->new({ lower => 3, upper => 15 }));
 cmp_ok($range->lower, '==', 0, 'Combine 1: Lower stays');
@@ -40,3 +44,5 @@ my $range3 = Chart::Clicker::Data::Range->new;
 $range3->combine(Chart::Clicker::Data::Range->new({ lower => 3, upper => 15 }));
 cmp_ok($range3->lower, '==', 3, 'Undefined range, combine check lower');
 cmp_ok($range3->upper, '==', 15, 'Undefined range, combine check upper');
+
+done_testing;
