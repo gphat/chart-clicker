@@ -81,13 +81,13 @@ contributions, drop me a line!
     # build the color allocator
     my $ca = Chart::Clicker::Drawing::ColorAllocator->new;
     # this hash is simply here to make things readable and cleaner, you can always call G::C::R inline
-    my $red => Graphics::Color::RGB->new({
-        red =>.75, green =>0, blue =>0, alpha =>.8
+    my $red = Graphics::Color::RGB->new({
+        red => .75, green => 0, blue => 0, alpha => .8
     });
-    my $green => Graphics::Color::RGB->new({
-        red => 0,green => .75, blue=> 0, alpha=>.8
+    my $green = Graphics::Color::RGB->new({
+        red => 0,green => .75, blue=> 0, alpha=> .8
     });
-    my $blue => Graphics::Color::RGB->new({
+    my $blue = Graphics::Color::RGB->new({
         red => 0, green => 0, blue => .75, alpha => .8
     }),
 
@@ -106,18 +106,18 @@ contributions, drop me a line!
     $ca->add_to_colors($blue);
 
     $dataset->add_to_series(Chart::Clicker::Data::Series->new(
-        keys	=>	[ 1,2,3,4,5 ],
-        values	=>	[ 34,67,89,45,67 ],
+        keys    =>  [ 1,2,3,4,5 ],
+        value   =>  [ 34,67,89,45,67 ],
     ));
     # add a second color
-    $ca->add_to_colors($colorset{red});
+    $ca->add_to_colors($red);
 
     $dataset->add_to_series(Chart::Clicker::Data::Series->new(
-        keys	=>	[ 1,2,3,4,5 ],
-        values	=>	[ 11,22,33,44,55 ],
+        keys    =>  [ 1,2,3,4,5 ],
+        values  =>  [ 11,22,33,44,55 ],
     ));
     # add a third color
-    $ca->add_to_colors($colorset{green});
+    $ca->add_to_colors($green);
 
     $chart->add_to_datasets($dataset);
 
