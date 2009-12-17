@@ -1,5 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.53
+  - Fix bad default opacity in Bar renderer
+  - Fix syntax error from method name typo in share-axes example
+
 2.52
   - Add contains method to Range
   - Redo POD to use an ATTRIBUTES section

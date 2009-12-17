@@ -49,21 +49,21 @@ my $ds1 = Chart::Clicker::Data::DataSet->new(
 );
 
 # Create a new context
-my $other_context = Chart::Clicker::Context->new(
-    name => 'other'
-);
+# my $other_context = Chart::Clicker::Context->new(
+#     name => 'other'
+# );
 
 my $defctx = $cc->get_context('default');
 
 # This line does the magic.  It sets the other_context's axes to the same
 # ones used by the default.  This gives us all the features of multiple
 # contexts, but without separate axes.
-$other_context->share_axis_with($defctx);
+# $other_context->share_axes_with($defctx);
 
 # Instruct the ds1 dataset to use the 'other' context.  DataSets default to
 # the 'default' context.
-$ds1->context('other');
-$cc->add_to_contexts($other_context);
+# $ds1->context('other');
+# $cc->add_to_contexts($other_context);
 
 # Pretty stuff
 $cc->border->width(0);

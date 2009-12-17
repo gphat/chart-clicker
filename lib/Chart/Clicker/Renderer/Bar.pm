@@ -22,7 +22,7 @@ has 'brush' => (
 has 'opacity' => (
     is => 'rw',
     isa => 'Num',
-    default => 0
+    default => 1
 );
 
 override('prepare', sub {

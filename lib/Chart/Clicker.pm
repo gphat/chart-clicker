@@ -24,7 +24,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 use Carp qw(croak);
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.52';
+our $VERSION = '2.53';
 
 has '+background_color' => (
     default => sub {
