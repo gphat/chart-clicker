@@ -85,13 +85,21 @@ sub draw_lines {
     if($axis->is_horizontal) {
 
         foreach my $val (@{ $axis->tick_values }) {
-            $self->move_to($axis->mark($width, $val), 0);
+            my $mark = $axis->mark($width, $val);
+            # Don't try and draw a mark if the Axis wouldn't give us a value,
+            # it might be skipping...
+            next unless defined($mark);
+            $self->move_to($mark, 0);
             $self->rel_line_to(0, $height);
         }
     } else {
 
         foreach my $val (@{ $axis->tick_values }) {
-            $self->move_to(0, $height - $axis->mark($height, $val));
+            my $mark = $axis->mark($height, $val);
+            # Don't try and draw a mark if the Axis wouldn't give us a value,
+            # it might be skipping...
+            next unless defined($mark);
+            $self->move_to(0, $height - $mark);
             $self->rel_line_to($width, 0);
         }
     }
