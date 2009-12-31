@@ -230,9 +230,9 @@ override('prepare', sub {
 
     if(scalar(keys(%{ $self->_data }))) {
 
+        my $ds = Chart::Clicker::Data::DataSet->new;
         foreach my $name (keys(%{ $self->_data })) {
 
-            my $ds = Chart::Clicker::Data::DataSet->new;
             my $vals = $self->_data->{$name};
 
             if(ref($vals) eq 'ARRAY') {
@@ -262,8 +262,8 @@ override('prepare', sub {
                     )
                 );
             }
-            $self->add_to_datasets($ds);
         }
+        $self->add_to_datasets($ds);
     }
 
     unless(scalar(@{ $self->components })) {
