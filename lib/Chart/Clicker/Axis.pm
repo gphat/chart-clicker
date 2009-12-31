@@ -78,10 +78,10 @@ has 'range' => (
 );
 has 'show_ticks' => ( is => 'rw', isa => 'Bool', default => 1 );
 has 'staggered' => ( is => 'rw', isa => 'Bool', default => 0 );
-has 'tick_brush' => (
+has 'skip_range' => (
     is => 'rw',
-    isa => 'Graphics::Primitive::Brush',
-    default => sub { Graphics::Primitive::Brush->new }
+    isa => 'Chart::Clicker::Data::Range',
+    predicate => 'has_skip_range'
 );
 has 'tick_font' => (
     is => 'rw',
@@ -101,7 +101,6 @@ has 'tick_labels' => (
     is => 'rw',
     isa => 'ArrayRef',
 );
-has 'tick_length' => ( is => 'rw', isa => 'Num', default => 3 );
 has 'tick_values' => (
     traits => [ 'Array' ],
     is => 'rw',
@@ -176,6 +175,12 @@ override('prepare', sub {
     # Determine all this once... much faster.
     my $i = 0;
     foreach my $val (@{ $self->tick_values }) {
+        if($self->has_skip_range && $self->skip_range->contains($val)) {
+            # If the label falls in inside the skip range, it's not to be
+            # used at all.
+            next;
+        }
+
         my $label = $val;
         if(defined($self->tick_labels)) {
             $label = $self->tick_labels->[$i];
@@ -208,10 +213,6 @@ override('prepare', sub {
     my $big = $bheight;
     if($self->is_vertical) {
         $big = $bwidth;
-    }
-
-    if($self->show_ticks) {
-        $big += $self->tick_length;
     }
 
     my $label_width = 0;
@@ -264,11 +265,29 @@ override('prepare', sub {
 sub mark {
     my ($self, $span, $value) = @_;
 
+    if($self->has_skip_range) {
+        # We must completely ignore values that fall inside the skip range,
+        # so we return an undef.
+        return undef if $self->skip_range->contains($value);
+        if($value > $self->skip_range->upper) {
+            # If the value was outside the range, but above it then we must
+            # be sure and substract the range we are skipping so that the
+            # value will still fall on the chart.
+            $value = $value - $self->skip_range->span;
+        }
+    }
+
     # 'caching' this here speeds things up.  Calling after changing the
     # range would result in a messed up chart anyway...
     if(!defined($self->{LOWER})) {
         $self->{LOWER} = $self->range->lower;
-        $self->{RSPAN} = $self->range->span;
+        if($self->has_skip_range) {
+            # If we have a skip range then the RSPAN is less the skip range's
+            # span.
+            $self->{RSPAN} = $self->range->span - $self->skip_range->span;
+        } else {
+            $self->{RSPAN} = $self->range->span;
+        }
     }
 
     return ($span / $self->{RSPAN}) * ($value - $self->{LOWER} || 0);
@@ -303,8 +322,6 @@ override('finalize', sub {
         # nuffin
     }
 
-    my $tick_length = $self->tick_length;
-
     my $lower = $self->range->lower;
     my $upper = $self->range->upper;
 
@@ -312,10 +329,13 @@ override('finalize', sub {
 
     if($self->is_vertical) {
 
+        my $comp_count = 0;
         for(0..$#values) {
             my $val = $values[$_];
-            my $iy = $height - $self->mark($height, $val);
-            my $label = $self->get_component($_);
+            my $mark = $self->mark($height, $val);
+            next unless defined($mark);
+            my $iy = $height - $mark;
+            my $label = $self->get_component($comp_count);
 
             if($self->is_left) {
                 $label->origin->x($iox + $iwidth - $label->width);
@@ -345,6 +365,9 @@ override('finalize', sub {
                     $label->origin->y($iy - ($label->height / 2));
                 }
             }
+            # Keep track of how many components we've actually grabbed, since
+            # we could be skipping any that are in a skip range.
+            $comp_count++;
         }
 
         # Draw the label
@@ -364,11 +387,13 @@ override('finalize', sub {
         }
     } else {
         # Draw a tick for each value.
+        my $comp_count = 0;
         for(0..$#values) {
             my $val = $values[$_];
             my $ix = $self->mark($width, $val);
+            next unless defined($ix);
 
-            my $label = $self->get_component($_);
+            my $label = $self->get_component($comp_count);
 
             my $bump = 0;
             if($self->staggered) {
@@ -397,6 +422,9 @@ override('finalize', sub {
                 }
                 $label->origin->y($ioy + $bump);
             }
+            # Keep track of how many components we've actually grabbed, since
+            # we could be skipping any that are in a skip range.
+            $comp_count++;
         }
 
         # Draw the label
@@ -459,35 +487,28 @@ Chart::Clicker::Axis represents the plot of the chart.
     orientation => 'vertical',
     position => 'left',
     brush => Graphics::Primitive::Brush->new,
-    tick_length => 2,
-    tick_brush => Graphics::Primitive::Brush->new,
     visible => 1,
   });
 
-=head1 METHODS
-
-=head2 new
-
-Creates a new Chart::Clicker::Axis.  If no arguments are given then sane
-defaults are chosen.
+=head1 ATTRIBUTES
 
 =head2 baseline
 
-Set the 'baseline' value of this axis.  This is used by some renderers to
-change the way a value is marked.  The Bar render, for instance, considers
-values below the base to be 'negative'.
+The 'baseline' value of this axis.  This is used by some renderers to change
+the way a value is marked.  The Bar render, for instance, considers values
+below the base to be 'negative'.
 
 =head2 brush
 
-Set/Get the brush for this axis.
+The brush for this axis.
 
 =head2 color
 
-Set/Get the color of the axis' border.
+The color of the axis' border.
 
 =head2 format
 
-Set/Get the format to use for the axis values.
+The format to use for the axis values.
 
 If the format is a string then format is applied to each value 'tick' via
 sprintf.  See sprintf perldoc for details!  This is useful for situations
@@ -501,7 +522,7 @@ passed to it as an argument.
 
 =head2 fudge_amount
 
-Set/Get the amount to 'fudge' the span of this axis.  You should supply a
+The amount to 'fudge' the span of this axis.  You should supply a
 percentage (in decimal form) and the axis will grow at both ends by the
 supplied amount.  This is useful when you want a bit of padding above and
 below the dataset.
@@ -511,57 +532,104 @@ would add 5 to the top and bottom of the axis.
 
 =head2 height
 
-Set/Get the height of the axis.
+The height of the axis.
+
+=head2 hidden
+
+This axis' hidden flag.  If this is true then the Axis will not be drawn.
 
 =head2 label
 
-Set/Get the label of the axis.
+The label of the axis.
 
 =head2 label_color
 
-Set the color of the Axis' labels.
+The color of the Axis' labels.
 
 =head2 label_font
 
-Set/Get the font used for the axis' label.
-
+The font used for the axis' label.
 
 =head2 orientation
 
-Set/Get the orientation of this axis.  See L<Chart::Clicker::Drawing>.
+The orientation of this axis.  See L<Chart::Clicker::Drawing>.
 
 =head2 position
 
-Set/Get the position of the axis on the chart.
+The position of the axis on the chart.
 
 =head2 range
 
-Set/Get the Range for this axis.
+The Range for this axis.
 
 =head2 show_ticks
 
-Set/Get the show ticks flag.  If this is value then the small tick marks at
-each mark on the axis will not be drawn.
+If this is value is false then 'ticks' and their labels will not drawn for
+this axis.
+
+=head2 skip_range
+
+Allows you to specify a range of values that will be skipped completely on
+this axis.  This is often used to trim a large, unremarkable section of data.
+If, for example, 50% of your values fall below 10 and 50% fall above 100 it
+is useless to bother charting the 10 to 100 range.  Skipping it with this
+attribute will make for a much more useful chart, albeit somewhat visually
+skewed.
+
+  $axis->skip_range(Chart::Clicker::Data::Range->new(lower => 10, upper => 100));
+  
+Note that B<any> data points, including ticks, that fall inside the range
+specified will be completely ignored.
+
+=head2 stagger
+
+If true, causes horizontally labeled axes to 'stagger' the labels so that half
+are at the top of the box and the other half are at the bottom.  This makes
+long, overlapping labels less likely to overlap.  It only does something
+useful with B<horizontal> labels.
 
 =head2 tick_font
 
-Set/Get the font used for the axis' ticks.
+The font used for the axis' ticks.
 
 =head2 tick_label_angle
 
-Set the angle (in radians) to rotate the tick's labels.
+The angle (in radians) to rotate the tick's labels.
 
 =head2 tick_label_color
 
-Set the color of the tick labels.
-
-=head2 tick_length
-
-Set/Get the tick length.
+The color of the tick labels.
 
 =head2 tick_values
 
-Set/Get the arrayref of values show as ticks on this Axis.
+The arrayref of values show as ticks on this Axis.
+
+=head2 tick_value_count
+
+Get a count of tick values.
+
+=head2 tick_labels
+
+The arrayref of labels to show for ticks on this Axis.  This arrayref is
+consulted for every tick, in order.  So placing a string at the zeroeth index
+will result in it being displayed on the zeroeth tick, etc, etc.
+
+=head2 ticks
+
+The number of 'ticks' to show.  Setting this will divide the range on this
+axis by the specified value to establish tick values.  This will have no
+effect if you specify tick_values.
+
+=head2 width
+
+This axis' width.
+
+=head1 METHODS
+
+=head2 new
+
+Creates a new Chart::Clicker::Axis.  If no arguments are given then sane
+defaults are chosen.
 
 =head2 add_to_tick_values
 
@@ -570,33 +638,6 @@ Add a value to the list of tick values.
 =head2 clear_tick_values
 
 Clear all tick values.
-
-=head2 stagger
-
-Set/Get the stagger flag, which causes horizontally labeled axes to 'stagger'
-the labels so that half are at the top of the box and the other half are at
-the bottom.  This makes long, overlapping labels less likely to overlap.  It
-only does something useful with B<horizontal> labels.
-
-=head2 tick_brush
-
-Set/Get the stroke for the tick markers.
-
-=head2 tick_value_count
-
-Get a count of tick values.
-
-=head2 tick_labels
-
-Set/Get the arrayref of labels to show for ticks on this Axis.  This arrayref
-is consulted for every tick, in order.  So placing a string at the zeroeth
-index will result in it being displayed on the zeroeth tick, etc, etc.
-
-=head2 ticks
-
-Set/Get the number of 'ticks' to show.  Setting this will divide the
-range on this axis by the specified value to establish tick values.  This
-will have no effect if you specify tick_values.
 
 =head2 mark
 
@@ -614,14 +655,6 @@ CC_HORIZONTAL this method sets the height.  Otherwise sets the width.
 =head2 draw
 
 Draw this axis.
-
-=head2 hidden
-
-Set/Get this axis' hidden flag.
-
-=head2 width
-
-Set/Get this axis' width.
 
 =head2 BUILD
 
