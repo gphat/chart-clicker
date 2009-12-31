@@ -47,7 +47,10 @@ override('finalize', sub {
             my @keys = @{ $series->keys };
             for(0..($series->key_count - 1)) {
                 my $x = $domain->mark($width, $keys[$_]);
-                my $y = $height - $range->mark($height, $vals[$_]);
+                next unless defined($x);
+                my $ymark = $range->mark($height, $vals[$_]);
+                next unless defined($ymark);
+                my $y = $height - $ymark;
 
                 $self->move_to($x, $y);
                 $self->draw_point($x, $y, $series, $_);

@@ -2,7 +2,7 @@
 use strict;
 
 use Chart::Clicker;
-use Chart::Clicker::Renderer::Line;
+use Chart::Clicker::Renderer::Point;
 
 my $cc = Chart::Clicker->new(width => 500, height => 250);
 
@@ -26,6 +26,10 @@ foreach my $d (@bw3) {
     $cc->add_data('Series 2', $d);
 }
 
+my $def = $cc->get_context('default');
+
+my $ren = Chart::Clicker::Renderer::Point->new;
+$cc->get_context('default')->renderer($ren);
 $def->range_axis->skip_range(Chart::Clicker::Data::Range->new(lower => 20, upper => 95));
 $def->range_axis->format('%d');
 $def->domain_axis->tick_values([qw(2 4 6 8 10)]);

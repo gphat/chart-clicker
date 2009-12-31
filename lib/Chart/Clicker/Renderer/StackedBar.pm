@@ -89,6 +89,7 @@ override('finalize', sub {
         for my $j (0 .. $#values) {
             $val += $values[$j];
             my $y = $range->mark($height, $val);
+            next unless defined($y);
 
             $self->move_to($x - $self->{HBWIDTH}, $height - $y + $self->brush->width * 2);
             $self->rectangle($self->{BWIDTH}, $y - $accum - 1);

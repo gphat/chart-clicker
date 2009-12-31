@@ -52,7 +52,9 @@ sub finalize {
                 my $key = $keys[$_];
 
                 my $x = $domain->mark($width, $key);
+                next unless defined($x);
                 my $ymark = $range->mark($height, $vals[$_]);
+                next unless defined($ymark);
 
                 if($self->additive) {
                     if(exists($accum{$key})) {
@@ -80,7 +82,9 @@ sub finalize {
                 for(0..$kcount) {
                     my $key = $keys[$_];
                     my $x = $domain->mark($width, $key);
+                    next unless defined($x);
                     my $ymark = $range->mark($height, $vals[$_]);
+                    next unless defined($ymark);
 
                     if($self->additive) {
                         if(exists($accum{$key})) {

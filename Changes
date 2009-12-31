@@ -1,5 +1,11 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.54
+  - Values added via add_data will now be part of the same DataSet, this may
+    have caused some odd results with additive renderers
+  - Remove some unused tick attributes and code associated with them
+  - Add skip_range to Axis
+
 2.53
   - Fix bad default opacity in Bar renderer
   - Fix syntax error from method name typo in share-axes example

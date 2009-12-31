@@ -52,8 +52,11 @@ override('finalize', sub {
             for(0..($series->key_count - 1)) {
 
                 my $x = $domain->mark($width, $keys[$_]);
+                next unless defined($x);
 
-                my $y = $height - $range->mark($height, $vals[$_]);
+                my $ymark = $range->mark($height, $vals[$_]);
+                next unless defined($ymark);
+                my $y = $height - $ymark;
 
                 if(defined($biggest)) {
                     $biggest = $y if $y > $biggest;

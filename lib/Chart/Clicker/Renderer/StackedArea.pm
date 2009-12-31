@@ -42,6 +42,7 @@ override('finalize', sub {
 
                 my $key = $keys[$_];
                 my $x = $domain->mark($width, $key);
+                next unless defined($x);
                 my $val = $vals[$_];
 
                 if(exists($accum{$key})) {
@@ -55,7 +56,9 @@ override('finalize', sub {
                     $accum{$key} = $val;
                 }
 
-                my $y = $height - $range->mark($height, $val);
+                my $ymark = $range->mark($height, $val);
+                next unless defined($ymark);
+                my $y = $height - $ymark;
 
                 if(defined($biggest)) {
                     $biggest = $y if $y > $biggest;
