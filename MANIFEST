@@ -14,6 +14,7 @@ example/pie.pl
 example/point.pl
 example/share-axes.pl
 example/simple.pl
+example/skip_range.pl
 example/sparkline.pl
 example/stackedarea.pl
 example/stackedbar.pl
