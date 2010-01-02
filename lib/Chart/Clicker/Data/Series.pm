@@ -53,6 +53,13 @@ sub BUILDARGS {
     return $args[0];
 }
 
+sub add_pair {
+    my ($self, $key, $value) = @_;
+
+    $self->add_to_keys($key);
+    $self->add_to_value($value);
+}
+
 sub find_range {
     my ($self) = @_;
 
@@ -141,6 +148,11 @@ Set/Get the values for this series.
 =head2 new
 
 Creates a new, empty Series
+
+=head2 add_pair ($key, $value)
+
+Add a key and a value to the series.  Internally wraps C<add_to_keys> and
+C<add_to_values>.
 
 =head2 add_to_keys
 
