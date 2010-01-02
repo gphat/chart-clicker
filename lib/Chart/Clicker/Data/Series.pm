@@ -57,7 +57,7 @@ sub add_pair {
     my ($self, $key, $value) = @_;
 
     $self->add_to_keys($key);
-    $self->add_to_value($value);
+    $self->add_to_values($value);
 }
 
 sub find_range {
