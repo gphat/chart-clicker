@@ -21,4 +21,6 @@ requires    'Layout::Manager' => 0.29;
 recommends 'List::Util'         => 0;
 recommends 'Statistics::Basic'  => 0;
 
+repository 'http://github.com/gphat/chart-clicker';
+
 WriteAll;
