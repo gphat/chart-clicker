@@ -1,4 +1,4 @@
-use Test::More tests => 11;
+use Test::More;
 
 BEGIN {
     use_ok('Chart::Clicker::Axis');
@@ -12,16 +12,11 @@ my $axis = Chart::Clicker::Axis->new(
 ok($axis->label() eq $label, 'label()');
 
 ok($axis->show_ticks(), 'Default show_ticks()');
-cmp_ok($axis->tick_length(), '>', 0, 'Default tick_length()');
 ok($axis->visible(), 'Default visible');
 
 my $showticks = 0;
 $axis->show_ticks($showticks);
 ok($axis->show_ticks() == $showticks, 'show_ticks()');
-
-my $ticklen = 5;
-$axis->tick_length($ticklen);
-ok($axis->tick_length() == $ticklen, 'tick_length()');
 
 my $vis = 0;
 $axis->visible($vis);
@@ -35,3 +30,5 @@ $axis->range->lower($lower);
 $axis->range->upper($upper);
 ok($axis->range->lower() == $lower, 'Lower value');
 ok($axis->range->upper() == $upper, 'Upper value');
+
+done_testing;

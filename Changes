@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.56
+  - Fix tests that tested removed methods. (Thanks Christoper Bottoms)
+
 2.55
   - Add add_pair method to Series
   - Add repository metadata to Makefile.PL (Thanks cpanservice)
