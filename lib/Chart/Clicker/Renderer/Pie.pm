@@ -138,13 +138,9 @@ The keys are discarded and a pie chart will be drawn with $series' slice at
 
 =head1 SYNOPSIS
 
-  my $lr = Chart::Clicker::Renderer::Pie->new;
-  # Optionally set the stroke
-  $lr->options({
-    brush => Graphics::Primitive::Brush->new({
-      ...
-    })
-  });
+  my $pier = Chart::Clicker::Renderer::Pie->new;
+  # Optionally set the stroke width
+  $pier->brush->width(2);
 
 =head1 ATTRIBUTES
 
@@ -155,6 +151,8 @@ Set/Get the Color to use for the border.
 =head2 brush
 
 Set/Get a Brush to be used for the pie's border.
+
+=head1 METHODS
 
 =head2 render
 
