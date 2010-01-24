@@ -59,6 +59,7 @@ lib/Chart/Clicker/Renderer/CandleStick.pm
 lib/Chart/Clicker/Renderer/Line.pm
 lib/Chart/Clicker/Renderer/Pie.pm
 lib/Chart/Clicker/Renderer/Point.pm
+lib/Chart/Clicker/Renderer/PolarArea.pm
 lib/Chart/Clicker/Renderer/StackedArea.pm
 lib/Chart/Clicker/Renderer/StackedBar.pm
 lib/Chart/Clicker/Tutorial.pod
