@@ -145,7 +145,7 @@ polygons stacked atop one another.
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/" width="500" height="250" alt="Stacked Area Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/stacked-area.png" width="500" height="250" alt="Stacked Area Chart" /></p>
 
 =end HTML
 

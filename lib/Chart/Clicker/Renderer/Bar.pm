@@ -189,7 +189,7 @@ something like this:
 
 =begin HTML
 
-<p><img src="http://github.com/gphat/chart-clicker-examples/raw/master/bar/bar-baseline.png width="500" height="250" alt="Base (Baseline) Chart" /></p>
+<p><img src="http://www.onemogin.com.com/clicker/chart-clicker-examples/bar/bar-baseline.png" width="500" height="250" alt="Base (Baseline) Chart" /></p>
 
 =end HTML
 

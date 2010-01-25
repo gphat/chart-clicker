@@ -185,7 +185,7 @@ values making the slices longer.  The 360 degrees of pie is divided equally.
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/polararea/polararea.png" width="300" height="250" alt="Pie Chart" /></p>
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/polararea/polararea.png" width="500" height="250" alt="Pie Chart" /></p>
 
 =end HTML
 

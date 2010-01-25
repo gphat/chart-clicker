@@ -1,6 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
-2.57    January 24, 2009
+2.58    January 25, 2010
+  - POD fixes
+
+2.57    January 24, 2010
   - Add PolarArea renderer
   - Clean up some Pie POD
 
