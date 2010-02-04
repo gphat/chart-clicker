@@ -1,4 +1,4 @@
-use Test::More tests => 5;
+use Test::More;
 
 BEGIN { use_ok('Chart::Clicker::Data::Series::Size'); }
 
@@ -18,3 +18,8 @@ cmp_ok($series->size_count, '==', 2, '2 sizes');
 
 $series->add_to_sizes(5);
 cmp_ok($series->size_count, '==', 3, '3 sizes');
+
+cmp_ok($series->get_max_size, '==', 6, 'get_max_size');
+cmp_ok($series->get_min_size, '==', 3, 'get_min_size');
+
+done_testing;

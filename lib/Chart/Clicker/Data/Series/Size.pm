@@ -3,6 +3,8 @@ use Moose;
 
 extends 'Chart::Clicker::Data::Series';
 
+use List::Util qw(min max);
+
 has 'sizes' => (
     traits => [ 'Array' ],
     is => 'rw',
@@ -14,6 +16,18 @@ has 'sizes' => (
         'get_size' => 'get'
     }
 );
+
+sub get_max_size {
+    my ($self) = @_;
+
+    return max(@{ $self->sizes });
+}
+
+sub get_min_size {
+    my ($self) = @_;
+
+    return min(@{ $self->sizes });
+}
 
 __PACKAGE__->meta->make_immutable;
 
@@ -58,6 +72,14 @@ Creates a new, empty Series::Size
 =head2 add_to_sizes
 
 Adds a size to this series.
+
+=head2 get_max_size
+
+Gets the largest value from this Series' C<sizes>.
+
+=head2 get_min_size
+
+Gets the smallest value from this Series' C<sizes>.
 
 =head2 get_size
 
