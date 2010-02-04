@@ -1,5 +1,13 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.59
+  - Correct POD in PolarArea
+  - Add get_max_size and get_min_size to Series::Size
+  - Bump some dependencies
+  - Add PolarArea example to Clicker.pm POD
+  - Remove some unnecessary imports from Context and clean up some code
+  - Add Math::Gradient dep
+
 2.58    January 25, 2010
   - POD fixes
 
