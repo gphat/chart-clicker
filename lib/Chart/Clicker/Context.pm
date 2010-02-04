@@ -1,9 +1,6 @@
 package Chart::Clicker::Context;
 use Moose;
 
-use Moose::Util::TypeConstraints;
-
-use Chart::Clicker;
 use Chart::Clicker::Axis;
 use Chart::Clicker::Renderer::Line;
 
