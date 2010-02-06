@@ -8,6 +8,8 @@ Revision history for Perl extension Chart::Clicker.
   - Remove some unnecessary imports from Context and clean up some code
   - Add Math::Gradient dep
   - Fix POD typos in tutorial  (Thanks Franz Bräuer)
+  - Make Data::Series->range a lazy_build attribute
+  - Rearrange tests
 
 2.58    January 25, 2010
   - POD fixes
