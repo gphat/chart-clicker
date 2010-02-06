@@ -72,8 +72,6 @@ sub add_pair {
     $self->add_to_values($value);
 }
 
-
-
 sub prepare {
     my ($self) = @_;
 
