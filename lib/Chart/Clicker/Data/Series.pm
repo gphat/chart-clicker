@@ -22,8 +22,7 @@ has 'name' => (
 has 'range' => (
     is => 'rw',
     isa => 'Chart::Clicker::Data::Range',
-    lazy => 1,
-    default => sub { my $self = shift; $self->find_range }
+    lazy_build => 1
 );
 has 'values' => (
     traits => [ 'Array' ],
@@ -35,6 +34,19 @@ has 'values' => (
         'value_count' => 'count'
     }
 );
+
+sub _build_range {
+    my ($self) = @_;
+
+    my $values = $self->values;
+
+    confess('A series must have values before it can be charted')
+        unless scalar(@{ $values });
+
+    return Chart::Clicker::Data::Range->new(
+        lower => min(@{ $values }), upper => max(@{ $values})
+    );
+}
 
 sub BUILDARGS {
     my ($class, @args) = @_;
@@ -60,18 +72,7 @@ sub add_pair {
     $self->add_to_values($value);
 }
 
-sub find_range {
-    my ($self) = @_;
 
-    my $values = $self->values;
-
-    confess('A series must have values before it can be charted')
-        unless scalar(@{ $values });
-
-    return Chart::Clicker::Data::Range->new(
-        lower => min(@{ $values }), upper => max(@{ $values})
-    );
-}
 
 sub prepare {
     my ($self) = @_;
@@ -161,11 +162,6 @@ Adds a key to this series.
 =head2 add_to_values
 
 Add a value to this series.
-
-=head2 find_range
-
-Used internally to determine the range for this series.  Exposed so that
-subclasses can implement their own method.
 
 =head2 key_count
 

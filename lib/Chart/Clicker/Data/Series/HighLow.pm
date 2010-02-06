@@ -5,6 +5,15 @@ extends 'Chart::Clicker::Data::Series';
 
 use List::Util qw(max min);
 
+sub _build_range {
+    my ($self) = @_;
+
+    return Chart::Clicker::Data::Range->new(
+        lower => min(@{ $self->lows }),
+        upper => max(@{ $self->highs })
+    );
+}
+
 has 'highs' => (
     traits => [ 'Array' ],
     is => 'rw',
@@ -40,15 +49,6 @@ has 'opens' => (
         'get_open' => 'get'
     }
 );
-
-sub find_range {
-    my ($self) = @_;
-
-    return Chart::Clicker::Data::Range->new(
-        lower => min(@{ $self->lows }),
-        upper => max(@{ $self->highs })
-    );
-}
 
 __PACKAGE__->meta->make_immutable;
 
