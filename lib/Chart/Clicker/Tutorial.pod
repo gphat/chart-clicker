@@ -107,14 +107,14 @@ contributions, drop me a line!
 
     $dataset->add_to_series(Chart::Clicker::Data::Series->new(
         keys    =>  [ 1,2,3,4,5 ],
-        value   =>  [ 34,67,89,45,67 ],
+        values   =>  [ 34,67,89,45,67 ]
     ));
     # add a second color
     $ca->add_to_colors($red);
 
     $dataset->add_to_series(Chart::Clicker::Data::Series->new(
         keys    =>  [ 1,2,3,4,5 ],
-        values  =>  [ 11,22,33,44,55 ],
+        values  =>  [ 11,22,33,44,55 ]
     ));
     # add a third color
     $ca->add_to_colors($green);
