@@ -17,13 +17,25 @@ has 'sizes' => (
     }
 );
 
-sub get_max_size {
+has max_size => (
+    is => 'ro',
+    isa => 'Num',
+    lazy_build => 1
+);
+
+has min_size => (
+    is => 'ro',
+    isa => 'Num',
+    lazy_build => 1
+);
+
+sub _build_max_size {
     my ($self) = @_;
 
     return max(@{ $self->sizes });
 }
 
-sub get_min_size {
+sub _build_min_size {
     my ($self) = @_;
 
     return min(@{ $self->sizes });
@@ -63,6 +75,14 @@ for the Bubble renderer.
 
 Set/Get the sizes for this series.
 
+=head2 max_size
+
+Gets the largest value from this Series' C<sizes>.
+
+=head2 min_size
+
+Gets the smallest value from this Series' C<sizes>.
+
 =head1 METHODS
 
 =head2 new
@@ -72,14 +92,6 @@ Creates a new, empty Series::Size
 =head2 add_to_sizes
 
 Adds a size to this series.
-
-=head2 get_max_size
-
-Gets the largest value from this Series' C<sizes>.
-
-=head2 get_min_size
-
-Gets the smallest value from this Series' C<sizes>.
 
 =head2 get_size
 

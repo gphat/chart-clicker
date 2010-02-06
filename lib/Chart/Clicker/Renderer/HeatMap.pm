@@ -67,8 +67,8 @@ override('prepare', sub {
 
     die 'HeatMap may only have one series!' unless scalar(@{ $dses[0]->series }) == 1;
 
-    $self->max_size($series->get_max_size);
-    $self->min_size($series->get_min_size);
+    $self->max_size($series->max_size);
+    $self->min_size($series->min_size);
 });
 
 override('finalize', {
