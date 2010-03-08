@@ -4,6 +4,7 @@ example/bar.pl
 example/bubble.pl
 example/candlestick.pl
 example/date-axis.pl
+example/heatmap.pl
 example/line-and-shape.pl
 example/line.pl
 example/markers.pl
@@ -56,6 +57,7 @@ lib/Chart/Clicker/Renderer/Area.pm
 lib/Chart/Clicker/Renderer/Bar.pm
 lib/Chart/Clicker/Renderer/Bubble.pm
 lib/Chart/Clicker/Renderer/CandleStick.pm
+lib/Chart/Clicker/Renderer/HeatMap.pm
 lib/Chart/Clicker/Renderer/Line.pm
 lib/Chart/Clicker/Renderer/Pie.pm
 lib/Chart/Clicker/Renderer/Point.pm
@@ -73,8 +75,6 @@ t/00-drawing-colorallocator.t
 t/01-data-dataset.t
 t/01-data-marker.t
 t/01-data-range.t
-t/01-data-series-highlow.t
-t/01-data-series.t
 t/03-axis-datetime.t
 t/03-axis.t
 t/03-renderer-base.t
@@ -94,12 +94,14 @@ t/05-decoration-plot.t
 t/05-decoration.t
 t/06-data-marker.t
 t/10-context.t
-t/10-data-series-size.t
 t/75-example.t
 t/76-simple-ctx.t
 t/77-same-axes-ctx.t
 t/78-invisible.t
 t/79-datetime.t
 t/99-add-data.t
+t/series/highlow.t
+t/series/series.t
+t/series/size.t
 t/xt/pod-coverage.t
 t/xt/pod.t
