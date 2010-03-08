@@ -5,7 +5,9 @@ extends 'Chart::Clicker::Renderer';
 
 use Graphics::Color::RGB;
 use Geometry::Primitive::Arc;
+use Geometry::Primitive::Circle;
 use Graphics::Primitive::Brush;
+use Graphics::Primitive::Paint::Gradient::Radial;
 
 use Scalar::Util qw(refaddr);
 
@@ -18,6 +20,11 @@ has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
     default => sub { Graphics::Primitive::Brush->new }
+);
+has 'gradient_color' => (
+    is => 'rw',
+    isa => 'Graphics::Color::RGB',
+    predicate => 'has_gradient_color'
 );
 
 my $TO_RAD = (4 * atan2(1, 1)) / 180;
@@ -81,11 +88,34 @@ override('finalize', sub {
 
             my $color = $clicker->color_allocator->next;
 
+            my $paint;
+            if($self->has_gradient_color) {
+                my $gc = $self->gradient_color;
+                $paint = Graphics::Primitive::Paint::Gradient::Radial->new(
+                    start => Geometry::Primitive::Circle->new(
+                        origin => [ $midx, $midy ],
+                        radius => 0
+                    ),
+                    end => Geometry::Primitive::Circle->new(
+                        origin => [ $midx, $midy ],
+                        radius => $self->{RADIUS}
+                    )
+                );
+                $paint->add_stop(0, $color);
+                $paint->add_stop(1, $color->clone(
+                    red     => $color->red + ($gc->red - $color->red) * $gc->alpha,
+                    green   => $color->green + ($gc->green - $color->green) * $gc->alpha,
+                    blue    => $color->blue + ($gc->blue - $color->blue) * $gc->alpha,
+                ));
+            } else {
+                $paint = Graphics::Primitive::Paint::Solid->new(
+                    color => $color,
+                );
+            }
+
             my $fop = Graphics::Primitive::Operation::Fill->new(
                 preserve => 1,
-                paint => Graphics::Primitive::Paint::Solid->new(
-                    color => $color,
-                )
+                paint => $paint
             );
             $self->do($fop);
 
@@ -151,6 +181,25 @@ Set/Get the Color to use for the border.
 =head2 brush
 
 Set/Get a Brush to be used for the pie's border.
+
+=head2 gradient_color
+
+If supplied, specifies a color to mix with each slice's color for use as a
+radial gradient.  The best results are usually gotten from mixing with a
+white or black and manipulating the alpha, like so:
+
+  $ren->gradient_color(
+    Graphics::Color::RGB->new(red => 1, green => 1, blue => 1, alpha => .3)
+  );
+  
+The above will cause each generated color to fade toward a lighter version of
+itself.  Adjust the alpha to increase or decrease the effect.
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/pie/pie-gradient.png" width="300" height="250" alt="Pie Chart" /></p>
+
+=end HTML
 
 =head1 METHODS
 

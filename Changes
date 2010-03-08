@@ -10,6 +10,7 @@ Revision history for Perl extension Chart::Clicker.
   - Fix POD typos in tutorial  (Thanks Franz Bräuer)
   - Make Data::Series->range a lazy_build attribute
   - Rearrange tests
+  - Add gradient_color to Pie renderer
 
 2.58    January 25, 2010
   - POD fixes
