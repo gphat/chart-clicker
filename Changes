@@ -1,5 +1,12 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.60    March 20, 2010
+  - Add gradient_reverse attribute to Pie renderer for reverse the
+    direction of the gradient (Carl Chambers)
+  - Add starting_angle attribute to Pie rather than hardcoding it to -90
+    (Carl Chambers)
+  - Refactor some Pie internals to not use $self->{VAR} (Carl Chambers)
+
 2.59
   - Correct POD in PolarArea
   - Add max_size and min_size to Series::Size

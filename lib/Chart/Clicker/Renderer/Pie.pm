@@ -26,6 +26,16 @@ has 'gradient_color' => (
     isa => 'Graphics::Color::RGB',
     predicate => 'has_gradient_color'
 );
+has 'gradient_reverse' => (
+    is => 'rw',
+    isa	=> 'Bool',
+    default => 0,
+);
+has 'starting_angle' => (
+    is => 'rw',
+    isa	=> 'Int',
+    default => -90,
+);
 
 my $TO_RAD = (4 * atan2(1, 1)) / 180;
 
@@ -53,21 +63,21 @@ override('finalize', sub {
 
     my $clicker = $self->clicker;
 
-    $self->{RADIUS} = $self->height;
+    my $radius = $self->height;
     if($self->width < $self->height) {
-        $self->{RADIUS} = $self->width;
+        $radius = $self->width;
     }
 
-    $self->{RADIUS} = $self->{RADIUS} / 2;
+    $radius = $radius / 2;
 
     # Take into acount the line around the edge when working out the radius
-    $self->{RADIUS} -= $self->brush->width;
+    $radius -= $self->brush->width;
 
     my $height = $self->height;
     my $linewidth = 1;
     my $midx = $self->width / 2;
     my $midy = $height / 2;
-    $self->{POS} = -90;
+    my $pos = $self->starting_angle;
 
     my $dses = $clicker->get_datasets_for_context($self->context);
     foreach my $ds (@{ $dses }) {
@@ -79,10 +89,10 @@ override('finalize', sub {
             my $range = $ctx->range_axis;
 
             my $avg = $self->{ACCUM}->{refaddr($series)} / $self->{TOTAL};
-            my $degs = ($avg * 360) + $self->{POS};
+            my $degs = ($avg * 360) + $pos;
 
             $self->move_to($midx, $midy);
-            $self->arc($self->{RADIUS}, $degs * $TO_RAD, $self->{POS} * $TO_RAD);
+            $self->arc($radius, $degs * $TO_RAD, $pos * $TO_RAD);
 
             $self->close_path;
 
@@ -91,14 +101,22 @@ override('finalize', sub {
             my $paint;
             if($self->has_gradient_color) {
                 my $gc = $self->gradient_color;
+                my $start_radius = 0;
+                my $end_radius = $radius;
+
+                if($self->gradient_reverse) {
+                    $start_radius = $radius;
+                    $end_radius = 0;
+                }
+
                 $paint = Graphics::Primitive::Paint::Gradient::Radial->new(
                     start => Geometry::Primitive::Circle->new(
                         origin => [ $midx, $midy ],
-                        radius => 0
+                        radius => $start_radius
                     ),
                     end => Geometry::Primitive::Circle->new(
                         origin => [ $midx, $midy ],
-                        radius => $self->{RADIUS}
+                        radius => $end_radius
                     )
                 );
                 $paint->add_stop(0, $color);
@@ -124,7 +142,7 @@ override('finalize', sub {
             $op->brush->color($self->border_color);
             $self->do($op);
 
-            $self->{POS} = $degs;
+            $pos = $degs;
         }
     }
 
