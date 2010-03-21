@@ -14,6 +14,11 @@ has 'bar_padding' => (
     isa => 'Int',
     default => 0
 );
+has 'bar_width' => (
+    is => 'rw',
+    isa => 'Num',
+    predicate => 'has_bar_width'
+);
 has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
@@ -60,9 +65,15 @@ override('finalize', sub {
     my $strokewidth = $self->brush->width;
     $padding += $strokewidth;
 
-    $self->{BWIDTH} = int(($width - ($width * $domain->fudge_amount)
-        - ($padding / 2 * $self->{KEYCOUNT})) / ($self->{KEYCOUNT}));
-    $self->{HBWIDTH} = $self->{BWIDTH} / 2;
+    my $bwidth;
+    if($self->has_bar_width) {
+        $bwidth = $self->bar_width;
+    } else {
+        $bwidth = int(($width - ($width * $domain->fudge_amount)
+            - ($padding / 2 * $self->{KEYCOUNT})) / ($self->{KEYCOUNT}));
+    }
+
+    my $hbwidth = $bwidth / 2;
 
     # Fetch all the colors we'll need.  Since we build each vertical bar from
     # top to bottom, we'll need to change colors vertically.
@@ -91,8 +102,8 @@ override('finalize', sub {
             my $y = $range->mark($height, $val);
             next unless defined($y);
 
-            $self->move_to($x - $self->{HBWIDTH}, $height - $y + $self->brush->width * 2);
-            $self->rectangle($self->{BWIDTH}, $y - $accum - 1);
+            $self->move_to($x - $hbwidth, $height - $y + $self->brush->width * 2);
+            $self->rectangle($bwidth, $y - $accum - 1);
             # Accumulate the Y value, as it dictates how much we bump up the
             # next bar.
             $accum += $y - $accum;
@@ -157,6 +168,11 @@ Chart::Clicker::Renderer::StackedBar renders a dataset as stacked bars.
 
 How much padding to put around a bar.  A padding of 4 will result in 2 pixels
 on each side.
+
+=head2 bar_width
+
+Allows you to override the calculation that determines the optimal width for
+bars.  Be careful using this as it can making things look terrible.
 
 =head2 brush
 

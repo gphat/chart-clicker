@@ -14,6 +14,11 @@ has 'bar_padding' => (
     isa => 'Int',
     default => 0
 );
+has 'bar_width' => (
+    is => 'rw',
+    isa => 'Num',
+    predicate => 'has_bar_width'
+);
 has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
@@ -64,10 +69,15 @@ override('finalize', sub {
             my $range = $ctx->range_axis;
 
             my $owidth = $width - ($width * $domain->fudge_amount);
-            my $bwidth = int(($owidth / $self->{KEYCOUNT})) - $padding;
+            my $bwidth;
+            if($self->has_bar_width) {
+                $bwidth = $self->bar_width;
+            } else {
+                $bwidth = int(($owidth / $self->{KEYCOUNT})) - $padding;
+            }
             my $hbwidth = int($bwidth / 2);
 
-            # Fudge amounts change mess up the calculation of bar widths, so
+            # Fudge amounts mess up the calculation of bar widths, so
             # we compensate for them here.
             my $cbwidth = $bwidth / $self->{SCOUNT};
             my $chbwidth = int($cbwidth / 2);
@@ -199,6 +209,13 @@ something like this:
 
 How much padding to put around a bar.  A padding of 4 will result in 2 pixels
 on each side.
+
+=head2 bar_width
+
+Allows you to override the calculation that determines the optimal width for
+bars.  Be careful using this as it can making things look terrible.  Note that
+this number is divided evenly between all the values in a series when charting
+multiple series.
 
 =head2 brush
 
