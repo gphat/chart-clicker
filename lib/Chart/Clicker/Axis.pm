@@ -14,10 +14,6 @@ use Layout::Manager::Absolute;
 
 use Math::Trig ':pi';
 
-use Moose::Util::TypeConstraints;
-
-type 'StrOrCodeRef' => where { (ref($_) eq "") || ref($_) eq 'CODE' };
-
 has 'tick_label_angle' => (
     is => 'rw',
     isa => 'Num'
@@ -46,7 +42,7 @@ has '+color' => (
         })
     }
 );
-has 'format' => ( is => 'rw', isa => 'StrOrCodeRef' );
+has 'format' => ( is => 'rw', isa => 'Str|CodeRef' );
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
 has 'hidden' => ( is => 'rw', isa => 'Bool', default => 0 );
 has 'label' => ( is => 'rw', isa => 'Str' );
