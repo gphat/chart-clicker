@@ -1,5 +1,10 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.61
+  - Add bar_width attribute to Bar and StackedBar renderers for choosing your   
+    own bar width.
+  - Remove unnecessary type declaration from Axis
+
 2.60    March 20, 2010
   - Add gradient_reverse attribute to Pie renderer for reverse the
     direction of the gradient (Carl Chambers)
