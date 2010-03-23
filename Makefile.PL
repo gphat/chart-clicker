@@ -17,7 +17,7 @@ requires    'Graphics::Primitive' => '0.49';
 requires    'Graphics::Primitive::Driver::Cairo' => '0.42';
 requires    'Layout::Manager' => '0.31';
 requires    'Math::Gradient'    => '0.04';
-
+requires    'POSIX';
 
 
 recommends 'Statistics::Basic'  => 0;
