@@ -108,7 +108,7 @@ Chart::Clicker::Renderer::Point renders a dataset as points.
 =head1 SYNOPSIS
 
   my $pr = Chart::Clicker::Renderer::Point->new({
-    shape => Chart::Clicker::Shape::Arc->new({
+    shape => Geometry::Primitive::Arc->new({
         angle1 => 0,
         angle2 => 180,
         radius  => 5

@@ -548,7 +548,7 @@ The font used for the axis' label.
 
 =head2 orientation
 
-The orientation of this axis.  See L<Chart::Clicker::Drawing>.
+The orientation of this axis.  See L<Graphics::Primitive::Oriented>.
 
 =head2 position
 
