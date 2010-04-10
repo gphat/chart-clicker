@@ -7,7 +7,6 @@ example/date-axis.pl
 example/heatmap.pl
 example/line-and-shape.pl
 example/line.pl
-example/markers.pl
 example/multiple-axes.pl
 example/multiple-renderers.pl
 example/overaxis-bar.pl
