@@ -466,7 +466,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Axis
+Chart::Clicker::Axis - An X or Y Axis
 
 =head1 DESCRIPTION
 

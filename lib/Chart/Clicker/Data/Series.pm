@@ -91,7 +91,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Data::Series
+Chart::Clicker::Data::Series - A series of key, value pairs representing chart data
 
 =head1 DESCRIPTION
 

@@ -158,7 +158,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::Pie
+Chart::Clicker::Renderer::Pie - Pie renderer
 
 =head1 DESCRIPTION
 

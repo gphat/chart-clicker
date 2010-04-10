@@ -93,7 +93,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::Point
+Chart::Clicker::Renderer::Point - Point renderer
 
 =head1 DESCRIPTION
 

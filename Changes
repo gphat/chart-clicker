@@ -1,12 +1,13 @@
 Revision history for Perl extension Chart::Clicker.
 
-2.62
-  - POD errors (spotted by Ricardo Signes)
-
 2.61
   - Add bar_width attribute to Bar and StackedBar renderers for choosing your   
     own bar width.
   - Remove unnecessary type declaration from Axis
+  - POD errors (spotted by Ricardo Signes)
+  - Add POD 'whatis' entries (RT #56287, Jonathan Yu)
+  - Update README (RT #56396, Jonathan Yu)
+  - Add missing dependency on Test::Exception (RT #56398, Jonathan Yu)
 
 2.60    March 20, 2010
   - Add gradient_reverse attribute to Pie renderer for reverse the

@@ -53,7 +53,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Decoration::Glass
+Chart::Clicker::Decoration::Glass - Under-chart gradient decoration
 
 =head1 DESCRIPTION
 

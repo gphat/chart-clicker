@@ -136,7 +136,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::StackedArea
+Chart::Clicker::Renderer::StackedArea - Stacked Area renderer
 
 =head1 DESCRIPTION
 

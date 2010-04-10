@@ -19,7 +19,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Component
+Chart::Clicker::Component - Base class that extends Graphics::Primitive::Component
 
 =head1 DESCRIPTION
 

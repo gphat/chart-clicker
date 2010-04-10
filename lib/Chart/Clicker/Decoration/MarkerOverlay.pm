@@ -103,7 +103,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Decoration::MarkerOverlay
+Chart::Clicker::Decoration::MarkerOverlay - Component for drawing markers
 
 =head1 DESCRIPTION
 

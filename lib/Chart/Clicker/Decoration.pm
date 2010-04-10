@@ -14,7 +14,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Decoration
+Chart::Clicker::Decoration - Shiny baubles!
 
 =head1 DESCRIPTION
 

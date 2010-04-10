@@ -141,7 +141,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::Line
+Chart::Clicker::Renderer::Line - Line renderer
 
 =head1 DESCRIPTION
 

@@ -147,7 +147,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Decoration::Legend::Tabular
+Chart::Clicker::Decoration::Legend::Tabular - Tabular version of Legend
 
 =head1 DESCRIPTION
 

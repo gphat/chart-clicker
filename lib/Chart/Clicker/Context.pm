@@ -63,7 +63,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Context
+Chart::Clicker::Context - A rendering context: Axes, Markers and a Renderer
 
 =head1 DESCRIPTION
 

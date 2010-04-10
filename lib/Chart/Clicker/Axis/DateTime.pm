@@ -132,7 +132,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Axis::DateTime
+Chart::Clicker::Axis::DateTime - An X or Y Axis using DateTime
 
 =head1 DESCRIPTION
 

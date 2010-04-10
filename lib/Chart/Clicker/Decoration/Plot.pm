@@ -67,7 +67,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Decoration::Plot
+Chart::Clicker::Decoration::Plot - Area on which renderers draw
 
 =head1 DESCRIPTION
 

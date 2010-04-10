@@ -51,7 +51,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Data::Series::Size
+Chart::Clicker::Data::Series::Size - Chart data with additional attributes for Size charts
 
 =head1 DESCRIPTION
 

@@ -19,7 +19,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Container
+Chart::Clicker::Container - Base class that extends Graphics::Primitive::Container
 
 =head1 DESCRIPTION
 

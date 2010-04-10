@@ -119,7 +119,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Drawing::ColorAllocator
+Chart::Clicker::Drawing::ColorAllocator - Color picker
 
 =head1 DESCRIPTION
 

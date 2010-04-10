@@ -126,7 +126,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Decoration::OverAxis
+Chart::Clicker::Decoration::OverAxis - An axis drawn over data
 
 =head1 DESCRIPTION
 

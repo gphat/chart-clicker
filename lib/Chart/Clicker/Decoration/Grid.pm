@@ -114,7 +114,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Decoration::Grid
+Chart::Clicker::Decoration::Grid - Under-data grid
 
 =head1 DESCRIPTION
 

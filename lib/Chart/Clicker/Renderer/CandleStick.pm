@@ -148,7 +148,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::CandleStick
+Chart::Clicker::Renderer::CandleStick - CandleStick renderer
 
 =head1 DESCRIPTION
 

@@ -109,7 +109,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Data::Range
+Chart::Clicker::Data::Range - A range of Data
 
 =head1 DESCRIPTION
 

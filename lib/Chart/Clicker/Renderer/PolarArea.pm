@@ -175,7 +175,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::PolarArea
+Chart::Clicker::Renderer::PolarArea - Polar Area renderer
 
 =head1 DESCRIPTION
 

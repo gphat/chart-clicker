@@ -43,7 +43,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Data::Marker
+Chart::Clicker::Data::Marker - Highlight arbitrary value(s)
 
 =head1 DESCRIPTION
 

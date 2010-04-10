@@ -21,7 +21,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::Bubble
+Chart::Clicker::Renderer::Bubble - Bubble render
 
 =head1 DESCRIPTION
 

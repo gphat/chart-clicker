@@ -60,7 +60,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Data::Series::HighLow
+Chart::Clicker::Data::Series::HighLow - Series data with additional attributes for High-Low charts
 
 =head1 DESCRIPTION
 

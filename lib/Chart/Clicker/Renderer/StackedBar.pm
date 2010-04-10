@@ -146,7 +146,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::StackedBar
+Chart::Clicker::Renderer::StackedBar - Stacked Bar renderer
 
 =head1 DESCRIPTION
 

@@ -1,40 +1,295 @@
-Chart::Clicker
-==================
+NAME
+    Chart::Clicker - Powerful, extensible charting.
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+SYNOPSIS
+      use Chart::Clicker;
 
-A README file is required for CPAN modules since CPAN extracts the
-README file from a module distribution so that people browsing the
-archive can use it get an idea of the modules uses. It is usually a
-good idea to provide version information here so that people can
-decide whether fixes for the module are worth downloading.
+      my $cc = Chart::Clicker->new;
 
-INSTALLATION
+      my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+      $cc->add_data('Sales', \@values);
 
-To install this module type the following:
+      # alternately, you can add data one bit at a time...
+      foreach my $v (@values) {
+        $cc->add_data('Sales', $v);
+      }
 
-   perl Makefile.PL
-   make
-   make test
-   make install
+      # Or, if you want to specify the keys you can use a hashref
+      my $data = { 12 => 123, 13 => 341, 14 => 1241 };
+      $cc->add_data('Sales', $data);
 
-DEPENDENCIES
+      $cc->write_output('foo.png');
 
-This module requires these other modules and libraries:
+DESCRIPTION
+    Chart::Clicker aims to be a powerful, extensible charting package that
+    creates really pretty output. Charts can be saved in png, svg, pdf and
+    postscript format.
 
-  blah blah blah
+    Clicker leverages the power of Graphics::Primitive to create snazzy
+    graphics without being tied to specific backend. You may want to begin
+    with Chart::Clicker::Tutorial.
 
-COPYRIGHT AND LICENCE
+    For code examples see the examples repository on GitHub:
+    <http://github.com/gphat/chart-clicker-examples/>
 
-Put the correct copyright and licence information here.
+FEATURES
+  Renderers
+    Clicker supports the following renderers:
 
-Copyright (C) 2007 by gphat
+    Line
+    StackedLine
+    Bar
+    StackedBar
+    Area
+    StackedArea
+    Bubble
+    CandleStick
+    Point
+    Pie
+    PolarArea
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.6 or,
-at your option, any later version of Perl 5 you may have available.
+ADDING DATA
+    The synopsis shows the simple way to add data.
 
+      my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+      foreach my $v (@values) {
+        $cc->add_data('Sales', $v);
+      }
+
+    This is a convenience method provided to make simple cases much simpler.
+    Adding multiple Series to a chart is as easy as changing the name
+    argument of "add_data". Each unique first argument will result in a
+    separate series. See the docs for "add_data" to learn more.
+
+    If you'd like to use the more advanced features of Clicker you'll need
+    to shake off this simple method and build Series & DataSets explicitly.
+
+      use Chart::Clicker::Data::Series;
+      use Chart::Clicker::Data::DataSet;
+
+      ...
+
+      my $series = Chart::Clicker::Data::Series->new(
+        keys    => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+        values  => [ 42, 25, 86, 23, 2, 19, 103, 12, 54, 9 ],
+      );
+
+      my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
+ 
+      $cc->add_to_datasets($ds);
+
+    This used to be the only way to add data, but repeated requests to make
+    the common case easier resulted in the inclusion of "add_data".
+
+COOKBOOK
+    Check the cookbook at <http://www.onemogin.com/clicker/cookbook>
+
+CONTEXTS
+    The normal use case for a chart is a couple of datasets on the same
+    axes. Sometimes you want to chart one or more datasets on different
+    axes. A common need for this is when you are comparing two datasets of
+    vastly different scale such as the number of employees in an office
+    (1-10) to monthly revenues (10s of thousands). On a normal chart the
+    number of employees would show up as a flat line at the bottom of the
+    chart.
+
+    To correct this, Clicker has contexts. A context is a pair of axes, a
+    renderer and a name. The name is the 'key' by which you will refer to
+    the context.
+
+      my $context = Chart::Clicker::Context->new( name => 'sales' );
+      $clicker->add_to_contexts($context);
+  
+      $dataset->context('sales');
+  
+      $clicker->add_to_datasets($dataset);
+
+    New contexts provide a fresh domain and range axis and default to a Line
+    renderer.
+
+    Caveat: Clicker expects that the default context (identified by the
+    string "default") will always be present. It is from this context that
+    some of Clicker's internals draw their values. You should use the
+    default context unless you need more than one, in which case you should
+    use "default" as the base context.
+
+FORMATS & OUTPUT
+    Clicker supports PNG, SVG, PDF and PostScript output. To change your
+    output type, specificy it when you create your Clicker object:
+
+      my $cc = Chart::Clicker->new(format => 'pdf', ...);
+      # ...
+      $cc->write_output('chart.pdf');
+
+    If you are looking to get a scalar of the output for use with HTTP or
+    similar things, you can use:
+
+      # ... make your chart
+      $cc->draw;
+      my $image_data = $cc->data;
+
+    If you happen to be using Catalyst then take a look at
+    Catalyst::View::Graphics::Primitive.
+
+ATTRIBUTES
+  contexts
+    Set/Get the contexts for this chart.
+
+  datasets
+    Get/Set the datasets for this chart.
+
+  format
+    Get the format for this Chart. Required in the constructor. Must be on
+    of Png, Pdf, Ps or Svg.
+
+  legend
+    Set/Get the legend that will be used with this chart.
+
+  legend_position
+    The position the legend will be added. Should be one of north, south,
+    east, west or center as required by Layout::Manager::Compass.
+
+  grid_over
+    Flag controlling if the grid is rendered over the data. Defaults to 0.
+    You probably want to set the grid's background color to an alpha of 0 if
+    you enable this flag.
+
+  title
+    Set/Get the title component for this chart. This is a
+    Graphics::Primitive::TextBox, not a string. To set the title of a chart
+    you should access the TextBox's "text" method.
+
+      $cc->title->text('A Title!');
+      $cc->title->font->size(20);
+      # etc, etc
+
+    If the title has text then it is added to the chart in the position
+    specified by "title_position".
+
+    You should consult the documentation for Graphics::Primitive::TextBox
+    for things like padding and text rotation. If you are adding it to the
+    top and want some padding between it and the plot, you can:
+
+      $cc->title->padding->bottom(5);
+
+  title_position
+    The position the title will be added. Should be one of north, south,
+    east, west or center as required by Layout::Manager::Compass.
+
+    Note that if no angle is set for the title then it will be changed to
+    -1.5707 if the title position is east or west.
+
+METHODS
+  new
+    Creates a new Chart::Clicker object. If no format, width and height are
+    specified then defaults of Png, 500 and 300 are chosen, respectively.
+
+  add_data ($name, $data)
+    Convenience method for adding data to the chart. Can be called one of
+    three ways.
+
+    scalar
+        Passing a name and a scalar will "add" the scalar data to that
+        series' data.
+
+          $cc->add_data('Sales', 1234);
+          $cc->add_data('Sales', 1235);
+
+        This will result in a Series names 'Sales' with two values.
+
+    arrayref
+        Passing a name and an arrayref works much the same as the scalar
+        method discussed above, but appends the supplied arrayref to the
+        existing one. It may be mixed with the scalar method.
+
+          $cc->add_data('Sales', \@some_sales);
+          $cc->add_data('Sales', \@some_more_sales);
+          # This works still!
+          $cc->add_data('Sales', 1234);
+
+    hashref
+        This allows you to pass both keys and add in all at once, but it's
+        an all-or-nothing thing. Subsequent calls with the same name will
+        overwrite previous calls.
+
+          $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
+          # Overwrites last call!
+          $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
+
+  add_to_contexts
+    Add the specified context to the chart.
+
+  add_to_datasets
+    Add the specified dataset (or arrayref of datasets) to the chart.
+
+  add_to_markers
+    Add the specified marker to the chart.
+
+  color_allocator
+    Set/Get the color_allocator for this chart.
+
+  data
+    Returns the data for this chart as a scalar. Suitable for 'streaming' to
+    a client.
+
+  draw
+    Draw this chart.
+
+  get_datasets_for_context
+    Returns an arrayref containing all datasets for the given context. Used
+    by renderers to get a list of datasets to chart.
+
+  inside_width
+    Get the width available in this container after taking away space for
+    insets and borders.
+
+  inside_height
+    Get the height available in this container after taking away space for
+    insets and borders.
+
+  marker_overlay
+    Set/Get the marker overlay object that will be used if this chart has
+    markers. This is lazily constructed to save time.
+
+  set_renderer ($renderer_object, [ $context ]);
+    Sets the renderer on the specified context. If no context is provided
+    then 'default' is assumed.
+
+  write
+    This method is passed through to the underlying driver. It is only
+    necessary that you call this if you manually called "draw" beforehand.
+    You likely want to use "write_output".
+
+  write_output ($path)
+    Write the chart output to the specified location. Output is written in
+    the format provided to the constructor (which defaults to Png).
+    Internally calls "draw" for you. If you use this method, do not call
+    "draw" first!
+
+      $c->write_output('/path/to/the.png');
+
+AUTHOR
+    Cory G Watson <gphat@cpan.org>
+
+CONTRIBUTORS
+    Many thanks to the individuals who have contributed various bits:
+
+    Ash Berlin
+
+    Brian Cassidy
+
+    Guillermo Roditi
+
+    Torsten Schoenfeld
+
+    Yuval Kogman
+
+SOURCE
+    Chart::Clicker is on github:
+
+      http://github.com/gphat/chart-clicker/tree/master
+
+LICENSE
+    You can redistribute and/or modify this code under the same terms as
+    Perl itself.
 

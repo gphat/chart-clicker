@@ -182,7 +182,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::HeatMap
+Chart::Clicker::Renderer::HeatMap - Work In Progress
 
 =head1 DESCRIPTION
 

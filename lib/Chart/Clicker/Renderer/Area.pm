@@ -133,7 +133,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer::Area
+Chart::Clicker::Renderer::Area - Area renderer
 
 =head1 DESCRIPTION
 

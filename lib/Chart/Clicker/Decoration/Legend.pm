@@ -92,7 +92,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Decoration::Legend
+Chart::Clicker::Decoration::Legend - Series name, color key
 
 =head1 DESCRIPTION
 
