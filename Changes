@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.62
+  - More POD fixes
+
 2.61
   - Add bar_width attribute to Bar and StackedBar renderers for choosing your   
     own bar width.

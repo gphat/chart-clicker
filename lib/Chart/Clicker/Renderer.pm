@@ -22,7 +22,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Renderer
+Chart::Clicker::Renderer - Base class for renderers
 
 =head1 DESCRIPTION
 

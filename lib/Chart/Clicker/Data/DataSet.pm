@@ -97,7 +97,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Data::DataSet
+Chart::Clicker::Data::DataSet - A collection of series
 
 =head1 DESCRIPTION
 
