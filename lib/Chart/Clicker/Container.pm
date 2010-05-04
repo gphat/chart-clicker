@@ -1,7 +1,7 @@
 package Chart::Clicker::Container;
 use Moose;
 
-extends 'Graphics::Primitive::Container';
+extends 'Graphics::Primitive::Component';
 
 with 'Graphics::Primitive::Oriented';
 

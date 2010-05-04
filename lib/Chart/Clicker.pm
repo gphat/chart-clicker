@@ -9,6 +9,7 @@ use Graphics::Color::RGB;
 
 use Graphics::Primitive::Insets;
 use Graphics::Primitive::Border;
+use Geometry::Primitive::Dimension;
 
 use Graphics::Primitive::Driver::Cairo;
 
@@ -74,6 +75,9 @@ has 'datasets' => (
         'get_dataset' => 'get'
     }
 );
+has '+dimensions' => (
+    default => sub { Geometry::Primitive::Dimension->new(width => 500, height => 300) }
+);
 has 'driver' => (
     is => 'rw',
     does => 'Graphics::Primitive::Driver',
@@ -98,9 +102,6 @@ has 'grid_over' => (
     is => 'rw',
     isa => 'Bool',
     default => sub { 0 }
-);
-has '+height' => (
-    default => 300
 );
 has '+layout_manager' => (
     default => sub { Layout::Manager::Compass->new }
@@ -167,9 +168,6 @@ has 'title_position' => (
     isa => 'Str',
     default => sub { 'n' }
 );
-has '+width' => (
-    default => 500
-);
 
 sub add_to_contexts {
     my ($self, $ctx) = @_;
@@ -226,8 +224,6 @@ sub add_data {
 override('prepare', sub {
     my ($self, $driver) = @_;
 
-    return if $self->prepared;
-
     if(scalar(keys(%{ $self->_data }))) {
 
         my $ds = Chart::Clicker::Data::DataSet->new;
@@ -266,7 +262,7 @@ override('prepare', sub {
         $self->add_to_datasets($ds);
     }
 
-    unless(scalar(@{ $self->components })) {
+    unless($self->is_leaf) {
         $self->add_component($self->plot, 'c');
 
         my $lp = lc($self->legend_position);
@@ -290,8 +286,9 @@ override('prepare', sub {
 
     my $plot = $self->plot;
 
-    $plot->clear_components;
-    $plot->render_area->clear_components;
+    # Replace these later?
+    $plot->clear_children;
+    $plot->render_area->clear_children;
 
     # These two adds are here because the plot is too dependant on changes
     # in the axes and such to trust it across multiple prepares.  Putting all
