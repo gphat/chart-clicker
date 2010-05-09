@@ -2,11 +2,11 @@
 
 =head1 NAME
 
-Chart::Clicker::Tutorial
+Chart::Clicker::Tutorial - A Tutorial for using Chart::Clicker
 
 =head1 DESCRIPTION
 
-This document aims to provide a tutorial for using Chart::Clicker.  
+This document aims to provide a tutorial for using Chart::Clicker.
 
 =head1 DISCLAIMER
 

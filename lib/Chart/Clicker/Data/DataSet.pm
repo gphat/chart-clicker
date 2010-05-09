@@ -31,6 +31,16 @@ has 'series' => (
     }
 );
 
+sub get_all_series_keys {
+    my ($self) = @_;
+
+    my %keys;
+    for my $series (@{$self->series}) {
+        foreach (@{$series->keys}) { $keys{$_} = 1};
+    }
+    return keys %keys;
+}
+
 sub get_series_keys {
     my ($self, $position) = @_;
 
@@ -53,7 +63,7 @@ sub largest_value_slice {
     # Check that value against all the remaining slices
     for my $i (0 .. $self->max_key_count - 1) {
         my $t;
-        foreach ($self->get_series_values($i)) { $t += $_; }
+        foreach ($self->get_series_values($i)) { $t += $_ if defined($_); }
         $big = $t if(($t > $big) || !defined($big));
     }
     return $big;
@@ -157,6 +167,10 @@ Add a series to this dataset.
 =head2 count
 
 Get the number of series in this dataset.
+
+=head2 get_all_series keys
+
+Returns an array of keys representing the union of all keys from all DataSets.
 
 =head2 get_series_keys
 

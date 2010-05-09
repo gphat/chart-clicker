@@ -24,7 +24,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 use Carp qw(croak);
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.62';
+our $VERSION = '2.64';
 
 has '+background_color' => (
     default => sub {
@@ -152,6 +152,12 @@ has 'plot' => (
         Chart::Clicker::Decoration::Plot->new
     }
 );
+has 'subgraphs' => (
+    is => 'rw',
+    isa => 'ArrayRef',
+    default => sub { [] },
+    predicate => 'has_subgraphs'
+);
 has 'title' => (
     is => 'rw',
     isa => 'Graphics::Primitive::TextBox',
@@ -178,6 +184,15 @@ sub add_to_contexts {
         croak("Context named '".$ctx->name."' already exists.");
     }
     $self->set_context($ctx->name, $ctx);
+}
+
+sub add_subgraph {
+    my ($self, $graph) = @_;
+
+    if (not ref $graph or not $graph->isa('Chart::Clicker')) {
+        die('Sub-Graphs must be Chart::Clicker objects');
+    }
+    push(@{$self->subgraphs}, $graph);
 }
 
 sub data {
@@ -275,6 +290,16 @@ override('prepare', sub {
                 $self->legend->orientation('vertical');
             }
             $self->add_component($self->legend, $self->legend_position);
+        }
+
+        # Add subgraphs
+        if($self->has_subgraphs) {
+            for my $subgraph (@{$self->subgraphs}) {
+                $subgraph->border->width(0);
+                $subgraph->padding(0);
+
+                $self->add_component($subgraph, 'south');
+            }
         }
 
         if(defined($self->title->text)) {
@@ -693,6 +718,12 @@ Flag controlling if the grid is rendered B<over> the data.  Defaults to 0.
 You probably want to set the grid's background color to an alpha of 0 if you
 enable this flag.
 
+=head2 subgraphs
+
+You can add "child" graphs to this one via C<add_subgraph>.  These must be
+Chart::Clicker objects and they will be added to the bottom of the existing
+chart.  This is a rather esoteric feature.
+
 =head2 title
 
 Set/Get the title component for this chart.  This is a
@@ -777,6 +808,10 @@ Add the specified dataset (or arrayref of datasets) to the chart.
 
 Add the specified marker to the chart.
 
+=head2 add_subgraph
+
+Add a subgraph to this chart.
+
 =head2 color_allocator
 
 Set/Get the color_allocator for this chart.
@@ -853,7 +888,9 @@ Chart::Clicker is on github:
 
   http://github.com/gphat/chart-clicker/tree/master
 
-=head1 LICENSE
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2007-2010 by Cory G Watson
 
 You can redistribute and/or modify this code under the same terms as Perl
 itself.

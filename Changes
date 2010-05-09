@@ -1,5 +1,12 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.64
+  - POD fixes (Jonathan Yu, RT #56287 and #57317)
+
+2.63
+  - Make DataSet and StackedBar more tolerant of missing values (Rod Taylor,
+    RT #57259)
+
 2.62
   - More POD fixes
 

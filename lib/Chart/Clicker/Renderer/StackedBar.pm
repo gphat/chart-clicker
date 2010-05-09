@@ -81,7 +81,7 @@ override('finalize', sub {
         push(@{ $self->{COLORS} }, $clicker->color_allocator->next);
     }
 
-    my @keys = @{ $dses->[0]->get_series(0)->keys };
+    my @keys = $dses->[0]->get_all_series_keys;
 
     # Iterate over each key...
     for (my $i = 0; $i < scalar(@keys); $i++) {
@@ -98,7 +98,7 @@ override('finalize', sub {
 
         my $val = 0;
         for my $j (0 .. $#values) {
-            $val += $values[$j];
+            $val += $values[$j] if defined($values[$j]);
             my $y = $range->mark($height, $val);
             next unless defined($y);
 
