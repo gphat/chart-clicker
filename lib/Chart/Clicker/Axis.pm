@@ -333,33 +333,28 @@ override('finalize', sub {
             my $iy = $height - $mark;
             my $label = $self->get_component($comp_count);
 
+            # Adjust text on the Y axis to fit when it is
+            # too close to the edges
+			my $standardYOrigin = $iy - ($label->height / 2);
+            #my $lowerYOrigin = $iy - $label->height;
+            my $lowerYOrigin = $ioy + $iheight - $label->height;
+            my $upperYOrigin = $ioy;
+            if($standardYOrigin >= $lowerYOrigin) {
+                # The first label (being at the bottom) needs to be
+                # skooched up a bit to fit.
+                $label->origin->y($lowerYOrigin);
+            } elsif($standardYOrigin <= $upperYOrigin) {
+                # The last label (being at the top) can be positioned
+                # exactly at the mark.
+                $label->origin->y($upperYOrigin);
+            } else {
+                $label->origin->y($standardYOrigin);
+            }
+
             if($self->is_left) {
                 $label->origin->x($iox + $iwidth - $label->width);
-                if($val == $lower) {
-                    # The first label (being at the bottom) needs to be
-                    # skooched up a bit to fit.
-                    $label->origin->y($iy - $label->height);
-                } elsif($val == $upper) {
-                    # The last label (being at the top) can be positioned
-                    # exactly at the mark.
-                    $label->origin->y($iy);
-                } else {
-                    $label->origin->y($iy - ($label->height / 2));
-                }
             } else {
-
                 $label->origin->x($iox);
-                if($val == $lower) {
-                    # The first label (being at the bottom) needs to be
-                    # skooched up a bit to fit.
-                    $label->origin->y($iy - $label->height);
-                } elsif($val == $upper) {
-                    # The last label (being at the top) can be positioned
-                    # exactly at the mark.
-                    $label->origin->y($iy);
-                } else {
-                    $label->origin->y($iy - ($label->height / 2));
-                }
             }
             # Keep track of how many components we've actually grabbed, since
             # we could be skipping any that are in a skip range.
@@ -398,24 +393,22 @@ override('finalize', sub {
                 }
             }
 
-            if($self->is_top) {
+            # Adjust the X-origin value to ensure it is within the graph
+            # and does not get snipped when too close to the edge.
+            my $standardXOrigin = $ix - ($label->width / 1.8);
+            my $lowerXOrigin = $iox;
+            my $upperXOrigin = $iox + $iwidth - $label->width;
+            if($standardXOrigin <= $lowerXOrigin) {
+                $label->origin->x($lowerXOrigin);
+            } elsif($standardXOrigin >= $upperXOrigin) {
+                $label->origin->x($upperXOrigin);
+            } else {
+                $label->origin->x($standardXOrigin);
+            }
 
-                if($val == $lower) {
-                    $label->origin->x($ix);
-                } elsif($val == $upper) {
-                    $label->origin->x($ix - $label->width);
-                } else {
-                    $label->origin->x($ix - ($label->width / 1.8));
-                }
+            if($self->is_top) {
                 $label->origin->y($ioy + $iheight - $label->height - $bump);
             } else {
-                if($val == $lower) {
-                    $label->origin->x($ix);
-                } elsif($val == $upper) {
-                    $label->origin->x($ix - $label->width);
-                } else {
-                    $label->origin->x($ix - ($label->width / 1.8));
-                }
                 $label->origin->y($ioy + $bump);
             }
             # Keep track of how many components we've actually grabbed, since

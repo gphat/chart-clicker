@@ -1,8 +1,11 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.66
+  - Nudge edge tick labels closer in based on their bounding box (Rod Taylor, RT #60603)
+
 2.65
   - Fix warning in Glass related to newer Moose deprecation warnings.
-  
+
 2.64
   - POD fixes (Jonathan Yu, RT #56287 and #57317)
 
@@ -14,7 +17,7 @@ Revision history for Perl extension Chart::Clicker.
   - More POD fixes
 
 2.61
-  - Add bar_width attribute to Bar and StackedBar renderers for choosing your   
+  - Add bar_width attribute to Bar and StackedBar renderers for choosing your
     own bar width.
   - Remove unnecessary type declaration from Axis
   - POD errors (spotted by Ricardo Signes)
