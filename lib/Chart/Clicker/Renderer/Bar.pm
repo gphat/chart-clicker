@@ -98,6 +98,10 @@ override('finalize', sub {
 
             my $sksent = $series->key_count;
             for(0..($sksent - 1)) {
+
+                # Skip drawing anything if the value is equal to the baseline
+                next if $vals[$_] == $range->baseline;
+
                 my $x = $domain->mark($width, $keys[$_]);
                 my $y = $range->mark($height, $vals[$_]);
 

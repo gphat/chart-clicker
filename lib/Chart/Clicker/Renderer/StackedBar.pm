@@ -98,7 +98,12 @@ override('finalize', sub {
 
         my $val = 0;
         for my $j (0 .. $#values) {
-            $val += $values[$j] if defined($values[$j]);
+            my $sval = $values[$j];
+            if(defined($sval)) {
+                next if $sval == $range->baseline; # no reason to draw anything if no value
+                $val += $sval;
+            }
+
             my $y = $range->mark($height, $val);
             next unless defined($y);
 
