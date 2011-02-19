@@ -292,9 +292,11 @@ sub mark {
 override('finalize', sub {
     my ($self) = @_;
 
-    super;
-
-    return if $self->hidden;
+    if($self->hidden) {
+        # Call the callback, just in case it matters.
+        super;
+        return;
+    }
 
     my $x = 0;
     my $y = 0;
@@ -433,6 +435,8 @@ override('finalize', sub {
             }
         }
     }
+
+    super;
 });
 
 sub format_value {

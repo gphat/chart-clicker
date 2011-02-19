@@ -1,5 +1,9 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.67
+  - Axis now calls "super" at the end of it's finalize.  This way if there is
+    a callback it's called at the end, as advertised
+
 2.66
   - Nudge edge tick labels closer in based on their bounding box (Rod Taylor, RT #60603)
   - Skip "zero" values in Bar and Stacked bar.  This prevents drawing hairline
