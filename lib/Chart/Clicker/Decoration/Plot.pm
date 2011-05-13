@@ -26,11 +26,6 @@ has 'grid' => (
 has '+layout_manager' => (
     default => sub { Layout::Manager::Axis->new }
 );
-has 'markers' => (
-    is => 'rw',
-    isa => 'Bool',
-    default => 1
-);
 has 'render_area' => (
     is => 'rw',
     isa => 'Chart::Clicker::Container',

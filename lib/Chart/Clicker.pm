@@ -24,7 +24,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 use Carp qw(croak);
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.67';
+our $VERSION = '2.68';
 
 has '+background_color' => (
     default => sub {
@@ -326,11 +326,9 @@ override('prepare', sub {
         $plot->render_area->add_component($plot->grid, 'c');
     }
 
-    if($plot->markers) {
-        $plot->render_area->add_component(
-            $self->marker_overlay
-        );
-    }
+    $plot->render_area->add_component(
+        $self->marker_overlay
+    );
 
     # Sentinels to control the side that the axes will be drawn on.
     my $dcount = 0;
@@ -500,6 +498,8 @@ Clicker leverages the power of Graphics::Primitive to create snazzy graphics
 without being tied to specific backend.  You may want to begin with
 L<Chart::Clicker::Tutorial>.
 
+=head1 EXAMPLES
+
 For code examples see the examples repository on GitHub:
 L<http://github.com/gphat/chart-clicker-examples/>
 
@@ -635,10 +635,6 @@ shake off this simple method and build Series & DataSets explicitly.
 
 This used to be the only way to add data, but repeated requests to make the
 common case easier resulted in the inclusion of C<add_data>.
-
-=head1 COOKBOOK
-
-Check the cookbook at L<http://www.onemogin.com/clicker/cookbook>
 
 =head1 CONTEXTS
 
@@ -803,10 +799,6 @@ Add the specified context to the chart.
 =head2 add_to_datasets
 
 Add the specified dataset (or arrayref of datasets) to the chart.
-
-=head2 add_to_markers
-
-Add the specified marker to the chart.
 
 =head2 add_subgraph
 

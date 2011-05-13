@@ -1,5 +1,12 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.68
+  - Remove add_to_markers stuff in docs, as it's bogus.  That functionality
+    is in the context.
+  _ Remove boolean attribute that determines if a Plot has any markers to be
+    drawn, as it was always true.  Remove check of said attribute since it
+    was always true.
+
 2.67
   - Axis now calls "super" at the end of it's finalize.  This way if there is
     a callback it's called at the end, as advertised
