@@ -1,5 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
+2.69
+  - Add note about CentOS.
+
 2.68
   - Remove add_to_markers stuff in docs, as it's bogus.  That functionality
     is in the context.
