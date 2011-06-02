@@ -24,7 +24,7 @@ use Chart::Clicker::Drawing::ColorAllocator;
 use Carp qw(croak);
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.68';
+our $VERSION = '2.69';
 
 has '+background_color' => (
     default => sub {
@@ -855,6 +855,16 @@ format provided to the constructor (which defaults to Png).  Internally
 calls C<draw> for you.  If you use this method, do not call C<draw> first!
 
   $c->write_output('/path/to/the.png');
+
+=head1 ISSUES WITH CENTOS
+
+I've had numerous reports of problems with Chart::Clicker when using CentOS.
+This problem has usually be solved by updating the version of cairo.  I've
+had reports that upgrading to at least cairo-1.8.8-3 makes thinks work properly.
+
+I hesitate to provide any other data with this because it may get out of date
+fast.  If you have trouble feel free to drop me an email and I'll tell you
+what I know.
 
 =head1 AUTHOR
 
