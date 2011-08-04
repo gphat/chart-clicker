@@ -169,6 +169,16 @@ contributions, drop me a line!
 
   $chart->write_output('chart.pdf');
 
+=head2 Example 7 : Hide the Legend and X-Axis
+
+  my $chart = Chart::Clicker->new();
+
+  # hide the legend
+  $chart->legend->visible(0);
+
+  # hide the X-Axis
+  $chart->get_context('default')->domain_axis->hidden(1);
+
 =head1 AUTHOR
 
 Cory G Watson <gphat@cpan.org>
