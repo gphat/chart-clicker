@@ -161,7 +161,7 @@ contributions, drop me a line!
 
   my $chart = Chart::Clicker->new(width => 1024, height => 768);
 
-=head2 Example 5 : PDF (or SVG or PS)
+=head2 Example 6 : PDF (or SVG or PS)
 
   my $chart = Chart::Clicker->new(format => 'pdf');
 
