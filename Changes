@@ -1,6 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+
+2.70 Aug 7 2011
   - Add more examples in the Tutorial (mpeters)
   - Convert to Dist::Zilla & Pod::Weaver
   - Add some missing documentation found in Pod::Weaver conversion
