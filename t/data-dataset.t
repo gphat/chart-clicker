@@ -42,14 +42,28 @@ cmp_ok($dataset->range->upper, '==', 102, 'Max Range');
 cmp_ok($dataset->domain->lower, '==', 1, 'Min Domain');
 cmp_ok($dataset->domain->upper, '==', 4, 'Max Domain');
 
-my @values = $dataset->get_series_values(0);
-cmp_ok(scalar(@values), '==', 2, '2 values for position 0');
-cmp_ok($values[0], '==', 4, 'value 0');
-cmp_ok($values[1], '==', -1, 'value 1');
+is_deeply($dataset->get_series_values(0), [ 4, -1 ], 'get_series_values');
 
 my @keys = $dataset->get_series_keys(2);
 cmp_ok($keys[0], '==', 3, 'key 0');
 cmp_ok($keys[1], '==', 4, 'key 1');
 cmp_ok(scalar(@keys), '==', 2, '2 keys for position 2');
+
+{
+    my $ds2 = Chart::Clicker::Data::DataSet->new;
+    my $s1 = Chart::Clicker::Data::Series->new(
+        keys => [1, 3, 5],
+        values => [1, 3, 5]
+    );
+    my $s2 = Chart::Clicker::Data::Series->new(
+        keys => [1, 2, 5, 7],
+        values => [2, 4, 8, 10]
+    );
+    $ds2->add_to_series($s1);
+    $ds2->add_to_series($s2);
+
+    is_deeply($ds2->get_series_values_for_key(1), [ 1, 2 ], 'get_series_values_for_key where both series have key');
+    is_deeply($ds2->get_series_values_for_key(3), [ 3, undef ], 'get_series_values_for_key one series is missing key');
+}
 
 done_testing;
