@@ -31,7 +31,18 @@ polygons stacked atop one another.
           width => 2
       })
   });
-  
+
+=begin :prelude
+
+=head1 NOTES
+
+Note that series with varying keys (e.g. Series 1 has keys 1, 2, 3 but Series
+2 only has 1 and 3) will cause you some problems.  Since the keys don't match
+up, neither will the accumulation of area.  This may be addressed in the
+future.
+
+=end :prelude
+
 =cut
 
 has '+additive' => ( default => sub { 1 } );

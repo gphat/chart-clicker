@@ -474,11 +474,15 @@ override('prepare', sub {
     }
 
     if($self->is_vertical) {
-        $self->minimum_width($self->outside_width + $big + $label_width);
-        $self->minimum_height($self->outside_height + $self->outside_height + $big);
+        my $new_min_width = $self->outside_width + $big + $label_width;
+        $self->minimum_width($new_min_width) if $new_min_width > $self->minimum_width;
+        my $new_min_height = $self->outside_height + $big;
+        $self->minimum_height($new_min_height) if $new_min_height > $self->minimum_height;
     } else {
-        $self->minimum_height($self->outside_height + $big + $label_height);
-        $self->minimum_width($self->outside_width + $big + $self->outside_width);
+        my $new_min_height = $self->outside_height + $big + $label_height;
+        my $new_min_width = $self->outside_width + $big;
+        $self->minimum_height($new_min_height)  if $new_min_height > $self->minimum_height;
+        $self->minimum_width($new_min_width) if $new_min_width > $self->minimum_width;
         if($self->staggered) {
             $self->minimum_height($self->minimum_height * 2);
         }

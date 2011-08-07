@@ -4,7 +4,7 @@ Revision history for Perl extension Chart::Clicker.
   - Add more examples in the Tutorial (mpeters)
   - Convert to Dist::Zilla & Pod::Weaver
   - Add some missing documentation found in Pod::Weaver conversion
-  - Remove a lot of useless ()
+  - Removed a lot of useless ()
   - Take numbers off test names
   - Remove stillborn HeatMap renderer
   - Remove some useless tests
@@ -15,6 +15,9 @@ Revision history for Perl extension Chart::Clicker.
   - Change DataSet::get_series_values to return an arrayref
   - Fix an issue where series whose keys don't match cause weird StackedBar
     results (Fixes RT #57372)
+  - Adjust Axis to honor existing minimum_width and minimum_height set on
+    itself (Addresses RT #60279)
+  - Add Note to StackedArea regarding the same problem mentioned in RT #57372
 
 2.69
   - Add note about CentOS.
