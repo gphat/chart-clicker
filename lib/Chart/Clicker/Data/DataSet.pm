@@ -132,26 +132,28 @@ sub get_series_keys {
 
 =method get_series_values
 
-Returns the value at the specified position for every series in this DataSet.
+Returns the value at the specified position for every series in this DataSet
+as an ArrayRef.
 
 =cut
 
 sub get_series_values {
     my ($self, $position) = @_;
 
-    return map({ $_->values->[$position] } @{ $self->series });
+    return [ map({ $_->values->[$position] } @{ $self->series }) ];
 }
 
 =method get_series_values_for_key
 
-Returns the value at the specified position for every series in this DataSet.
+Returns the value for the specified key for every series in this DataSet as an
+ArrayRef.
 
 =cut
 
 sub get_series_values_for_key {
     my ($self, $key) = @_;
 
-    return map({ $_->get_value_for_key($key) } @{ $self->series });
+    return [ map({ $_->get_value_for_key($key) } @{ $self->series }) ];
 }
 
 =method largest_value_slice
@@ -165,12 +167,12 @@ sub largest_value_slice {
 
     # Prime out big variable with the value of the first slice
     my $big;
-    foreach ($self->get_series_values(0)) { $big += $_; }
+    foreach (@{ $self->get_series_values(0) }) { $big += $_; }
 
     # Check that value against all the remaining slices
     for my $i (0 .. $self->max_key_count - 1) {
         my $t;
-        foreach ($self->get_series_values($i)) { $t += $_ if defined($_); }
+        foreach (@{ $self->get_series_values($i) }) { $t += $_ if defined($_); }
         $big = $t if(($t > $big) || !defined($big));
     }
     return $big;

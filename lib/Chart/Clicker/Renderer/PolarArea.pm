@@ -105,9 +105,9 @@ override('prepare', sub {
         my $count = $ds->max_key_count;
         for(0..$count - 1) {
             my $pos = $_;
-            my @vals = $ds->get_series_values($pos);
+            my $vals = $ds->get_series_values($pos);
             my $total = 0;
-            foreach my $v (@vals) {
+            foreach my $v (@{ $vals }) {
                 $total += $v;
             }
             $self->_accum->[$pos] += $total;

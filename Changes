@@ -9,6 +9,10 @@ Revision history for Perl extension Chart::Clicker.
   - Remove stillborn HeatMap renderer
   - Remove some useless tests
   - Use done_tests
+  - Add get_value_for_key to Series
+  - Fix name of get_all_series_keys in POD
+  - Add get_series_values_for_key to DataSet
+  - Change DataSet::get_series_values to return an arrayref.
 
 2.69
   - Add note about CentOS.

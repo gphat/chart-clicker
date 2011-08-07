@@ -137,7 +137,7 @@ override('finalize', sub {
         # Get all the values from every dataset's series for each key
         my @values;
         foreach my $ds (@{ $dses }) {
-            push(@values, $ds->get_series_values($i));
+            push(@values, @{ $ds->get_series_values($i) });
         }
 
         # Mark the x, since it's the same for each Y value
