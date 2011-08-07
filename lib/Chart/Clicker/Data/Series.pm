@@ -10,6 +10,10 @@ use Chart::Clicker::Data::Range;
 
 Chart::Clicker::Data::Series represents a series of values to be charted.
 
+Despite the name (keys and values) it is expected that all keys and values
+will be numeric.  Values is pretty obvious, but it is important that keys
+also be numeric, as otherwise we'd have no idea how to order the data.
+
 =head1 SYNOPSIS
 
   use Chart::Clicker::Data::Series;
@@ -152,6 +156,25 @@ sub add_pair {
 
     $self->add_to_keys($key);
     $self->add_to_values($value);
+}
+
+=method get_value_for_key ($key)
+
+Returns the value associated with the specified key.  This is necessary
+because not all series will have values for every key.
+
+=cut
+
+sub get_value_for_key {
+    my ($self, $key) = @_;
+
+    for(0..$self->key_count) {
+        my $ikey = $self->keys->[$_];
+        return $self->values->[$_] if $ikey == $key;
+    }
+
+    # We found nothing, return undef
+    return undef;
 }
 
 sub prepare {

@@ -67,4 +67,10 @@ my $quickseries = Chart::Clicker::Data::Series->new({
 is_deeply($quickseries->keys, [ 1, 2, 3, 4 ], 'keys');
 is_deeply($quickseries->values, [ 5, 6, 7, 8 ], 'values');
 
+my $oddseries = Chart::Clicker::Data::Series->new({
+    keys => [ 1, 3, 5, 7, 9 ],
+    values => [ 10, 11, 12, 13, 14 ]
+});
+cmp_ok($oddseries->get_value_for_key(3), '==', 11, 'get_value_for_key');
+
 done_testing;
