@@ -142,6 +142,18 @@ sub get_series_values {
     return map({ $_->values->[$position] } @{ $self->series });
 }
 
+=method get_series_values_for_key
+
+Returns the value at the specified position for every series in this DataSet.
+
+=cut
+
+sub get_series_values_for_key {
+    my ($self, $key) = @_;
+
+    return map({ $_->get_value_for_key($key) } @{ $self->series });
+}
+
 =method largest_value_slice
 
 Finds the largest cumulative 'slice' in this dataset.
