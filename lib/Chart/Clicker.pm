@@ -3,6 +3,8 @@ use Moose;
 
 extends 'Chart::Clicker::Container';
 
+# ABSTRACT: Powerful, extensible charting.
+
 use Layout::Manager::Compass;
 
 use Graphics::Color::RGB;
@@ -24,13 +26,245 @@ use Chart::Clicker::Drawing::ColorAllocator;
 use Carp qw(croak);
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '2.69';
+=head1 SYNOPSIS
+
+  use Chart::Clicker;
+
+  my $cc = Chart::Clicker->new;
+
+  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+  $cc->add_data('Sales', \@values);
+
+  # alternately, you can add data one bit at a time...
+  foreach my $v (@values) {
+    $cc->add_data('Sales', $v);
+  }
+
+  # Or, if you want to specify the keys you can use a hashref
+  my $data = { 12 => 123, 13 => 341, 14 => 1241 };
+  $cc->add_data('Sales', $data);
+
+  $cc->write_output('foo.png');
+
+=head1 DESCRIPTION
+
+Chart::Clicker aims to be a powerful, extensible charting package that creates
+really pretty output.  Charts can be saved in png, svg, pdf and postscript
+format.
+
+Clicker leverages the power of Graphics::Primitive to create snazzy graphics
+without being tied to specific backend.  You may want to begin with
+L<Chart::Clicker::Tutorial>.
+
+=begin :prelude
+
+=head1 EXAMPLES
+
+For code examples see the examples repository on GitHub:
+L<http://github.com/gphat/chart-clicker-examples/>
+
+=head1 FEATURES
+
+=head2 Renderers
+
+Clicker supports the following renderers:
+
+=over 4
+
+=item B<Line>
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line.png" width="500" height="250" alt="Line Chart" /></p>
+
+=end HTML
+
+=item B<StackedLine>
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/stacked-line.png" width="500" height="250" alt="Stacked Line Chart" /></p>
+
+=end HTML
+
+=item B<Bar>
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/bar.png" width="500" height="250" alt="Bar Chart" /></p>
+
+=end HTML
+
+=item B<StackedBar>
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/stacked-bar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
+
+=end HTML
+
+=item B<Area>
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/area.png" width="500" height="250" alt="Area Chart" /></p>
+
+=end HTML
+
+=item B<StackedArea>
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/stacked-area.png" width="500" height="250" alt="Stacked Area Chart" /></p>
+
+=end HTML
+
+=item B<Bubble>
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bubble/bubble.png" width="500" height="250" alt="Bubble Chart" /></p>
+
+=end HTML
+
+=item B<CandleStick>
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/candlestick/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
+
+=end HTML
+
+=item B<Point>
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/point/point.png" width="500" height="250" alt="Point Chart" /></p>
+
+=end HTML
+
+=item B<Pie>
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/pie/pie.png" width="300" height="250" alt="Pie Chart" /></p>
+
+=end HTML
+
+=item B<PolarArea>
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/polararea/polararea.png" width="300" height="250" alt="Polar Area Chart" /></p>
+
+=end HTML
+
+
+=back
+
+=head1 ADDING DATA
+
+The synopsis shows the simple way to add data.
+
+  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+  foreach my $v (@values) {
+    $cc->add_data('Sales', $v);
+  }
+
+This is a convenience method provided to make simple cases much simpler. Adding
+multiple Series to a chart is as easy as changing the name argument of
+C<add_data>.  Each unique first argument will result in a separate series. See
+the docs for C<add_data> to learn more.
+
+If you'd like to use the more advanced features of Clicker you'll need to
+shake off this simple method and build Series & DataSets explicitly.
+
+  use Chart::Clicker::Data::Series;
+  use Chart::Clicker::Data::DataSet;
+
+  ...
+
+  my $series = Chart::Clicker::Data::Series->new(
+    keys    => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+    values  => [ 42, 25, 86, 23, 2, 19, 103, 12, 54, 9 ],
+  );
+
+  my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
+ 
+  $cc->add_to_datasets($ds);
+
+This used to be the only way to add data, but repeated requests to make the
+common case easier resulted in the inclusion of C<add_data>.
+
+=head1 CONTEXTS
+
+The normal use case for a chart is a couple of datasets on the same axes.
+Sometimes you want to chart one or more datasets on different axes.  A common
+need for this is when you are comparing two datasets of vastly different scale
+such as the number of employees in an office (1-10) to monthly revenues (10s
+of thousands).  On a normal chart the number of employees would show up as a
+flat line at the bottom of the chart.
+
+To correct this, Clicker has contexts.  A context is a pair of axes, a
+renderer and a name.  The name is the 'key' by which you will refer to the
+context.
+
+  my $context = Chart::Clicker::Context->new( name => 'sales' );
+  $clicker->add_to_contexts($context);
+  
+  $dataset->context('sales');
+  
+  $clicker->add_to_datasets($dataset);
+  
+New contexts provide a fresh domain and range axis and default to a Line
+renderer. 
+
+B<Caveat>: Clicker expects that the default context (identified by the string
+"default") will always be present.  It is from this context that some of
+Clicker's internals draw their values.  You should use the default context
+unless you need more than one, in which case you should use "default" as the
+base context.
+
+=head1 FORMATS & OUTPUT
+
+Clicker supports PNG, SVG, PDF and PostScript output.  To change your output
+type, specificy it when you create your Clicker object:
+
+  my $cc = Chart::Clicker->new(format => 'pdf', ...);
+  # ...
+  $cc->write_output('chart.pdf');
+
+If you are looking to get a scalar of the output for use with HTTP or
+similar things, you can use:
+
+  # ... make your chart
+  $cc->draw;
+  my $image_data = $cc->data;
+
+If you happen to be using Catalyst then take a look at
+L<Catalyst::View::Graphics::Primitive>.
+
+=end :prelude
+
+=attr background_color
+
+Set/Get the background color.  Expects a L<Graphics::Color> object.  Defaults
+to white.
+
+=cut
 
 has '+background_color' => (
     default => sub {
         Graphics::Color::RGB->new({ red => 1, green => 1, blue => 1, alpha => 1 })
     }
 );
+
+=attr border
+
+Set/Get the border.  Expects a L<Graphics::Primitive::Border>.
+
+=cut
+
 has '+border' => (
     default => sub {
         my $b = Graphics::Primitive::Border->new;
@@ -39,11 +273,45 @@ has '+border' => (
         return $b;
     }
 );
+
+=attr color_allocator
+
+Set/Get the color_allocator for this chart.
+
+=cut
+
 has 'color_allocator' => (
     is => 'rw',
     isa => 'Chart::Clicker::Drawing::ColorAllocator',
     default => sub { Chart::Clicker::Drawing::ColorAllocator->new }
 );
+
+=attr contexts
+
+Set/Get the contexts for this chart.
+
+=method context_count
+
+Get a count of contexts.
+
+=method context_names
+
+Get a list of context names.
+
+=method delete_context ($name)
+
+Remove the context with the specified name.
+
+=method get_context ($name)
+
+Get the context with the specified name
+
+=method set_context ($name, $context)
+
+Set a context of the specified name.
+
+=cut
+
 has 'contexts' => (
     traits => [ 'Hash' ],
     is => 'rw',
@@ -57,12 +325,32 @@ has 'contexts' => (
         'delete_context' => 'delete'
     }
 );
+
 has '_data' => (
     traits => [ 'Hash' ],
     is => 'rw',
     isa => 'HashRef[Str]',
     default => sub { {} }
 );
+
+=attr datasets
+
+Get/Set the datasets for this chart.
+
+=method add_to_datasets
+
+Add the specified dataset (or arrayref of datasets) to the chart.
+
+=method dataset_count
+
+Get a count of datasets.
+
+=method get_dataset ($index)
+
+Get the dataset at the specified index.
+
+=cut
+
 has 'datasets' => (
     traits => [ 'Array' ],
     is => 'rw',
@@ -74,6 +362,14 @@ has 'datasets' => (
         'get_dataset' => 'get'
     }
 );
+
+=attr driver
+
+Set/Get the driver used to render this Chart. Defautls to
+L<Graphics::Primitive::Driver::Cairo>.
+
+=cut
+
 has 'driver' => (
     is => 'rw',
     does => 'Graphics::Primitive::Driver',
@@ -89,22 +385,60 @@ has 'driver' => (
     },
     lazy => 1
 );
+
+=attr format
+
+Get the format for this Chart.  Required in the constructor.  Must be on of
+Png, Pdf, Ps or Svg.
+
+=cut
+
 has 'format' => (
     is => 'rw',
     isa => 'Str',
     default => sub { 'PNG' }
 );
+
+=attr grid_over
+
+Flag controlling if the grid is rendered B<over> the data.  Defaults to 0.
+You probably want to set the grid's background color to an alpha of 0 if you
+enable this flag.
+
+=cut
+
 has 'grid_over' => (
     is => 'rw',
     isa => 'Bool',
     default => sub { 0 }
 );
+
+=attr height
+
+Set/Get the height.  Defaults to 300.
+
+=cut
+
 has '+height' => (
     default => 300
 );
+
+=attr layout_manager
+
+Set/Get the layout manager.  Defaults to L<Layout::Manager::Compass>.
+
+=cut
+
 has '+layout_manager' => (
     default => sub { Layout::Manager::Compass->new }
 );
+
+=attr legend
+
+Set/Get the legend that will be used with this chart.
+
+=cut
+
 has 'legend' => (
     is => 'rw',
     isa => 'Chart::Clicker::Decoration::Legend',
@@ -114,11 +448,27 @@ has 'legend' => (
         );
     }
 );
+
+=attr legend_position
+
+The position the legend will be added.  Should be one of north, south, east,
+west or center as required by L<Layout::Manager::Compass>.
+
+=cut
+
 has 'legend_position' => (
     is => 'rw',
     isa => 'Str',
     default => sub { 's' }
 );
+
+=attr marker_overlay
+
+Set/Get the marker overlay object that will be used if this chart
+has markers.  This is lazily constructed to save time.
+
+=cut
+
 has 'marker_overlay' => (
     is => 'rw',
     isa => 'Chart::Clicker::Decoration::MarkerOverlay',
@@ -127,6 +477,26 @@ has 'marker_overlay' => (
         Chart::Clicker::Decoration::MarkerOverlay->new
     }
 );
+
+=attr over_decorations
+
+Set/Get an arrayref of "over decorations", or things that are drawn OVER the
+chart.  This is an advanced feature.  See C<overaxis-bar.pl> in the examples.
+
+=method add_to_over_decorations
+
+Add an over decoration to the list.
+
+=method get_over_decoration ($index)
+
+Get the over decoration at the specified index.
+
+=method over_decoration_count
+
+Get a count of over decorations.
+
+=cut
+
 has 'over_decorations' => (
     traits => [ 'Array' ],
     is => 'rw',
@@ -138,6 +508,12 @@ has 'over_decorations' => (
         'get_over_decoration' => 'get'
     }
 );
+
+=attr padding
+
+Set/Get the padding.  Expects a L<Graphics::Primitive::Insets> object.  Defaults
+to 3px on all sides.
+
 has '+padding' => (
     default => sub {
         Graphics::Primitive::Insets->new(
@@ -145,6 +521,13 @@ has '+padding' => (
         )
     }
 );
+
+=attr plot
+
+Set/Get the Plot on which things are drawn.
+
+=cut
+
 has 'plot' => (
     is => 'rw',
     isa => 'Chart::Clicker::Decoration::Plot',
@@ -152,12 +535,43 @@ has 'plot' => (
         Chart::Clicker::Decoration::Plot->new
     }
 );
+
+=attr subgraphs
+
+You can add "child" graphs to this one via C<add_subgraph>.  These must be
+Chart::Clicker objects and they will be added to the bottom of the existing
+chart.  This is a rather esoteric feature.
+
+=cut
+
 has 'subgraphs' => (
     is => 'rw',
     isa => 'ArrayRef',
     default => sub { [] },
     predicate => 'has_subgraphs'
 );
+
+=attr title
+
+Set/Get the title component for this chart.  This is a
+L<Graphics::Primitive::TextBox>, not a string.  To set the title of a chart
+you should access the TextBox's C<text> method.
+
+  $cc->title->text('A Title!');
+  $cc->title->font->size(20);
+  # etc, etc
+
+If the title has text then it is added to the chart in the position specified
+by C<title_position>.
+
+You should consult the documentation for L<Graphics::Primitive::TextBox> for
+things like padding and text rotation.  If you are adding it to the top and
+want some padding between it and the plot, you can:
+
+  $cc->title->padding->bottom(5);
+  
+=cut
+
 has 'title' => (
     is => 'rw',
     isa => 'Graphics::Primitive::TextBox',
@@ -168,14 +582,38 @@ has 'title' => (
         )
     }
 );
+
+=attr title_position
+
+The position the title will be added.  Should be one of north, south, east,
+west or center as required by L<Layout::Manager::Compass>.
+
+Note that if no angle is set for the title then it will be changed to
+-1.5707 if the title position is east or west.
+
+=cut
+
 has 'title_position' => (
     is => 'rw',
     isa => 'Str',
     default => sub { 'n' }
 );
+
+=attr width
+
+Set/Get the width.  Defaults to 500.
+
+=cut
+
 has '+width' => (
     default => 500
 );
+
+=method add_to_contexts
+
+Add the specified context to the chart.
+
+=cut
 
 sub add_to_contexts {
     my ($self, $ctx) = @_;
@@ -186,6 +624,12 @@ sub add_to_contexts {
     $self->set_context($ctx->name, $ctx);
 }
 
+=method add_subgraph
+
+Add a subgraph to this chart.
+
+=cut
+
 sub add_subgraph {
     my ($self, $graph) = @_;
 
@@ -195,11 +639,24 @@ sub add_subgraph {
     push(@{$self->subgraphs}, $graph);
 }
 
+=method data
+
+Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
+client.
+
+=cut
+
 sub data {
     my ($self) = @_;
     print STDERR "WARNING: Calling 'data' to get image data is deprecated, please use rendered_data\n";
     $self->rendered_data;
 }
+
+=method draw
+
+Draw this chart.
+
+=cut
 
 sub draw {
     my ($self) = @_;
@@ -210,6 +667,13 @@ sub draw {
     $driver->finalize($self);
     $driver->draw($self);
 }
+
+=method get_datasets_for_context
+
+Returns an arrayref containing all datasets for the given context.  Used by
+renderers to get a list of datasets to chart.
+
+=cut
 
 sub get_datasets_for_context {
     my ($self, $name) = @_;
@@ -223,6 +687,46 @@ sub get_datasets_for_context {
 
     return \@dses;
 }
+
+=method add_data ($name, $data)
+
+Convenience method for adding data to the chart.  Can be called one of three
+ways.
+
+=over 4
+
+=item B<scalar>
+
+Passing a name and a scalar will "add" the scalar data to that series' data.
+
+  $cc->add_data('Sales', 1234);
+  $cc->add_data('Sales', 1235);
+
+This will result in a Series names 'Sales' with two values.
+
+=item B<arrayref>
+
+Passing a name and an arrayref works much the same as the scalar method
+discussed above, but appends the supplied arrayref to the existing one.  It
+may be mixed with the scalar method.
+
+  $cc->add_data('Sales', \@some_sales);
+  $cc->add_data('Sales', \@some_more_sales);
+  # This works still!
+  $cc->add_data('Sales', 1234);
+
+=item B<hashref>
+
+This allows you to pass both keys and add in all at once, but it's an all-or-nothing
+thing.  Subsequent calls with the same name will overwrite previous calls.
+
+  $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
+  # Overwrites last call!
+  $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
+
+=back
+
+=cut
 
 sub add_data {
     my ($self, $name, $data) = @_;
@@ -438,6 +942,13 @@ override('prepare', sub {
     super;
 });
 
+=method set_renderer ($renderer_object, [ $context ]);
+
+Sets the renderer on the specified context.  If no context is provided then
+'default' is assumed.
+
+=cut
+
 sub set_renderer {
     my ($self, $renderer, $context) = @_;
 
@@ -448,6 +959,22 @@ sub set_renderer {
 
     $ctx->renderer($renderer);
 }
+
+=method write
+
+This method is passed through to the underlying driver.  It is only necessary
+that you call this if you manually called C<draw> beforehand.  You likely
+want to use C<write_output>.
+
+=method write_output ($path)
+
+Write the chart output to the specified location. Output is written in the
+format provided to the constructor (which defaults to Png).  Internally
+calls C<draw> for you.  If you use this method, do not call C<draw> first!
+
+  $c->write_output('/path/to/the.png');
+
+=cut
 
 sub write_output {
     my $self = shift;
@@ -462,399 +989,17 @@ no Moose;
 
 1;
 
-__END__
-
-=head1 NAME
-
-Chart::Clicker - Powerful, extensible charting.
-
-=head1 SYNOPSIS
-
-  use Chart::Clicker;
-
-  my $cc = Chart::Clicker->new;
-
-  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
-  $cc->add_data('Sales', \@values);
-
-  # alternately, you can add data one bit at a time...
-  foreach my $v (@values) {
-    $cc->add_data('Sales', $v);
-  }
-
-  # Or, if you want to specify the keys you can use a hashref
-  my $data = { 12 => 123, 13 => 341, 14 => 1241 };
-  $cc->add_data('Sales', $data);
-
-  $cc->write_output('foo.png');
-
-=head1 DESCRIPTION
-
-Chart::Clicker aims to be a powerful, extensible charting package that creates
-really pretty output.  Charts can be saved in png, svg, pdf and postscript
-format.
-
-Clicker leverages the power of Graphics::Primitive to create snazzy graphics
-without being tied to specific backend.  You may want to begin with
-L<Chart::Clicker::Tutorial>.
-
-=head1 EXAMPLES
-
-For code examples see the examples repository on GitHub:
-L<http://github.com/gphat/chart-clicker-examples/>
-
-=head1 FEATURES
-
-=head2 Renderers
-
-Clicker supports the following renderers:
-
-=over 4
-
-=item B<Line>
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line.png" width="500" height="250" alt="Line Chart" /></p>
-
-=end HTML
-
-=item B<StackedLine>
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/stacked-line.png" width="500" height="250" alt="Stacked Line Chart" /></p>
-
-=end HTML
-
-=item B<Bar>
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/bar.png" width="500" height="250" alt="Bar Chart" /></p>
-
-=end HTML
-
-=item B<StackedBar>
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/stacked-bar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
-
-=end HTML
-
-=item B<Area>
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/area.png" width="500" height="250" alt="Area Chart" /></p>
-
-=end HTML
-
-=item B<StackedArea>
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/stacked-area.png" width="500" height="250" alt="Stacked Area Chart" /></p>
-
-=end HTML
-
-=item B<Bubble>
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bubble/bubble.png" width="500" height="250" alt="Bubble Chart" /></p>
-
-=end HTML
-
-=item B<CandleStick>
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/candlestick/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
-
-=end HTML
-
-=item B<Point>
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/point/point.png" width="500" height="250" alt="Point Chart" /></p>
-
-=end HTML
-
-=item B<Pie>
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/pie/pie.png" width="300" height="250" alt="Pie Chart" /></p>
-
-=end HTML
-
-=item B<PolarArea>
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/polararea/polararea.png" width="300" height="250" alt="Polar Area Chart" /></p>
-
-=end HTML
-
-
-=back
-
-=head1 ADDING DATA
-
-The synopsis shows the simple way to add data.
-
-  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
-  foreach my $v (@values) {
-    $cc->add_data('Sales', $v);
-  }
-
-This is a convenience method provided to make simple cases much simpler. Adding
-multiple Series to a chart is as easy as changing the name argument of
-C<add_data>.  Each unique first argument will result in a separate series. See
-the docs for C<add_data> to learn more.
-
-If you'd like to use the more advanced features of Clicker you'll need to
-shake off this simple method and build Series & DataSets explicitly.
-
-  use Chart::Clicker::Data::Series;
-  use Chart::Clicker::Data::DataSet;
-
-  ...
-
-  my $series = Chart::Clicker::Data::Series->new(
-    keys    => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
-    values  => [ 42, 25, 86, 23, 2, 19, 103, 12, 54, 9 ],
-  );
-
-  my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
- 
-  $cc->add_to_datasets($ds);
-
-This used to be the only way to add data, but repeated requests to make the
-common case easier resulted in the inclusion of C<add_data>.
-
-=head1 CONTEXTS
-
-The normal use case for a chart is a couple of datasets on the same axes.
-Sometimes you want to chart one or more datasets on different axes.  A common
-need for this is when you are comparing two datasets of vastly different scale
-such as the number of employees in an office (1-10) to monthly revenues (10s
-of thousands).  On a normal chart the number of employees would show up as a
-flat line at the bottom of the chart.
-
-To correct this, Clicker has contexts.  A context is a pair of axes, a
-renderer and a name.  The name is the 'key' by which you will refer to the
-context.
-
-  my $context = Chart::Clicker::Context->new( name => 'sales' );
-  $clicker->add_to_contexts($context);
-  
-  $dataset->context('sales');
-  
-  $clicker->add_to_datasets($dataset);
-  
-New contexts provide a fresh domain and range axis and default to a Line
-renderer. 
-
-B<Caveat>: Clicker expects that the default context (identified by the string
-"default") will always be present.  It is from this context that some of
-Clicker's internals draw their values.  You should use the default context
-unless you need more than one, in which case you should use "default" as the
-base context.
-
-=head1 FORMATS & OUTPUT
-
-Clicker supports PNG, SVG, PDF and PostScript output.  To change your output
-type, specificy it when you create your Clicker object:
-
-  my $cc = Chart::Clicker->new(format => 'pdf', ...);
-  # ...
-  $cc->write_output('chart.pdf');
-
-If you are looking to get a scalar of the output for use with HTTP or
-similar things, you can use:
-
-  # ... make your chart
-  $cc->draw;
-  my $image_data = $cc->data;
-
-If you happen to be using Catalyst then take a look at
-L<Catalyst::View::Graphics::Primitive>.
-
-=head1 ATTRIBUTES
-
-=head2 contexts
-
-Set/Get the contexts for this chart.
-
-=head2 datasets
-
-Get/Set the datasets for this chart.
-
-=head2 format
-
-Get the format for this Chart.  Required in the constructor.  Must be on of
-Png, Pdf, Ps or Svg.
-
-=head2 legend
-
-Set/Get the legend that will be used with this chart.
-
-=head2 legend_position
-
-The position the legend will be added.  Should be one of north, south, east,
-west or center as required by L<Layout::Manager::Compass>.
-
-=head2 grid_over
-
-Flag controlling if the grid is rendered B<over> the data.  Defaults to 0.
-You probably want to set the grid's background color to an alpha of 0 if you
-enable this flag.
-
-=head2 subgraphs
-
-You can add "child" graphs to this one via C<add_subgraph>.  These must be
-Chart::Clicker objects and they will be added to the bottom of the existing
-chart.  This is a rather esoteric feature.
-
-=head2 title
-
-Set/Get the title component for this chart.  This is a
-L<Graphics::Primitive::TextBox>, not a string.  To set the title of a chart
-you should access the TextBox's C<text> method.
-
-  $cc->title->text('A Title!');
-  $cc->title->font->size(20);
-  # etc, etc
-
-If the title has text then it is added to the chart in the position specified
-by C<title_position>.
-
-You should consult the documentation for L<Graphics::Primitive::TextBox> for
-things like padding and text rotation.  If you are adding it to the top and
-want some padding between it and the plot, you can:
-
-  $cc->title->padding->bottom(5);
-
-=head2 title_position
-
-The position the title will be added.  Should be one of north, south, east,
-west or center as required by L<Layout::Manager::Compass>.
-
-Note that if no angle is set for the title then it will be changed to
--1.5707 if the title position is east or west.
-
-=head1 METHODS
-
-=head2 new
-
-Creates a new Chart::Clicker object. If no format, width and height are
-specified then defaults of Png, 500 and 300 are chosen, respectively.
-
-=head2 add_data ($name, $data)
-
-Convenience method for adding data to the chart.  Can be called one of three
-ways.
-
-=over 4
-
-=item B<scalar>
-
-Passing a name and a scalar will "add" the scalar data to that series' data.
-
-  $cc->add_data('Sales', 1234);
-  $cc->add_data('Sales', 1235);
-
-This will result in a Series names 'Sales' with two values.
-
-=item B<arrayref>
-
-Passing a name and an arrayref works much the same as the scalar method
-discussed above, but appends the supplied arrayref to the existing one.  It
-may be mixed with the scalar method.
-
-  $cc->add_data('Sales', \@some_sales);
-  $cc->add_data('Sales', \@some_more_sales);
-  # This works still!
-  $cc->add_data('Sales', 1234);
-
-=item B<hashref>
-
-This allows you to pass both keys and add in all at once, but it's an all-or-nothing
-thing.  Subsequent calls with the same name will overwrite previous calls.
-
-  $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
-  # Overwrites last call!
-  $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
-
-=back
-
-=head2 add_to_contexts
-
-Add the specified context to the chart.
-
-=head2 add_to_datasets
-
-Add the specified dataset (or arrayref of datasets) to the chart.
-
-=head2 add_subgraph
-
-Add a subgraph to this chart.
-
-=head2 color_allocator
-
-Set/Get the color_allocator for this chart.
-
-=head2 data
-
-Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
-client.
-
-=head2 draw
-
-Draw this chart.
-
-=head2 get_datasets_for_context
-
-Returns an arrayref containing all datasets for the given context.  Used by
-renderers to get a list of datasets to chart.
-
-=head2 inside_width
+=method inside_width
 
 Get the width available in this container after taking away space for
 insets and borders.
 
-=head2 inside_height
+=method inside_height
 
 Get the height available in this container after taking away space for
 insets and borders.
 
-=head2 marker_overlay
-
-Set/Get the marker overlay object that will be used if this chart
-has markers.  This is lazily constructed to save time.
-
-=head2 set_renderer ($renderer_object, [ $context ]);
-
-Sets the renderer on the specified context.  If no context is provided then
-'default' is assumed.
-
-=head2 write
-
-This method is passed through to the underlying driver.  It is only necessary
-that you call this if you manually called C<draw> beforehand.  You likely
-want to use C<write_output>.
-
-=head2 write_output ($path)
-
-Write the chart output to the specified location. Output is written in the
-format provided to the constructor (which defaults to Png).  Internally
-calls C<draw> for you.  If you use this method, do not call C<draw> first!
-
-  $c->write_output('/path/to/the.png');
+=begin :postlude
 
 =head1 ISSUES WITH CENTOS
 
@@ -866,10 +1011,6 @@ I hesitate to provide any other data with this because it may get out of date
 fast.  If you have trouble feel free to drop me an email and I'll tell you
 what I know.
 
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
 =head1 CONTRIBUTORS
 
 Many thanks to the individuals who have contributed various bits:
@@ -877,6 +1018,8 @@ Many thanks to the individuals who have contributed various bits:
 Ash Berlin
 
 Brian Cassidy
+
+Michael Peters
 
 Guillermo Roditi
 
@@ -890,9 +1033,4 @@ Chart::Clicker is on github:
 
   http://github.com/gphat/chart-clicker/tree/master
 
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2007-2010 by Cory G Watson
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.
+=end :postlude

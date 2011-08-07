@@ -4,6 +4,8 @@ use Moose;
 extends 'Chart::Clicker::Container';
 with 'Chart::Clicker::Positioned';
 
+# ABSTRACT: An X or Y Axis
+
 use Chart::Clicker::Data::Range;
 
 use Graphics::Color::RGB;
@@ -14,15 +16,62 @@ use Layout::Manager::Absolute;
 
 use Math::Trig ':pi';
 
+=head1 DESCRIPTION
+
+Chart::Clicker::Axis represents the plot of the chart.
+
+=head1 SYNOPSIS
+
+  use Chart::Clicker::Axis;
+  use Graphics::Primitive::Font;
+  use Graphics::Primitive::Brush;
+
+  my $axis = Chart::Clicker::Axis->new({
+    font  => Graphics::Primitive::Font->new,
+    orientation => 'vertical',
+    position => 'left',
+    brush => Graphics::Primitive::Brush->new,
+    visible => 1,
+  });
+
+=attr height
+
+The height of the axis.
+
+=attr width
+
+This axis' width.
+
+=attr tick_label_angle
+
+The angle (in radians) to rotate the tick's labels.
+  
+=cut
+
 has 'tick_label_angle' => (
     is => 'rw',
     isa => 'Num'
 );
+
+=attr baseline
+
+The 'baseline' value of this axis.  This is used by some renderers to change
+the way a value is marked.  The Bar render, for instance, considers values
+below the base to be 'negative'.
+
+=cut
+
 has 'baseline' => (
     is  => 'rw',
     isa => 'Num',
 );
-# Remove for border...
+
+=attr brush
+
+The brush for this axis.  Expects a L<Graphics::Primitve::Brush>.
+
+=cut
+
 has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
@@ -35,6 +84,14 @@ has 'brush' => (
         )
     }
 );
+
+=attr color
+
+The color of the axis' border.  Expects a L<Graphics::Color::RGB> object.
+Defaults to black.
+
+=cut
+
 has '+color' => (
     default => sub {
         Graphics::Color::RGB->new({
@@ -42,10 +99,61 @@ has '+color' => (
         })
     }
 );
+
+=attr format
+
+The format to use for the axis values.
+
+If the format is a string then format is applied to each value 'tick' via
+sprintf.  See sprintf perldoc for details!  This is useful for situations
+where the values end up with repeating decimals.
+
+If the format is a coderef then that coderef will be executed and the value
+passed to it as an argument.
+
+  my $nf = Number::Format->new;
+  $default->domain_axis->format(sub { return $nf->format_number(shift); });
+
+=cut
+
 has 'format' => ( is => 'rw', isa => 'Str|CodeRef' );
+
+=attr fudge_amount
+
+The amount to 'fudge' the span of this axis.  You should supply a
+percentage (in decimal form) and the axis will grow at both ends by the
+supplied amount.  This is useful when you want a bit of padding above and
+below the dataset.
+
+As an example, a fugdge_amount of .10 on an axis with a span of 10 to 50
+would add 5 to the top and bottom of the axis.
+
+=cut
+
 has 'fudge_amount' => ( is => 'rw', isa => 'Num', default => 0 );
+
+=attr hidden
+
+This axis' hidden flag.  If this is true then the Axis will not be drawn.
+
+=cut
+
 has 'hidden' => ( is => 'rw', isa => 'Bool', default => 0 );
+
+=attr label
+
+The label of the axis.
+
+=cut
+
 has 'label' => ( is => 'rw', isa => 'Str' );
+
+=attr label_color
+
+The color of the Axis' labels.
+
+=cut
+
 has 'label_color' => (
     is => 'rw',
     isa => 'Graphics::Color',
@@ -55,35 +163,117 @@ has 'label_color' => (
         })
     }
 );
+
+=attr label_font
+
+The font used for the axis' label.
+
+=cut
+
 has 'label_font' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Font',
     default => sub { Graphics::Primitive::Font->new }
 );
+
+=attr layout_manager
+
+Set/Get the Layout Manager.  Defaults to L<Layout::Manager::Absolute>.
+
 has '+layout_manager' => ( default => sub { Layout::Manager::Absolute->new });
+
+=attr orientation
+
+The orientation of this axis.  See L<Graphics::Primitive::Oriented>.
+
+=cut
+
 has '+orientation' => (
     required => 1
 );
+
+=attr position
+
+The position of the axis on the chart.
+
+=cut
+
 has '+position' => (
     required => 1
 );
+
+=attr range
+
+The Range for this axis.
+
+=cut
+
 has 'range' => (
     is => 'rw',
     isa => 'Chart::Clicker::Data::Range',
     default => sub { Chart::Clicker::Data::Range->new }
 );
+
+=attr show_ticks
+
+If this is value is false then 'ticks' and their labels will not drawn for
+this axis.
+
+=cut
+
 has 'show_ticks' => ( is => 'rw', isa => 'Bool', default => 1 );
+
+=attr staggered
+
+If true, causes horizontally labeled axes to 'stagger' the labels so that half
+are at the top of the box and the other half are at the bottom.  This makes
+long, overlapping labels less likely to overlap.  It only does something
+useful with B<horizontal> labels.
+
+=cut
+
 has 'staggered' => ( is => 'rw', isa => 'Bool', default => 0 );
+
+=attr skip_range
+
+Allows you to specify a range of values that will be skipped completely on
+this axis.  This is often used to trim a large, unremarkable section of data.
+If, for example, 50% of your values fall below 10 and 50% fall above 100 it
+is useless to bother charting the 10 to 100 range.  Skipping it with this
+attribute will make for a much more useful chart, albeit somewhat visually
+skewed.
+
+  $axis->skip_range(Chart::Clicker::Data::Range->new(lower => 10, upper => 100));
+  
+Note that B<any> data points, including ticks, that fall inside the range
+specified will be completely ignored.
+
+=cut
+
 has 'skip_range' => (
     is => 'rw',
     isa => 'Chart::Clicker::Data::Range',
     predicate => 'has_skip_range'
 );
+
+=attr tick_font
+
+The font used for the axis' ticks.
+
+=cut
+
 has 'tick_font' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Font',
     default => sub { Graphics::Primitive::Font->new }
 );
+
+=attr tick_label_color
+
+The color of the tick labels.
+
+=cut
+
 has 'tick_label_color' => (
     is => 'rw',
     isa => 'Graphics::Color',
@@ -93,10 +283,38 @@ has 'tick_label_color' => (
         })
     }
 );
+
+=attr tick_labels
+
+The arrayref of labels to show for ticks on this Axis.  This arrayref is
+consulted for every tick, in order.  So placing a string at the zeroeth index
+will result in it being displayed on the zeroeth tick, etc, etc.
+
+=cut
+
 has 'tick_labels' => (
     is => 'rw',
     isa => 'ArrayRef',
 );
+
+=attr tick_values
+
+The arrayref of values show as ticks on this Axis.
+
+=method add_to_tick_values
+
+Add a value to the list of tick values.
+
+=method clear_tick_values
+
+Clear all tick values.
+
+=method tick_value_count
+
+Get a count of tick values.
+
+=cut
+
 has 'tick_values' => (
     traits => [ 'Array' ],
     is => 'rw',
@@ -108,6 +326,15 @@ has 'tick_values' => (
         'tick_value_count' => 'count'
     }
 );
+
+=attr ticks
+
+The number of 'ticks' to show.  Setting this will divide the range on this
+axis by the specified value to establish tick values.  This will have no
+effect if you specify tick_values.
+
+=cut
+
 has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
 
 sub BUILD {
@@ -257,6 +484,12 @@ override('prepare', sub {
 
     return 1;
 });
+
+=method mark
+
+Given a span and a value, returns it's pixel position on this Axis.
+
+=cut
 
 sub mark {
     my ($self, $span, $value) = @_;
@@ -439,6 +672,12 @@ override('finalize', sub {
     super;
 });
 
+=method format_value
+
+Given a value, returns it formatted using this Axis' formatter.
+
+=cut
+
 sub format_value {
     my $self = shift;
     my $value = shift;
@@ -459,210 +698,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Axis - An X or Y Axis
-
-=head1 DESCRIPTION
-
-Chart::Clicker::Axis represents the plot of the chart.
-
-=head1 SYNOPSIS
-
-  use Chart::Clicker::Axis;
-  use Graphics::Primitive::Font;
-  use Graphics::Primitive::Brush;
-
-  my $axis = Chart::Clicker::Axis->new({
-    font  => Graphics::Primitive::Font->new,
-    orientation => 'vertical',
-    position => 'left',
-    brush => Graphics::Primitive::Brush->new,
-    visible => 1,
-  });
-
-=head1 ATTRIBUTES
-
-=head2 baseline
-
-The 'baseline' value of this axis.  This is used by some renderers to change
-the way a value is marked.  The Bar render, for instance, considers values
-below the base to be 'negative'.
-
-=head2 brush
-
-The brush for this axis.
-
-=head2 color
-
-The color of the axis' border.
-
-=head2 format
-
-The format to use for the axis values.
-
-If the format is a string then format is applied to each value 'tick' via
-sprintf.  See sprintf perldoc for details!  This is useful for situations
-where the values end up with repeating decimals.
-
-If the format is a coderef then that coderef will be executed and the value
-passed to it as an argument.
-
-  my $nf = Number::Format->new;
-  $default->domain_axis->format(sub { return $nf->format_number(shift); });
-
-=head2 fudge_amount
-
-The amount to 'fudge' the span of this axis.  You should supply a
-percentage (in decimal form) and the axis will grow at both ends by the
-supplied amount.  This is useful when you want a bit of padding above and
-below the dataset.
-
-As an example, a fugdge_amount of .10 on an axis with a span of 10 to 50
-would add 5 to the top and bottom of the axis.
-
-=head2 height
-
-The height of the axis.
-
-=head2 hidden
-
-This axis' hidden flag.  If this is true then the Axis will not be drawn.
-
-=head2 label
-
-The label of the axis.
-
-=head2 label_color
-
-The color of the Axis' labels.
-
-=head2 label_font
-
-The font used for the axis' label.
-
-=head2 orientation
-
-The orientation of this axis.  See L<Graphics::Primitive::Oriented>.
-
-=head2 position
-
-The position of the axis on the chart.
-
-=head2 range
-
-The Range for this axis.
-
-=head2 show_ticks
-
-If this is value is false then 'ticks' and their labels will not drawn for
-this axis.
-
-=head2 skip_range
-
-Allows you to specify a range of values that will be skipped completely on
-this axis.  This is often used to trim a large, unremarkable section of data.
-If, for example, 50% of your values fall below 10 and 50% fall above 100 it
-is useless to bother charting the 10 to 100 range.  Skipping it with this
-attribute will make for a much more useful chart, albeit somewhat visually
-skewed.
-
-  $axis->skip_range(Chart::Clicker::Data::Range->new(lower => 10, upper => 100));
-  
-Note that B<any> data points, including ticks, that fall inside the range
-specified will be completely ignored.
-
-=head2 stagger
-
-If true, causes horizontally labeled axes to 'stagger' the labels so that half
-are at the top of the box and the other half are at the bottom.  This makes
-long, overlapping labels less likely to overlap.  It only does something
-useful with B<horizontal> labels.
-
-=head2 tick_font
-
-The font used for the axis' ticks.
-
-=head2 tick_label_angle
-
-The angle (in radians) to rotate the tick's labels.
-
-=head2 tick_label_color
-
-The color of the tick labels.
-
-=head2 tick_values
-
-The arrayref of values show as ticks on this Axis.
-
-=head2 tick_value_count
-
-Get a count of tick values.
-
-=head2 tick_labels
-
-The arrayref of labels to show for ticks on this Axis.  This arrayref is
-consulted for every tick, in order.  So placing a string at the zeroeth index
-will result in it being displayed on the zeroeth tick, etc, etc.
-
-=head2 ticks
-
-The number of 'ticks' to show.  Setting this will divide the range on this
-axis by the specified value to establish tick values.  This will have no
-effect if you specify tick_values.
-
-=head2 width
-
-This axis' width.
-
-=head1 METHODS
-
-=head2 new
-
-Creates a new Chart::Clicker::Axis.  If no arguments are given then sane
-defaults are chosen.
-
-=head2 add_to_tick_values
-
-Add a value to the list of tick values.
-
-=head2 clear_tick_values
-
-Clear all tick values.
-
-=head2 mark
-
-Given a span and a value, returns it's pixel position on this Axis.
-
-=head2 format_value
-
-Given a value, returns it formatted using this Axis' formatter.
-
-=head2 prepare
-
-Prepare this Axis by determining the size required.  If the orientation is
-CC_HORIZONTAL this method sets the height.  Otherwise sets the width.
-
-=head2 draw
-
-Draw this axis.
-
-=head2 BUILD
-
-Documening for POD::Coverage tests, Moose stuff.
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.
-

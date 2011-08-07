@@ -1,6 +1,8 @@
 package Chart::Clicker::Axis::DateTime;
 use Moose;
 
+# ABSTRACT: An X or Y Axis using DateTime
+
 use Chart::Clicker::Data::Marker;
 
 use DateTime;
@@ -9,10 +11,34 @@ use Graphics::Color::RGB;
 
 extends 'Chart::Clicker::Axis';
 
+=head1 DESCRIPTION
+
+A temporal Axis.  Requires L<DateTime> and L<DateTime::Set>.  Inherits from
+Axis, so check the methods there as well.  Expects that times will be in
+unix format.
+
+=head1 SYNOPSIS
+
+  my $axis = Chart::Clicker::Axis::DateTime->new;
+
+=attr format
+
+Set/Get the formatting string used to format the DateTime.  See DateTime's
+strftime.
+
+=cut
+
 has 'format' => (
     is => 'rw',
     isa => 'Str'
 );
+
+=attr time_zone
+
+Set/Get the time zone to use when creating DateTime objects!  Accepts an
+object or a string ('America/Chicago').
+
+=cut
 
 has 'time_zone' => (
     is => 'rw',
@@ -108,6 +134,12 @@ override 'prepare' => sub {
     return 1;
 };
 
+=method format_value
+
+Formats the value using L<DateTime>'s strftime.
+
+=cut
+
 sub format_value {
     my $self = shift();
     my $value = shift();
@@ -128,53 +160,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Axis::DateTime - An X or Y Axis using DateTime
-
-=head1 DESCRIPTION
-
-A temporal Axis.  Requires L<DateTime> and L<DateTime::Set>.  Inherits from
-Axis, so check the methods there as well.  Expects that times will be in
-unix format.
-
-=head1 SYNOPSIS
-
-  my $axis = Chart::Clicker::Axis::DateTime->new;
-
-=head1 ATTRIBUTES
-
-=head2 time_zone
-
-Set/Get the time zone to use when creating DateTime objects!  Accepts an
-object or a string ('America/Chicago').
-
-=head2 format
-
-Set/Get the formatting string used to format the DateTime.  See DateTime's
-strftime.
-
-=head1 METHODS
-
-=head2 new
-
-Creates a new DateTime Axis.
-
-=head2 format_value
-
-Formats the value using L<DateTime>'s strftime.
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.
