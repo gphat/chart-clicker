@@ -1019,8 +1019,6 @@ Ash Berlin
 
 Brian Cassidy
 
-Michael Peters
-
 Guillermo Roditi
 
 Torsten Schoenfeld
