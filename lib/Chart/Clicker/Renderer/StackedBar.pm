@@ -134,23 +134,27 @@ override('finalize', sub {
     # Iterate over each key...
     for (my $i = 0; $i < scalar(@keys); $i++) {
 
+        # Mark the x, since it's the same for each Y value
+        my $x = $domain->mark($width, $keys[$i]);
+        my $accum = 0;
+
         # Get all the values from every dataset's series for each key
         my @values;
         foreach my $ds (@{ $dses }) {
-            push(@values, @{ $ds->get_series_values($i) });
+            push(@values, @{ $ds->get_series_values_for_key($keys[$i]) });
         }
-
-        # Mark the x, since it's the same for each Y value
-        my $x = $domain->mark($width, $keys[$i],);
-        my $accum = 0;
 
         my $val = 0;
         for my $j (0 .. $#values) {
             my $sval = $values[$j];
-            if(defined($sval)) {
-                next if $sval == $range->baseline; # no reason to draw anything if no value
-                $val += $sval;
-            }
+
+            # Skip this if there is no value for the specified key position
+            next if !defined($sval);
+
+            # Skip it if it's equal to our baseline, as there's no reason to
+            # draw anything if so
+            next if $sval == $range->baseline;
+            $val += $sval;
 
             my $y = $range->mark($height, $val);
             next unless defined($y);

@@ -12,7 +12,9 @@ Revision history for Perl extension Chart::Clicker.
   - Add get_value_for_key to Series
   - Fix name of get_all_series_keys in POD
   - Add get_series_values_for_key to DataSet
-  - Change DataSet::get_series_values to return an arrayref.
+  - Change DataSet::get_series_values to return an arrayref
+  - Fix an issue where series whose keys don't match cause weird StackedBar
+    results (Fixes RT #57372)
 
 2.69
   - Add note about CentOS.
