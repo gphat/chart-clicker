@@ -1,7 +1,14 @@
 Revision history for Perl extension Chart::Clicker.
 
-2.70
+{{$NEXT}}
   - Add more examples in the Tutorial (mpeters)
+  - Convert to Dist::Zilla & Pod::Weaver
+  - Add some missing documentation found in Pod::Weaver conversion
+  - Remove a lot of useless ()
+  - Take numbers off test names
+  - Remove stillborn HeatMap renderer
+  - Remove some useless tests
+  - Use done_tests
 
 2.69
   - Add note about CentOS.
