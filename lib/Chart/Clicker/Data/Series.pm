@@ -170,7 +170,7 @@ sub get_value_for_key {
 
     for(0..$self->key_count) {
         my $ikey = $self->keys->[$_];
-        return $self->values->[$_] if $ikey == $key;
+        return $self->values->[$_] if defined($ikey) && $ikey == $key;
     }
 
     # We found nothing, return undef
