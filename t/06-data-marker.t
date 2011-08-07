@@ -1,4 +1,4 @@
-use Test::More tests => 5;
+use Test::More;
 
 BEGIN {
     use_ok('Chart::Clicker::Data::Marker');
@@ -18,3 +18,5 @@ $dec->key($key);
 cmp_ok($dec->key(), 'eq', $key, 'Key');
 $dec->key2($key2);
 cmp_ok($dec->key2(), 'eq', $key2, 'Key2');
+
+done_testing;

@@ -1,4 +1,4 @@
-use Test::More tests => 24;
+use Test::More;
 
 BEGIN { use_ok('Chart::Clicker::Data::DataSet'); }
 BEGIN { use_ok('Chart::Clicker::Data::Series'); }
@@ -51,3 +51,5 @@ my @keys = $dataset->get_series_keys(2);
 cmp_ok($keys[0], '==', 3, 'key 0');
 cmp_ok($keys[1], '==', 4, 'key 1');
 cmp_ok(scalar(@keys), '==', 2, '2 keys for position 2');
+
+done_testing;

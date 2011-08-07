@@ -1,4 +1,4 @@
-use Test::More tests => 3;
+use Test::More;
 
 BEGIN {
     use_ok('Chart::Clicker::Renderer::CandleStick');
@@ -7,3 +7,5 @@ BEGIN {
 my $rndr = Chart::Clicker::Renderer::CandleStick->new();
 ok(defined($rndr), 'new CandleStick Renderer');
 isa_ok($rndr, 'Chart::Clicker::Renderer::CandleStick');
+
+done_testing;

@@ -1,4 +1,4 @@
-use Test::More tests => 5;
+use Test::More;
 
 use Chart::Clicker::Data::Series;
 use Chart::Clicker::Data::Series::Size;
@@ -37,3 +37,4 @@ cmp_ok($cc->plot->origin->y, '==', 4, 'plot origin y');
 my $data = $cc->rendered_data();
 ok(defined($data), 'data');
 
+done_testing;

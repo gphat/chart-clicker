@@ -1,4 +1,4 @@
-use Test::More tests => 4;
+use Test::More;
 
 BEGIN {
     use_ok('Chart::Clicker::Axis::DateTime');
@@ -24,3 +24,5 @@ my $dt = DateTime->new(
 $a->time_zone('UTC');
 my $formatted = $a->format_value($dt->epoch());
 cmp_ok($formatted, 'eq', '23:53:00', 'Proper formatting with timezone');
+
+done_testing;

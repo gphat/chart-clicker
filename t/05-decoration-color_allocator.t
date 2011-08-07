@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 101;
+use Test::More;
 use Test::Exception;
 
 BEGIN {
@@ -40,3 +40,5 @@ is(
   $allocator->colors->[96]->as_hex_string,
   'goes full circle'
 );
+
+done_testing;

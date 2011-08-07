@@ -1,4 +1,4 @@
-use Test::More tests => 10;
+use Test::More;
 
 BEGIN {
     use_ok('Chart::Clicker');
@@ -25,3 +25,5 @@ eval {
     $chart->set_renderer(Chart::Clicker::Renderer::Bar->new, 'foo');
 };
 ok(defined($@), 'non-existant context blew up');
+
+done_testing;

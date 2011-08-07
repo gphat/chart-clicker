@@ -1,4 +1,4 @@
-use Test::More tests => 8;
+use Test::More;
 
 BEGIN { use_ok('Chart::Clicker::Data::Series::HighLow'); }
 
@@ -21,3 +21,5 @@ cmp_ok($fooseries->get_open(1), '==', 5, 'open 5');
 my $range = $fooseries->range;
 cmp_ok($range->lower, '==', 1, 'range lower');
 cmp_ok($range->upper, '==', 14, 'range upper');
+
+done_testing;

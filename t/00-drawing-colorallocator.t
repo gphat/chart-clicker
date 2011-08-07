@@ -1,4 +1,4 @@
-use Test::More tests => 4;
+use Test::More;
 
 use Graphics::Color::RGB;
 
@@ -19,7 +19,8 @@ my $ca = Chart::Clicker::Drawing::ColorAllocator->new({
     colors => \@seedcolors
 });
 isa_ok($ca, 'Chart::Clicker::Drawing::ColorAllocator');
-my $shouldbeblack = $ca->next();
+my $shouldbeblack = $ca->next;
 ok(defined($shouldbeblack), 'Seeded color seems to be there');
-cmp_ok($shouldbeblack->name(), 'eq', 'black', 'Seeded color is black');
+cmp_ok($shouldbeblack->name, 'eq', 'black', 'Seeded color is black');
 
+done_testing;

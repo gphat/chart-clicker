@@ -1,4 +1,4 @@
-use Test::More tests => 3;
+use Test::More;
 
 use Chart::Clicker::Data::Series;
 use Chart::Clicker::Data::DataSet;
@@ -47,3 +47,5 @@ $ctx->add_marker($mark2);
 $cc->draw;
 my $data = $cc->rendered_data;
 ok(defined($data), 'data');
+
+done_testing;

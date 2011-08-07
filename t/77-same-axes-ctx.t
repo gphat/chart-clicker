@@ -1,4 +1,4 @@
-use Test::More tests => 7;
+use Test::More;
 
 use Chart::Clicker::Data::Series;
 use Chart::Clicker::Data::Series::Size;
@@ -49,3 +49,5 @@ cmp_ok($rrange->position, 'eq', 'right', 'second range axis position');
 cmp_ok($tdomain->position, 'eq', 'bottom', 'second domain axis position');
 
 ok(defined($cc->rendered_data), 'data');
+
+done_testing;
