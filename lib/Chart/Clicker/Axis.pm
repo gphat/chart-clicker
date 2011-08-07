@@ -180,6 +180,8 @@ has 'label_font' => (
 
 Set/Get the Layout Manager.  Defaults to L<Layout::Manager::Absolute>.
 
+=cut
+
 has '+layout_manager' => ( default => sub { Layout::Manager::Absolute->new });
 
 =attr orientation
