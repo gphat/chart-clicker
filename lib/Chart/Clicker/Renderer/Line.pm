@@ -1,21 +1,82 @@
 package Chart::Clicker::Renderer::Line;
 use Moose;
 
+# ABSTRACT: Line renderer
+
 extends 'Chart::Clicker::Renderer';
 
 use Geometry::Primitive::Point;
 use Graphics::Primitive::Brush;
 use Graphics::Primitive::Operation::Stroke;
 
+=head1 DESCRIPTION
+
+Chart::Clicker::Renderer::Line renders a dataset as lines.
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line.png" width="500" height="250" alt="Line Chart" /></p>
+
+=end HTML
+
+=head1 SYNOPSIS
+
+  my $lr = Chart::Clicker::Renderer::Line->new(
+    brush => Graphics::Primitive::Brush->new({
+      ...
+    })
+  });
+
+=attr additive
+
+If true, the lines are drawn "stacked", each key accumulates based on those
+drawn below it.
+
+=attr brush
+
+Set/Get a Brush to be used for the lines.
+
+=cut
+
 has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
     default => sub { Graphics::Primitive::Brush->new(width => 2) }
 );
+
+=attr shape
+
+Set a shape object to draw at each of the data points.  Adding a shape results
+in:
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line-shapes.png" width="500" height="250" alt="Line + Shape Chart" /></p>
+
+=end HTML
+
+=cut
+
 has 'shape' => (
     is => 'rw',
     isa => 'Geometry::Primitive::Shape',
 );
+
+=attr shape_brush
+
+Set/Get the Brush to be used on the shapes at each point.  If no shape_brush
+is provided, then the shapes will be filled.  The brush allows you to draw a
+"halo" around each shape.  This sometimes help to separate the points from the
+lines and make them more distinct.
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line-shapes-brushed.png" width="500" height="250" alt="Line + Shape (Brushed) Chart" /></p>
+
+=end HTML
+
+=cut
+
 has 'shape_brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
@@ -124,6 +185,12 @@ sub finalize {
     return 1;
 }
 
+=method draw_point
+
+Called for each point encountered on the line.
+
+=cut
+
 sub draw_point {
     my ($self, $x, $y, $series, $count) = @_;
 
@@ -137,82 +204,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Renderer::Line - Line renderer
-
-=head1 DESCRIPTION
-
-Chart::Clicker::Renderer::Line renders a dataset as lines.
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line.png" width="500" height="250" alt="Line Chart" /></p>
-
-=end HTML
-
-=head1 SYNOPSIS
-
-  my $lr = Chart::Clicker::Renderer::Line->new(
-    brush => Graphics::Primitive::Brush->new({
-      ...
-    })
-  });
-
-=head1 ATTRIBUTES
-
-=head2 additive
-
-If true, the lines are drawn "stacked", each key accumulates based on those
-drawn below it.
-
-=head2 brush
-
-Set/Get a Brush to be used for the lines.
-
-=head2 draw_point
-
-Called for each point encountered on the line.
-
-=head2 finalize
-
-Draw the actual line chart
-
-=head2 shape
-
-Set a shape object to draw at each of the data points.  Adding a shape results
-in:
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line-shapes.png" width="500" height="250" alt="Line + Shape Chart" /></p>
-
-=end HTML
-
-=head2 shape_brush
-
-Set/Get the Brush to be used on the shapes at each point.  If no shape_brush
-is provided, then the shapes will be filled.  The brush allows you to draw a
-"halo" around each shape.  This sometimes help to separate the points from the
-lines and make them more distinct.
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line-shapes-brushed.png" width="500" height="250" alt="Line + Shape (Brushed) Chart" /></p>
-
-=end HTML
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.

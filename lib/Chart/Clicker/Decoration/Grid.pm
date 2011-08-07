@@ -7,6 +7,16 @@ with 'Graphics::Primitive::Oriented';
 
 use Graphics::Color::RGB;
 
+=head1 DESCRIPTION
+
+Generates a collection of Markers for use as a background.
+
+=attr background_color
+
+Set/Get the background_color for this Grid.
+
+=cut
+
 has '+background_color' => (
     default => sub {
         Graphics::Color::RGB->new(
@@ -14,7 +24,25 @@ has '+background_color' => (
         )
     }
 );
+
+=attr border
+
+Set/Get the border for this Grid.
+
+=attr color
+
+Set/Get the color for this Grid.
+
+=cut
+
 has 'clicker' => ( is => 'rw', isa => 'Chart::Clicker' );
+
+=attr domain_brush
+
+Set/Get the brush for inking the domain markers.
+
+=cut
+
 has 'domain_brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
@@ -27,6 +55,13 @@ has 'domain_brush' => (
         )
     }
 );
+
+=attr range_brush
+
+Set/Get the brush for inking the range markers.
+
+=cut
+
 has 'range_brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
@@ -39,16 +74,36 @@ has 'range_brush' => (
         )
     }
 );
+
+=attr show_domain
+
+Flag to show or not show the domain lines.
+
+=cut
+
 has 'show_domain' => (
     is => 'rw',
     isa => 'Bool',
     default => 1
 );
+
+=attr show_range
+
+Flag to show or not show the range lines.
+
+=cut
+
 has 'show_range' => (
     is => 'rw',
     isa => 'Bool',
     default => 1
 );
+
+=attr stroke
+
+Set/Get the Stroke for this Grid.
+
+=cut
 
 override('finalize', sub {
     my $self = shift();
@@ -75,6 +130,12 @@ override('finalize', sub {
         $self->do($rop);
     }
 });
+
+=method draw_lines
+
+Called by pack, draws the lines for a given axis.
+
+=cut
 
 sub draw_lines {
     my ($self, $axis) = @_;
@@ -110,75 +171,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Decoration::Grid - Under-data grid
-
-=head1 DESCRIPTION
-
-Generates a collection of Markers for use as a background.
-
-=head1 SYNOPSIS
-
-=head1 ATTRIBUTES
-
-=head2 background_color
-
-Set/Get the background_color for this Grid.
-
-=head2 border
-
-Set/Get the border for this Grid.
-
-=head2 color
-
-Set/Get the color for this Grid.
-
-=head2 domain_brush
-
-Set/Get the brush for inking the domain markers.
-
-=head2 range_brush
-
-Set/Get the brush for inking the range markers.
-
-=head2 show_domain
-
-Flag to show or not show the domain lines.
-
-=head2 show_range
-
-Flag to show or not show the range lines.
-
-=head1 METHODS
-
-=head2 new
-
-Creates a new Chart::Clicker::Decoration::Grid object.
-
-=head2 draw_lines
-
-Called by pack, draws the lines for a given axis.
-
-=head2 pack
-
-Prepare this Grid for drawing
-
-=head2 stroke
-
-Set/Get the Stroke for this Grid.
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.

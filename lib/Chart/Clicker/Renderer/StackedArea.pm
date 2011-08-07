@@ -1,6 +1,8 @@
 package Chart::Clicker::Renderer::StackedArea;
 use Moose;
 
+# ABSTRACT: Stacked Area renderer
+
 extends 'Chart::Clicker::Renderer::Area';
 
 use Graphics::Primitive::Brush;
@@ -10,7 +12,44 @@ use Graphics::Primitive::Operation::Stroke;
 use Graphics::Primitive::Paint::Gradient::Linear;
 use Graphics::Primitive::Paint::Solid;
 
+=head1 DESCRIPTION
+
+Chart::Clicker::Renderer::StackedArea renders a dataset as line-like
+polygons stacked atop one another.
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/stacked-area.png" width="500" height="250" alt="Stacked Area Chart" /></p>
+
+=end HTML
+
+=head1 SYNOPSIS
+
+  my $ar = Chart::Clicker::Renderer::StackedArea->new({
+      fade => 1,
+      brush => Graphics::Primitive::Brush->new({
+          width => 2
+      })
+  });
+  
+=cut
+
 has '+additive' => ( default => sub { 1 } );
+
+=attr brush
+
+Set/Get the brush that informs the line surrounding the area renders
+individual segments.
+
+=attr fade
+
+Set/Get the fade flag, which turns on or off a gradient in the area renderer.
+
+=attr opacity
+
+Set the alpha value for the renderer, which makes things more or less opaque.
+
+=cut
 
 override('finalize', sub {
     my ($self) = @_;
@@ -132,56 +171,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Renderer::StackedArea - Stacked Area renderer
-
-=head1 DESCRIPTION
-
-Chart::Clicker::Renderer::StackedArea renders a dataset as line-like
-polygons stacked atop one another.
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/stacked-area.png" width="500" height="250" alt="Stacked Area Chart" /></p>
-
-=end HTML
-
-=head1 SYNOPSIS
-
-  my $ar = Chart::Clicker::Renderer::StackedArea->new({
-      fade => 1,
-      brush => Graphics::Primitive::Brush->new({
-          width => 2
-      })
-  });
-
-=head1 ATTRIBUTES
-
-=head2 brush
-
-Set/Get the brush that informs the line surrounding the area renders
-individual segments.
-
-=head2 fade
-
-Set/Get the fade flag, which turns on or off a gradient in the area renderer.
-
-=head2 opacity
-
-Set the alpha value for the renderer, which makes things more or less opaque.
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-L<Chart::Clicker::Renderer>, perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.

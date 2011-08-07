@@ -3,6 +3,8 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer';
 
+# ABSTRACT: CandleStick renderer
+
 use Graphics::Primitive::Brush;
 use Graphics::Primitive::Operation::Fill;
 use Graphics::Primitive::Operation::Stroke;
@@ -10,11 +12,40 @@ use Graphics::Primitive::Paint::Solid;
 
 use List::Util qw(max min);
 
+=head1 DESCRIPTION
+
+Chart::Clicker::Renderer::CandleStick renders a dataset as a candlestick style
+bar chart.
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/candlestick/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
+
+=end HTML
+
+=head1 SYNOPSIS
+
+  my $br = Chart::Clicker::Renderer::CandleStick->new();
+
+=attr bar_padding
+
+How much padding to put around a bar.  A padding of 4 will result in 2 pixels
+on each side.
+
+=cut
+
 has 'bar_padding' => (
     is => 'rw',
     isa => 'Int',
     default => 0
 );
+
+=attr brush
+
+Set/Get the Brush to use around each bar and on each line.
+
+=cut
+
 has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
@@ -144,47 +175,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Renderer::CandleStick - CandleStick renderer
-
-=head1 DESCRIPTION
-
-Chart::Clicker::Renderer::CandleStick renders a dataset as a candlestick style
-bar chart.
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/candlestick/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
-
-=end HTML
-
-=head1 SYNOPSIS
-
-  my $br = Chart::Clicker::Renderer::CandleStick->new();
-
-=head1 ATTRIBUTES
-
-=head2 bar_padding
-
-How much padding to put around a bar.  A padding of 4 will result in 2 pixels
-on each side.
-
-=head2 brush
-
-Set/Get the Brush to use around each bar and on each line.
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-perl(1), L<http://en.wikipedia.org/wiki/Candlestick_chart>
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.

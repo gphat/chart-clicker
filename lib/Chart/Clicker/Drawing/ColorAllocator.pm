@@ -6,121 +6,6 @@ use Color::Scheme;
 
 my @defaults = (qw());;
 
-has 'colors' => (
-    traits => [ 'Array' ],
-    is => 'rw',
-    isa => 'ArrayRef',
-    default => sub { [] },
-    handles => {
-        'add_to_colors' => 'push',
-        'clear_colors' => 'clear',
-        'color_count' => 'count',
-        'get_color' => 'get'
-    }
-);
-has 'position' => ( is => 'rw', isa => 'Int', default => -1 );
-
-has 'color_scheme' => (
-    is => 'rw',
-    isa => 'Color::Scheme',
-    lazy_build => 1,
-);
-
-has 'seed_hue' => (
-    is => 'rw',
-    isa => 'Int',
-    required => 1,
-    default => sub { 270 },
-);
-
-has hues => (
-    is => 'rw',
-    isa => 'ArrayRef',
-    required => 1,
-    lazy => 1,
-    default => sub {
-      my $seed = shift->seed_hue;
-      [ map { ($seed + $_) % 360 } (0, 45, 75, 15, 60, 30) ]
-    },
-);
-
-has shade_order => (
-    is => 'rw',
-    isa => 'ArrayRef',
-    required => 1,
-    default => sub { [1, 3, 0, 2] },
-);
-
-sub _build_color_scheme {
-  my $self = shift;
-  my $scheme = Color::Scheme->new;
-  $scheme->scheme('tetrade');
-  $scheme->web_safe(1);
-  $scheme->distance(1);
-  return $scheme;
-}
-
-sub next {
-    my $self = shift();
-
-    $self->position($self->position() + 1);
-
-    return $self->colors->[$self->position()];
-}
-
-# Before we attempt to get the next color, we'll instantiate it if we need it
-# that way we don't waste a bunch of memory with useless colors.
-before 'next' => sub {
-    my $self = shift();
-
-    my $pos = $self->position();
-    if(!defined($self->colors->[$pos + 1])) {
-        $self->add_to_colors($self->allocate_color);
-    }
-};
-
-sub allocate_color {
-  my $self = shift;
-
-  my $pos = $self->position + 1;
-  my $scheme = $self->color_scheme;
-
-  my $hue_cnt = @{ $self->hues };
-  my $hue_pos = int($pos / 4) % $hue_cnt;
-  $scheme->from_hue($self->hues->[$hue_pos]);
-
-  my $shade_pos = int($pos / ( $hue_cnt * 4)) % 4;
-  my $shade_idx = $self->shade_order->[$shade_pos];
-  my $color_idx = $pos % 4;
-
-  my $color_hex = $scheme->colorset->[$color_idx]->[$shade_idx];
-  my ($r,$g,$b) = ( map{ hex } ($color_hex =~ /(..)(..)(..)/));
-  my $color = Graphics::Color::RGB->new(
-    red     => $r / 255,
-    green   => $g / 255,
-    blue    => $b / 255,
-    alpha   => 1,
-  )
-}
-
-sub reset {
-    my $self = shift();
-
-    $self->position(-1);
-    return 1;
-}
-
-__PACKAGE__->meta->make_immutable;
-
-no Moose;
-
-1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Drawing::ColorAllocator - Color picker
-
 =head1 DESCRIPTION
 
 Allocates colors for use in the chart.  The position in the color allocator
@@ -147,6 +32,8 @@ corresponds to the series that will be colored.
         seed_hue => 0, #red
     });
 
+=begin :prelude
+
 =head1 AUTOMATIC COLOR ALLOCATION
 
 This module has the capacity to automatically allocate 96 individual colors
@@ -158,20 +45,68 @@ values of C<hues> have been utilized, it repeats them using a different shade.
 This has the effect of generating evenly spaced complementing colors to ensure
 colors are well ditinguishable from one another and have appropriate contrast.
 
-=head1 ATTRIBUTES
+=end :prelude
 
-=head2 color_scheme
+=cut
+
+=attr colors
+
+An arrayref of colors that will be used for series that Clicker draws.
+
+=method add_to_colors
+
+Add a color to this allocator.
+
+=method clear_colors
+
+Clear this allocator's colors
+
+=method color_count
+
+Get the number of colors in this allocator.
+
+=method get_color ($index)
+
+Gets the color at the specified index.  Returns undef if that position has no
+color.
+
+=cut
+
+has 'colors' => (
+    traits => [ 'Array' ],
+    is => 'rw',
+    isa => 'ArrayRef',
+    default => sub { [] },
+    handles => {
+        'add_to_colors' => 'push',
+        'clear_colors' => 'clear',
+        'color_count' => 'count',
+        'get_color' => 'get'
+    }
+);
+
+=head2 position
+
+Gets the current position.
+
+=cut
+
+has 'position' => ( is => 'rw', isa => 'Int', default => -1 );
+
+=attr color_scheme
 
 A lazy-building L<Color::Scheme> object used to generate the color scheme of
 the chart;
 
-=head2 hues
+=cut
 
-An array reference of evenly spaced seed hues for color allocation. By default
-it will use the seed hue plus 0, 45, 75, 15, 60 and 30 which is enough to cover
-all web-safe colors when using a tetrade color scheme.
+has 'color_scheme' => (
+    is => 'rw',
+    isa => 'Color::Scheme',
+    lazy_build => 1,
+);
 
-=head2 seed_hue
+=attr seed_hue
 
 The interger value of the first hue used when computing the tetrade color
 scheme. Setting this will affect the hue of the first color allocated.
@@ -179,62 +114,129 @@ Subsequent colors will be allocated based on their distance from this color
 to maintain sifficient contrast between colors. If not specified the seed_hue
 will default to 270, blue.
 
-=head2 shade_order
+=cut
+
+has 'seed_hue' => (
+    is => 'rw',
+    isa => 'Int',
+    required => 1,
+    default => sub { 270 },
+);
+
+=attr hues
+
+An array reference of evenly spaced seed hues for color allocation. By default
+it will use the seed hue plus 0, 45, 75, 15, 60 and 30 which is enough to cover
+all web-safe colors when using a tetrade color scheme.
+
+=cut
+
+has hues => (
+    is => 'rw',
+    isa => 'ArrayRef',
+    required => 1,
+    lazy => 1,
+    default => sub {
+      my $seed = shift->seed_hue;
+      [ map { ($seed + $_) % 360 } (0, 45, 75, 15, 60, 30) ]
+    },
+);
+
+=attr shade_order
 
 An array reference of the order in which the different shades of each color
 will be used for every color scheme generated. It defaults to 1, 3, 0, 2 for
 optimum color spacing.
 
-=head1 METHODS
+=cut
 
-=head2 new
+has shade_order => (
+    is => 'rw',
+    isa => 'ArrayRef',
+    required => 1,
+    default => sub { [1, 3, 0, 2] },
+);
 
-Create a new ColorAllocator.  You can optionally pass an arrayref of colors
-to 'seed' the allocator.
+sub _build_color_scheme {
+  my $self = shift;
+  my $scheme = Color::Scheme->new;
+  $scheme->scheme('tetrade');
+  $scheme->web_safe(1);
+  $scheme->distance(1);
+  return $scheme;
+}
 
-=head2 add_to_colors
-
-Add a color to this allocator.
-
-=head2 clear_colors
-
-Clear this allocator's colors
-
-=head2 color_count
-
-Get the number of colors in this allocator.
-
-=head2 get_color
-
-Gets the color at the specified index.  Returns undef if that position has no
-color.
-
-=head2 position
-
-Gets the current position.
-
-=head2 next
+=method next
 
 Returns the next color.  Each call to next increments the position, so
 subsequent calls will return different colors.
 
-=head2 allocate_color
+=cut
+
+sub next {
+    my $self = shift();
+
+    $self->position($self->position() + 1);
+
+    return $self->colors->[$self->position()];
+}
+
+# Before we attempt to get the next color, we'll instantiate it if we need it
+# that way we don't waste a bunch of memory with useless colors.
+before 'next' => sub {
+    my $self = shift();
+
+    my $pos = $self->position();
+    if(!defined($self->colors->[$pos + 1])) {
+        $self->add_to_colors($self->allocate_color);
+    }
+};
+
+=method allocate_color
 
 Determines what the next color should be.
 
-=head2 reset
+=cut
+
+sub allocate_color {
+  my $self = shift;
+
+  my $pos = $self->position + 1;
+  my $scheme = $self->color_scheme;
+
+  my $hue_cnt = @{ $self->hues };
+  my $hue_pos = int($pos / 4) % $hue_cnt;
+  $scheme->from_hue($self->hues->[$hue_pos]);
+
+  my $shade_pos = int($pos / ( $hue_cnt * 4)) % 4;
+  my $shade_idx = $self->shade_order->[$shade_pos];
+  my $color_idx = $pos % 4;
+
+  my $color_hex = $scheme->colorset->[$color_idx]->[$shade_idx];
+  my ($r,$g,$b) = ( map{ hex } ($color_hex =~ /(..)(..)(..)/));
+  my $color = Graphics::Color::RGB->new(
+    red     => $r / 255,
+    green   => $g / 255,
+    blue    => $b / 255,
+    alpha   => 1,
+  )
+}
+
+=method reset
 
 Resets this allocator back to the beginning.
 
-=head1 AUTHOR
+=cut
 
-Cory G Watson <gphat@cpan.org>
+sub reset {
+    my $self = shift();
 
-=head1 SEE ALSO
+    $self->position(-1);
+    return 1;
+}
 
-perl(1)
+__PACKAGE__->meta->make_immutable;
 
-=head1 LICENSE
+no Moose;
 
-You can redistribute and/or modify this code under the same terms as Perl
-itself.
+1;

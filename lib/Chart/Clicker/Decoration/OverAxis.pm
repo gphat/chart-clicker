@@ -3,16 +3,36 @@ use Moose;
 
 extends 'Chart::Clicker::Container';
 
+# ABSTRACT: An axis drawn over data
+
 use Graphics::Color::RGB;
 use Graphics::Primitive::Operation::Fill;
 use Graphics::Primitive::Paint::Solid;
 use Layout::Manager::Flow;
+
+=head1 DESCRIPTION
+
+An axis that is meant to be drawn "over" a chart.  You can find an example
+of an OverAxis at L<http://www.onemogin.com/clicker/images/overaxis.png>.
+
+=attr axis_height
+
+Set/Get the height of the OverAxis that will be drawn.
+
+=cut
 
 has 'axis_height' => (
     is => 'rw',
     isa => 'Num',
     default => sub { 20 }
 );
+
+=attr background_color
+
+Set/Get the background color for this OverAxis.
+
+=cut
+
 has '+background_color' => (
     # is => 'rw',
     # isa => 'Graphics::Color::RGB',
@@ -22,6 +42,13 @@ has '+background_color' => (
         )
     }
 );
+
+=attr border_color
+
+Set/Get the border color for this OverAxis.
+
+=cut
+
 has 'border_color' => (
     is => 'rw',
     isa => 'Graphics::Color::RGB',
@@ -31,24 +58,60 @@ has 'border_color' => (
         )
     }
 );
+
+=attr border_width
+
+Set/Get the width of the border for this OverAxis
+
+=cut
+
 has 'border_width' => (
     is => 'rw',
     isa => 'Num',
     default => sub { 2 }
 );
+
+=attr context
+
+Set/Get the context that this OverAxis should use.
+
+=cut
+
 has 'context' => (
     is => 'rw',
     isa => 'Str',
     required => 1
 );
+
+=attr font
+
+The font to use for the OverAxis.
+
+=cut
+
 has 'font' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Font',
     default => sub { Graphics::Primitive::Font->new }
 );
+
+=attr layout_manager
+
+The layout manager to use for this overaxis.  Defaults to a
+L<Layout::Manager::Compass>.
+
+=cut
+
 has '+layout_manager' => (
     default => sub { Layout::Manager::Compass->new }
 );
+
+=attr text_color
+
+Set/Get the color of the text labels dawn for the ticks.
+
+=cut
+
 has 'text_color' => (
     is => 'rw',
     isa => 'Graphics::Color::RGB',
@@ -122,64 +185,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Decoration::OverAxis - An axis drawn over data
-
-=head1 DESCRIPTION
-
-An axis that is meant to be drawn "over" a chart.  You can find an example
-of an OverAxis at L<http://www.onemogin.com/clicker/images/overaxis.png>.
-
-=head1 SYNOPSIS
-
-=head1 ATTRIBUTES
-
-=head2 axis_height
-
-Set/Get the height of the OverAxis that will be drawn.
-
-=head2 background_color
-
-Set/Get the background color for this OverAxis.
-
-=head2 border_color
-
-Set/Get the border color for this OverAxis.
-
-=head2 border_width
-
-Set/Get the width of the border for this OverAxis
-
-=head2 context
-
-Set/Get the context that this OverAxis should use.
-
-=head2 text_color
-
-Set/Get the color of the text labels dawn for the ticks.
-
-=head1 METHODS
-
-=head2 new
-
-Creates a new Chart::Clicker::Decoration::OverAxis object.
-
-=head2 prepare
-
-Prepare this OverAxis for drawing
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.

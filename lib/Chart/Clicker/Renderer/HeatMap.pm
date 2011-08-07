@@ -3,11 +3,46 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer';
 
+# ABSTRACT: Work In Progress
+
 use Geometry::Primitive::Point;
 use Graphics::Color::RGB;
 use Graphics::Primitive::Brush;
 use Graphics::Primitive::Operation::Stroke;
 use List::Util qw(min max);
+
+=head1 DESCRIPTION
+
+Chart::Clicker::Renderer::HeatMap renders a map of values represented by color.
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/heatmap/heatmap.png" width="500" height="250" alt="Heat Map" /></p>
+
+=end HTML
+
+=head1 SYNOPSIS
+
+  my $lr = Chart::Clicker::Renderer::Line->new(
+    brush => Graphics::Primitive::Brush->new({
+      ...
+    })
+  });
+
+=attr color_stops
+
+An arrayref of colors that represent the various "stops" on a map. The default
+value is green and red, represented as:
+
+  [
+    Graphics::Color::RGB->new(red => 0, green => 1, blue => 0),
+    Graphics::Color::RGB->new(red => 1, green => 0, blue => 0)
+  ]
+
+When sizes are plotted in the map, the color is chosen by generating a gradient
+between the colors specified in C<color_stops>.
+
+=cut
 
 has 'color_stops' => (
     is => 'rw',
@@ -178,56 +213,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Renderer::HeatMap - Work In Progress
-
-=head1 DESCRIPTION
-
-Chart::Clicker::Renderer::HeatMap renders a map of values represented by color.
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/heatmap/heatmap.png" width="500" height="250" alt="Heat Map" /></p>
-
-=end HTML
-
-=head1 SYNOPSIS
-
-  my $lr = Chart::Clicker::Renderer::Line->new(
-    brush => Graphics::Primitive::Brush->new({
-      ...
-    })
-  });
-
-=head1 ATTRIBUTES
-
-=head2 color_stops
-
-An arrayref of colors that represent the various "stops" on a map. The default
-value is green and red, represented as:
-
-  [
-    Graphics::Color::RGB->new(red => 0, green => 1, blue => 0),
-    Graphics::Color::RGB->new(red => 1, green => 0, blue => 0)
-  ]
-
-When sizes are plotted in the map, the color is chosen by generating a gradient
-between the colors specified in C<color_stops>.
-
-=head1 METHODS
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.

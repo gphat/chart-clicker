@@ -3,27 +3,75 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer';
 
+# ABSTRACT: Stacked Bar renderer
+
 use Graphics::Primitive::Brush;
 use Graphics::Primitive::Paint::Solid;
 use Graphics::Primitive::Operation::Fill;
 use Graphics::Primitive::Operation::Stroke;
 
+=head1 DESCRIPTION
+
+Chart::Clicker::Renderer::StackedBar renders a dataset as stacked bars.
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/stacked-bar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
+
+=end HTML
+
+=head1 SYNOPSIS
+
+  my $br = Chart::Clicker::Renderer::Bar->new;
+
+=cut
+
 has '+additive' => ( default => 1 );
+
+=attr bar_padding
+
+How much padding to put around a bar.  A padding of 4 will result in 2 pixels
+on each side.
+
+=cut
+
 has 'bar_padding' => (
     is => 'rw',
     isa => 'Int',
     default => 0
 );
+
+=attr bar_width
+
+Allows you to override the calculation that determines the optimal width for
+bars.  Be careful using this as it can making things look terrible.
+
+=cut
+
 has 'bar_width' => (
     is => 'rw',
     isa => 'Num',
     predicate => 'has_bar_width'
 );
+
+=attr brush
+
+A stroke to use on each bar.
+
+=cut
+
 has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
     default => sub { Graphics::Primitive::Brush->new }
 );
+
+=attr opacity
+
+If true this value will be used when setting the opacity of the bar's fill.
+
+=cut
+
 has 'opacity' => (
     is => 'rw',
     isa => 'Num',
@@ -147,59 +195,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Renderer::StackedBar - Stacked Bar renderer
-
-=head1 DESCRIPTION
-
-Chart::Clicker::Renderer::StackedBar renders a dataset as stacked bars.
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/stacked-bar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
-
-=end HTML
-
-=head1 SYNOPSIS
-
-  my $br = Chart::Clicker::Renderer::Bar->new;
-
-=head1 ATTRIBUTES
-
-=head2 bar_padding
-
-How much padding to put around a bar.  A padding of 4 will result in 2 pixels
-on each side.
-
-=head2 bar_width
-
-Allows you to override the calculation that determines the optimal width for
-bars.  Be careful using this as it can making things look terrible.
-
-=head2 brush
-
-A stroke to use on each bar.
-
-=head2 opacity
-
-If true this value will be used when setting the opacity of the bar's fill.
-
-=head2 prepare
-
-Prepare the renderer
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.

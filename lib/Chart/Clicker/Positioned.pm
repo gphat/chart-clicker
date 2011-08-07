@@ -1,45 +1,11 @@
 package Chart::Clicker::Positioned;
 use Moose::Role;
 
+# ABSTRACT: Role for components that care about position.
+
 use Moose::Util::TypeConstraints;
 
 enum 'Chart::Clicker::Position' => qw(left right top bottom);
-
-has 'position' => (
-    is => 'rw',
-    isa => 'Chart::Clicker::Position'
-);
-
-sub is_left {
-    my ($self) = @_;
-
-    return $self->position eq 'left';
-}
-
-sub is_right {
-    my ($self) = @_;
-
-    return $self->position eq 'right';
-}
-
-sub is_top {
-    my ($self) = @_;
-
-    return $self->position eq 'top';
-}
-
-sub is_bottom {
-    my ($self) = @_;
-
-    return $self->position eq 'bottom';
-}
-
-no Moose;
-1;
-__END__
-=head1 NAME
-
-Chart::Clicker::Positioned - Role for components that care about position.
 
 =head1 SYNOPSIS
 
@@ -49,44 +15,71 @@ bar on the right.  If positioned on the other side then those two piece are
 reversed.
 
     package My::Component;
-    
+
     extends 'Chart::Clicker::Drawing::Component';
-    
+
     with 'Chart::Clicker::Positioned';
-    
+
     1;
 
-=head1 METHODS
-
-=head2 is_bottom
-
-Returns true if the component is positioned bottom.
-
-=head2 is_left
-
-Returns true if the component is positioned left.
-
-=head2 is_right
-
-Returns true if the component is positioned right.
-
-=head2 is_top
-
-Returns true if the component is positioned top.
-
-=head2 position
+=attr position
 
 The 'side' on which this component is positioned.
 
-=head1 AUTHOR
+=cut
 
-Cory G Watson <gphat@cpan.org>
+has 'position' => (
+    is => 'rw',
+    isa => 'Chart::Clicker::Position'
+);
 
-=head1 SEE ALSO
+=method is_left
 
-perl(1)
+Returns true if the component is positioned left.
 
-=head1 LICENSE
+=cut
 
-You can redistribute and/or modify this code under the same terms as Perl
-itself.
+sub is_left {
+    my ($self) = @_;
+
+    return $self->position eq 'left';
+}
+
+=method is_right
+
+Returns true if the component is positioned right.
+
+=cut
+
+sub is_right {
+    my ($self) = @_;
+
+    return $self->position eq 'right';
+}
+
+=method is_top
+
+Returns true if the component is positioned top.
+
+=cut
+
+sub is_top {
+    my ($self) = @_;
+
+    return $self->position eq 'top';
+}
+
+=method is_bottom
+
+Returns true if the component is positioned bottom.
+
+=cut
+
+sub is_bottom {
+    my ($self) = @_;
+
+    return $self->position eq 'bottom';
+}
+
+no Moose;
+1;

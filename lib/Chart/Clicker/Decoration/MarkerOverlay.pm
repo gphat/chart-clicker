@@ -4,9 +4,17 @@ use Moose;
 
 extends 'Chart::Clicker::Decoration';
 
+# ABSTRACT: Component for drawing markers
+
 use Graphics::Primitive::Operation::Stroke;
 use Graphics::Primitive::Operation::Fill;
 use Graphics::Primitive::Paint::Solid;
+
+=head1 DESCRIPTION
+
+A Component that handles the rendering of Markers.
+
+=cut
 
 override('finalize', sub {
     my ($self) = @_;
@@ -99,33 +107,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Decoration::MarkerOverlay - Component for drawing markers
-
-=head1 DESCRIPTION
-
-A Component that handles the rendering of Markers.
-
-=head1 SYNOPSIS
-
-=head1 METHODS
-
-=head2 new
-
-Creates a new MarkerOverlay object.
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.

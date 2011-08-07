@@ -3,6 +3,8 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer';
 
+# ABSTRACT: Area renderer
+
 use Graphics::Primitive::Brush;
 use Graphics::Primitive::Path;
 use Graphics::Primitive::Operation::Fill;
@@ -10,16 +12,57 @@ use Graphics::Primitive::Operation::Stroke;
 use Graphics::Primitive::Paint::Gradient::Linear;
 use Graphics::Primitive::Paint::Solid;
 
+=head1 DESCRIPTION
+
+Chart::Clicker::Renderer::Area renders a dataset as line-like polygons with
+their interior areas filled.
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/area.png" width="500" height="250" alt="Area Chart" /></p>
+
+=end HTML
+
+=head1 SYNOPSIS
+
+  my $ar = Chart::Clicker::Renderer::Area->new({
+      fade => 1,
+      brush => Graphics::Primitive::Brush->new({
+          width => 2
+      })
+  });
+
+=attr brush
+
+Set/Get the brush that informs the line surrounding the area renders
+individual segments.
+
+=cut
+
 has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
     default => sub { Graphics::Primitive::Brush->new }
 );
+
+=attr fade
+
+Set/Get the fade flag, which turns on or off a gradient in the area renderer.
+
+=cut
+
 has 'fade' => (
     is => 'rw',
     isa => 'Bool',
     default => 0
 );
+
+=attr opacity
+
+Set the alpha value for the renderer, which makes things more or less opaque.
+
+=cut
+
 has 'opacity' => (
     is => 'rw',
     isa => 'Num',
@@ -129,58 +172,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Renderer::Area - Area renderer
-
-=head1 DESCRIPTION
-
-Chart::Clicker::Renderer::Area renders a dataset as line-like polygons with
-their interior areas filled.
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/area.png" width="500" height="250" alt="Area Chart" /></p>
-
-=end HTML
-
-=head1 SYNOPSIS
-
-  my $ar = Chart::Clicker::Renderer::Area->new({
-      fade => 1,
-      brush => Graphics::Primitive::Brush->new({
-          width => 2
-      })
-  });
-
-=head1 ATTRIBUTES
-
-=head2 brush
-
-Set/Get the brush that informs the line surrounding the area renders
-individual segments.
-
-=head2 fade
-
-Set/Get the fade flag, which turns on or off a gradient in the area renderer.
-
-=head2 opacity
-
-Set the alpha value for the renderer, which makes things more or less opaque.
-
-=head1 METHODS
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-L<Chart::Clicker::Renderer>, perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.

@@ -3,26 +3,57 @@ use Moose;
 
 extends 'Chart::Clicker::Renderer';
 
+# ABSTRACT: Polar Area renderer
+
 use Graphics::Color::RGB;
 use Geometry::Primitive::Arc;
 use Graphics::Primitive::Brush;
 
 use Scalar::Util qw(refaddr);
 
+=head1 DESCRIPTION
+
+Chart::Clicker::Renderer::PolarArea renders each series as a slice of a pie.
+The values of the series determine the radius of each slice, with larger
+values making the slices longer.  The 360 degrees of pie is divided equally.
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/polararea/polararea.png" width="300" height="250" alt="Polar Area Chart" /></p>
+
+=end HTML
+
+=head1 SYNOPSIS
+
+  my $par = Chart::Clicker::Renderer::PolarArea->new;
+  # Optionally set the stroke
+  $par->brush->width(2);
+  # and color
+  $par->border_color(Graphics::Color::RGB->new(red => 1, green => 1, blue => 1));
+
+=attr border_color
+
+Set/Get the Color to use for the border.
+
+=cut
+
 has 'border_color' => (
     is => 'rw',
     isa => 'Graphics::Color::RGB',
     default => sub { Graphics::Color::RGB->new },
 );
+
+=attr brush
+
+Set/Get a Brush to be used for the polar area's borders, which are around
+each slice.
+
+=cut
+
 has 'brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
     default => sub { Graphics::Primitive::Brush->new }
-);
-has 'center_radius' => (
-    is => 'rw',
-    isa => 'Num',
-    default => 5
 );
 has '_accum' => (
     is => 'rw',
@@ -59,7 +90,7 @@ override('prepare', sub {
 
     # This is really hinky, basically since figuring out the arcs and whatnot
     # is a pain in the ass, we employ the painter's algorithm and draw
-    # the last series first, the pain the next one over it.  As such, we have
+    # the last series first, then paint the next one over it.  As such, we have
     # to know the total "accumulated" value for each series' position so that
     # we can decrement it on each run through the series... this finds the
     # totals
@@ -171,58 +202,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Renderer::PolarArea - Polar Area renderer
-
-=head1 DESCRIPTION
-
-Chart::Clicker::Renderer::PolarArea renders each series as a slice of a pie.
-The values of the series determine the radius of each slice, with larger
-values making the slices longer.  The 360 degrees of pie is divided equally.
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/polararea/polararea.png" width="300" height="250" alt="Polar Area Chart" /></p>
-
-=end HTML
-
-=head1 SYNOPSIS
-
-  my $par = Chart::Clicker::Renderer::PolarArea->new;
-  # Optionally set the stroke
-  $par->brush->width(2);
-  # and color
-  $par->border_color(Graphics::Color::RGB->new(red => 1, green => 1, blue => 1));
-
-=head1 ATTRIBUTES
-
-=head2 border_color
-
-Set/Get the Color to use for the border.
-
-=head2 brush
-
-Set/Get a Brush to be used for the polar area's borders, which are around
-each slice.
-
-=head1 METHODS
-
-=head2 render
-
-Render the series.
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.

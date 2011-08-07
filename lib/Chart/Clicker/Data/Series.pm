@@ -1,8 +1,55 @@
 package Chart::Clicker::Data::Series;
 use Moose;
 
+# ABSTRACT: A series of key, value pairs representing chart data
+
 use List::Util qw(max min);
 use Chart::Clicker::Data::Range;
+
+=head1 DESCRIPTION
+
+Chart::Clicker::Data::Series represents a series of values to be charted.
+
+=head1 SYNOPSIS
+
+  use Chart::Clicker::Data::Series;
+
+  my @keys = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+
+  my $series = Chart::Clicker::Data::Series->new({
+    keys    => \@keys,
+    value   => \@values
+  });
+
+  # Alternately, if you prefer
+
+  my $series = Chart::Clicker::Data::Series->new({
+    1  => 42,
+    2  => 25,
+    3  => 85,
+    4  => 23,
+    5  => 2,
+    6  => 19,
+    7  => 102,
+    8  => 12,
+    9  => 54,
+    10 => 9
+  });
+
+=attr keys
+
+Set/Get the keys for this series.
+
+=method key_count
+
+Get the count of keys in this series.
+
+=attr add_to_keys
+
+Adds a key to this series.
+
+=cut
 
 has 'keys' => (
     traits => [ 'Array' ],
@@ -14,16 +61,45 @@ has 'keys' => (
         'key_count' => 'count'
     }
 );
+
+=attr name
+
+Set/Get the name for this Series
+
+=cut
+
 has 'name' => (
     is => 'rw',
     isa => 'Str',
     predicate => 'has_name'
 );
+
+=attr range
+
+Returns the range for this series.
+
+=cut
+
 has 'range' => (
     is => 'rw',
     isa => 'Chart::Clicker::Data::Range',
     lazy_build => 1
 );
+
+=attr values
+
+Set/Get the values for this series.
+
+=method add_to_values
+
+Add a value to this series.
+
+=method value_count
+
+Get the count of values in this series.
+
+=cut
+
 has 'values' => (
     traits => [ 'Array' ],
     is => 'rw',
@@ -65,6 +141,12 @@ sub BUILDARGS {
     return $args[0];
 }
 
+=method add_pair ($key, $value)
+
+Convenience method to add a single key and a single value to the series.
+
+=cut
+
 sub add_pair {
     my ($self, $key, $value) = @_;
 
@@ -87,98 +169,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Data::Series - A series of key, value pairs representing chart data
-
-=head1 DESCRIPTION
-
-Chart::Clicker::Data::Series represents a series of values to be charted.
-
-=head1 SYNOPSIS
-
-  use Chart::Clicker::Data::Series;
-
-  my @keys = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
-
-  my $series = Chart::Clicker::Data::Series->new({
-    keys    => \@keys,
-    value   => \@values
-  });
-
-  # Alternately, if you prefer
-
-  my $series = Chart::Clicker::Data::Series->new({
-    1  => 42,
-    2  => 25,
-    3  => 85,
-    4  => 23,
-    5  => 2,
-    6  => 19,
-    7  => 102,
-    8  => 12,
-    9  => 54,
-    10 => 9
-  });
-
-=head1 ATTRIBUTES
-
-=head2 keys
-
-Set/Get the keys for this series.
-
-=head2 name
-
-Set/Get the name for this Series
-
-=head2 range
-
-Returns the range for this series.
-
-=head2 values
-
-Set/Get the values for this series.
-
-=head1 METHODS
-
-=head2 new
-
-Creates a new, empty Series
-
-=head2 add_pair ($key, $value)
-
-Add a key and a value to the series.  Internally wraps C<add_to_keys> and
-C<add_to_values>.
-
-=head2 add_to_keys
-
-Adds a key to this series.
-
-=head2 add_to_values
-
-Add a value to this series.
-
-=head2 key_count
-
-Get the count of keys in this series.
-
-=head2 prepare
-
-Prepare this series.  Performs various checks and calculates
-various things.
-
-=head2 value_count
-
-Get the count of values in this series.
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.

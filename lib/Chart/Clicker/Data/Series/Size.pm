@@ -3,55 +3,9 @@ use Moose;
 
 extends 'Chart::Clicker::Data::Series';
 
+# ABSTRACT: Chart data with additional attributes for Size charts
+
 use List::Util qw(min max);
-
-has 'sizes' => (
-    traits => [ 'Array' ],
-    is => 'rw',
-    isa => 'ArrayRef',
-    default => sub { [] },
-    handles => {
-        'add_to_sizes' => 'push',
-        'size_count' => 'count',
-        'get_size' => 'get'
-    }
-);
-
-has max_size => (
-    is => 'ro',
-    isa => 'Num',
-    lazy_build => 1
-);
-
-has min_size => (
-    is => 'ro',
-    isa => 'Num',
-    lazy_build => 1
-);
-
-sub _build_max_size {
-    my ($self) = @_;
-
-    return max(@{ $self->sizes });
-}
-
-sub _build_min_size {
-    my ($self) = @_;
-
-    return min(@{ $self->sizes });
-}
-
-__PACKAGE__->meta->make_immutable;
-
-no Moose;
-
-1;
-
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Data::Series::Size - Chart data with additional attributes for Size charts
 
 =head1 DESCRIPTION
 
@@ -69,45 +23,70 @@ for the Bubble renderer.
     sizes   => \@sized
   });
 
-=head1 ATTRIBUTES
-
-=head2 sizes
+=attr sizes
 
 Set/Get the sizes for this series.
 
-=head2 max_size
-
-Gets the largest value from this Series' C<sizes>.
-
-=head2 min_size
-
-Gets the smallest value from this Series' C<sizes>.
-
-=head1 METHODS
-
-=head2 new
-
-Creates a new, empty Series::Size
-
-=head2 add_to_sizes
+=method add_to_sizes
 
 Adds a size to this series.
 
-=head2 get_size
+=method get_size
 
 Get a size by it's index.
 
-=head2 size_count
+=method size_count
 
 Gets the count of sizes in this series.
 
-=head1 AUTHOR
+=cut
 
-Cory G Watson <gphat@cpan.org>
+has 'sizes' => (
+    traits => [ 'Array' ],
+    is => 'rw',
+    isa => 'ArrayRef',
+    default => sub { [] },
+    handles => {
+        'add_to_sizes' => 'push',
+        'size_count' => 'count',
+        'get_size' => 'get'
+    }
+);
 
-=head1 LICENSE
+=attr max_size
 
-You can redistribute and/or modify this code under the same terms as Perl
-itself.
+Gets the largest value from this Series' C<sizes>.
+
+=cut
+
+has max_size => (
+    is => 'ro',
+    isa => 'Num',
+    lazy => 1,
+    default => sub {
+        my ($self) = @_;
+        return max(@{ $self->sizes });
+    }
+);
+
+=attr min_size
+
+Gets the smallest value from this Series' C<sizes>.
+
+=cut
+
+has min_size => (
+    is => 'ro',
+    isa => 'Num',
+    lazy => 1,
+    default => sub {
+        my ($self) = @_;
+        return min(@{ $self->sizes });
+    }
+);
+
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
 
 1;

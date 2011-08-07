@@ -1,27 +1,9 @@
 package Chart::Clicker::Renderer::Bubble;
 use Moose;
 
+# ABSTRACT: Bubble render
+
 extends 'Chart::Clicker::Renderer::Point';
-
-override('draw_point', sub {
-    my ($self, $x, $y, $series, $count) = @_;
-
-    my $shape = $self->shape->scale($series->get_size($count));
-    $shape->origin(Geometry::Primitive::Point->new(x => $x, y => $y));
-    $self->path->add_primitive($shape);
-});
-
-__PACKAGE__->meta->make_immutable;
-
-no Moose;
-
-1;
-
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Renderer::Bubble - Bubble render
 
 =head1 DESCRIPTION
 
@@ -46,26 +28,23 @@ Chart::Clicker::Data::Series::Size>.
     })
   });
 
-=head1 METHODS
-
-=head2 new
-
-Create a new Bubble renderer
-
-=head2 draw_point
+=method draw_point
 
 Called for each point.  Implemented as a separate method so that subclasses
 such as Bubble may override the drawing.
 
-=head1 AUTHOR
+=cut
 
-Cory G Watson <gphat@cpan.org>
+override('draw_point', sub {
+    my ($self, $x, $y, $series, $count) = @_;
 
-=head1 SEE ALSO
+    my $shape = $self->shape->scale($series->get_size($count));
+    $shape->origin(Geometry::Primitive::Point->new(x => $x, y => $y));
+    $self->path->add_primitive($shape);
+});
 
-perl(1)
+__PACKAGE__->meta->make_immutable;
 
-=head1 LICENSE
+no Moose;
 
-You can redistribute and/or modify this code under the same terms as Perl
-itself.
+1;

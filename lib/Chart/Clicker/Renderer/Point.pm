@@ -1,12 +1,41 @@
 package Chart::Clicker::Renderer::Point;
 use Moose;
 
+# ABSTRACT: Point renderer
+
 extends 'Chart::Clicker::Renderer';
 
 use Geometry::Primitive::Circle;
 use Geometry::Primitive::Point;
 use Graphics::Primitive::Operation::Fill;
 use Graphics::Primitive::Paint::Solid;
+
+=head1 DESCRIPTION
+
+Chart::Clicker::Renderer::Point renders a dataset as points.
+
+=begin HTML
+
+<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/point/point.png" width="500" height="250" alt="Point Chart" /></p>
+
+=end HTML
+
+=head1 SYNOPSIS
+
+  my $pr = Chart::Clicker::Renderer::Point->new({
+    shape => Geometry::Primitive::Arc->new({
+        angle1 => 0,
+        angle2 => 180,
+        radius  => 5
+    })
+  });
+
+=attr shape
+
+Specify the shape to be used at each point.  Defaults to 360 degree arc with
+a radius of 3.
+
+=cut
 
 has 'shape' => (
     is => 'rw',
@@ -17,6 +46,13 @@ has 'shape' => (
         });
     }
 );
+
+=attr shape_brush
+
+Optionally provide a brush with with to stroke each point.
+
+=cut
+
 has 'shape_brush' => (
     is => 'rw',
     isa => 'Graphics::Primitive::Brush',
@@ -76,6 +112,13 @@ override('finalize', sub {
     return 1;
 });
 
+=method draw_point
+
+Called for each point.  Implemented as a separate method so that subclasses
+such as Bubble may override the drawing.
+
+=cut
+
 sub draw_point {
     my ($self, $x, $y, $series, $count) = @_;
 
@@ -89,67 +132,3 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 
 1;
-__END__
-
-=head1 NAME
-
-Chart::Clicker::Renderer::Point - Point renderer
-
-=head1 DESCRIPTION
-
-Chart::Clicker::Renderer::Point renders a dataset as points.
-
-=begin HTML
-
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/point/point.png" width="500" height="250" alt="Point Chart" /></p>
-
-=end HTML
-
-=head1 SYNOPSIS
-
-  my $pr = Chart::Clicker::Renderer::Point->new({
-    shape => Geometry::Primitive::Arc->new({
-        angle1 => 0,
-        angle2 => 180,
-        radius  => 5
-    })
-  });
-
-=head1 ATTRIBUTES
-
-=head2 shape
-
-Specify the shape to be used at each point.  Defaults to 360 degree arc with
-a radius of 3.
-
-=head2 shape_brush
-
-Optionally provide a brush with with to stroke each point.
-
-=head1 METHODS
-
-=head2 new
-
-Create a new Point renderer
-
-=head2 draw_point
-
-Called for each point.  Implemented as a separate method so that subclasses
-such as Bubble may override the drawing.
-
-=head2 render
-
-Render the series.
-
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
-
-=head1 SEE ALSO
-
-perl(1)
-
-=head1 LICENSE
-
-You can redistribute and/or modify this code under the same terms as Perl
-itself.
