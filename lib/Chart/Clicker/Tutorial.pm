@@ -1,8 +1,6 @@
-=pod
+package Chart::Clicker::Tutorial;
 
-=head1 NAME
-
-Chart::Clicker::Tutorial - A Tutorial for using Chart::Clicker
+# ABSTRACT: A Tutorial for using Chart::Clicker
 
 =head1 DESCRIPTION
 
@@ -12,6 +10,8 @@ This document aims to provide a tutorial for using Chart::Clicker.
 
 This is a work in progress. If you find errors or would like to make
 contributions, drop me a line!
+
+=begin :prelude
 
 =head1 EXAMPLES
 
@@ -186,17 +186,16 @@ contributions, drop me a line!
   # a sprintf format to have 3 decimal places showing on the Y-Axis
   $chart->get_context('default')->range_axis->format('%.3f')
 
-=head1 AUTHOR
-
-Cory G Watson <gphat@cpan.org>
+=begin :postlude
 
 =head1 CONTRIBUTORS
 
 Steve Bradford
 
-=head1 LICENSE
+Michael Peters
 
-You can redistribute and/or modify this code under the same terms as Perl
-itself.
+=end :postlude
 
 =cut
+
+1;
