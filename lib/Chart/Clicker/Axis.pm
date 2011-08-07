@@ -572,7 +572,7 @@ override('finalize', sub {
 
             # Adjust text on the Y axis to fit when it is
             # too close to the edges
-			my $standardYOrigin = $iy - ($label->height / 2);
+            my $standardYOrigin = $iy - ($label->height / 2);
             #my $lowerYOrigin = $iy - $label->height;
             my $lowerYOrigin = $ioy + $iheight - $label->height;
             my $upperYOrigin = $ioy;
