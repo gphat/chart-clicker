@@ -102,7 +102,7 @@ has 'series' => (
     }
 );
 
-=method get_all_series keys
+=method get_all_series_keys
 
 Returns an array of keys representing the union of all keys from all DataSets.
 
