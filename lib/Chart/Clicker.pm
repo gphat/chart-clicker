@@ -514,6 +514,8 @@ has 'over_decorations' => (
 Set/Get the padding.  Expects a L<Graphics::Primitive::Insets> object.  Defaults
 to 3px on all sides.
 
+=cut
+
 has '+padding' => (
     default => sub {
         Graphics::Primitive::Insets->new(
@@ -1032,3 +1034,5 @@ Chart::Clicker is on github:
   http://github.com/gphat/chart-clicker/tree/master
 
 =end :postlude
+
+=cut
