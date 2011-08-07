@@ -1,10 +1,10 @@
 package Chart::Clicker::Drawing::ColorAllocator;
 use Moose;
 
+# ABSTRACT: Color picker
+
 use Graphics::Color::RGB;
 use Color::Scheme;
-
-my @defaults = (qw());;
 
 =head1 DESCRIPTION
 

@@ -5,6 +5,8 @@ extends 'Graphics::Primitive::Canvas';
 
 with 'Graphics::Primitive::Oriented';
 
+# ABSTRACT: Under-data grid
+
 use Graphics::Color::RGB;
 
 =head1 DESCRIPTION
