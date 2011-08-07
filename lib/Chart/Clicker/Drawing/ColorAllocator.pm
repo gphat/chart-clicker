@@ -174,19 +174,19 @@ subsequent calls will return different colors.
 =cut
 
 sub next {
-    my $self = shift();
+    my $self = shift;
 
-    $self->position($self->position() + 1);
+    $self->position($self->position + 1);
 
-    return $self->colors->[$self->position()];
+    return $self->colors->[$self->position];
 }
 
 # Before we attempt to get the next color, we'll instantiate it if we need it
 # that way we don't waste a bunch of memory with useless colors.
 before 'next' => sub {
-    my $self = shift();
+    my $self = shift;
 
-    my $pos = $self->position();
+    my $pos = $self->position;
     if(!defined($self->colors->[$pos + 1])) {
         $self->add_to_colors($self->allocate_color);
     }
@@ -229,7 +229,7 @@ Resets this allocator back to the beginning.
 =cut
 
 sub reset {
-    my $self = shift();
+    my $self = shift;
 
     $self->position(-1);
     return 1;

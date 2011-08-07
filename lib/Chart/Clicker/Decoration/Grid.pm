@@ -108,7 +108,7 @@ Set/Get the Stroke for this Grid.
 =cut
 
 override('finalize', sub {
-    my $self = shift();
+    my $self = shift;
 
     return unless ($self->show_domain || $self->show_range);
 

@@ -55,8 +55,8 @@ override 'prepare' => sub {
     };
 
     if(!defined($dstart) || !defined($dend)) {
-        $dstart = DateTime->now();
-        $dend = DateTime->now();
+        $dstart = DateTime->now;
+        $dend = DateTime->now;
     }
 
     my $dur = $dend - $dstart;
@@ -75,14 +75,14 @@ override 'prepare' => sub {
         }
     }
 
-    super();
+    super;
 
-    my $clicker = shift();
+    my $clicker = shift;
     if(!defined($clicker)) {
         die('No clicker?')
     }
 
-    # my @markers = @{ $clicker->markers() };
+    # my @markers = @{ $clicker->markers };
 
     my $set = DateTime::Span->from_datetimes(
         start => $dstart, end => $dend
@@ -99,20 +99,20 @@ override 'prepare' => sub {
     # my $day = $set->start->truncate(to => 'day');
     # 
     # my $dayval;
-    # while($day < $set->end()) {
+    # while($day < $set->end) {
     #     if($set->contains($day)) {
     #         if(defined($dayval)) {
     #             push(@dmarkers,
     #                 Chart::Clicker::Data::Marker->new({
     #                     key         => $dayval,
-    #                     key2        => $day->epoch(),
+    #                     key2        => $day->epoch,
     #                     color       => $linecolor,
     #                     inside_color=> $fillcolor,
     #                 })
     #             );
     #             $dayval = undef;
     #         } else {
-    #             $dayval = $day->epoch();
+    #             $dayval = $day->epoch;
     #         }
     #     }
     #     $day = $day->add(days => 1);
@@ -121,7 +121,7 @@ override 'prepare' => sub {
     #     push(@dmarkers,
     #         Chart::Clicker::Data::Marker->new({
     #             key         => $dayval,
-    #             key2        => $day->epoch(),
+    #             key2        => $day->epoch,
     #             color       => $linecolor,
     #             inside_color=> $fillcolor,
     #         })
@@ -141,18 +141,18 @@ Formats the value using L<DateTime>'s strftime.
 =cut
 
 sub format_value {
-    my $self = shift();
-    my $value = shift();
+    my $self = shift;
+    my $value = shift;
 
     my %dtargs = (
         'epoch' => $value
     );
-    if($self->time_zone()) {
-        $dtargs{'time_zone'} = $self->time_zone();
+    if($self->time_zone) {
+        $dtargs{'time_zone'} = $self->time_zone;
     }
     my $dt = DateTime->from_epoch(%dtargs);
 
-    return $dt->strftime($self->format());
+    return $dt->strftime($self->format);
 }
 
 __PACKAGE__->meta->make_immutable;

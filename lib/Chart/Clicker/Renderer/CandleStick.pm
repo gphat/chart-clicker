@@ -25,7 +25,7 @@ bar chart.
 
 =head1 SYNOPSIS
 
-  my $br = Chart::Clicker::Renderer::CandleStick->new();
+  my $br = Chart::Clicker::Renderer::CandleStick->new;
 
 =attr bar_padding
 
@@ -53,7 +53,7 @@ has 'brush' => (
 );
 
 override('prepare', sub {
-    my $self = shift();
+    my $self = shift;
 
     super;
 

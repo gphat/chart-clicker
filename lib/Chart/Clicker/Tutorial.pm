@@ -171,7 +171,7 @@ contributions, drop me a line!
 
 =head2 Example 7 : Hide the Legend and X-Axis
 
-  my $chart = Chart::Clicker->new();
+  my $chart = Chart::Clicker->new;
 
   # hide the legend
   $chart->legend->visible(0);
@@ -181,7 +181,7 @@ contributions, drop me a line!
 
 =head2 Example 8 : Change the display format of the Y-Axis
 
-  my $chart = Chart::Clicker->new();
+  my $chart = Chart::Clicker->new;
 
   # a sprintf format to have 3 decimal places showing on the Y-Axis
   $chart->get_context('default')->range_axis->format('%.3f')

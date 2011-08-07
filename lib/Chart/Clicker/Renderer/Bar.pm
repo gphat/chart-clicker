@@ -23,7 +23,7 @@ Chart::Clicker::Renderer::Bar renders a dataset as bars.
 
 =head1 SYNOPSIS
 
-  my $br = Chart::Clicker::Renderer::Bar->new();
+  my $br = Chart::Clicker::Renderer::Bar->new;
 
 =begin :prelude
 
@@ -94,7 +94,7 @@ has 'opacity' => (
 );
 
 override('prepare', sub {
-    my $self = shift();
+    my $self = shift;
 
     super;
 

@@ -11,7 +11,7 @@ Chart::Clicker::Renderer represents the plot of the chart.
 
 =head1 SYNOPSIS
 
-  my $renderer = Chart::Clicker::Renderer::Foo->new();
+  my $renderer = Chart::Clicker::Renderer::Foo->new;
   
 =attr additive
 

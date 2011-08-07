@@ -2,7 +2,7 @@ use Test::More;
 
 BEGIN { use_ok('Chart::Clicker::Data::Series::Size'); }
 
-my $series = Chart::Clicker::Data::Series::Size->new();
+my $series = Chart::Clicker::Data::Series::Size->new;
 ok(defined($series), 'new Chart::Clicker::Data::Series::Size');
 isa_ok($series, 'Chart::Clicker::Data::Series::Size');
 
