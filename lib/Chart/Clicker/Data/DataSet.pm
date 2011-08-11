@@ -21,7 +21,7 @@ use more than one in your chart.
   my @keys = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
   my $series = Chart::Clicker::Data::Series->new({
     keys    => \@keys,
-    values  => \@values
+    values  => \@vals
   });
 
   my $ds = Chart::Clicker::Data::DataSet->new({

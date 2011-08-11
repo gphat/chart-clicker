@@ -17,8 +17,6 @@ use Layout::Manager::Grid;
 Chart::Clicker::Decoration::Legend::Tabular draws a legend on a Chart with
 tabular data display.
 
-=head1 SYNOPSIS
-
 The Tabular legend is a legend with a few extra attributes that allow you to
 pass it data to display.  The attributes are c<header> and c<data>.  The
 C<header> (optional) allows you to specify the strings to display at the top
@@ -32,6 +30,13 @@ that you will provide C<data> with one arrayref for every series, each
 containing n elements.  Having that, C<header> will expect n + 1 elements
 with one for the series name and the remaining (n) matching the number of
 elements in each of C<data>'s arrayrefs.
+
+=head1 SYNOPSIS
+
+    my $cc = Chart::Clicker->new;
+
+    my $series1 = Chart::Clicker::Data::Series->new;
+    my $series2 = Chart::Clicker::Data::Series->new;
 
     $cc->legend(Chart::Clicker::Decoration::Legend::Tabular->new(
         header => [ qw(Name Min Max) ],

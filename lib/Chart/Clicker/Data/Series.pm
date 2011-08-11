@@ -28,7 +28,7 @@ also be numeric, as otherwise we'd have no idea how to order the data.
 
   # Alternately, if you prefer
 
-  my $series = Chart::Clicker::Data::Series->new({
+  my $series2 = Chart::Clicker::Data::Series->new({
     1  => 42,
     2  => 25,
     3  => 85,

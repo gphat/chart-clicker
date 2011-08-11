@@ -17,10 +17,14 @@ for the Bubble renderer.
 
   use Chart::Clicker::Data::Series::Size;
 
+  my @keys = ();
+  my @values = ();
+  my @sizes = ();
+
   my $series = Chart::Clicker::Data::Series::Size->new({
     keys    => \@keys,
     values  => \@values,
-    sizes   => \@sized
+    sizes   => \@sizes
   });
 
 =attr sizes

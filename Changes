@@ -1,6 +1,7 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+  - Fix typo in ColorAllocator synopsis (Matthias Bloch)
 
 2.70 Aug 7 2011
   - Add more examples in the Tutorial (mpeters)

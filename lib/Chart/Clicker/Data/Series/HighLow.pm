@@ -28,6 +28,12 @@ CandleStick renderer.  The general idea is:
 
   use Chart::Clicker::Data::Series::HighLow;
 
+  my @keys = ();
+  my @values = ();
+  my @highs = ();
+  my @lows = ();
+  my @opens = ();
+
   my $series = Chart::Clicker::Data::Series::HighLow->new({
     keys    => \@keys,
     values  => \@values,

@@ -16,7 +16,7 @@ Used to highlight a particular key, value or range of either.
  use Graphics::Color::RGB;
  use Graphics::Primitive::Brush;
 
- my $cc = Chart::Clicker->new(...);
+ my $cc = Chart::Clicker->new;
 
  my $mark = Chart::Clicker::Data::Marker->new(
     color   => Graphics::Color::RGB->new,

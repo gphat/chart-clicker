@@ -23,9 +23,9 @@ Chart::Clicker::Renderer::Line renders a dataset as lines.
 
   my $lr = Chart::Clicker::Renderer::Line->new(
     brush => Graphics::Primitive::Brush->new({
-      ...
+      #...
     })
-  });
+  );
 
 =attr additive
 

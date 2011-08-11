@@ -7,14 +7,17 @@ use Moose::Util::TypeConstraints;
 
 enum 'Chart::Clicker::Position' => qw(left right top bottom);
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
 
 Some components draw differently depending on which 'side' they are
 positioned.  If an Axis is on the left, it will put the numbers left and the
 bar on the right.  If positioned on the other side then those two piece are
 reversed.
 
+=head1 SYNOPSIS
+
     package My::Component;
+    use Moose;
 
     extends 'Chart::Clicker::Drawing::Component';
 

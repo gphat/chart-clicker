@@ -17,18 +17,18 @@ corresponds to the series that will be colored.
     use Chart::Clicker::Drawing::ColorAllocator;
 
     my $ca = Chart::Clicker::Drawing::ColorAllocator->new({
-        colors => (
+        colors => [
             Graphics::Color::RGB->new(
                 red => 1.0, green => 0, blue => 0, alpha => 1.0
             ),
-            ...
-        )
+            #...
+        ]
     });
 
     my $red = $ca->get(0);
 
     #or let Chart::Clicker autmatically pick complementing colors for you
-    my $ca = Chart::Clicker::Drawing::ColorAllocator->new({
+    my $ca2 = Chart::Clicker::Drawing::ColorAllocator->new({
         seed_hue => 0, #red
     });
 

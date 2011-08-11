@@ -14,9 +14,12 @@ in L<Chart::Clicker>.
 
 =head1 SYNOPSIS
 
+  my $clicker = Chart::Clicker->new;
+
   my $context = Chart::Clicker::Context->new(
     name => 'Foo'
   );
+
   $clicker->add_to_contexts('foo', $context);
 
 =attr domain_axis
