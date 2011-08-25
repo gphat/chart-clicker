@@ -3,38 +3,26 @@
 <head>
   <meta charset='utf-8'>
 
-  <title>gphat/chart-clicker @ GitHub</title>
+  <title>Chart::Clicker</title>
 
-  <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #6190cf;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #000000;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #9e6f30; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #9e6f30; }
-    h3 { text-align: center; color: #9e6f30; }
-    a { color: #9e6f30; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-  </style>
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.4.0/build/cssreset/reset-min.css">
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.3.0/build/cssgrids/grids-min.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/main.css" media="all">
+  <!--[if lt IE 9]>
+   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
 </head>
 
 <body>
+ <header>
+  <h1><img src="/static/images/logo.png" alt="Chart::Clicker"></h1>
+ </header>
+ <nav>
+  &nbsp;
+ </nav>
   <a href="http://github.com/gphat/chart-clicker"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
   <div id="container">
-
     <div class="download">
       <a href="http://github.com/gphat/chart-clicker/zipball/master">
         <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
@@ -42,20 +30,31 @@
         <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
     </div>
 
-    <h1><a href="http://github.com/gphat/chart-clicker">chart-clicker</a>
-      <span class="small">by <a href="http://github.com/gphat">gphat</a></span></h1>
+    <h1>Powerful, extensible charting in Perl!</h1>
 
-    <div class="description">
-      Extensible, Beautiful Charts for Perl
+    <p>Chart::Clicker is a Perl module for generating beautiful charts.  Using <a href="http://cairographics.org/">Cairo</a> it can generate charts in various <a href="https://metacpan.org/module/Chart::Clicker#FORMATS-OUTPUT">formats</a>.  It also has a number of <a href="https://metacpan.org/module/Chart::Clicker#Renderers">renderers</a> for different types of charts. Please <a href="https://metacpan.org/module/Chart::Clicker">read the docs on CPAN</a>. I also welcome <a href="https://github.com/gphat/chart-clicker/issues">submission of issues or suggestions</a>.  You are also welcome to <a href="http://www.onemogin.com/contact/">drop me a line</a> if you need help, want to tell me how much you love me, or whatever.</p>
+
+    <hgroup>
+     <h2>Talks</h2>
+    </hgroup>
+    <p>I gave a talk at YAPC::NA in 2009 called <a href="http://onemogin.squarespace.com/storage/talks/HowNotToBuild.pdf">Data Visualization with Chart::Clicker</a> (PDF Link).</p>
+
+    <hgroup>
+     <h2>Examples</h2>
+     <h3><a href="http://github.com/gphat/chart-clicker-examples">Source Here!</a></h3>
+    </hgroup>
+    <div class="examples">
+     <figure><a href="/static/images/examples/area.png"><img src="/static/images/examples/area.png" width="200"></a></figure>
+     <figure><a href="/static/images/examples/bubble.png"><img src="/static/images/examples/bubble.png" width="200"></a></figure>
+     <figure><a href="/static/images/examples/candlestick.png"><img src="/static/images/examples/candlestick.png" width="200"></a></figure>
+     <figure><a href="/static/images/examples/line.png"><img src="/static/images/examples/line.png" width="200"></a></figure>
+     <figure><a href="/static/images/examples/pie.png"><img src="/static/images/examples/pie.png" height="100"></a></figure>
+     <figure><a href="/static/images/examples/point.png"><img src="/static/images/examples/point.png" width="200"></a></figure>
+     <figure><a href="/static/images/examples/polararea.png"><img src="/static/images/examples/polararea.png" height="100"></a></figure>
+     <figure><a href="/static/images/examples/stacked-area.png"><img src="/static/images/examples/stacked-area.png" width="200"></a></figure>
+     <figure><a href="/static/images/examples/stacked-bar.png"><img src="/static/images/examples/stacked-bar.png" width="200"></a></figure>
+     <figure><a href="/static/images/examples/stacked-line.png"><img src="/static/images/examples/stacked-line.png" width="200"></a></figure>
     </div>
-
-    <h2>License</h2>
-<p>http://dev.perl.org/licenses/</p>
-<h2>Authors</h2>
-<p>Cory Watson (github@onemogin.com)<br/>Cory G Watson (gphat@onemogin.com)<br/>Guillermo Roditi (groditi@gmail.com)<br/>Michael Peters (mpeters@plusthree.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Cory G Watson (github@onemogin.com)<br/>      </p>
-
 
     <h2>Download</h2>
     <p>
@@ -73,7 +72,5 @@
     </div>
 
   </div>
-
-  
 </body>
 </html>

@@ -1,0 +1,17 @@
+html,body{-webkit-font-smoothing:antialiased;background-color:#e4e9ec;font-family:Helvetica,Arial,FreeSans,san-serif;font-size:16px;color:#000000;text-shadow:0 1px 1px rgba(255, 255, 255, 0.85);}
+header{background-image:url('/static/images/header.png');height:150px;text-align:center;}header h1{padding-top:39px;}
+a{color:#ffac00;font-weight:bold;text-decoration:none;}
+a:hover{text-decoration:underline;}
+h1,h2,h3{font-weight:bold;margin-bottom:.5em;}
+h1{font-size:2.625em;}
+h2{font-size:2.125em;}
+h3{font-size:1.625em;}
+nav{background-image:url('/static/images/nav.png');height:22px;}
+p{line-height:1.25em;margin-bottom:1em;}
+pre{-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;background:#000;color:#fff;margin-top:.5em;padding:15px;text-shadow:none;}
+hgroup h2{display:inline-block;margin:0 .5em .2em 0;}
+hgroup h3{display:inline-block;font-size:1em;}
+#container{margin:1em auto;width:700px;}
+.download{float:right;}
+.examples figure{display:inline-block;margin:0 .5em 1em 0;}
+.footer{font-style:italic;padding-top:30px;text-align:center;}
