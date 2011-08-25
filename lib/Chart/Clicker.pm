@@ -75,7 +75,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/line.png" width="500" height="250" alt="Line Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/line.png" width="500" height="250" alt="Line Chart" /></p>
 
 =end HTML
 
@@ -83,7 +83,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/line/stacked-line.png" width="500" height="250" alt="Stacked Line Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/stacked-line.png" width="500" height="250" alt="Stacked Line Chart" /></p>
 
 =end HTML
 
@@ -91,7 +91,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/bar.png" width="500" height="250" alt="Bar Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/bar.png" width="500" height="250" alt="Bar Chart" /></p>
 
 =end HTML
 
@@ -99,7 +99,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/stacked-bar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/stacked-bar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
 
 =end HTML
 
@@ -107,7 +107,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/area.png" width="500" height="250" alt="Area Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/area.png" width="500" height="250" alt="Area Chart" /></p>
 
 =end HTML
 
@@ -115,7 +115,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/area/stacked-area.png" width="500" height="250" alt="Stacked Area Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/stacked-area.png" width="500" height="250" alt="Stacked Area Chart" /></p>
 
 =end HTML
 
@@ -123,7 +123,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bubble/bubble.png" width="500" height="250" alt="Bubble Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/bubble.png" width="500" height="250" alt="Bubble Chart" /></p>
 
 =end HTML
 
@@ -131,7 +131,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/candlestick/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/candlestick.png" width="500" height="250" alt="Candlestick Chart" /></p>
 
 =end HTML
 
@@ -139,7 +139,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/point/point.png" width="500" height="250" alt="Point Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/point.png" width="500" height="250" alt="Point Chart" /></p>
 
 =end HTML
 
@@ -147,7 +147,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/pie/pie.png" width="300" height="250" alt="Pie Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/pie.png" width="300" height="250" alt="Pie Chart" /></p>
 
 =end HTML
 
@@ -155,7 +155,7 @@ Clicker supports the following renderers:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/polararea/polararea.png" width="300" height="250" alt="Polar Area Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/polararea.png" width="300" height="250" alt="Polar Area Chart" /></p>
 
 =end HTML
 
@@ -190,7 +190,7 @@ shake off this simple method and build Series & DataSets explicitly.
   );
 
   my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
- 
+
   $cc->add_to_datasets($ds);
 
 This used to be the only way to add data, but repeated requests to make the
@@ -211,13 +211,13 @@ context.
 
   my $context = Chart::Clicker::Context->new( name => 'sales' );
   $clicker->add_to_contexts($context);
-  
+
   $dataset->context('sales');
-  
+
   $clicker->add_to_datasets($dataset);
-  
+
 New contexts provide a fresh domain and range axis and default to a Line
-renderer. 
+renderer.
 
 B<Caveat>: Clicker expects that the default context (identified by the string
 "default") will always be present.  It is from this context that some of
@@ -571,7 +571,7 @@ things like padding and text rotation.  If you are adding it to the top and
 want some padding between it and the plot, you can:
 
   $cc->title->padding->bottom(5);
-  
+
 =cut
 
 has 'title' => (
