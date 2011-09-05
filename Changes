@@ -1,6 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+
+2.72 Sep 5 2011
   - Remove documentation for data method and replace it with rendered data method.
 
 2.71 Aug 25 2011
