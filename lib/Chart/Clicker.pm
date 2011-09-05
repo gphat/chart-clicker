@@ -239,7 +239,7 @@ similar things, you can use:
 
   # ... make your chart
   $cc->draw;
-  my $image_data = $cc->data;
+  my $image_data = $cc->rendered_data;
 
 If you happen to be using Catalyst then take a look at
 L<Catalyst::View::Graphics::Primitive>.
@@ -367,6 +367,11 @@ has 'datasets' => (
 
 Set/Get the driver used to render this Chart. Defautls to
 L<Graphics::Primitive::Driver::Cairo>.
+
+=method rendered_data
+
+Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
+client.
 
 =cut
 
@@ -640,13 +645,6 @@ sub add_subgraph {
     }
     push(@{$self->subgraphs}, $graph);
 }
-
-=method data
-
-Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
-client.
-
-=cut
 
 sub data {
     my ($self) = @_;
