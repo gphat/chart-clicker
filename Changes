@@ -1,6 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+
+2.73 Nov 4 2011
   - Fix busted images in renderers.
 
 2.72 Sep 5 2011
