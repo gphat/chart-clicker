@@ -17,7 +17,7 @@ Chart::Clicker::Renderer::Bar renders a dataset as bars.
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/bar.png" width="500" height="250" alt="Bar Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/bar.png" width="500" height="250" alt="Bar Chart" /></p>
 
 =end HTML
 
@@ -35,7 +35,7 @@ something like this:
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com.com/clicker/chart-clicker-examples/bar/bar-baseline.png" width="500" height="250" alt="Base (Baseline) Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/bar-baseline.png" width="500" height="250" alt="Base (Baseline) Chart" /></p>
 
 =end HTML
 

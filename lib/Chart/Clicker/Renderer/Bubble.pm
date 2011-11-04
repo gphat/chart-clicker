@@ -15,7 +15,7 @@ Chart::Clicker::Data::Series::Size>.
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bubble/bubble.png" width="500" height="250" alt="Bubble Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/bubble.png" width="500" height="250" alt="Bubble Chart" /></p>
 
 =end HTML
 

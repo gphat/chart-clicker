@@ -16,7 +16,7 @@ Chart::Clicker::Renderer::StackedBar renders a dataset as stacked bars.
 
 =begin HTML
 
-<p><img src="http://www.onemogin.com/clicker/chart-clicker-examples/bar/stacked-bar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
+<p><img src="http://gphat.github.com/chart-clicker/static/images/examples/stacked-bar.png" width="500" height="250" alt="Stacked Bar Chart" /></p>
 
 =end HTML
 

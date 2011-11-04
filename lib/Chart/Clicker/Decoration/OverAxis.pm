@@ -13,7 +13,7 @@ use Layout::Manager::Flow;
 =head1 DESCRIPTION
 
 An axis that is meant to be drawn "over" a chart.  You can find an example
-of an OverAxis at L<http://www.onemogin.com/clicker/images/overaxis.png>.
+of an OverAxis at L<http://gphat.github.com/chart-clicker/static/images/examples/overaxis.png>.
 
 =attr axis_height
 
