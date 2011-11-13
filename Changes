@@ -1,6 +1,7 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+  - POD fixes
 
 2.73 Nov 4 2011
   - Fix busted images in renderers.

@@ -22,9 +22,8 @@ Chart::Clicker::Data::Series::Size>.
 =head1 SYNOPSIS
 
   my $pr = Chart::Clicker::Renderer::Bubble->new({
-    shape => Chart::Clicker::Shape::Arc->new({
-        angle1 => 0,
-        angle2 => 180,
+    shape => Geometry::Primitive::Circle->new({
+        radius => 3
     })
   });
 
