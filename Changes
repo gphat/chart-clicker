@@ -1,6 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+
+2.74 Nov 13 2011
   - POD fixes
 
 2.73 Nov 4 2011
