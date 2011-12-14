@@ -184,7 +184,7 @@ contributions, drop me a line!
   my $chart = Chart::Clicker->new;
 
   # a sprintf format to have 3 decimal places showing on the Y-Axis
-  $chart->get_context('default')->range_axis->format('%.3f')
+  $chart->get_context('default')->range_axis->format('%.3f');
 
 =begin :postlude
 

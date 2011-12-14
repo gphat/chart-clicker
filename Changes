@@ -1,6 +1,7 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+  - Fix syntax error in example (Alexx Roche)
 
 2.75 Dec 5 2011
   - Add Graphics::Primitive::Cairo dep (thanks TEEJAY)
