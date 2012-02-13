@@ -27,7 +27,7 @@ Chart::Clicker::Axis represents the plot of the chart.
   use Graphics::Primitive::Brush;
 
   my $axis = Chart::Clicker::Axis->new({
-    font  => Graphics::Primitive::Font->new,
+    label_font  => Graphics::Primitive::Font->new,
     orientation => 'vertical',
     position => 'left',
     brush => Graphics::Primitive::Brush->new,
@@ -116,7 +116,7 @@ passed to it as an argument.
 
 =cut
 
-has 'format' => ( is => 'rw', isa => 'Str|CodeRef' );
+has 'format' => ( is => 'rw', isa => 'Str|CodeRef', default => '%s' );
 
 =attr fudge_amount
 

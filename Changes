@@ -1,6 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+  - Fix synopsis of Axis (Thanks Gisbert W. Selke, RT #74951)
+  - Default Axis' format to %s to fix it from blowing up (Thanks Gisbert W. Selke, RT #74950)
 
 2.76 Dec 14 2011
   - Fix syntax error in example (Alexx Roche)

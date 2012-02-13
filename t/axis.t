@@ -9,6 +9,8 @@ my $axis = Chart::Clicker::Axis->new(
     label => $label, orientation => 'vertical', position => 'left'
 );
 
+cmp_ok($axis->format_value(100), 'eq', '100', 'format_value (default format test)');
+
 ok($axis->label eq $label, 'label');
 
 ok($axis->show_ticks, 'Default show_ticks');
