@@ -1,6 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+
+2.77 Feb 13 2012
   - Fix synopsis of Axis (Thanks Gisbert W. Selke, RT #74951)
   - Default Axis' format to %s to fix it from blowing up (Thanks Gisbert W. Selke, RT #74950)
 
