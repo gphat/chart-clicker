@@ -1,6 +1,7 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+  - Add lots of POD.
 
 2.77 Feb 13 2012
   - Fix synopsis of Axis (Thanks Gisbert W. Selke, RT #74951)
