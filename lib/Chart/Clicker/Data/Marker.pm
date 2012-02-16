@@ -35,7 +35,7 @@ Used to highlight a particular key, value or range of either.
 
 =attr brush
 
-Set/Get the brush for this Marker.
+Set/Get the L<brush|Graphics::Primitive::Brush> for this Marker.
 
 =cut
 
@@ -49,7 +49,7 @@ has 'brush' => (
 
 =attr color
 
-Set/Get the color for this marker.
+Set/Get the L<color|Graphics::Primitive::Color> for this marker.
 
 =cut
 
@@ -65,7 +65,7 @@ has 'color' => (
 
 =attr inside_color
 
-Set/Get the inside color, which will be used if this range has two keys and
+Set/Get the inside L<color|Graphics::Primitive::Color>, which will be used if this range has two keys and
 two values.
 
 =cut

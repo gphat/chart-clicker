@@ -33,7 +33,7 @@ values making the slices longer.  The 360 degrees of pie is divided equally.
 
 =attr border_color
 
-Set/Get the Color to use for the border.
+Set/Get the L<color|Graphics::Color::RGB> to use for the border.
 
 =cut
 
@@ -45,7 +45,7 @@ has 'border_color' => (
 
 =attr brush
 
-Set/Get a Brush to be used for the polar area's borders, which are around
+Set/Get a L<brush|Graphics::Primitive::Brush> to be used for the polar area's borders, which are around
 each slice.
 
 =cut

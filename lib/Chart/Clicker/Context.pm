@@ -24,7 +24,7 @@ in L<Chart::Clicker>.
 
 =attr domain_axis
 
-Set/get this context's domain axis
+Set/get this context's domain L<Axis|Chart::Clicker::Axis>.
 
 =cut
 
@@ -79,7 +79,7 @@ has 'name' => (
 
 =attr range_axis
 
-Set/get this context's range axis
+Set/get this context's range L<Axis|Chart::Clicker::Axis>.
 
 =cut
 

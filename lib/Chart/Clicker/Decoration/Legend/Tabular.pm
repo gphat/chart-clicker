@@ -48,7 +48,7 @@ elements in each of C<data>'s arrayrefs.
 
 =attr border
 
-Set/Get this Legend's border.
+Set/Get this Legend's L<border|Graphics::Primitive::Border>.
 
 =cut
 
@@ -63,7 +63,7 @@ has '+border' => (
 
 =attr color
 
-Set/Get the color to use as the foreground for the legend.
+Set/Get the L<color|Graphics::Color::RGB> to use as the foreground for the legend.
 
 =cut
 
@@ -86,7 +86,7 @@ has 'data'  => (
 
 =attr font
 
-Set/Get the font used for this legend's items.
+Set/Get the L<font|Graphics::Primitive::Font> used for this legend's items.
 
 =cut
 
@@ -120,7 +120,7 @@ Set/Get this Legend's insets.
 
 =attr item_padding
 
-Set/Get the padding for this legend's items.
+Set/Get the L<padding|Graphics::Primitive::Insets> for this legend's items.
 
 =cut
 

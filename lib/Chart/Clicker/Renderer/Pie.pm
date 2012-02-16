@@ -45,7 +45,7 @@ The keys are discarded and a pie chart will be drawn with $series' slice at
 
 =attr border_color
 
-Set/Get the Color to use for the border.
+Set/Get the L<color|Graphics::Color::RGB> to use for the border.
 
 =cut
 
@@ -57,7 +57,7 @@ has 'border_color' => (
 
 =attr brush
 
-Set/Get a Brush to be used for the pie's border.
+Set/Get a L<brush|Graphics::Primitive::Brush> to be used for the pie's border.
 
 =cut
 
@@ -69,7 +69,7 @@ has 'brush' => (
 
 =attr gradient_color
 
-If supplied, specifies a color to mix with each slice's color for use as a
+If supplied, specifies a L<color|Graphics::Color::RGB> to mix with each slice's color for use as a
 radial gradient.  The best results are usually gotten from mixing with a
 white or black and manipulating the alpha, like so:
 

@@ -150,7 +150,7 @@ has 'label' => ( is => 'rw', isa => 'Str' );
 
 =attr label_color
 
-The color of the Axis' labels.
+The color of the Axis' labels. Expects a L<Graphics::Color::RGB> object.
 
 =cut
 
@@ -166,7 +166,7 @@ has 'label_color' => (
 
 =attr label_font
 
-The font used for the axis' label.
+The font used for the axis' label. Expects a L<Graphics::Primitive::Font> object.
 
 =cut
 
@@ -206,7 +206,11 @@ has '+position' => (
 
 =attr range
 
-The Range for this axis.
+The Range for this axis. Expects a L<Chart::Clicker::Data::Range> object.
+You may use this to explicitly set an upper and lower bound for the chart:
+
+  $axis->range->max(1000);
+  $axis->range->min(1);
 
 =cut
 
@@ -260,7 +264,7 @@ has 'skip_range' => (
 
 =attr tick_font
 
-The font used for the axis' ticks.
+The font used for the axis' ticks. Expects a L<Graphics::Primitive::Font> object.
 
 =cut
 
@@ -272,7 +276,7 @@ has 'tick_font' => (
 
 =attr tick_label_color
 
-The color of the tick labels.
+The color of the tick labels. Expects a L<Graphics::Color::RGB> object.
 
 =cut
 
@@ -444,15 +448,20 @@ override('prepare', sub {
     my $label_height = 0;
 
     if ($self->label) {
-
         my $label = Graphics::Primitive::TextBox->new(
             # angle => $angle,
             color => $self->label_color,
             name => 'label',
             font => $self->label_font,
             text => $self->label,
-            width => $self->height
+            width => $self->height,
+            horizontal_align => 'center'
         );
+        $label->name('label');
+        $label->border->width(1);
+        use Graphics::Color::RGB;
+        $label->border->color(Graphics::Color::RGB->new(r => 0, g => 0, b => 0));
+        
 
         if($self->is_vertical) {
             if ($self->is_left) {

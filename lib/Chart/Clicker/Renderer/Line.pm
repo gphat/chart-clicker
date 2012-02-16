@@ -34,7 +34,7 @@ drawn below it.
 
 =attr brush
 
-Set/Get a Brush to be used for the lines.
+Set/Get a L<brush|Graphics::Primitive::Brush> to be used for the lines.
 
 =cut
 
@@ -46,7 +46,7 @@ has 'brush' => (
 
 =attr shape
 
-Set a shape object to draw at each of the data points.  Adding a shape results
+Set a L<shape|Geometry::Primitive::Shape> object to draw at each of the data points.  Adding a shape results
 in:
 
 =begin HTML
@@ -64,7 +64,7 @@ has 'shape' => (
 
 =attr shape_brush
 
-Set/Get the Brush to be used on the shapes at each point.  If no shape_brush
+Set/Get the L<brush|Graphics::Primitive::Brush> to be used on the shapes at each point.  If no shape_brush
 is provided, then the shapes will be filled.  The brush allows you to draw a
 "halo" around each shape.  This sometimes help to separate the points from the
 lines and make them more distinct.

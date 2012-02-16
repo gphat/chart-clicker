@@ -32,7 +32,7 @@ Chart::Clicker::Renderer::Point renders a dataset as points.
 
 =attr shape
 
-Specify the shape to be used at each point.  Defaults to 360 degree arc with
+Specify the L<shape|Geometry::Primitive::Shape> to be used at each point.  Defaults to 360 degree arc with
 a radius of 3.
 
 =cut
@@ -49,7 +49,7 @@ has 'shape' => (
 
 =attr shape_brush
 
-Optionally provide a brush with with to stroke each point.
+Optionally provide a L<brush|Graphics::Primitive::Brush> with with to stroke each point.
 
 =cut
 

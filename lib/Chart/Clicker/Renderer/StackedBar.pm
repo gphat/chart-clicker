@@ -56,7 +56,7 @@ has 'bar_width' => (
 
 =attr brush
 
-A stroke to use on each bar.
+A L<brush|Graphics::Primitive::Brush> to stroke on each bar.
 
 =cut
 

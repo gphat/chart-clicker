@@ -42,7 +42,7 @@ has 'bar_padding' => (
 
 =attr brush
 
-Set/Get the Brush to use around each bar and on each line.
+Set/Get the L<brush|Graphics::Primitive::Brush> to use around each bar and on each line.
 
 =cut
 

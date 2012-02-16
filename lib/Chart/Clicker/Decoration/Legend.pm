@@ -18,7 +18,7 @@ Chart::Clicker::Decoration::Legend draws a legend on a Chart.
 
 =attr border
 
-Set/Get this Legend's border.
+Set/Get this Legend's L<border|Graphics::Primitive::Border>.
 =cut
 
 has '+border' => (
@@ -32,7 +32,7 @@ has '+border' => (
 
 =attr font
 
-Set/Get the font used for this legend's items.
+Set/Get the L<font|Graphics::Primitive::Font> used for this legend's items.
 
 =cut
 
@@ -46,11 +46,11 @@ has 'font' => (
 
 =attr insets
 
-Set/Get this Legend's insets.
+Set/Get this Legend's L<insets|Graphics::Primitive::Insets>.
 
 =attr item_padding
 
-Set/Get the padding for this legend's items.
+Set/Get the L<padding|Graphics::Primitive::Insets> for this legend's items.
 
 =cut
 

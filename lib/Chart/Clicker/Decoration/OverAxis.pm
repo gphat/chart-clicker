@@ -29,7 +29,7 @@ has 'axis_height' => (
 
 =attr background_color
 
-Set/Get the background color for this OverAxis.
+Set/Get the background L<color|Graphics::Color::RGB> for this OverAxis.
 
 =cut
 
@@ -45,7 +45,7 @@ has '+background_color' => (
 
 =attr border_color
 
-Set/Get the border color for this OverAxis.
+Set/Get the border L<color|Graphics::Color::RGB> for this OverAxis.
 
 =cut
 
@@ -85,7 +85,7 @@ has 'context' => (
 
 =attr font
 
-The font to use for the OverAxis.
+The L<font|Graphics::Primitive::Font> to use for the OverAxis.
 
 =cut
 
@@ -108,7 +108,7 @@ has '+layout_manager' => (
 
 =attr text_color
 
-Set/Get the color of the text labels dawn for the ticks.
+Set/Get the L<color|Graphics::Color::RGB> of the text labels dawn for the ticks.
 
 =cut
 

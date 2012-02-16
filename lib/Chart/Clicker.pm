@@ -248,8 +248,7 @@ L<Catalyst::View::Graphics::Primitive>.
 
 =attr background_color
 
-Set/Get the background color.  Expects a L<Graphics::Color> object.  Defaults
-to white.
+Set/Get the background L<color|Graphics::Color::RGB>. Defaults to white.
 
 =cut
 
@@ -261,7 +260,7 @@ has '+background_color' => (
 
 =attr border
 
-Set/Get the border.  Expects a L<Graphics::Primitive::Border>.
+Set/Get the L<border|Graphics::Primitive::Border>.
 
 =cut
 
@@ -276,7 +275,7 @@ has '+border' => (
 
 =attr color_allocator
 
-Set/Get the color_allocator for this chart.
+Set/Get the L<color_allocator|Chart::Clicker::Drawing::ColorAllocator> for this chart.
 
 =cut
 
@@ -288,7 +287,7 @@ has 'color_allocator' => (
 
 =attr contexts
 
-Set/Get the contexts for this chart.
+Set/Get the L<contexts|Chart::Clicker::Context> for this chart.
 
 =method context_count
 
@@ -365,7 +364,7 @@ has 'datasets' => (
 
 =attr driver
 
-Set/Get the driver used to render this Chart. Defautls to
+Set/Get the L<driver|Graphics::Primitive::Driver> used to render this Chart. Defaults to
 L<Graphics::Primitive::Driver::Cairo>.
 
 =method rendered_data
@@ -440,7 +439,7 @@ has '+layout_manager' => (
 
 =attr legend
 
-Set/Get the legend that will be used with this chart.
+Set/Get the L<legend|Chart::Clicker::Decoration::Legend> that will be used with this chart.
 
 =cut
 
@@ -469,7 +468,7 @@ has 'legend_position' => (
 
 =attr marker_overlay
 
-Set/Get the marker overlay object that will be used if this chart
+Set/Get the L<marker overlay|Chart::Clicker::Decoration::MarkerOverlay> object that will be used if this chart
 has markers.  This is lazily constructed to save time.
 
 =cut
@@ -516,7 +515,7 @@ has 'over_decorations' => (
 
 =attr padding
 
-Set/Get the padding.  Expects a L<Graphics::Primitive::Insets> object.  Defaults
+Set/Get the L<padding|Graphics::Primitive::Insets>. Defaults
 to 3px on all sides.
 
 =cut
@@ -531,7 +530,7 @@ has '+padding' => (
 
 =attr plot
 
-Set/Get the Plot on which things are drawn.
+Set/Get the L<plot|Chart::Clicker::Decoration::Plot> on which things are drawn.
 
 =cut
 

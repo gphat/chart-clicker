@@ -71,7 +71,7 @@ has 'bar_width' => (
 
 =attr brush
 
-Set/Get the Brush to use around each bar.
+Set/Get the L<brush|Graphics::Primitive::Brush> to use around each bar.
 
 =cut
 

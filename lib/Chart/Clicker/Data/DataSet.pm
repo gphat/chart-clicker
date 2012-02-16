@@ -42,7 +42,7 @@ has 'context' => (
 
 =attr domain
 
-Get the Range for the domain values
+Get the L<Range|Chart::Clicker::Data::Range> for the domain values
 
 =cut
 
@@ -62,7 +62,7 @@ has 'max_key_count' => ( is => 'rw', isa => 'Int', default => 0 );
 
 =attr range
 
-Get the Range for the... range values...
+Get the L<Range|Chart::Clicker::Data::Range> for the... range values...
 
 =cut
 

@@ -15,7 +15,7 @@ Generates a collection of Markers for use as a background.
 
 =attr background_color
 
-Set/Get the background_color for this Grid.
+Set/Get the background L<color|Graphics::Color::RGB> for this Grid.
 
 =cut
 
@@ -29,11 +29,11 @@ has '+background_color' => (
 
 =attr border
 
-Set/Get the border for this Grid.
+Set/Get the L<border|Graphics::Primitive::Border> for this Grid.
 
 =attr color
 
-Set/Get the color for this Grid.
+Set/Get the L<color|Graphics::Color::RGB> for this Grid.
 
 =cut
 
@@ -41,7 +41,7 @@ has 'clicker' => ( is => 'rw', isa => 'Chart::Clicker' );
 
 =attr domain_brush
 
-Set/Get the brush for inking the domain markers.
+Set/Get the L<brush|Graphics::Primitive::Brush> for inking the domain markers.
 
 =cut
 
@@ -60,7 +60,7 @@ has 'domain_brush' => (
 
 =attr range_brush
 
-Set/Get the brush for inking the range markers.
+Set/Get the L<brush|Graphics::Primitive::Brush> for inking the range markers.
 
 =cut
 

@@ -34,7 +34,7 @@ their interior areas filled.
 
 =attr brush
 
-Set/Get the brush that informs the line surrounding the area renders
+Set/Get the L<brush|Graphics::Primitive::Brush> that informs the line surrounding the area renders
 individual segments.
 
 =cut

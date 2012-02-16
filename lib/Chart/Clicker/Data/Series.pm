@@ -80,7 +80,7 @@ has 'name' => (
 
 =attr range
 
-Returns the range for this series.
+Returns the L<range|Chart::Clicker::Data::Range> for this series.
 
 =cut
 

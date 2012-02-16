@@ -15,7 +15,7 @@ A glass-like decoration.
 
 =attr background_color
 
-Set/Get the background color for this glass.
+Set/Get the background L<color|Graphics::Color::RGB> for this glass.
 
 =cut
 
@@ -31,7 +31,7 @@ has 'background_color' => (
 
 =attr glare_color
 
-Set/Get the glare color for this glass.
+Set/Get the glare L<color|Graphics::Color::RGB> for this glass.
 
 =cut
 
