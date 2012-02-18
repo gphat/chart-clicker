@@ -64,10 +64,10 @@ has 'shape' => (
 
 =attr shape_brush
 
-Set/Get the L<brush|Graphics::Primitive::Brush> to be used on the shapes at each point.  If no shape_brush
-is provided, then the shapes will be filled.  The brush allows you to draw a
-"halo" around each shape.  This sometimes help to separate the points from the
-lines and make them more distinct.
+Set/Get the L<brush|Graphics::Primitive::Brush> to be used on the shapes at
+each point.  If no shape_brush is provided, then the shapes will be filled.
+The brush allows you to draw a "halo" around each shape.  This sometimes help
+to separate the points from the lines and make them more distinct.
 
 =begin HTML
 

@@ -1,0 +1,425 @@
+# NAME
+
+Chart::Clicker - Powerful, extensible charting.
+
+# VERSION
+
+version 2.78
+
+# SYNOPSIS
+
+  use Chart::Clicker;
+
+  my $cc = Chart::Clicker->new;
+
+  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+  $cc->add_data('Sales', \@values);
+
+  # alternately, you can add data one bit at a time...
+  foreach my $v (@values) {
+    $cc->add_data('Sales', $v);
+  }
+
+  # Or, if you want to specify the keys you can use a hashref
+  my $data = { 12 => 123, 13 => 341, 14 => 1241 };
+  $cc->add_data('Sales', $data);
+
+  $cc->write_output('foo.png');
+
+# DESCRIPTION
+
+Chart::Clicker aims to be a powerful, extensible charting package that creates
+really pretty output.  Charts can be saved in png, svg, pdf and postscript
+format.
+
+Clicker leverages the power of Graphics::Primitive to create snazzy graphics
+without being tied to specific backend.  You may want to begin with
+[Chart::Clicker::Tutorial](http://search.cpan.org/perldoc?Chart::Clicker::Tutorial).
+
+# EXAMPLES
+
+For code examples see the examples repository on GitHub:
+[http://github.com/gphat/chart-clicker-examples/](http://github.com/gphat/chart-clicker-examples/)
+
+# FEATURES
+
+## Renderers
+
+Clicker supports the following renderers:
+
+- __Line__
+- __StackedLine__
+- __Bar__
+- __StackedBar__
+- __Area__
+- __StackedArea__
+- __Bubble__
+- __CandleStick__
+- __Point__
+- __Pie__
+- __PolarArea__
+
+# ADDING DATA
+
+The synopsis shows the simple way to add data.
+
+  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+  foreach my $v (@values) {
+    $cc->add_data('Sales', $v);
+  }
+
+This is a convenience method provided to make simple cases much simpler. Adding
+multiple Series to a chart is as easy as changing the name argument of
+`add_data`.  Each unique first argument will result in a separate series. See
+the docs for `add_data` to learn more.
+
+If you'd like to use the more advanced features of Clicker you'll need to
+shake off this simple method and build Series & DataSets explicitly.
+
+  use Chart::Clicker::Data::Series;
+  use Chart::Clicker::Data::DataSet;
+
+  ...
+
+  my $series = Chart::Clicker::Data::Series->new(
+    keys    => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+    values  => [ 42, 25, 86, 23, 2, 19, 103, 12, 54, 9 ],
+  );
+
+  my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
+
+  $cc->add_to_datasets($ds);
+
+This used to be the only way to add data, but repeated requests to make the
+common case easier resulted in the inclusion of `add_data`.
+
+# CONTEXTS
+
+The normal use case for a chart is a couple of datasets on the same axes.
+Sometimes you want to chart one or more datasets on different axes.  A common
+need for this is when you are comparing two datasets of vastly different scale
+such as the number of employees in an office (1-10) to monthly revenues (10s
+of thousands).  On a normal chart the number of employees would show up as a
+flat line at the bottom of the chart.
+
+To correct this, Clicker has contexts.  A context is a pair of axes, a
+renderer and a name.  The name is the 'key' by which you will refer to the
+context.
+
+  my $context = Chart::Clicker::Context->new( name => 'sales' );
+  $clicker->add_to_contexts($context);
+
+  $dataset->context('sales');
+
+  $clicker->add_to_datasets($dataset);
+
+New contexts provide a fresh domain and range axis and default to a Line
+renderer.
+
+__Caveat__: Clicker expects that the default context (identified by the string
+"default") will always be present.  It is from this context that some of
+Clicker's internals draw their values.  You should use the default context
+unless you need more than one, in which case you should use "default" as the
+base context.
+
+# FORMATS & OUTPUT
+
+Clicker supports PNG, SVG, PDF and PostScript output.  To change your output
+type, specificy it when you create your Clicker object:
+
+  my $cc = Chart::Clicker->new(format => 'pdf', ...);
+  # ...
+  $cc->write_output('chart.pdf');
+
+If you are looking to get a scalar of the output for use with HTTP or
+similar things, you can use:
+
+  # ... make your chart
+  $cc->draw;
+  my $image_data = $cc->rendered_data;
+
+If you happen to be using Catalyst then take a look at
+[Catalyst::View::Graphics::Primitive](http://search.cpan.org/perldoc?Catalyst::View::Graphics::Primitive).
+
+# ATTRIBUTES
+
+## background_color
+
+Set/Get the background [color](http://search.cpan.org/perldoc?Graphics::Color::RGB). Defaults to white.
+
+## border
+
+Set/Get the [border](http://search.cpan.org/perldoc?Graphics::Primitive::Border).
+
+## color_allocator
+
+Set/Get the [color_allocator](http://search.cpan.org/perldoc?Chart::Clicker::Drawing::ColorAllocator) for this chart.
+
+## contexts
+
+Set/Get the [contexts](http://search.cpan.org/perldoc?Chart::Clicker::Context) for this chart.
+
+## datasets
+
+Get/Set the datasets for this chart.
+
+## driver
+
+Set/Get the [driver](http://search.cpan.org/perldoc?Graphics::Primitive::Driver) used to render this Chart. Defaults to
+[Graphics::Primitive::Driver::Cairo](http://search.cpan.org/perldoc?Graphics::Primitive::Driver::Cairo).
+
+## format
+
+Get the format for this Chart.  Required in the constructor.  Must be on of
+Png, Pdf, Ps or Svg.
+
+## grid_over
+
+Flag controlling if the grid is rendered __over__ the data.  Defaults to 0.
+You probably want to set the grid's background color to an alpha of 0 if you
+enable this flag.
+
+## height
+
+Set/Get the height.  Defaults to 300.
+
+## layout_manager
+
+Set/Get the layout manager.  Defaults to [Layout::Manager::Compass](http://search.cpan.org/perldoc?Layout::Manager::Compass).
+
+## legend
+
+Set/Get the [legend](http://search.cpan.org/perldoc?Chart::Clicker::Decoration::Legend) that will be used with this chart.
+
+## legend_position
+
+The position the legend will be added.  Should be one of north, south, east,
+west or center as required by [Layout::Manager::Compass](http://search.cpan.org/perldoc?Layout::Manager::Compass).
+
+## marker_overlay
+
+Set/Get the [marker overlay](http://search.cpan.org/perldoc?Chart::Clicker::Decoration::MarkerOverlay) object that will be used if this chart
+has markers.  This is lazily constructed to save time.
+
+## over_decorations
+
+Set/Get an arrayref of "over decorations", or things that are drawn OVER the
+chart.  This is an advanced feature.  See `overaxis-bar.pl` in the examples.
+
+## padding
+
+Set/Get the [padding](http://search.cpan.org/perldoc?Graphics::Primitive::Insets). Defaults
+to 3px on all sides.
+
+## plot
+
+Set/Get the [plot](http://search.cpan.org/perldoc?Chart::Clicker::Decoration::Plot) on which things are drawn.
+
+## subgraphs
+
+You can add "child" graphs to this one via `add_subgraph`.  These must be
+Chart::Clicker objects and they will be added to the bottom of the existing
+chart.  This is a rather esoteric feature.
+
+## title
+
+Set/Get the title component for this chart.  This is a
+[Graphics::Primitive::TextBox](http://search.cpan.org/perldoc?Graphics::Primitive::TextBox), not a string.  To set the title of a chart
+you should access the TextBox's `text` method.
+
+  $cc->title->text('A Title!');
+  $cc->title->font->size(20);
+  # etc, etc
+
+If the title has text then it is added to the chart in the position specified
+by `title_position`.
+
+You should consult the documentation for [Graphics::Primitive::TextBox](http://search.cpan.org/perldoc?Graphics::Primitive::TextBox) for
+things like padding and text rotation.  If you are adding it to the top and
+want some padding between it and the plot, you can:
+
+  $cc->title->padding->bottom(5);
+
+## title_position
+
+The position the title will be added.  Should be one of north, south, east,
+west or center as required by [Layout::Manager::Compass](http://search.cpan.org/perldoc?Layout::Manager::Compass).
+
+Note that if no angle is set for the title then it will be changed to
+-1.5707 if the title position is east or west.
+
+## width
+
+Set/Get the width.  Defaults to 500.
+
+# METHODS
+
+## context_count
+
+Get a count of contexts.
+
+## context_names
+
+Get a list of context names.
+
+## delete_context ($name)
+
+Remove the context with the specified name.
+
+## get_context ($name)
+
+Get the context with the specified name
+
+## set_context ($name, $context)
+
+Set a context of the specified name.
+
+## add_to_datasets
+
+Add the specified dataset (or arrayref of datasets) to the chart.
+
+## dataset_count
+
+Get a count of datasets.
+
+## get_dataset ($index)
+
+Get the dataset at the specified index.
+
+## rendered_data
+
+Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
+client.
+
+## add_to_over_decorations
+
+Add an over decoration to the list.
+
+## get_over_decoration ($index)
+
+Get the over decoration at the specified index.
+
+## over_decoration_count
+
+Get a count of over decorations.
+
+## add_to_contexts
+
+Add the specified context to the chart.
+
+## add_subgraph
+
+Add a subgraph to this chart.
+
+## draw
+
+Draw this chart.
+
+## get_datasets_for_context
+
+Returns an arrayref containing all datasets for the given context.  Used by
+renderers to get a list of datasets to chart.
+
+## add_data ($name, $data)
+
+Convenience method for adding data to the chart.  Can be called one of three
+ways.
+
+- __scalar__
+
+Passing a name and a scalar will "add" the scalar data to that series' data.
+
+  $cc->add_data('Sales', 1234);
+  $cc->add_data('Sales', 1235);
+
+This will result in a Series names 'Sales' with two values.
+
+- __arrayref__
+
+Passing a name and an arrayref works much the same as the scalar method
+discussed above, but appends the supplied arrayref to the existing one.  It
+may be mixed with the scalar method.
+
+  $cc->add_data('Sales', \@some_sales);
+  $cc->add_data('Sales', \@some_more_sales);
+  # This works still!
+  $cc->add_data('Sales', 1234);
+
+- __hashref__
+
+This allows you to pass both keys and add in all at once, but it's an all-or-nothing
+thing.  Subsequent calls with the same name will overwrite previous calls.
+
+  $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
+  # Overwrites last call!
+  $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
+
+## set_renderer ($renderer_object, [ $context ]);
+
+Sets the renderer on the specified context.  If no context is provided then
+'default' is assumed.
+
+## write
+
+This method is passed through to the underlying driver.  It is only necessary
+that you call this if you manually called `draw` beforehand.  You likely
+want to use `write_output`.
+
+## write_output ($path)
+
+Write the chart output to the specified location. Output is written in the
+format provided to the constructor (which defaults to Png).  Internally
+calls `draw` for you.  If you use this method, do not call `draw` first!
+
+  $c->write_output('/path/to/the.png');
+
+## inside_width
+
+Get the width available in this container after taking away space for
+insets and borders.
+
+## inside_height
+
+Get the height available in this container after taking away space for
+insets and borders.
+
+# ISSUES WITH CENTOS
+
+I've had numerous reports of problems with Chart::Clicker when using CentOS.
+This problem has usually be solved by updating the version of cairo.  I've
+had reports that upgrading to at least cairo-1.8.8-3 makes thinks work properly.
+
+I hesitate to provide any other data with this because it may get out of date
+fast.  If you have trouble feel free to drop me an email and I'll tell you
+what I know.
+
+# CONTRIBUTORS
+
+Many thanks to the individuals who have contributed various bits:
+
+Ash Berlin
+
+Brian Cassidy
+
+Guillermo Roditi
+
+Torsten Schoenfeld
+
+Yuval Kogman
+
+# SOURCE
+
+Chart::Clicker is on github:
+
+  http://github.com/gphat/chart-clicker/tree/master
+
+# AUTHOR
+
+Cory G Watson <gphat@cpan.org>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Cold Hard Code, LLC.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
