@@ -14,6 +14,9 @@ Despite the name (keys and values) it is expected that all keys and values
 will be numeric.  Values is pretty obvious, but it is important that keys
 also be numeric, as otherwise we'd have no idea how to order the data.
 
+If you want to use text labels for your domain's see L<Chart::Clicker::Axis>'s
+L<tick_labels> method.
+
 =head1 SYNOPSIS
 
   use Chart::Clicker::Data::Series;
