@@ -56,4 +56,52 @@ my @keys = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     ok(defined($cc->rendered_data), 'rendered');
 }
 
+{
+    my $cc = Chart::Clicker->new;
+
+    my $hashref1 = {
+        1  => 42,
+        4  => 23,
+        6  => 19,
+        7  => 103,
+    };
+    my $hashref2 = {
+        5  => 2,
+        2  => 25,
+        3  => 86,
+        8  => 12,
+        9  => 54,
+        10 => 9
+    };
+
+    $cc->add_data('Sales', $hashref1);
+    $cc->add_data('Sales', $hashref2);
+
+    $cc->draw;
+    is_deeply($cc->datasets->[0]->series->[0]->values, \@values, 'add_data multiple hashref values');
+
+    ok(defined($cc->rendered_data), 'rendered');
+}
+
+{
+    my $cc = Chart::Clicker->new;
+
+    my @vals = (42, 25, 86, 23);
+    my $hashref2 = {
+        5  => 2,
+        6  => 19,
+        7  => 103,
+        8  => 12,
+        9  => 54,
+        10 => 9
+    };
+
+    $cc->add_data('Sales', \@vals);
+    $cc->add_data('Sales', $hashref2);
+
+    $cc->draw;
+    is_deeply($cc->datasets->[0]->series->[0]->values, \@values, 'add_data arrayref followed by hashref');
+
+    ok(defined($cc->rendered_data), 'rendered');
+}
 done_testing;

@@ -696,12 +696,12 @@ ways.
 
 =item B<scalar>
 
-Passing a name and a scalar will "add" the scalar data to that series' data.
+Passing a name and a scalar will append the scalar data to that series' data.
 
   $cc->add_data('Sales', 1234);
   $cc->add_data('Sales', 1235);
 
-This will result in a Series names 'Sales' with two values.
+This will result in a Series named 'Sales' with two values.
 
 =item B<arrayref>
 
@@ -716,12 +716,15 @@ may be mixed with the scalar method.
 
 =item B<hashref>
 
-This allows you to pass both keys and add in all at once, but it's an all-or-nothing
-thing.  Subsequent calls with the same name will overwrite previous calls.
+This allows you to pass both keys and values in all at once.
 
   $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
-  # Overwrites last call!
+  # appends to last call
   $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
+
+You may call the hashref version after the scalar or arrayref versions, but you
+may not add a scalar or arrayref after adding a hashref (as it's not clear what
+indices should be used for the new data).
 
 =back
 
@@ -734,7 +737,18 @@ sub add_data {
         $self->_data->{$name} = [] unless defined($self->_data->{$name});
         push(@{ $self->_data->{$name}}, @{ $data });
     } elsif(ref($data) eq 'HASH') {
-        $self->_data->{$name} = $data;
+        if (!defined $self->_data->{$name}) {
+            $self->_data->{$name} = {};
+        } elsif (ref($self->_data->{$name}) eq 'ARRAY') {
+            my $old_data = $self->_data->{$name};
+            $self->_data->{$name} = {};
+            for my $i (0 .. @$old_data - 1) {
+                $self->_data->{$name}{$i} = $old_data->[$i];
+            }
+        }
+        for my $key (keys %$data) {
+            $self->_data->{$name}{$key} = $data->{$key};
+        }
     } else {
         $self->_data->{$name} = [] unless defined($self->_data->{$name});
         push(@{ $self->_data->{$name}}, $data);
