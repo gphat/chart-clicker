@@ -128,4 +128,26 @@ my @keys = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     );
 }
 
+{
+    my $cc = Chart::Clicker->new;
+
+    my $hashref = {
+        1  => 42,
+        2  => 25,
+        3  => 86,
+        4  => 23,
+        5  => 2,
+    };
+    my $val = 19;
+
+    like(
+        exception {
+            $cc->add_data('Sales', $hashref);
+            $cc->add_data('Sales', $val);
+        },
+        qr/Can't add scalar data after adding hashrefs/,
+        "Exception thrown if scalar data added after hashref data",
+    );
+}
+
 done_testing;

@@ -752,6 +752,8 @@ sub add_data {
             $self->_data->{$name}{$key} = $data->{$key};
         }
     } else {
+        croak "Can't add scalar data after adding hashrefs"
+            if ref($self->_data->{$name}) eq 'HASH';
         $self->_data->{$name} = [] unless defined($self->_data->{$name});
         push(@{ $self->_data->{$name}}, $data);
     }
