@@ -734,6 +734,8 @@ sub add_data {
     my ($self, $name, $data) = @_;
 
     if(ref($data) eq 'ARRAY') {
+        croak "Can't add arrayref data after adding hashrefs"
+            if ref($self->_data->{$name}) eq 'HASH';
         $self->_data->{$name} = [] unless defined($self->_data->{$name});
         push(@{ $self->_data->{$name}}, @{ $data });
     } elsif(ref($data) eq 'HASH') {
