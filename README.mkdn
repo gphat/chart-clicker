@@ -327,12 +327,12 @@ ways.
 
 - __scalar__
 
-Passing a name and a scalar will "add" the scalar data to that series' data.
+Passing a name and a scalar will append the scalar data to that series' data.
 
-  $cc->add_data('Sales', 1234);
-  $cc->add_data('Sales', 1235);
+    $cc->add_data('Sales', 1234);
+    $cc->add_data('Sales', 1235);
 
-This will result in a Series names 'Sales' with two values.
+This will result in a Series named 'Sales' with two values.
 
 - __arrayref__
 
@@ -347,12 +347,15 @@ may be mixed with the scalar method.
 
 - __hashref__
 
-This allows you to pass both keys and add in all at once, but it's an all-or-nothing
-thing.  Subsequent calls with the same name will overwrite previous calls.
+This allows you to pass both keys and values in all at once.
 
-  $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
-  # Overwrites last call!
-  $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
+    $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
+    # appends to last call
+    $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
+
+You may call the hashref version after the scalar or arrayref versions, but you
+may not add a scalar or arrayref after adding a hashref (as it's not clear what
+indices should be used for the new data).
 
 ## set_renderer ($renderer_object, [ $context ]);
 
