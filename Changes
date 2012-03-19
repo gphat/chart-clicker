@@ -1,6 +1,7 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+  - Don't throw away old data on add_data($hashref) (pozorvlak)
 
 2.80 Mar 5 2012
   - Minor POD updates.
