@@ -4,7 +4,7 @@ Chart::Clicker - Powerful, extensible charting.
 
 # VERSION
 
-version 2.79
+version 2.81
 
 # SYNOPSIS
 
@@ -329,8 +329,8 @@ ways.
 
 Passing a name and a scalar will append the scalar data to that series' data.
 
-    $cc->add_data('Sales', 1234);
-    $cc->add_data('Sales', 1235);
+  $cc->add_data('Sales', 1234);
+  $cc->add_data('Sales', 1235);
 
 This will result in a Series named 'Sales' with two values.
 
@@ -349,9 +349,9 @@ may be mixed with the scalar method.
 
 This allows you to pass both keys and values in all at once.
 
-    $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
-    # appends to last call
-    $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
+  $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
+  # appends to last call
+  $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
 
 You may call the hashref version after the scalar or arrayref versions, but you
 may not add a scalar or arrayref after adding a hashref (as it's not clear what
