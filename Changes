@@ -1,6 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+
+2.82 Jun 19 2012
   - Remove accidental label border (Thanks Eric Busto)
 
 2.81 Mar 19 2012
