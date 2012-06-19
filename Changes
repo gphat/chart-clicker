@@ -1,6 +1,7 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+  - Remove accidental label border (Thanks Eric Busto)
 
 2.81 Mar 19 2012
   - Don't throw away old data on add_data($hashref) (pozorvlak)
