@@ -1,6 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+
+2.83 Jun 21 2012
   - Remove a duplicate file (Thanks Jotam)
 
 2.82 Jun 19 2012
