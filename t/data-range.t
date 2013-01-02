@@ -8,9 +8,6 @@ isa_ok($range, 'Chart::Clicker::Data::Range', 'isa Chart::Clicker::Data::Range')
 cmp_ok($range->lower, '==', 0, 'Lower');
 cmp_ok($range->upper, '==', 10, 'Upper');
 
-my $divvy = $range->divvy(5);
-cmp_ok(scalar(@{ $divvy }), '==', 5, 'divvy count');
-is_deeply($divvy, [ 0, 2.5, 5, 7.5, 10 ], 'divvy results');
 cmp_ok($range->span, '==', 10, 'span');
 ok($range->contains(0), 'range contains 0');
 ok($range->contains(5), 'range contains 5');

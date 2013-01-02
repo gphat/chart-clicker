@@ -5,6 +5,7 @@ BEGIN {
 }
 my $label = 'Foo';
 
+# Exact tick_division_type by default
 my $axis = Chart::Clicker::Axis->new(
     label => $label, orientation => 'vertical', position => 'left'
 );
