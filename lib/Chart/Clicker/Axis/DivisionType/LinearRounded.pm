@@ -61,12 +61,16 @@ sub _real_divvy {
     # at front of graph would be low) then use that as the starting
     # value; otherwise choose the first tick value above the lowest.
     my $lowestTick        = int( $range->lower() / $tickSize ) * $tickSize;
-    my $lowTickDifference = $range->lower() - $lowestTick;
+    my $lowestValue       = $range->lower();
+    my $lowTickDifference = $lowestValue - $lowestTick;
 
     if ( $lowTickDifference > $self->tick_slop * $tickSize ) {
         $lowestTick = $lowestTick + $tickSize;
     }
-    $range->lower($lowestTick);
+    if ( $lowestTick < $lowestValue ) {
+        $lowestValue = $lowestTick;
+    }
+    $range->lower($lowestValue);
     my @vals;
     push( @vals, $lowestTick );
 
