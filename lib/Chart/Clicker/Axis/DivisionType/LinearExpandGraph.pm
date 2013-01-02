@@ -23,7 +23,6 @@ sub _real_divvy {
     my $max = $self->range->upper;
 
     my $range = _nicenum($self->range->span, 0);
-    print "$range\n";
     my $d = _nicenum($range / ($n - 1), 1);
     my $graphmin = $min;
     my $graphmax = $max;
