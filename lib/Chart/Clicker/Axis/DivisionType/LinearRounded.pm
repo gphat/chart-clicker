@@ -17,7 +17,7 @@ has 'tick_slop' => (
 sub best_tick_size {
     my ($self) = @_;
 
-    my $minimum_target_ticks = $self->ticks - 1;
+    my $minimum_target_ticks = $self->ticks;
     $minimum_target_ticks = 1 if ( $minimum_target_ticks < 1 );
 
     my $equal_tick_size = $self->range->span / ($minimum_target_ticks);
