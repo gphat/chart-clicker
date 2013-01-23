@@ -50,6 +50,15 @@ Set/Get the upper bound for this Range
 
 has 'upper' => ( is => 'rw', isa => 'Num' );
 
+=attr ticks
+
+The number of ticks to be displayed for this range.
+
+=cut
+
+has 'ticks' => ( is => 'rw', isa => 'Int', default    => 5 );
+
+
 after 'lower' => sub {
     my $self = shift;
 
@@ -141,32 +150,6 @@ sub contains {
 
     return 1 if $value >= $self->lower && $value <= $self->upper;
     return 0;
-}
-
-=method divvy
-
-  my $values = $range->divvy(5);
-
-Returns an arrayref of $N - 1 values equally spaced in the range so that
-it may be divided into $N pieces.
-
-=cut
-
-sub divvy {
-    my ($self, $n) = @_;
-
-    if(!$n) {
-        return [];
-    }
-
-    my $per = $self->span / ($n - 1);
-
-    my @vals;
-    for(0..($n - 1)) {
-        push(@vals, $self->lower + ($_ * $per));
-    }
-
-    return \@vals;
 }
 
 =method span
