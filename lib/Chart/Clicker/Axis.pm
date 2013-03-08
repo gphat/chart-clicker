@@ -466,7 +466,12 @@ override('prepare', sub {
 
         my $label = $val;
         if(defined($self->tick_labels)) {
-            $label = $self->tick_labels->[$i];
+            if (defined $self->tick_labels->[$i]) {
+                $label = $self->tick_labels->[$i];
+            }
+            else {
+                $label = "";
+            }
         } else {
             $label = $self->format_value($val);
         }
@@ -562,6 +567,7 @@ Given a span and a value, returns it's pixel position on this Axis.
 sub mark {
     my ($self, $span, $value) = @_;
 
+    return undef if not defined $value;
     if($self->has_skip_range) {
         # We must completely ignore values that fall inside the skip range,
         # so we return an undef.

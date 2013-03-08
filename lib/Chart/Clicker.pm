@@ -403,6 +403,19 @@ has 'format' => (
     default => sub { 'PNG' }
 );
 
+=attr plot_mode 
+
+Fast or slow plot mode. When in fast mode, data elements that are deemed to be
+superfluous or invisible will not be drawn. Default is 'slow'
+
+=cut
+
+has 'plot_mode' => (
+    is => 'rw',
+    isa => 'Str',
+    default => sub { 'slow' }
+);
+
 =attr grid_over
 
 Flag controlling if the grid is rendered B<over> the data.  Defaults to 0.
