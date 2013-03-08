@@ -1,5 +1,8 @@
 package Chart::Clicker::Data::Range;
 use Moose;
+use Moose::Util::TypeConstraints;
+
+use constant EPSILON => 0.0001;
 
 # ABSTRACT: A range of Data
 
@@ -22,7 +25,15 @@ Set/Get the lower bound for this Range
 
 =cut
 
-has 'lower' => ( is => 'rw', isa => 'Num' );
+subtype 'Lower'
+    => as 'Num|Undef'
+    => where { defined($_) };
+
+coerce 'Lower'
+    => from 'Undef'
+    => via { - EPSILON };
+
+has 'lower' => ( is => 'rw', isa => 'Lower', coerce => 1);
 
 =attr max
 
@@ -48,7 +59,16 @@ Set/Get the upper bound for this Range
 
 =cut
 
-has 'upper' => ( is => 'rw', isa => 'Num' );
+subtype 'Upper'
+    => as 'Num|Undef'
+    => where { defined($_) };
+
+coerce 'Upper'
+    => from 'Num|Undef'
+    => via { EPSILON };
+
+has 'upper' => ( is => 'rw', isa => 'Upper', coerce => 1);
+
 
 =attr ticks
 
@@ -65,6 +85,15 @@ after 'lower' => sub {
     if(defined($self->{'min'})) {
         $self->{'lower'} = $self->{'min'};
     }
+
+    $self->{'lower'} = $self->{'min'} unless (defined($self->{'lower'}));
+    $self->{'upper'} = $self->{'max'} unless (defined($self->{'upper'}));
+
+    if(defined($self->{'lower'}) && defined($self->{'upper'}) && $self->{'lower'} == $self->{'upper'}) {
+        $self->{'lower'} = $self->{'lower'} - EPSILON;
+        $self->{'lower'} = $self->{'lower'} + EPSILON;
+    }
+
 };
 
 after 'upper' => sub {
@@ -73,6 +102,15 @@ after 'upper' => sub {
     if(defined($self->{'max'})) {
         $self->{'upper'} = $self->{'max'};
     }
+
+    $self->{'lower'} = $self->{'min'} unless (defined($self->{'lower'}));
+    $self->{'upper'} = $self->{'max'} unless (defined($self->{'upper'}));
+
+    if(defined($self->{'lower'}) && defined($self->{'upper'}) && $self->{'lower'} == $self->{'upper'}) {
+        $self->{'upper'} = $self->{'upper'} - EPSILON;
+        $self->{'upper'} = $self->{'upper'} + EPSILON;
+    }
+
 };
 
 after 'min' => sub {
@@ -161,7 +199,15 @@ Returns the span of this range, or UPPER - LOWER.
 sub span {
     my ($self) = @_;
 
-    return $self->upper - $self->lower;
+    my $span = $self->upper - $self->lower;
+
+    #we still want to be able to see flat lines!
+    if ($span <= EPSILON) {
+        $self->upper($self->upper() + EPSILON);
+        $self->lower($self->lower() - EPSILON);
+        $span = $self->upper - $self->lower;
+    }
+    return $span;
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -86,6 +86,9 @@ override('prepare', sub {
     my $font = $self->font;
 
     my $ii = $self->item_padding;
+    
+    #this makes sure that wrapping works
+    $self->width($self->clicker->width);
 
     if($self->is_vertical) {
         # This assumes you aren't changing the layout manager...

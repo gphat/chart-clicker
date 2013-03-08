@@ -8,6 +8,12 @@ extends 'Chart::Clicker::Renderer';
 use Geometry::Primitive::Point;
 use Graphics::Primitive::Brush;
 use Graphics::Primitive::Operation::Stroke;
+use Geometry::Primitive::Circle;
+
+#number of defined points we must have around another point
+#to render a line instead of a scatter
+#
+use constant MIN_DEFINED_SURROUNDING_POINTS => 5;
 
 =head1 DESCRIPTION
 
@@ -108,12 +114,18 @@ sub finalize {
 
             my $kcount = $series->key_count - 1;
 
+            my $skip = 0;
+            my $previous_x = -1;
+            my $previous_y = -1;
+            my $min_y_delta_on_same_x = $height / 100;
+
             for(0..$kcount) {
 
                 my $key = $keys[$_];
 
                 my $x = $domain->mark($width, $key);
                 next unless defined($x);
+                $skip = 1 unless defined $vals[$_];
                 my $ymark = $range->mark($height, $vals[$_]);
                 next unless defined($ymark);
 
@@ -127,12 +139,49 @@ sub finalize {
                 }
 
                 my $y = $height - $ymark;
-
-                if($_ == 0) {
+                if( $_ == 0 || $skip ) {
+                    my $lineop = Graphics::Primitive::Operation::Stroke->new(
+                        brush => $self->brush->clone
+                    );
+                    $lineop->brush->color($color);
+                    $self->do($lineop);
                     $self->move_to($x, $y);
-                } else {
-                    $self->line_to($x, $y);
+                    my $start_new_line = 1;
+                    foreach my $i ($_..($_ + MIN_DEFINED_SURROUNDING_POINTS)) {
+                        if ($i > 0 && $i < @vals && !defined($vals[$i])) {
+                            $start_new_line = 0;
+                        }
+                    }
+                    if ($start_new_line){
+                        $skip = 0;
+                    }
+                    else {
+                        my $shape = Geometry::Primitive::Circle->new(radius => 3);
+                        $shape->origin(Geometry::Primitive::Point->new(x => $x, y => $y));
+                        $self->path->add_primitive($shape);
+                        my $fill = Graphics::Primitive::Operation::Fill->new(
+                            paint => Graphics::Primitive::Paint::Solid->new(
+                                color => $color
+                            )
+                        );
+                        $self->do($fill);
+                    }
                 }
+                else {
+                    # when in fast mode, we plot only if we moved by more than
+                    # 1 of a pixel on the X axis or we moved by more than 1%
+                    # of the size of the Y axis.
+                    if( $clicker->plot_mode ne 'fast' ||
+                        $x - $previous_x > 1 ||
+                        abs($y - $previous_y) > $min_y_delta_on_same_x
+                      )
+                    {
+                        $self->line_to($x, $y);
+                        $previous_x = $x;
+                        $previous_y = $y;
+                    }
+                }
+
             }
             my $op = Graphics::Primitive::Operation::Stroke->new;
             $op->brush($self->brush->clone);
