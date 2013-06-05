@@ -4,27 +4,27 @@ Chart::Clicker - Powerful, extensible charting.
 
 # VERSION
 
-version 2.82
+version 2.85
 
 # SYNOPSIS
 
-  use Chart::Clicker;
+    use Chart::Clicker;
 
-  my $cc = Chart::Clicker->new;
+    my $cc = Chart::Clicker->new;
 
-  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
-  $cc->add_data('Sales', \@values);
+    my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+    $cc->add_data('Sales', \@values);
 
-  # alternately, you can add data one bit at a time...
-  foreach my $v (@values) {
-    $cc->add_data('Sales', $v);
-  }
+    # alternately, you can add data one bit at a time...
+    foreach my $v (@values) {
+      $cc->add_data('Sales', $v);
+    }
 
-  # Or, if you want to specify the keys you can use a hashref
-  my $data = { 12 => 123, 13 => 341, 14 => 1241 };
-  $cc->add_data('Sales', $data);
+    # Or, if you want to specify the keys you can use a hashref
+    my $data = { 12 => 123, 13 => 341, 14 => 1241 };
+    $cc->add_data('Sales', $data);
 
-  $cc->write_output('foo.png');
+    $cc->write_output('foo.png');
 
 # DESCRIPTION
 
@@ -63,10 +63,10 @@ Clicker supports the following renderers:
 
 The synopsis shows the simple way to add data.
 
-  my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
-  foreach my $v (@values) {
-    $cc->add_data('Sales', $v);
-  }
+    my @values = (42, 25, 86, 23, 2, 19, 103, 12, 54, 9);
+    foreach my $v (@values) {
+      $cc->add_data('Sales', $v);
+    }
 
 This is a convenience method provided to make simple cases much simpler. Adding
 multiple Series to a chart is as easy as changing the name argument of
@@ -76,19 +76,19 @@ the docs for `add_data` to learn more.
 If you'd like to use the more advanced features of Clicker you'll need to
 shake off this simple method and build Series & DataSets explicitly.
 
-  use Chart::Clicker::Data::Series;
-  use Chart::Clicker::Data::DataSet;
+    use Chart::Clicker::Data::Series;
+    use Chart::Clicker::Data::DataSet;
 
-  ...
+    ...
 
-  my $series = Chart::Clicker::Data::Series->new(
-    keys    => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
-    values  => [ 42, 25, 86, 23, 2, 19, 103, 12, 54, 9 ],
-  );
+    my $series = Chart::Clicker::Data::Series->new(
+      keys    => [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+      values  => [ 42, 25, 86, 23, 2, 19, 103, 12, 54, 9 ],
+    );
 
-  my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
+    my $ds = Chart::Clicker::Data::DataSet->new(series => [ $series ]);
 
-  $cc->add_to_datasets($ds);
+    $cc->add_to_datasets($ds);
 
 This used to be the only way to add data, but repeated requests to make the
 common case easier resulted in the inclusion of `add_data`.
@@ -106,12 +106,12 @@ To correct this, Clicker has contexts.  A context is a pair of axes, a
 renderer and a name.  The name is the 'key' by which you will refer to the
 context.
 
-  my $context = Chart::Clicker::Context->new( name => 'sales' );
-  $clicker->add_to_contexts($context);
+    my $context = Chart::Clicker::Context->new( name => 'sales' );
+    $clicker->add_to_contexts($context);
 
-  $dataset->context('sales');
+    $dataset->context('sales');
 
-  $clicker->add_to_datasets($dataset);
+    $clicker->add_to_datasets($dataset);
 
 New contexts provide a fresh domain and range axis and default to a Line
 renderer.
@@ -127,23 +127,23 @@ base context.
 Clicker supports PNG, SVG, PDF and PostScript output.  To change your output
 type, specificy it when you create your Clicker object:
 
-  my $cc = Chart::Clicker->new(format => 'pdf', ...);
-  # ...
-  $cc->write_output('chart.pdf');
+    my $cc = Chart::Clicker->new(format => 'pdf', ...);
+    # ...
+    $cc->write_output('chart.pdf');
 
 If you are looking to get a scalar of the output for use with HTTP or
 similar things, you can use:
 
-  # ... make your chart
-  $cc->draw;
-  my $image_data = $cc->rendered_data;
+    # ... make your chart
+    $cc->draw;
+    my $image_data = $cc->rendered_data;
 
 If you happen to be using Catalyst then take a look at
 [Catalyst::View::Graphics::Primitive](http://search.cpan.org/perldoc?Catalyst::View::Graphics::Primitive).
 
 # ATTRIBUTES
 
-## background_color
+## background\_color
 
 Set/Get the background [color](http://search.cpan.org/perldoc?Graphics::Color::RGB). Defaults to white.
 
@@ -151,9 +151,9 @@ Set/Get the background [color](http://search.cpan.org/perldoc?Graphics::Color::R
 
 Set/Get the [border](http://search.cpan.org/perldoc?Graphics::Primitive::Border).
 
-## color_allocator
+## color\_allocator
 
-Set/Get the [color_allocator](http://search.cpan.org/perldoc?Chart::Clicker::Drawing::ColorAllocator) for this chart.
+Set/Get the [color\_allocator](http://search.cpan.org/perldoc?Chart::Clicker::Drawing::ColorAllocator) for this chart.
 
 ## contexts
 
@@ -173,7 +173,12 @@ Set/Get the [driver](http://search.cpan.org/perldoc?Graphics::Primitive::Driver)
 Get the format for this Chart.  Required in the constructor.  Must be on of
 Png, Pdf, Ps or Svg.
 
-## grid_over
+## plot\_mode 
+
+Fast or slow plot mode. When in fast mode, data elements that are deemed to be
+superfluous or invisible will not be drawn. Default is 'slow'
+
+## grid\_over
 
 Flag controlling if the grid is rendered __over__ the data.  Defaults to 0.
 You probably want to set the grid's background color to an alpha of 0 if you
@@ -183,7 +188,7 @@ enable this flag.
 
 Set/Get the height.  Defaults to 300.
 
-## layout_manager
+## layout\_manager
 
 Set/Get the layout manager.  Defaults to [Layout::Manager::Compass](http://search.cpan.org/perldoc?Layout::Manager::Compass).
 
@@ -191,17 +196,17 @@ Set/Get the layout manager.  Defaults to [Layout::Manager::Compass](http://searc
 
 Set/Get the [legend](http://search.cpan.org/perldoc?Chart::Clicker::Decoration::Legend) that will be used with this chart.
 
-## legend_position
+## legend\_position
 
 The position the legend will be added.  Should be one of north, south, east,
 west or center as required by [Layout::Manager::Compass](http://search.cpan.org/perldoc?Layout::Manager::Compass).
 
-## marker_overlay
+## marker\_overlay
 
 Set/Get the [marker overlay](http://search.cpan.org/perldoc?Chart::Clicker::Decoration::MarkerOverlay) object that will be used if this chart
 has markers.  This is lazily constructed to save time.
 
-## over_decorations
+## over\_decorations
 
 Set/Get an arrayref of "over decorations", or things that are drawn OVER the
 chart.  This is an advanced feature.  See `overaxis-bar.pl` in the examples.
@@ -227,9 +232,9 @@ Set/Get the title component for this chart.  This is a
 [Graphics::Primitive::TextBox](http://search.cpan.org/perldoc?Graphics::Primitive::TextBox), not a string.  To set the title of a chart
 you should access the TextBox's `text` method.
 
-  $cc->title->text('A Title!');
-  $cc->title->font->size(20);
-  # etc, etc
+    $cc->title->text('A Title!');
+    $cc->title->font->size(20);
+    # etc, etc
 
 If the title has text then it is added to the chart in the position specified
 by `title_position`.
@@ -238,15 +243,15 @@ You should consult the documentation for [Graphics::Primitive::TextBox](http://s
 things like padding and text rotation.  If you are adding it to the top and
 want some padding between it and the plot, you can:
 
-  $cc->title->padding->bottom(5);
+    $cc->title->padding->bottom(5);
 
-## title_position
+## title\_position
 
 The position the title will be added.  Should be one of north, south, east,
 west or center as required by [Layout::Manager::Compass](http://search.cpan.org/perldoc?Layout::Manager::Compass).
 
 Note that if no angle is set for the title then it will be changed to
--1.5707 if the title position is east or west.
+\-1.5707 if the title position is east or west.
 
 ## width
 
@@ -254,60 +259,60 @@ Set/Get the width.  Defaults to 500.
 
 # METHODS
 
-## context_count
+## context\_count
 
 Get a count of contexts.
 
-## context_names
+## context\_names
 
 Get a list of context names.
 
-## delete_context ($name)
+## delete\_context ($name)
 
 Remove the context with the specified name.
 
-## get_context ($name)
+## get\_context ($name)
 
 Get the context with the specified name
 
-## set_context ($name, $context)
+## set\_context ($name, $context)
 
 Set a context of the specified name.
 
-## add_to_datasets
+## add\_to\_datasets
 
 Add the specified dataset (or arrayref of datasets) to the chart.
 
-## dataset_count
+## dataset\_count
 
 Get a count of datasets.
 
-## get_dataset ($index)
+## get\_dataset ($index)
 
 Get the dataset at the specified index.
 
-## rendered_data
+## rendered\_data
 
 Returns the data for this chart as a scalar.  Suitable for 'streaming' to a
 client.
 
-## add_to_over_decorations
+## add\_to\_over\_decorations
 
 Add an over decoration to the list.
 
-## get_over_decoration ($index)
+## get\_over\_decoration ($index)
 
 Get the over decoration at the specified index.
 
-## over_decoration_count
+## over\_decoration\_count
 
 Get a count of over decorations.
 
-## add_to_contexts
+## add\_to\_contexts
 
 Add the specified context to the chart.
 
-## add_subgraph
+## add\_subgraph
 
 Add a subgraph to this chart.
 
@@ -315,49 +320,49 @@ Add a subgraph to this chart.
 
 Draw this chart.
 
-## get_datasets_for_context
+## get\_datasets\_for\_context
 
 Returns an arrayref containing all datasets for the given context.  Used by
 renderers to get a list of datasets to chart.
 
-## add_data ($name, $data)
+## add\_data ($name, $data)
 
 Convenience method for adding data to the chart.  Can be called one of three
 ways.
 
 - __scalar__
 
-Passing a name and a scalar will append the scalar data to that series' data.
+    Passing a name and a scalar will append the scalar data to that series' data.
 
-  $cc->add_data('Sales', 1234);
-  $cc->add_data('Sales', 1235);
+        $cc->add_data('Sales', 1234);
+        $cc->add_data('Sales', 1235);
 
-This will result in a Series named 'Sales' with two values.
+    This will result in a Series named 'Sales' with two values.
 
 - __arrayref__
 
-Passing a name and an arrayref works much the same as the scalar method
-discussed above, but appends the supplied arrayref to the existing one.  It
-may be mixed with the scalar method.
+    Passing a name and an arrayref works much the same as the scalar method
+    discussed above, but appends the supplied arrayref to the existing one.  It
+    may be mixed with the scalar method.
 
-  $cc->add_data('Sales', \@some_sales);
-  $cc->add_data('Sales', \@some_more_sales);
-  # This works still!
-  $cc->add_data('Sales', 1234);
+        $cc->add_data('Sales', \@some_sales);
+        $cc->add_data('Sales', \@some_more_sales);
+        # This works still!
+        $cc->add_data('Sales', 1234);
 
 - __hashref__
 
-This allows you to pass both keys and values in all at once.
+    This allows you to pass both keys and values in all at once.
 
-  $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
-  # appends to last call
-  $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
+        $cc->add_data('Sales', { 2009 => 1234, 2010 => 1235 });
+        # appends to last call
+        $cc->add_data('Sales', { 2011 => 1234, 2012 => 1235 });
 
-You may call the hashref version after the scalar or arrayref versions, but you
-may not add a scalar or arrayref after adding a hashref (as it's not clear what
-indices should be used for the new data).
+    You may call the hashref version after the scalar or arrayref versions, but you
+    may not add a scalar or arrayref after adding a hashref (as it's not clear what
+    indices should be used for the new data).
 
-## set_renderer ($renderer_object, [ $context ]);
+## set\_renderer ($renderer\_object, \[ $context \]);
 
 Sets the renderer on the specified context.  If no context is provided then
 'default' is assumed.
@@ -368,20 +373,20 @@ This method is passed through to the underlying driver.  It is only necessary
 that you call this if you manually called `draw` beforehand.  You likely
 want to use `write_output`.
 
-## write_output ($path)
+## write\_output ($path)
 
 Write the chart output to the specified location. Output is written in the
 format provided to the constructor (which defaults to Png).  Internally
 calls `draw` for you.  If you use this method, do not call `draw` first!
 
-  $c->write_output('/path/to/the.png');
+    $c->write_output('/path/to/the.png');
 
-## inside_width
+## inside\_width
 
 Get the width available in this container after taking away space for
 insets and borders.
 
-## inside_height
+## inside\_height
 
 Get the height available in this container after taking away space for
 insets and borders.
@@ -414,7 +419,7 @@ Yuval Kogman
 
 Chart::Clicker is on github:
 
-  http://github.com/gphat/chart-clicker/tree/master
+    http://github.com/gphat/chart-clicker/tree/master
 
 # AUTHOR
 
@@ -422,7 +427,7 @@ Cory G Watson <gphat@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Cold Hard Code, LLC.
+This software is copyright (c) 2013 by Cold Hard Code, LLC.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
