@@ -12,7 +12,7 @@ use Graphics::Color::RGB;
 use Graphics::Primitive::Insets;
 use Graphics::Primitive::Border;
 
-use Graphics::Primitive::Driver::Cairo;
+#use Graphics::Primitive::Driver::Cairo;
 
 use Chart::Clicker::Context;
 
@@ -379,8 +379,10 @@ has 'driver' => (
     does => 'Graphics::Primitive::Driver',
     default => sub {
         my ($self) = @_;
-        Graphics::Primitive::Driver::Cairo->new(
-            format => $self->format,
+        my $driver = $ENV{CHART_CLICKER_DEFAULT_DRIVER} || ($^O eq 'MSWin32'?"Graphics::Primitive::Driver::GD":"Graphics::Primitive::Driver::Cairo");
+        eval "require $driver;" or die "Cannot load driver $driver";
+        $driver->new(
+            'format' => $self->format,
         )
     },
     handles => {
