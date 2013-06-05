@@ -105,7 +105,7 @@ Set/Get the value for this marker.  This represents a point on the range.
 
 has 'value' => ( is => 'rw', isa => 'Num' );
 
-=head2 value2
+=attr value2
 
 Set/Get the value2 for this marker.  This represents a second point on the
 range and is used to specify a range.
