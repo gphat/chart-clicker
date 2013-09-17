@@ -64,7 +64,7 @@ Selects the algorithm for dividing the graph axis into labelled ticks.
 
 The currently included algorithms are:
 L<Chart::Clicker::Data::DivisionType::Exact/Exact>,
-L<Chart::Clicker::Data::DivisionType::RoundedLinear/RoundedLinear>.
+L<Chart::Clicker::Data::DivisionType::LinearRounded/LinearRounded>.
 
 You may write your own by providing a Moose Role which includes Role
 L<Chart::Clicker::Data::DivisionType> and prefixing the module name
