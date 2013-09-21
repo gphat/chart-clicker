@@ -369,7 +369,7 @@ effect if you specify tick_values.
 
 =cut
 
-has 'ticks' => ( is => 'rw', isa => 'Int', default => 5 );
+has 'ticks' => ( is => 'rw', isa => 'Int', default => 6 );
 
 sub BUILD {
     my ($self) = @_;
