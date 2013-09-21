@@ -101,7 +101,7 @@ __END__
 
 =head1 NAME
 
-Chart::Clicker::Axis::DivisionType::RoundedLinear - Nicely rounded segments on a linear scale.
+Chart::Clicker::Axis::DivisionType::LinearRounded - Nicely rounded segments on a linear scale.
 
 =head1 DESCRIPTION
 
@@ -112,7 +112,7 @@ Role describing how to divide data for Chart::Clicker::Axis.
   use Chart::Clicker::Axis;
 
   my $axis = Chart::Clicker::Axis->new({
-    tick_division_type  => 'RoundedLinear'
+    tick_division_type  => 'LinearRounded'
   });
 
 =head1 ATTRIBUTES
