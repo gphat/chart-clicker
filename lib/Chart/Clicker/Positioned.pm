@@ -5,7 +5,7 @@ use Moose::Role;
 
 use Moose::Util::TypeConstraints;
 
-enum 'Chart::Clicker::Position' => qw(left right top bottom);
+enum 'Chart::Clicker::Position' => [qw(left right top bottom)];
 
 =head1 DESCRIPTION
 
