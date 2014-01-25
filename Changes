@@ -1,6 +1,8 @@
 Revision history for Perl extension Chart::Clicker.
 
 {{$NEXT}}
+
+2.87 Jan 24 2014
   - Implement divvy strategies with tick_division_type (rbt)
 
 2.83 Jun 21 2012
