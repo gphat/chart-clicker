@@ -4,7 +4,7 @@ Chart::Clicker - Powerful, extensible charting.
 
 # VERSION
 
-version 2.85
+version 2.87
 
 # SYNOPSIS
 
@@ -34,7 +34,7 @@ format.
 
 Clicker leverages the power of Graphics::Primitive to create snazzy graphics
 without being tied to specific backend.  You may want to begin with
-[Chart::Clicker::Tutorial](http://search.cpan.org/perldoc?Chart::Clicker::Tutorial).
+[Chart::Clicker::Tutorial](https://metacpan.org/pod/Chart::Clicker::Tutorial).
 
 # EXAMPLES
 
@@ -139,25 +139,25 @@ similar things, you can use:
     my $image_data = $cc->rendered_data;
 
 If you happen to be using Catalyst then take a look at
-[Catalyst::View::Graphics::Primitive](http://search.cpan.org/perldoc?Catalyst::View::Graphics::Primitive).
+[Catalyst::View::Graphics::Primitive](https://metacpan.org/pod/Catalyst::View::Graphics::Primitive).
 
 # ATTRIBUTES
 
 ## background\_color
 
-Set/Get the background [color](http://search.cpan.org/perldoc?Graphics::Color::RGB). Defaults to white.
+Set/Get the background [color](https://metacpan.org/pod/Graphics::Color::RGB). Defaults to white.
 
 ## border
 
-Set/Get the [border](http://search.cpan.org/perldoc?Graphics::Primitive::Border).
+Set/Get the [border](https://metacpan.org/pod/Graphics::Primitive::Border).
 
 ## color\_allocator
 
-Set/Get the [color\_allocator](http://search.cpan.org/perldoc?Chart::Clicker::Drawing::ColorAllocator) for this chart.
+Set/Get the [color_allocator](https://metacpan.org/pod/Chart::Clicker::Drawing::ColorAllocator) for this chart.
 
 ## contexts
 
-Set/Get the [contexts](http://search.cpan.org/perldoc?Chart::Clicker::Context) for this chart.
+Set/Get the [contexts](https://metacpan.org/pod/Chart::Clicker::Context) for this chart.
 
 ## datasets
 
@@ -165,8 +165,8 @@ Get/Set the datasets for this chart.
 
 ## driver
 
-Set/Get the [driver](http://search.cpan.org/perldoc?Graphics::Primitive::Driver) used to render this Chart. Defaults to
-[Graphics::Primitive::Driver::Cairo](http://search.cpan.org/perldoc?Graphics::Primitive::Driver::Cairo).
+Set/Get the [driver](https://metacpan.org/pod/Graphics::Primitive::Driver) used to render this Chart. Defaults to
+[Graphics::Primitive::Driver::Cairo](https://metacpan.org/pod/Graphics::Primitive::Driver::Cairo).
 
 ## format
 
@@ -190,20 +190,20 @@ Set/Get the height.  Defaults to 300.
 
 ## layout\_manager
 
-Set/Get the layout manager.  Defaults to [Layout::Manager::Compass](http://search.cpan.org/perldoc?Layout::Manager::Compass).
+Set/Get the layout manager.  Defaults to [Layout::Manager::Compass](https://metacpan.org/pod/Layout::Manager::Compass).
 
 ## legend
 
-Set/Get the [legend](http://search.cpan.org/perldoc?Chart::Clicker::Decoration::Legend) that will be used with this chart.
+Set/Get the [legend](https://metacpan.org/pod/Chart::Clicker::Decoration::Legend) that will be used with this chart.
 
 ## legend\_position
 
 The position the legend will be added.  Should be one of north, south, east,
-west or center as required by [Layout::Manager::Compass](http://search.cpan.org/perldoc?Layout::Manager::Compass).
+west or center as required by [Layout::Manager::Compass](https://metacpan.org/pod/Layout::Manager::Compass).
 
 ## marker\_overlay
 
-Set/Get the [marker overlay](http://search.cpan.org/perldoc?Chart::Clicker::Decoration::MarkerOverlay) object that will be used if this chart
+Set/Get the [marker overlay](https://metacpan.org/pod/Chart::Clicker::Decoration::MarkerOverlay) object that will be used if this chart
 has markers.  This is lazily constructed to save time.
 
 ## over\_decorations
@@ -213,12 +213,12 @@ chart.  This is an advanced feature.  See `overaxis-bar.pl` in the examples.
 
 ## padding
 
-Set/Get the [padding](http://search.cpan.org/perldoc?Graphics::Primitive::Insets). Defaults
+Set/Get the [padding](https://metacpan.org/pod/Graphics::Primitive::Insets). Defaults
 to 3px on all sides.
 
 ## plot
 
-Set/Get the [plot](http://search.cpan.org/perldoc?Chart::Clicker::Decoration::Plot) on which things are drawn.
+Set/Get the [plot](https://metacpan.org/pod/Chart::Clicker::Decoration::Plot) on which things are drawn.
 
 ## subgraphs
 
@@ -229,7 +229,7 @@ chart.  This is a rather esoteric feature.
 ## title
 
 Set/Get the title component for this chart.  This is a
-[Graphics::Primitive::TextBox](http://search.cpan.org/perldoc?Graphics::Primitive::TextBox), not a string.  To set the title of a chart
+[Graphics::Primitive::TextBox](https://metacpan.org/pod/Graphics::Primitive::TextBox), not a string.  To set the title of a chart
 you should access the TextBox's `text` method.
 
     $cc->title->text('A Title!');
@@ -239,7 +239,7 @@ you should access the TextBox's `text` method.
 If the title has text then it is added to the chart in the position specified
 by `title_position`.
 
-You should consult the documentation for [Graphics::Primitive::TextBox](http://search.cpan.org/perldoc?Graphics::Primitive::TextBox) for
+You should consult the documentation for [Graphics::Primitive::TextBox](https://metacpan.org/pod/Graphics::Primitive::TextBox) for
 things like padding and text rotation.  If you are adding it to the top and
 want some padding between it and the plot, you can:
 
@@ -248,7 +248,7 @@ want some padding between it and the plot, you can:
 ## title\_position
 
 The position the title will be added.  Should be one of north, south, east,
-west or center as required by [Layout::Manager::Compass](http://search.cpan.org/perldoc?Layout::Manager::Compass).
+west or center as required by [Layout::Manager::Compass](https://metacpan.org/pod/Layout::Manager::Compass).
 
 Note that if no angle is set for the title then it will be changed to
 \-1.5707 if the title position is east or west.
@@ -427,7 +427,7 @@ Cory G Watson <gphat@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Cold Hard Code, LLC.
+This software is copyright (c) 2014 by Cold Hard Code, LLC.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

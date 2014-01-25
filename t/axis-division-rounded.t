@@ -18,8 +18,8 @@ my $label = 'Foo';
 
     $axis->range->lower(3);
     $axis->range->upper(105);
-    is( $axis->ticks, '5', 'Default number of ticks' );
-    is_deeply( $axis->divvy(), [ 20, 40, 60, 80, 100 ], 'Nicely rounded tick values - medium scale' );
+    is( $axis->ticks, '6', 'Default number of ticks' );
+    is_deeply( $axis->divvy(), [ 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 ], 'Nicely rounded tick values - medium scale' );
 }
 
 # Larger Range
