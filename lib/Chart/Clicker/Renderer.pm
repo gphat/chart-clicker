@@ -12,7 +12,7 @@ Chart::Clicker::Renderer represents the plot of the chart.
 =head1 SYNOPSIS
 
   my $renderer = Chart::Clicker::Renderer::Foo->new;
-  
+
 =attr additive
 
 Read-only value that informs Clicker that this renderer uses the combined ranges
@@ -25,7 +25,11 @@ results.
 
 has 'additive' => ( is => 'rw', isa => 'Bool', default => 0 );
 
-has 'clicker' => ( is => 'rw', isa => 'Chart::Clicker' );
+has 'clicker' => (
+  is => 'rw',
+  isa => 'Chart::Clicker',
+  weak_ref => 1
+);
 
 =attr context
 
