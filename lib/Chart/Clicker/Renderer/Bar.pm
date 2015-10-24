@@ -121,7 +121,9 @@ override('finalize', sub {
 
     my $dses = $clicker->get_datasets_for_context($self->context);
 
-    my $padding = $self->bar_padding + $self->brush->width * 2;
+    my $brwidth = $self->brush->width;
+
+    my $padding = $self->bar_padding + $brwidth * 2;
 
     my $offset = 1;
     foreach my $ds (@{ $dses }) {
@@ -179,7 +181,7 @@ override('finalize', sub {
                             $x - $hbwidth + ($offset * $cbwidth), $basey
                         );
                         $self->rectangle(
-                            -int($cbwidth) + $self->brush->width, -int($y - ($height - $basey))
+                            -int($cbwidth) + $brwidth, -int($y - ($height - $basey))
                         );
                     }
                 } else {
@@ -193,7 +195,7 @@ override('finalize', sub {
                             $x - $hbwidth + ($offset * $cbwidth), $basey
                         );
                         $self->rectangle(
-                            -int($cbwidth) + $self->brush->width, int($height - $basey - $y)
+                            -int($cbwidth) + $brwidth, int($height - $basey - $y)
                         );
                     }
                 }
@@ -202,8 +204,6 @@ override('finalize', sub {
             my $fillop = Graphics::Primitive::Operation::Fill->new(
                 paint => Graphics::Primitive::Paint::Solid->new
             );
-
-            my $brwidth = $self->brush->width;
 
             if($self->opacity < 1) {
                 my $fillcolor = $color->clone;

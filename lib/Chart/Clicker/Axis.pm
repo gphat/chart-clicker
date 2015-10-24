@@ -50,7 +50,7 @@ This axis' width.
 =attr tick_label_angle
 
 The angle (in radians) to rotate the tick's labels.
-  
+
 =cut
 
 has 'tick_label_angle' => (
@@ -278,7 +278,7 @@ attribute will make for a much more useful chart, albeit somewhat visually
 skewed.
 
   $axis->skip_range(Chart::Clicker::Data::Range->new(lower => 10, upper => 100));
-  
+
 Note that B<any> data points, including ticks, that fall inside the range
 specified will be completely ignored.
 
@@ -446,7 +446,7 @@ override('prepare', sub {
         $self->tick_values($self->divvy);
     }
 
-    # Return now without setting a min height or width and allow 
+    # Return now without setting a min height or width and allow
     # Layout::Manager to to set it for us, this is how we 'hide'
     return if $self->hidden;
 
@@ -517,9 +517,8 @@ override('prepare', sub {
             horizontal_align => 'center'
         );
         $label->name('label');
-        use Graphics::Color::RGB;
         $label->border->color(Graphics::Color::RGB->new(r => 0, g => 0, b => 0));
-        
+
 
         if($self->is_vertical) {
             if ($self->is_left) {

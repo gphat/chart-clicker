@@ -24,7 +24,7 @@ Set/Get the height of the OverAxis that will be drawn.
 has 'axis_height' => (
     is => 'rw',
     isa => 'Num',
-    default => sub { 20 }
+    default => 20
 );
 
 =attr background_color
@@ -68,7 +68,7 @@ Set/Get the width of the border for this OverAxis
 has 'border_width' => (
     is => 'rw',
     isa => 'Num',
-    default => sub { 2 }
+    default => 2
 );
 
 =attr context
@@ -128,12 +128,8 @@ override('prepare', sub {
     $self->height($self->axis_height);
 
     my $ctx = $self->clicker->get_context($self->context);
-    my $domain = $ctx->domain_axis;
 
-    my $ticks = $domain->tick_values;
-    my $tick_count = scalar(@{ $ticks });
-    my $per = $self->width / $tick_count;
-
+    my $ticks = $ctx->domain_axis->tick_values;
     foreach my $tick (@{ $ticks }) {
 
         my $tb = Graphics::Primitive::TextBox->new(

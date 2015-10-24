@@ -103,8 +103,7 @@ override('prepare', sub {
         }
 
         my $count = $ds->max_key_count;
-        for(0..$count - 1) {
-            my $pos = $_;
+        for my $pos (0..$count - 1) {
             my $vals = $ds->get_series_values($pos);
             my $total = 0;
             foreach my $v (@{ $vals }) {

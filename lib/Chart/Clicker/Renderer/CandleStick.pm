@@ -104,8 +104,6 @@ override('finalize', sub {
 
             my $min = $range->range->lower;
 
-            my $height = $self->height;
-
             my @highs = @{ $series->highs };
             my @lows = @{ $series->lows };
             my @opens = @{ $series->opens };
@@ -123,15 +121,15 @@ override('finalize', sub {
                 my $highy = $height - $range->mark($height, $highs[$_]);
                 my $lowy = $height - $range->mark($height, $lows[$_]);
 
-                my $height = $closey - $openy;
+                my $_height = $closey - $openy;
 
                 $self->move_to($x - $hcbwidth, $openy);
                 $self->rectangle(
-                    $cbwidth, $height
+                    $cbwidth, $_height
                 );
 
                 my $op;
-                if($height < 0) {
+                if($_height < 0) {
                     # We fill the bar if it closed higher
                     $op = Graphics::Primitive::Operation::Fill->new(
                         paint => Graphics::Primitive::Paint::Solid->new(
