@@ -161,6 +161,7 @@ override('finalize', sub {
     $self->border->top->width($self->border_width);
     $self->border->bottom->width($self->border_width);
     $self->border->color($self->border_color);
+    $self->minimum_height($self->axis_height);
     $self->height($self->axis_height);
 
     my $ticks = $domain->tick_values;
