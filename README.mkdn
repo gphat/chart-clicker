@@ -4,7 +4,7 @@ Chart::Clicker - Powerful, extensible charting.
 
 # VERSION
 
-version 2.88
+version 2.89
 
 # SYNOPSIS
 
@@ -47,17 +47,17 @@ For code examples see the examples repository on GitHub:
 
 Clicker supports the following renderers:
 
-- __Line__
-- __StackedLine__
-- __Bar__
-- __StackedBar__
-- __Area__
-- __StackedArea__
-- __Bubble__
-- __CandleStick__
-- __Point__
-- __Pie__
-- __PolarArea__
+- **Line**
+- **StackedLine**
+- **Bar**
+- **StackedBar**
+- **Area**
+- **StackedArea**
+- **Bubble**
+- **CandleStick**
+- **Point**
+- **Pie**
+- **PolarArea**
 
 # ADDING DATA
 
@@ -116,7 +116,7 @@ context.
 New contexts provide a fresh domain and range axis and default to a Line
 renderer.
 
-__Caveat__: Clicker expects that the default context (identified by the string
+**Caveat**: Clicker expects that the default context (identified by the string
 "default") will always be present.  It is from this context that some of
 Clicker's internals draw their values.  You should use the default context
 unless you need more than one, in which case you should use "default" as the
@@ -153,7 +153,7 @@ Set/Get the [border](https://metacpan.org/pod/Graphics::Primitive::Border).
 
 ## color\_allocator
 
-Set/Get the [color_allocator](https://metacpan.org/pod/Chart::Clicker::Drawing::ColorAllocator) for this chart.
+Set/Get the [color\_allocator](https://metacpan.org/pod/Chart::Clicker::Drawing::ColorAllocator) for this chart.
 
 ## contexts
 
@@ -180,7 +180,7 @@ superfluous or invisible will not be drawn. Default is 'slow'
 
 ## grid\_over
 
-Flag controlling if the grid is rendered __over__ the data.  Defaults to 0.
+Flag controlling if the grid is rendered **over** the data.  Defaults to 0.
 You probably want to set the grid's background color to an alpha of 0 if you
 enable this flag.
 
@@ -330,7 +330,7 @@ renderers to get a list of datasets to chart.
 Convenience method for adding data to the chart.  Can be called one of three
 ways.
 
-- __scalar__
+- **scalar**
 
     Passing a name and a scalar will append the scalar data to that series' data.
 
@@ -339,7 +339,7 @@ ways.
 
     This will result in a Series named 'Sales' with two values.
 
-- __arrayref__
+- **arrayref**
 
     Passing a name and an arrayref works much the same as the scalar method
     discussed above, but appends the supplied arrayref to the existing one.  It
@@ -350,7 +350,7 @@ ways.
         # This works still!
         $cc->add_data('Sales', 1234);
 
-- __hashref__
+- **hashref**
 
     This allows you to pass both keys and values in all at once.
 
@@ -427,7 +427,7 @@ Cory G Watson <gphat@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Cold Hard Code, LLC.
+This software is copyright (c) 2016 by Cory G Watson.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
