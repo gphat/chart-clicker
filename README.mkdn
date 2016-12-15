@@ -4,7 +4,7 @@ Chart::Clicker - Powerful, extensible charting.
 
 # VERSION
 
-version 2.89
+version 2.90
 
 # SYNOPSIS
 
