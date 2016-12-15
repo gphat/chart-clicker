@@ -45,7 +45,7 @@ future.
 
 =cut
 
-has '+additive' => ( default => sub { 1 } );
+has '+additive' => ( default => 1 );
 
 =attr brush
 

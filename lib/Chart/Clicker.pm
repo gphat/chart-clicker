@@ -386,7 +386,7 @@ has 'driver' => (
         )
     },
     handles => {
-        'rendered_data' => 'data',
+        rendered_data => 'data',
         write => 'write'
     },
     lazy => 1
@@ -402,10 +402,10 @@ Png, Pdf, Ps or Svg.
 has 'format' => (
     is => 'rw',
     isa => 'Str',
-    default => sub { 'PNG' }
+    default => 'PNG'
 );
 
-=attr plot_mode 
+=attr plot_mode
 
 Fast or slow plot mode. When in fast mode, data elements that are deemed to be
 superfluous or invisible will not be drawn. Default is 'slow'
@@ -415,7 +415,7 @@ superfluous or invisible will not be drawn. Default is 'slow'
 has 'plot_mode' => (
     is => 'rw',
     isa => 'Str',
-    default => sub { 'slow' }
+    default => 'slow'
 );
 
 =attr grid_over
@@ -429,7 +429,7 @@ enable this flag.
 has 'grid_over' => (
     is => 'rw',
     isa => 'Bool',
-    default => sub { 0 }
+    default => 0
 );
 
 =attr height
@@ -478,7 +478,7 @@ west or center as required by L<Layout::Manager::Compass>.
 has 'legend_position' => (
     is => 'rw',
     isa => 'Str',
-    default => sub { 's' }
+    default => 's'
 );
 
 =attr marker_overlay
@@ -617,7 +617,7 @@ Note that if no angle is set for the title then it will be changed to
 has 'title_position' => (
     is => 'rw',
     isa => 'Str',
-    default => sub { 'n' }
+    default => 'n'
 );
 
 =attr width

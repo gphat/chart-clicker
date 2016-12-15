@@ -77,8 +77,6 @@ override('finalize', sub {
 
             my $min = $range->range->lower;
 
-            my $height = $self->height;
-
             my @vals = @{ $series->values };
             my @keys = @{ $series->keys };
             for(0..($series->key_count - 1)) {

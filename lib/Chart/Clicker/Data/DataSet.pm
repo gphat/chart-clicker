@@ -37,7 +37,7 @@ Set/Get the context this DataSet will be charted under.
 has 'context' => (
     is => 'rw',
     isa => 'Str',
-    default => sub { 'default'}
+    default => 'default'
 );
 
 =attr domain
@@ -185,7 +185,6 @@ sub prepare {
         die('Dataset has no series.');
     }
 
-    my $stotal;
     foreach my $series (@{ $self->series }) {
         $series->prepare;
 

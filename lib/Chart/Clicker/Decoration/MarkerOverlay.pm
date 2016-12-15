@@ -29,12 +29,11 @@ override('finalize', sub {
         foreach my $marker (@{ $ctx->markers }) {
 
             my $key = $marker->key;
-            my $key2 = $marker->key2;
             my $value = $marker->value;
-            my $value2 = $marker->value2;
 
-            if($key && $value) {
-            } elsif(defined($key)) {
+            if(not defined($value)) {
+                my $key2 = $marker->key2;
+
                 my $domain = $ctx->domain_axis;
 
                 my $x = $domain->mark($self->width, $key);
@@ -65,9 +64,11 @@ override('finalize', sub {
                 $op->brush->color($marker->color);
 
                 $self->do($op);
-            } elsif(defined($value)) {
+            } elsif(not defined($key)) {
+                my $value2 = $marker->value2;
+
                 my $range = $ctx->range_axis;
-                # 
+                #
                 my $y = $height - $range->mark($height, $value);
                 my $y2;
 

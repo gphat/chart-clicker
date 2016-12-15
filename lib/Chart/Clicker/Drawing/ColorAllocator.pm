@@ -120,7 +120,7 @@ has 'seed_hue' => (
     is => 'rw',
     isa => 'Int',
     required => 1,
-    default => sub { 270 },
+    default => 270,
 );
 
 =attr hues
