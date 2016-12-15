@@ -173,7 +173,7 @@ Set/Get the [driver](https://metacpan.org/pod/Graphics::Primitive::Driver) used 
 Get the format for this Chart.  Required in the constructor.  Must be on of
 Png, Pdf, Ps or Svg.
 
-## plot\_mode 
+## plot\_mode
 
 Fast or slow plot mode. When in fast mode, data elements that are deemed to be
 superfluous or invisible will not be drawn. Default is 'slow'
