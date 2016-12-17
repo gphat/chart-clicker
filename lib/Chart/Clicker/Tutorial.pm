@@ -1,5 +1,8 @@
 package Chart::Clicker::Tutorial;
 
+use strict;
+use warnings;
+
 # ABSTRACT: A Tutorial for using Chart::Clicker
 
 =head1 DESCRIPTION
